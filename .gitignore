@@ -15,3 +15,7 @@ SEM-Asteroids.iml
 SEM-Asteroids.eml
 SEM-Asteroids.ipr
 SEM-Asteroids.iws
+
+.classpath
+.project
+.settings/
