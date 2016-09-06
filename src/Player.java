@@ -6,7 +6,7 @@ public class Player extends Entity{
 	public Player(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		lives=3;
-		radius=5;
+		radius=10;
 	}
 	
 	public void die(){
@@ -21,6 +21,9 @@ public class Player extends Entity{
 	
 	@Override
 	public void update(){
+		X=X+dX;
+		Y=Y+dY;
+		wrapAround();
 		//TODO: a lot (turn, shoot, die, respawn, hyperspace)
 	}
 }

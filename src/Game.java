@@ -1,28 +1,40 @@
 import java.util.ArrayList;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 public class Game {
 	private ArrayList<Entity> entities; 
 	private float screenX;
 	private float screenY;
+	private GraphicsContext gc;
 		
-	public Game(){
-		//TODO:ScreenX and ScreenY initialization.
+	public Game(GraphicsContext gc){
+		this.gc=gc;
+		screenX=1024;
+		screenY=512;
+		entities=new ArrayList<Entity>();
 		startGame();
 	}
 	
 	public void startGame(){
 		entities.add(new Player(screenX/2,screenY/2,0,0, this));
-		entities.add(new Asteroid(0,screenY/3,2,3, this));
-		entities.add(new Asteroid(0,2*screenY/3,3,-3, this));
-		entities.add(new Asteroid(0,screenY/3,-3,2, this));
-		entities.add(new Asteroid(0,2*screenY/3,-2,-2, this));
+		entities.add(new Asteroid(0,screenY*(float)Math.random(),(float)Math.random()*2-1,(float)Math.random()*2-1, this));
+		entities.add(new Asteroid(0,screenY*(float)Math.random(),(float)Math.random()*2-1,(float)Math.random()*2-1, this));
+		entities.add(new Asteroid(0,screenY*(float)Math.random(),(float)Math.random()*2-1,(float)Math.random()*2-1, this));
+		entities.add(new Asteroid(0,screenY*(float)Math.random(),(float)Math.random()*2-1,(float)Math.random()*2-1, this));
 	}
 	
 	public void update(){
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, screenX, screenY);
 		for (Entity e : entities) {
 			e.update();
 			checkCollision(e);
-			draw(e);
+			
+			gc.setFill(Color.WHITE);
+			gc.fillOval(e.X-e.radius/2, e.Y-e.radius/2, e.radius, e.radius);
+			
 		}
 	}
 	
