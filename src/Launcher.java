@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -35,7 +36,7 @@ public class Launcher extends Application {
 		stage.setScene(scene);
 		
 		// set up the canvas
-		Canvas canvas = new Canvas(512, 256);
+		Canvas canvas = new Canvas(1024, 512);
 		root.getChildren().add(canvas);
 		
 		// set up the graphicsContext
@@ -60,20 +61,21 @@ public class Launcher extends Application {
 			}
 		});
 		
+		//Make a new Game
+		Game thisGame= new Game(gc);
+		
 		// set up the timing control
 		Timeline renderloop = new Timeline();
 		renderloop.setCycleCount(Timeline.INDEFINITE);
 		
-		final long startTime = System.currentTimeMillis();
+		//final long startTime = System.currentTimeMillis();
 		
-		KeyFrame kf = new KeyFrame(Duration.seconds(0.017), new EventHandler<ActionEvent>() {
+		KeyFrame kf = new KeyFrame(
+			Duration.seconds(0.017), 
+			new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				/**
-				 * DO GAME HERE
-				 * DO GAME HERE
-				 * DO GAME HERE
-				 */
+				thisGame.update();
 			}
 		});
 		
