@@ -45,9 +45,17 @@ public class Asteroid extends Entity{
 	}
 
 	public void split() {
-		thisGame.addAsteroid(X, Y, (float) (dX+Math.random()-.5), (float) (dY+Math.random()-.5), 12); //TODO: not only 12
-		thisGame.addAsteroid(X, Y, (float) (dX+Math.random()-.5), (float) (dY+Math.random()-.5), 12);
-		thisGame.destroy(this);
+		if (radius==20) {
+			thisGame.addAsteroid(X, Y, (float) (dX+Math.random()-.5), (float) (dY+Math.random()-.5), 12);
+			thisGame.addAsteroid(X, Y, (float) (dX+Math.random()-.5), (float) (dY+Math.random()-.5), 12);
+			thisGame.destroy(this);
+		} else if (radius==12) {
+			thisGame.addAsteroid(X, Y, (float) (dX+Math.random()*2-1), (float) (dY+Math.random()-.5), 4);
+			thisGame.addAsteroid(X, Y, (float) (dX+Math.random()*2-1), (float) (dY+Math.random()-.5), 4);
+			thisGame.destroy(this);
+		} else {
+			thisGame.destroy(this);
+		}
 	}
 
 	@Override
