@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * This is the superclass of all entities in the game.
  * 
@@ -23,11 +27,9 @@ public abstract class Entity {
 		this.thisGame = thisGame;
 	}
 
-	public void update() {
-		X = X + dX;
-		Y = Y + dY;
-		wrapAround();
-	}
+	public abstract void update(ArrayList<String> input);
+	
+	public abstract void draw(GraphicsContext gc);
 
 	public void wrapAround() {
 		if (X < 0) {

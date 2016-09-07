@@ -21,7 +21,7 @@ public class Game {
 
 	public void startGame() {
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
-		addRandomAsteroid(20);
+		addRandomAsteroid(4);
 	}
 	
 	public void addRandomAsteroid(int times){
@@ -31,15 +31,13 @@ public class Game {
 		}
 	}
 
-	public void update() {
+	public void update(ArrayList<String> input) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenX, screenY);
 		for (Entity e : entities) {
-			e.update();
+			e.update(input);
 			checkCollision(e);
-			gc.setFill(Color.WHITE);
-			gc.fillOval(e.X - e.radius / 2, e.Y - e.radius / 2, e.radius*2, e.radius*2);
-
+			e.draw(gc);
 		}
 		for (Entity destroyEntity : destroyList) {
 			entities.remove(destroyEntity);
