@@ -11,7 +11,7 @@ public class Player extends Entity{
 	public Player(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		lives=3;
-		radius=10;
+		radius=5;
 		rotation=Math.PI/2;
 	}
 	
@@ -61,12 +61,10 @@ public class Player extends Entity{
 	}
 
 	private void turnLeft() {
-		System.out.println(rotation);
 		rotation+=.2;
 	}
 
 	private void turnRight() {
-		System.out.println(rotation);
 		rotation-=.2;
 	}
 
