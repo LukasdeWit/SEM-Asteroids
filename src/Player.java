@@ -88,7 +88,7 @@ public class Player extends Entity {
 
 	private void fire() {
 		if (System.currentTimeMillis() - Bullet.lastbullet > 500) {
-			new BulletTimer(X, Y, (float) Math.cos(rotation), (float) Math.sin(rotation), thisGame).run();
+			new BulletTimer(X, Y, (float) Math.sin(rotation+Math.PI/2), (float) Math.cos(rotation+Math.PI/2), thisGame).run();
 		}
 	}
 
