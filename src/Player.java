@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -88,7 +85,8 @@ public class Player extends Entity {
 
 	private void fire() {
 		if (System.currentTimeMillis() - Bullet.lastbullet > 500) {
-			new BulletTimer(X, Y, (float) Math.sin(rotation+Math.PI/2), (float) Math.cos(rotation+Math.PI/2), thisGame).run();
+			Bullet b = new Bullet(X, Y, ((float) Math.sin(rotation+Math.PI/2))*10, ((float) Math.cos(rotation+Math.PI/2))*10, thisGame);
+			thisGame.create(b);
 		}
 	}
 
