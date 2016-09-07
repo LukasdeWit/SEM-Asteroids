@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -9,12 +6,14 @@ import javafx.scene.paint.Color;
 public class Player extends Entity {
 	private int lives;
 	private double rotation;
+	private long lastShot;
 
 	public Player(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		lives = 3;
 		radius = 10;
 		rotation = Math.PI / 2;
+		lastShot=0;
 	}
 
 	public void die() {
@@ -87,8 +86,10 @@ public class Player extends Entity {
 	}
 
 	private void fire() {
-		if (System.currentTimeMillis() - Bullet.lastbullet > 500) {
-			new BulletTimer(X, Y, (float) Math.sin(rotation+Math.PI/2), (float) Math.cos(rotation+Math.PI/2), thisGame).run();
+		if (System.currentTimeMillis() - lastShot > 200) {
+			Bullet b = new Bullet(X, Y, dX+((float) Math.sin(rotation+Math.PI/2))*10, dY+((float) Math.cos(rotation+Math.PI/2))*10, thisGame);
+			thisGame.create(b);
+			lastShot=System.currentTimeMillis();
 		}
 	}
 

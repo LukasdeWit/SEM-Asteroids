@@ -4,18 +4,22 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Bullet extends Entity {
-	static long lastbullet = System.currentTimeMillis();
+
+	private long birthTime;
 
 	public Bullet(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
-		radius = 5;
-		lastbullet = System.currentTimeMillis();
+		radius = 2;
+		birthTime=System.currentTimeMillis();
 	}
 
 	public void update(ArrayList<String> input) {
 		X = X + dX;
 		Y = Y + dY;
 		wrapAround();
+		if (System.currentTimeMillis()-birthTime>1000){
+			thisGame.destroy(this);
+		}
 	}
 
 	@Override

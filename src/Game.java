@@ -45,6 +45,7 @@ public class Game {
 		entities.addAll(createList);
 		
 		destroyList.clear();
+		createList.clear();
 	}
 
 	public void checkCollision(Entity e1){
