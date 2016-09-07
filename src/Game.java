@@ -7,6 +7,7 @@ public class Game {
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> destroyList;
 	private ArrayList<Entity> createList;
+	private ArrayList<Entity> addList;
 	private float screenX;
 	private float screenY;
 	private GraphicsContext gc;
@@ -16,12 +17,14 @@ public class Game {
 		screenX = 1024;
 		screenY = 512;
 		entities = new ArrayList<Entity>();
+		addList = new ArrayList<Entity>();
 		destroyList = new ArrayList<Entity>();
 		createList = new ArrayList<Entity>();
 		startGame();
 	}
 
 	public void startGame() {
+		entities.clear();
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
 		addRandomAsteroid(4);
 	}
@@ -32,8 +35,18 @@ public class Game {
 				(float) Math.random() * 4 - 2, this));
 		}
 	}
+	
+	public void addAsteroid(float X, float Y, float dX, float dY, float radius){
+		Asteroid newAsteroid = new Asteroid(X, Y, dX, dY, this);
+		newAsteroid.setRadius(radius);
+		addList.add(newAsteroid);
+		
+	}
 
 	public void update(ArrayList<String> input) {
+		if (input.contains("R")){
+			startGame();
+		}
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenX, screenY);
 		for (Entity e : entities) {
@@ -44,6 +57,13 @@ public class Game {
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
 		
+		for (Entity destroyEntity : destroyList) {
+			entities.remove(destroyEntity);
+		}
+		for (Entity addEntity : addList) {
+			entities.add(addEntity);
+		}
+		addList.clear();
 		destroyList.clear();
 		createList.clear();
 	}
