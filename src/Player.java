@@ -87,7 +87,7 @@ public class Player extends Entity {
 
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > 200) {
-			Bullet b = new Bullet(X, Y, ((float) Math.sin(rotation+Math.PI/2))*10, ((float) Math.cos(rotation+Math.PI/2))*10, thisGame);
+			Bullet b = new Bullet(X, Y, dX+((float) Math.sin(rotation+Math.PI/2))*10, dY+((float) Math.cos(rotation+Math.PI/2))*10, thisGame);
 			thisGame.create(b);
 			lastShot=System.currentTimeMillis();
 		}
