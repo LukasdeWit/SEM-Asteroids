@@ -74,7 +74,7 @@ public class Launcher extends Application {
 			new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				thisGame.update();
+				thisGame.update(input);
 			}
 		});
 		
