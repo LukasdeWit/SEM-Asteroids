@@ -37,6 +37,7 @@ public class Player extends Entity{
 	public void update(ArrayList<String> input){
 		X=X+dX;
 		Y=Y+dY;
+		slowDown();
 		wrapAround();
 		if (!invincable()){
 			keyHandler(input);	
@@ -54,8 +55,6 @@ public class Player extends Entity{
 		
 		if (input.contains("UP")){
 			accelerate();
-		} else {
-			slowDown();
 		}
 		
 		if (input.contains("DOWN")){
@@ -122,6 +121,8 @@ public class Player extends Entity{
 
 	@Override
 	public void draw(GraphicsContext gc) {
+		drawLives(gc);
+		
 		double s1=Math.sin(rotation);
 		double c1=Math.cos(rotation);
 		
@@ -141,5 +142,13 @@ public class Player extends Entity{
 	    gc.setLineWidth(2);
 		gc.strokePolygon(new double[]{X+10*c1, X+10*c2, X+10*c3}, new double[]{Y-10*s1, Y-10*s2, Y-10*s3}, 3);
 		//gc.fillOval(X - radius / 2, Y - radius / 2, radius*2, radius*2);	
+	}
+
+	private void drawLives(GraphicsContext gc) {
+		for (int i = 0; i < lives; i++) {
+			gc.setStroke(Color.WHITE);
+			gc.setLineWidth(2);
+			gc.strokePolygon(new double[]{10+10*i,8+10*i,12+10*i}, new double[]{10,18,18}, 3);
+		}	
 	}
 }
