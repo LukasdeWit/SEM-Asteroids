@@ -71,11 +71,9 @@ public class Game {
 					}
 
 				// If e1 is a Bullet
-				// Bullet has no interactions with Player
+				// Bullet has no interactions with Player or other Bullets
 				} else if (e1 instanceof Bullet) {
-					if (e1 instanceof Player) {
-						// nothing
-					} else if (e1 instanceof Asteroid) {
+					if (e1 instanceof Asteroid) {
 						if (Entity.collision(e1, e2)) {
 							destroy(e1);
 							destroy(e2);
