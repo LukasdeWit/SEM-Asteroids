@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 public class Player extends Entity{
 	private long invincableStart;
 	private int invincableMS;
+	private long hyperspaceStart;
 	private int lives;
 	private double rotation;
 	
@@ -14,7 +15,7 @@ public class Player extends Entity{
 		super(X, Y, dX, dY, thisGame);
 		lives=3;
 		radius=5;
-		rotation=Math.PI/2;
+		rotation=0;
 		invincableStart(3000);
 	}
 	
@@ -27,7 +28,7 @@ public class Player extends Entity{
 			Y=thisGame.getScreenY()/2;
 			dX=0;
 			dY=0;
-			rotation=Math.PI/2;
+			rotation=0;
 			invincableStart(3000);
 		}
 	}
@@ -58,7 +59,7 @@ public class Player extends Entity{
 		}
 		
 		if (input.contains("DOWN")){
-			hyperspace();
+			goHyperspace();
 		}
 		
 		if (input.contains("SPACE")){
@@ -95,8 +96,17 @@ public class Player extends Entity{
 		return (invincableStart+invincableMS>System.currentTimeMillis());
 	}
 	
-	private void hyperspace() {
-		// TODO: hyperspace
+	private void goHyperspace() {
+		X=(float) (thisGame.getScreenX()*Math.random());
+		Y=(float) (thisGame.getScreenY()*Math.random());
+		dX=0;
+		dY=0;
+		invincableStart(2000);
+		hyperspaceStart=System.currentTimeMillis();		
+	}
+	
+	private boolean hyperspace(){
+		return (hyperspaceStart+invincableMS>System.currentTimeMillis());
 	}
 
 	private void fire() {
@@ -124,6 +134,9 @@ public class Player extends Entity{
 		gc.setStroke(Color.WHITE);
 		if(invincable()&&(System.currentTimeMillis()+invincableMS)%500<250){
 			gc.setStroke(Color.GREY);
+		}
+		if(hyperspace()){
+			gc.setStroke(Color.BLACK);
 		}
 	    gc.setLineWidth(2);
 		gc.strokePolygon(new double[]{X+10*c1, X+10*c2, X+10*c3}, new double[]{Y-10*s1, Y-10*s2, Y-10*s3}, 3);
