@@ -6,12 +6,14 @@ import javafx.scene.paint.Color;
 public class Player extends Entity {
 	private int lives;
 	private double rotation;
+	private long lastShot;
 
 	public Player(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		lives = 3;
 		radius = 10;
 		rotation = Math.PI / 2;
+		lastShot=0;
 	}
 
 	public void die() {
@@ -84,9 +86,10 @@ public class Player extends Entity {
 	}
 
 	private void fire() {
-		if (System.currentTimeMillis() - Bullet.lastbullet > 500) {
+		if (System.currentTimeMillis() - lastShot > 200) {
 			Bullet b = new Bullet(X, Y, ((float) Math.sin(rotation+Math.PI/2))*10, ((float) Math.cos(rotation+Math.PI/2))*10, thisGame);
 			thisGame.create(b);
+			lastShot=System.currentTimeMillis();
 		}
 	}
 
