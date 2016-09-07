@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Player extends Entity{
+	private long invincableStart;
+	private int invincableMS;
 	private int lives;
 	private double rotation;
 	
@@ -13,6 +15,7 @@ public class Player extends Entity{
 		lives=3;
 		radius=5;
 		rotation=Math.PI/2;
+		invincableStart(3000);
 	}
 	
 	public void die(){
@@ -25,6 +28,7 @@ public class Player extends Entity{
 			dX=0;
 			dY=0;
 			rotation=Math.PI/2;
+			invincableStart(3000);
 		}
 	}
 	
@@ -33,7 +37,9 @@ public class Player extends Entity{
 		X=X+dX;
 		Y=Y+dY;
 		wrapAround();
-		keyHandler(input);		
+		if (!invincable()){
+			keyHandler(input);	
+		}	
 	}
 	
 	public void keyHandler(ArrayList<String> input){
@@ -80,6 +86,15 @@ public class Player extends Entity{
 		}
 	}
 	
+	private void invincableStart(int miliseconds){
+		invincableStart = System.currentTimeMillis();
+		invincableMS = miliseconds;
+	}
+	
+	private boolean invincable(){
+		return (invincableStart+invincableMS>System.currentTimeMillis());
+	}
+	
 	private void hyperspace() {
 		// TODO: hyperspace
 	}
@@ -89,7 +104,7 @@ public class Player extends Entity{
 	}
 
 	public void collide(Entity e2) {
-		if (e2 instanceof Asteroid) {
+		if (e2 instanceof Asteroid && !invincable()) {
 			thisGame.destroy(e2);
 			this.die();
 		}
@@ -107,6 +122,9 @@ public class Player extends Entity{
 		double c3=Math.cos(rotation+(Math.PI*5/4));
 		
 		gc.setStroke(Color.WHITE);
+		if(invincable()&&(System.currentTimeMillis()+invincableMS)%500<250){
+			gc.setStroke(Color.GREY);
+		}
 	    gc.setLineWidth(2);
 		gc.strokePolygon(new double[]{X+10*c1, X+10*c2, X+10*c3}, new double[]{Y-10*s1, Y-10*s2, Y-10*s3}, 3);
 		//gc.fillOval(X - radius / 2, Y - radius / 2, radius*2, radius*2);	
