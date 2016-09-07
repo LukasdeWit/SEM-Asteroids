@@ -9,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
  *
  */
 public abstract class Entity {
-	// Location
+	// Location	
 	protected float X;
 	protected float Y;
 	// Speed

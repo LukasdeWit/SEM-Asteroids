@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 
 public class Player extends Entity{
 	private int lives;
-	private int rotation;
+	private double rotation;
 	
 	
 	public Player(float X, float Y, float dX, float dY, Game thisGame) {
@@ -61,22 +61,25 @@ public class Player extends Entity{
 	}
 
 	private void turnLeft() {
+		System.out.println(rotation);
 		rotation+=.2;
-		if (rotation>360) rotation-=360; 
 	}
 
 	private void turnRight() {
+		System.out.println(rotation);
 		rotation-=.2;
-		if (rotation<0) rotation+=360; 
 	}
 
 	private void accelerate() {
-		dX+=(Math.sin(rotation)/10);
-		dY+=(Math.cos(rotation)/10);
+		dX+=(Math.sin(Math.toRadians(rotation))/10);
+		dY+=(Math.cos(Math.toRadians(rotation))/10);
 	}
 
 	private void slowDown(){
-		//dX
+		if ((Math.abs(dX)+Math.abs(dY))!=0){
+			dX-=(.02 * dX)/(Math.abs(dX)+Math.abs(dY));
+			dY-=(.02 * dY)/(Math.abs(dX)+Math.abs(dY));
+		}
 	}
 	
 	private void hyperspace() {
@@ -96,11 +99,11 @@ public class Player extends Entity{
 
 	@Override
 	public void draw(GraphicsContext gc) {
-		double s=Math.sin(rotation);
-		double c=Math.cos(rotation);
+		//double s=Math.sin(rotation);
+		//double c=Math.cos(rotation);
 		gc.setStroke(Color.WHITE);
 	    gc.setLineWidth(2);
-		gc.strokePolygon(new double[]{X+10*s, X-8*s, X-8*s} , new double[]{Y, Y-6, Y+6} , 3);
+		gc.strokePolygon(new double[]{X+10, X-8, X-8}, new double[]{Y, Y-6, Y+6}, 3);
 		//gc.fillOval(X - radius / 2, Y - radius / 2, radius*2, radius*2);	
 	}
 }
