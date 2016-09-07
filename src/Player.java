@@ -17,20 +17,21 @@ public class Player extends Entity{
 		lives=3;
 		radius=5;
 		rotation=0;
-		invincableStart(3000);
+		invincableStart(500);
 	}
 	
 	public void die(){
 		lives--;
 		if (lives==0){
 			thisGame.over();
+			invincableStart(500);
 		} else {
 			X=thisGame.getScreenX()/2;
 			Y=thisGame.getScreenY()/2;
 			dX=0;
 			dY=0;
 			rotation=0;
-			invincableStart(3000);
+			invincableStart(500);
 		}
 	}
 	
@@ -93,7 +94,7 @@ public class Player extends Entity{
 		invincableMS = miliseconds;
 	}
 	
-	private boolean invincable(){
+	public boolean invincable(){
 		return (invincableStart+invincableMS>System.currentTimeMillis());
 	}
 	
