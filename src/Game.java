@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 
 public class Game {
 	private ArrayList<Entity> entities;
+	private ArrayList<Entity> destroyList;
 	private float screenX;
 	private float screenY;
 	private GraphicsContext gc;
@@ -14,19 +15,20 @@ public class Game {
 		screenX = 1024;
 		screenY = 512;
 		entities = new ArrayList<Entity>();
+		destroyList = new ArrayList<Entity>();
 		startGame();
 	}
 
 	public void startGame() {
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
-		entities.add(new Asteroid(0, screenY * (float) Math.random(), (float) Math.random() * 2 - 1,
-				(float) Math.random() * 2 - 1, this));
-		entities.add(new Asteroid(0, screenY * (float) Math.random(), (float) Math.random() * 2 - 1,
-				(float) Math.random() * 2 - 1, this));
-		entities.add(new Asteroid(0, screenY * (float) Math.random(), (float) Math.random() * 2 - 1,
-				(float) Math.random() * 2 - 1, this));
-		entities.add(new Asteroid(0, screenY * (float) Math.random(), (float) Math.random() * 2 - 1,
-				(float) Math.random() * 2 - 1, this));
+		addRandomAsteroid(20);
+	}
+	
+	public void addRandomAsteroid(int times){
+		for (int i = 0; i < times; i++) {
+			entities.add(new Asteroid(0, screenY * (float) Math.random(), (float) Math.random() * 4 - 2,
+				(float) Math.random() * 4 - 2, this));
+		}
 	}
 
 	public void update() {
@@ -35,63 +37,34 @@ public class Game {
 		for (Entity e : entities) {
 			e.update();
 			checkCollision(e);
-
 			gc.setFill(Color.WHITE);
-			gc.fillOval(e.X - e.radius / 2, e.Y - e.radius / 2, e.radius, e.radius);
+			gc.fillOval(e.X - e.radius / 2, e.Y - e.radius / 2, e.radius*2, e.radius*2);
 
 		}
+		for (Entity destroyEntity : destroyList) {
+			entities.remove(destroyEntity);
+		}
+		destroyList.clear();
 	}
 
-	public void checkCollision(Entity e1) {
+	public void checkCollision(Entity e1){
 		for (Entity e2 : entities) {
-			if (!e1.equals(e2)) {
-				// If e1 is a Player
-				// Player has no interaction with Player or Bullet
-				if (e1 instanceof Player) {
-					if (e1 instanceof Asteroid) {
-						if (Entity.collision(e1, e2)) {
-							destroy(e2);
-							((Player) e1).die();
-						}
-					}
-
-				// If e1 is an Asteroid
-				// Asteroid has no interactions with other Asteroids
-				} else if (e1 instanceof Asteroid) {
-					if (e1 instanceof Player) {
-						if (Entity.collision(e1, e2)) {
-							destroy(e1);
-							((Player) e2).die();
-						}
-					} else if (e1 instanceof Bullet) {
-						if (Entity.collision(e1, e2)) {
-							destroy(e1);
-							destroy(e2);
-						}
-					}
-
-				// If e1 is a Bullet
-				// Bullet has no interactions with Player
-				} else if (e1 instanceof Bullet) {
-					if (e1 instanceof Player) {
-						// nothing
-					} else if (e1 instanceof Asteroid) {
-						if (Entity.collision(e1, e2)) {
-							destroy(e1);
-							destroy(e2);
-						}
-					}
-				}
+			if (!e1.equals(e2) && Entity.collision(e1, e2)){
+				e1.collide(e2);
 			}
 		}
 	}
-
+	
 	public void draw(Entity e) {
 		// TODO: draw e
 	}
 
 	public void destroy(Entity e) {
-		entities.remove(e);
+		destroyList.add(e);
+	}
+	
+	public ArrayList<Entity> getEntities(){
+		return entities;
 	}
 
 	public float getScreenX() {
@@ -103,6 +76,10 @@ public class Game {
 	}
 
 	public void over() {
-		// game over
+		for (Entity entity : entities) {
+			if (entity instanceof Player){
+				destroy(entity);
+			}
+		}
 	}
 }

@@ -26,4 +26,11 @@ public class Player extends Entity{
 		wrapAround();
 		//TODO: a lot (turn, shoot, die, respawn, hyperspace)
 	}
+
+	public void collide(Entity e2) {
+		if (e2 instanceof Asteroid) {
+			thisGame.destroy(e2);
+			this.die();
+		}
+	}
 }
