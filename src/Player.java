@@ -63,11 +63,11 @@ public class Player extends Entity {
 	}
 
 	private void turnLeft() {
-		rotation+=.2;
+		rotation += .2;
 	}
 
 	private void turnRight() {
-		rotation-=.2;
+		rotation -= .2;
 	}
 
 	private void accelerate() {
@@ -88,16 +88,7 @@ public class Player extends Entity {
 
 	private void fire() {
 		if (System.currentTimeMillis() - Bullet.lastbullet > 500) {
-			Bullet b = new Bullet(X, Y, (float) Math.cos(rotation) + dX, (float) Math.sin(rotation) + dY, thisGame);
-			thisGame.create(b);
-			final ScheduledExecutorService scheduler =
-				     Executors.newScheduledThreadPool(1);
-			final Runnable destroyer = new Runnable() {
-				public void run() {
-					thisGame.destroy(b);
-				}
-			};
-			scheduler.schedule(destroyer, 1000, TimeUnit.MILLISECONDS);
+			new BulletTimer(X, Y, (float) Math.cos(rotation), (float) Math.sin(rotation), thisGame).run();
 		}
 	}
 
