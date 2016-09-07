@@ -20,7 +20,7 @@ public class Bullet extends Entity{
 	public void collide(Entity e2) {
 		if (e2 instanceof Asteroid) {
 			thisGame.destroy(this);
-			thisGame.destroy(e2);
+			((Asteroid) e2).split();
 		}
 	}
 

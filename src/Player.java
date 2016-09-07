@@ -116,7 +116,7 @@ public class Player extends Entity{
 
 	public void collide(Entity e2) {
 		if (e2 instanceof Asteroid && !invincable()) {
-			thisGame.destroy(e2);
+			((Asteroid) e2).split();
 			this.die();
 		}
 	}

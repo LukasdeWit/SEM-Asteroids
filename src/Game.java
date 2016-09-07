@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 public class Game {
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> destroyList;
+	private ArrayList<Entity> addList;
 	private float screenX;
 	private float screenY;
 	private GraphicsContext gc;
@@ -15,6 +16,7 @@ public class Game {
 		screenX = 1024;
 		screenY = 512;
 		entities = new ArrayList<Entity>();
+		addList = new ArrayList<Entity>();
 		destroyList = new ArrayList<Entity>();
 		startGame();
 	}
@@ -31,6 +33,13 @@ public class Game {
 				(float) Math.random() * 4 - 2, this));
 		}
 	}
+	
+	public void addAsteroid(float X, float Y, float dX, float dY, float radius){
+		Asteroid newAsteroid = new Asteroid(X, Y, dX, dY, this);
+		newAsteroid.setRadius(radius);
+		addList.add(newAsteroid);
+		
+	}
 
 	public void update(ArrayList<String> input) {
 		if (input.contains("R")){
@@ -46,6 +55,10 @@ public class Game {
 		for (Entity destroyEntity : destroyList) {
 			entities.remove(destroyEntity);
 		}
+		for (Entity addEntity : addList) {
+			entities.add(addEntity);
+		}
+		addList.clear();
 		destroyList.clear();
 	}
 
