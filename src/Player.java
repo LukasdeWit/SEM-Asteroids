@@ -63,13 +63,11 @@ public class Player extends Entity {
 	}
 
 	private void turnLeft() {
-		System.out.println(rotation);
-		rotation += .2;
+		rotation+=.2;
 	}
 
 	private void turnRight() {
-		System.out.println(rotation);
-		rotation -= .2;
+		rotation-=.2;
 	}
 
 	private void accelerate() {
