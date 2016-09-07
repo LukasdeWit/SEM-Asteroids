@@ -3,12 +3,14 @@ import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Player extends Entity{
+public class Player extends Entity {
+	private int lives;
+	private double rotation;
+	private long lastShot;
+	
 	private long invincableStart;
 	private int invincableMS;
 	private long hyperspaceStart;
-	private int lives;
-	private double rotation;
 	private boolean boost;
 	
 	
@@ -19,10 +21,10 @@ public class Player extends Entity{
 		rotation=0;
 		invincableStart(500);
 	}
-	
-	public void die(){
+
+	public void die() {
 		lives--;
-		if (lives==0){
+		if (lives == 0) {
 			thisGame.over();
 			invincableStart(500);
 		} else {
@@ -34,7 +36,7 @@ public class Player extends Entity{
 			invincableStart(500);
 		}
 	}
-	
+
 	@Override
 	public void update(ArrayList<String> input){
 		X=X+dX;
@@ -45,35 +47,35 @@ public class Player extends Entity{
 			keyHandler(input);	
 		}	
 	}
-	
-	public void keyHandler(ArrayList<String> input){
-		if (input.contains("LEFT")&&!input.contains("RIGHT")){
+
+	public void keyHandler(ArrayList<String> input) {
+		if (input.contains("LEFT") && !input.contains("RIGHT")) {
 			turnLeft();
 		}
-		
-		if (input.contains("RIGHT")&&!input.contains("LEFT")){
+
+		if (input.contains("RIGHT") && !input.contains("LEFT")) {
 			turnRight();
 		}
-		
-		if (input.contains("UP")){
+
+		if (input.contains("UP")) {
 			accelerate();
 		}
 		
 		if (input.contains("DOWN")){
 			goHyperspace();
 		}
-		
-		if (input.contains("SPACE")){
+
+		if (input.contains("SPACE")) {
 			fire();
 		}
 	}
 
 	private void turnLeft() {
-		rotation+=.2;
+		rotation += .2;
 	}
 
 	private void turnRight() {
-		rotation-=.2;
+		rotation -= .2;
 	}
 
 	private void accelerate() {
@@ -82,10 +84,10 @@ public class Player extends Entity{
 		boost=true;
 	}
 
-	private void slowDown(){
-		if ((Math.abs(dX)+Math.abs(dY))!=0){
-			dX-=(.02 * dX)/(Math.abs(dX)+Math.abs(dY));
-			dY-=(.02 * dY)/(Math.abs(dX)+Math.abs(dY));
+	private void slowDown() {
+		if ((Math.abs(dX) + Math.abs(dY)) != 0) {
+			dX -= (.02 * dX) / (Math.abs(dX) + Math.abs(dY));
+			dY -= (.02 * dY) / (Math.abs(dX) + Math.abs(dY));
 		}
 	}
 	
@@ -112,7 +114,11 @@ public class Player extends Entity{
 	}
 
 	private void fire() {
-		// TODO: fire
+		if (System.currentTimeMillis() - lastShot > 200) {
+			Bullet b = new Bullet(X, Y, dX+((float) Math.sin(rotation+Math.PI/2))*10, dY+((float) Math.cos(rotation+Math.PI/2))*10, thisGame);
+			thisGame.create(b);
+			lastShot=System.currentTimeMillis();
+		}
 	}
 
 	public void collide(Entity e2) {
