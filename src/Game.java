@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 public class Game {
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> destroyList;
+	private ArrayList<Entity> createList;
 	private float screenX;
 	private float screenY;
 	private GraphicsContext gc;
@@ -16,6 +17,7 @@ public class Game {
 		screenY = 512;
 		entities = new ArrayList<Entity>();
 		destroyList = new ArrayList<Entity>();
+		createList = new ArrayList<Entity>();
 		startGame();
 	}
 
@@ -39,9 +41,9 @@ public class Game {
 			checkCollision(e);
 			e.draw(gc);
 		}
-		for (Entity destroyEntity : destroyList) {
-			entities.remove(destroyEntity);
-		}
+		entities.removeAll(destroyList);
+		entities.addAll(createList);
+		
 		destroyList.clear();
 	}
 
@@ -59,6 +61,10 @@ public class Game {
 
 	public void destroy(Entity e) {
 		destroyList.add(e);
+	}
+	
+	public void create(Entity e) {
+		createList.add(e);
 	}
 	
 	public ArrayList<Entity> getEntities(){

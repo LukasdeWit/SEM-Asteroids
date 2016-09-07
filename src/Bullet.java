@@ -4,10 +4,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Bullet extends Entity{
+	static long lastbullet = 0;
 	
 	public Bullet(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		radius=5;
+		lastbullet = System.currentTimeMillis();
 	}
 
 	public void update(ArrayList<String> input){
