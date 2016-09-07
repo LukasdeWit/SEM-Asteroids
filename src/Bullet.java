@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Bullet extends Entity {
-	static long lastbullet = 0;
+	static long lastbullet = System.currentTimeMillis();
 
 	public Bullet(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
