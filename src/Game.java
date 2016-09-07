@@ -20,6 +20,7 @@ public class Game {
 	}
 
 	public void startGame() {
+		entities.clear();
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
 		addRandomAsteroid(4);
 	}
@@ -32,6 +33,9 @@ public class Game {
 	}
 
 	public void update(ArrayList<String> input) {
+		if (input.contains("R")){
+			startGame();
+		}
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenX, screenY);
 		for (Entity e : entities) {
