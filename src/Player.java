@@ -12,7 +12,7 @@ public class Player extends Entity{
 		super(X, Y, dX, dY, thisGame);
 		lives=3;
 		radius=10;
-		rotation=90;
+		rotation=Math.PI/2;
 	}
 	
 	public void die(){
@@ -24,7 +24,7 @@ public class Player extends Entity{
 			Y=thisGame.getScreenY()/2;
 			dX=0;
 			dY=0;
-			rotation=90;
+			rotation=Math.PI/2;
 		}
 	}
 	
@@ -71,8 +71,8 @@ public class Player extends Entity{
 	}
 
 	private void accelerate() {
-		dX+=(Math.sin(Math.toRadians(rotation))/10);
-		dY+=(Math.cos(Math.toRadians(rotation))/10);
+		dX+=(Math.cos(rotation)/10);
+		dY-=(Math.sin(rotation)/10);
 	}
 
 	private void slowDown(){
@@ -99,11 +99,18 @@ public class Player extends Entity{
 
 	@Override
 	public void draw(GraphicsContext gc) {
-		//double s=Math.sin(rotation);
-		//double c=Math.cos(rotation);
+		double s1=Math.sin(rotation);
+		double c1=Math.cos(rotation);
+		
+		double s2=Math.sin(rotation+(Math.PI*3/4));
+		double c2=Math.cos(rotation+(Math.PI*3/4));
+		
+		double s3=Math.sin(rotation+(Math.PI*5/4));
+		double c3=Math.cos(rotation+(Math.PI*5/4));
+		
 		gc.setStroke(Color.WHITE);
 	    gc.setLineWidth(2);
-		gc.strokePolygon(new double[]{X+10, X-8, X-8}, new double[]{Y, Y-6, Y+6}, 3);
+		gc.strokePolygon(new double[]{X+10*c1, X+10*c2, X+10*c3}, new double[]{Y-10*s1, Y-10*s2, Y-10*s3}, 3);
 		//gc.fillOval(X - radius / 2, Y - radius / 2, radius*2, radius*2);	
 	}
 }
