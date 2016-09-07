@@ -45,7 +45,7 @@ public class Game {
 					if (e1 instanceof Player) {
 						//should never happen
 					} else if (e1 instanceof Asteroid) {
-						if (Entity.distance(e1,e2)<e1.radius+e2.radius){
+						if (Entity.collision(e1,e2)){
 							destroy(e2);
 							((Player)e1).die();
 						}
@@ -56,14 +56,14 @@ public class Game {
 					}
 				} else if (e1 instanceof Asteroid) {
 					if (e1 instanceof Player) {
-						if (Entity.distance(e1,e2)<e1.radius+e2.radius){
+						if (Entity.collision(e1,e2)){
 							destroy(e1);
 							((Player)e2).die();
 						}
 					} else if (e1 instanceof Asteroid) {
 						//nothing
 					} else if (e1 instanceof Bullet) {
-						if (Entity.distance(e1,e2)<e1.radius+e2.radius){
+						if (Entity.collision(e1,e2)){
 							destroy(e1);
 							destroy(e2);
 						}
@@ -74,7 +74,7 @@ public class Game {
 					if (e1 instanceof Player) {
 						//nothing
 					} else if (e1 instanceof Asteroid) {
-						if (Entity.distance(e1,e2)<e1.radius+e2.radius){
+						if (Entity.collision(e1,e2)){
 							destroy(e1);
 							destroy(e2);
 						}
