@@ -88,12 +88,15 @@ public class UFO extends Entity{
 	public void collide(Entity e2) {
 		if (e2 instanceof Player && !((Player)e2).invincable()) {
 			((Player)e2).die();
+			thisGame.addScore((int) (200+(radius%2*800)));
 			thisGame.destroy(this);
 		} else if (e2 instanceof Bullet && ((Bullet)e2).getFriendly()) {
 			thisGame.destroy(e2);
+			thisGame.addScore((int) (200+(radius%2*800)));
 			thisGame.destroy(this);
 		} else if (e2 instanceof Asteroid) {
 			((Asteroid)e2).split();
+			thisGame.addScore((int) (200+(radius%2*800)));
 			thisGame.destroy(this);
 		}
 	}

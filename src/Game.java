@@ -12,7 +12,7 @@ public class Game {
 	private float screenY;
 	private GraphicsContext gc;
 	private long restartTime;
-	private int score=78964;
+	private int score;
 	
 	private final double[] ScoreDisplayX={190,200,190,200,190,200}; //first one only
 	private final double[] ScoreDisplayY={ 20, 20, 30, 30, 40, 40};
@@ -47,6 +47,7 @@ public class Game {
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
 		addRandomAsteroid(4);
 		addRandomUFO();
+		score=0;
 	}
 	
 	public void addRandomUFO(){
@@ -154,5 +155,9 @@ public class Game {
 				destroy(entity);
 			}
 		}
+	}
+
+	public void addScore(int score) {
+		this.score+=score;
 	}
 }
