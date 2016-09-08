@@ -18,6 +18,10 @@ public class UFO extends Entity{
 		setPath((X>(thisGame.getScreenX()/2))?1:0, (int)(Math.random()*3));
 	}
 	
+	public void setRadius(float radius){
+		this.radius=radius;
+	}
+	
 	public void setPath(int toRight, int path){
 		this.toRight=toRight;
 		setDirection((float)(toRight*Math.PI+(path-1)*Math.PI/4));

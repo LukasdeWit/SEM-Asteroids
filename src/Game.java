@@ -33,7 +33,12 @@ public class Game {
 	}
 	
 	public void addRandomUFO(){
-		create(new UFO(((int)(Math.random()*2))*screenX,(float)Math.random()*screenY,0,0,this));
+		UFO newUFO = new UFO(((int)(Math.random()*2))*screenX,(float)Math.random()*screenY,0,0,this);
+		if(Math.random()<.5){
+			newUFO.setRadius(5);
+		}
+		create(newUFO);
+		
 	}
 	
 	public void addRandomAsteroid(int times){
