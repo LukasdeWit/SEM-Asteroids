@@ -11,6 +11,7 @@ public class Game {
 	private float screenX;
 	private float screenY;
 	private GraphicsContext gc;
+	private long restartTime;
 
 	public Game(GraphicsContext gc) {
 		this.gc = gc;
@@ -24,6 +25,7 @@ public class Game {
 	}
 
 	public void startGame() {
+		restartTime=System.currentTimeMillis();
 		entities.clear();
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
 		addRandomAsteroid(4);
@@ -48,7 +50,7 @@ public class Game {
 	}
 
 	public void update(ArrayList<String> input) {
-		if (input.contains("R")){
+		if (input.contains("R")&&System.currentTimeMillis()-restartTime>300){
 			startGame();
 		}
 		gc.setFill(Color.BLACK);
