@@ -27,6 +27,11 @@ public class Game {
 		entities.clear();
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
 		addRandomAsteroid(4);
+		addRandomUFO();
+	}
+	
+	public void addRandomUFO(){
+		create(new UFO(((int)(Math.random()*2))*screenX,(float)Math.random()*screenY,0,0,this));
 	}
 	
 	public void addRandomAsteroid(int times){
@@ -40,7 +45,6 @@ public class Game {
 		Asteroid newAsteroid = new Asteroid(X, Y, dX, dY, this);
 		newAsteroid.setRadius(radius);
 		addList.add(newAsteroid);
-		
 	}
 
 	public void update(ArrayList<String> input) {
@@ -70,7 +74,7 @@ public class Game {
 
 	public void checkCollision(Entity e1){
 		for (Entity e2 : entities) {
-			if (!e1.equals(e2) && Entity.collision(e1, e2)){
+			if (!e1.equals(e2) && Entity.collision(e1, e2) && !destroyList.contains(e1) && !destroyList.contains(e2)){
 				e1.collide(e2);
 			}
 		}
