@@ -71,11 +71,11 @@ public class Player extends Entity {
 	}
 
 	private void turnLeft() {
-		rotation += .2;
+		rotation += .1;
 	}
 
 	private void turnRight() {
-		rotation -= .2;
+		rotation -= .1;
 	}
 
 	private void accelerate() {
@@ -122,8 +122,15 @@ public class Player extends Entity {
 	}
 
 	public void collide(Entity e2) {
-		if (e2 instanceof Asteroid && !invincable()) {
-			((Asteroid) e2).split();
+		if (e2 instanceof Asteroid) {
+			if (invincable() && !hyperspace()) {
+				invincableStart=System.currentTimeMillis();
+			} else if (!invincable()) {
+				((Asteroid) e2).split();
+				this.die();
+			}
+		} else if (e2 instanceof Bullet && !((Bullet)e2).getFriendly()) {
+			thisGame.destroy(e2);
 			this.die();
 		}
 	}
