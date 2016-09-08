@@ -15,8 +15,8 @@ public class Game {
 
 	public Game(GraphicsContext gc) {
 		this.gc = gc;
-		screenX = 1024;
-		screenY = 512;
+		screenX = 500;
+		screenY = 500;
 		entities = new ArrayList<Entity>();
 		addList = new ArrayList<Entity>();
 		destroyList = new ArrayList<Entity>();

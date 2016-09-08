@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 public class UFO extends Entity{
 	private int toRight; //general direction 1 is to right 0 is to left
 	private long dirChangeTime;
+	private long shotTime;
 	private final double[] XShape0={ 1,  2,  4,  2, -2, -4, -2, -1};
 	private final double[] YShape0={-3, -1,  1,  3,  3,  1, -1, -3};
 	
@@ -13,6 +14,7 @@ public class UFO extends Entity{
 		super(X, Y, dX, dY, thisGame);
 		radius=10;
 		dirChangeTime=System.currentTimeMillis();
+		shotTime=dirChangeTime;
 		setPath((X>(thisGame.getScreenX()/2))?1:0, (int)(Math.random()*3));
 	}
 	
@@ -37,6 +39,17 @@ public class UFO extends Entity{
 		checkEnd();
 		wrapAround();
 		changeDirection();
+		shoot();
+	}
+	
+	private void shoot(){
+		if (System.currentTimeMillis()-shotTime>1000){
+			float randomDir=(float)(Math.random()*2*Math.PI);
+			Bullet newBullet=new Bullet(X,Y,dX+(float)Math.cos(randomDir)*5,dY-(float)Math.sin(randomDir)*5,thisGame);
+			newBullet.setFriendly(false);
+			thisGame.create(newBullet);
+			shotTime=System.currentTimeMillis();
+		}
 	}
 	
 	private void checkEnd(){
@@ -72,7 +85,7 @@ public class UFO extends Entity{
 		if (e2 instanceof Player && !((Player)e2).invincable()) {
 			((Player)e2).die();
 			thisGame.destroy(this);
-		} else if (e2 instanceof Bullet) {
+		} else if (e2 instanceof Bullet && ((Bullet)e2).getFriendly()) {
 			thisGame.destroy(e2);
 			thisGame.destroy(this);
 		} else if (e2 instanceof Asteroid) {

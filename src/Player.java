@@ -125,6 +125,9 @@ public class Player extends Entity {
 		if (e2 instanceof Asteroid && !invincable()) {
 			((Asteroid) e2).split();
 			this.die();
+		} else if (e2 instanceof Bullet && !((Bullet)e2).getFriendly()) {
+			thisGame.destroy(e2);
+			this.die();
 		}
 	}
 

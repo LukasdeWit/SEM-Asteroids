@@ -35,7 +35,7 @@ public class Launcher extends Application {
 		stage.setScene(scene);
 		
 		// set up the canvas
-		Canvas canvas = new Canvas(1024, 512);
+		Canvas canvas = new Canvas(500, 500);
 		root.getChildren().add(canvas);
 		
 		// set up the graphicsContext

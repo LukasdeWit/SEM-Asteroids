@@ -6,11 +6,13 @@ import javafx.scene.paint.Color;
 public class Bullet extends Entity {
 
 	private long birthTime;
+	private boolean friendly;
 
 	public Bullet(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		radius = 2;
 		birthTime=System.currentTimeMillis();
+		friendly=true;
 	}
 
 	public void update(ArrayList<String> input) {
@@ -20,6 +22,14 @@ public class Bullet extends Entity {
 		if (System.currentTimeMillis()-birthTime>1000){
 			thisGame.destroy(this);
 		}
+	}
+	
+	public boolean getFriendly(){
+		return friendly;
+	}
+	
+	public void setFriendly(boolean friendly){
+		this.friendly=friendly;
 	}
 
 	@Override
