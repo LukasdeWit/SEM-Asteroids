@@ -12,7 +12,24 @@ public class Game {
 	private float screenY;
 	private GraphicsContext gc;
 	private long restartTime;
+	private int score=78964;
+	
+	private final double[] ScoreDisplayX={190,200,190,200,190,200}; //first one only
+	private final double[] ScoreDisplayY={ 20, 20, 30, 30, 40, 40};
 
+	private final int[][] NumberLines={
+			{0,1,5,4,0},
+			{1,5},
+			{0,1,3,2,4,5},
+			{0,1,3,2,3,5,4},
+			{0,2,3,1,5},
+			{1,0,2,3,5,4},
+			{1,0,4,5,3,2},
+			{0,1,5},
+			{2,0,1,5,4,2,3},
+			{4,5,1,0,2,3}
+	};
+	
 	public Game(GraphicsContext gc) {
 		this.gc = gc;
 		screenX = 500;
@@ -77,6 +94,7 @@ public class Game {
 		addList.clear();
 		destroyList.clear();
 		createList.clear();
+		drawScore(gc);
 	}
 
 	public void checkCollision(Entity e1){
@@ -87,8 +105,27 @@ public class Game {
 		}
 	}
 	
-	public void draw(Entity e) {
-		// TODO: draw e
+	public void drawScore(GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(2);
+		int rest=score;
+		int digit;
+		for (int i = 1; rest!=0; i++) {
+			digit=(int) (rest%10);
+			rest=(rest-digit)/10;
+			drawDigit(gc,digit,i);
+		}
+	}
+
+	private void drawDigit(GraphicsContext gc, int digit, int ofset) {
+		int l=NumberLines[digit].length;
+		double[] scoreX = new double[l];
+		double[] scoreY = new double[l];
+		for (int i = 0; i < l; i++) {
+			scoreX[i]=ScoreDisplayX[NumberLines[digit][i]]-ofset*20;
+			scoreY[i]=ScoreDisplayY[NumberLines[digit][i]];
+		}
+		gc.strokePolyline(scoreX, scoreY, l);
 	}
 
 	public void destroy(Entity e) {
