@@ -54,5 +54,5 @@ public abstract class Entity {
 		return (e1.radius + e2.radius) > distance(e1, e2);
 	}
 
-	public abstract void collide(Entity e2);
+  public abstract void collide(Entity e2);
 }

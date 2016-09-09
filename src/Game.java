@@ -149,7 +149,7 @@ public class Game {
 		return screenY;
 	}
 
-	public void over() {
+  public void over() {
 		for (Entity entity : entities) {
 			if (entity instanceof Player){
 				destroy(entity);

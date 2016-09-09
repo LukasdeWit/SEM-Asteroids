@@ -15,6 +15,7 @@ import javafx.util.Duration;
 
 /**
  * This class is the main launcher of the game
+ * 
  * @author Lukas
  *
  */
