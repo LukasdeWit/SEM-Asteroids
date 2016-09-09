@@ -18,11 +18,11 @@ public class Bullet extends Entity {
 	}
 
 	public void update(ArrayList<String> input) {
-		x = x + getDX();
-		y = y + getDY();
+		setX(getX() + getDX());
+		setY(getY() + getDY());
 		wrapAround();
 		if (System.currentTimeMillis() - birthTime > 1000) {
-			thisGame.destroy(this);
+			getThisGame().destroy(this);
 		}
 	}
 
@@ -37,7 +37,7 @@ public class Bullet extends Entity {
 	@Override
 	public void collide(Entity e2) {
 		if (e2 instanceof Asteroid) {
-			thisGame.destroy(this);
+			getThisGame().destroy(this);
 			((Asteroid) e2).split();
 		}
 	}
@@ -45,6 +45,6 @@ public class Bullet extends Entity {
 	@Override
 	public void draw(GraphicsContext gc) {
 		gc.setFill(Color.WHITE);
-		gc.fillOval(x - radius / 2, y - radius / 2, radius * 2, radius * 2);
+		gc.fillOval(getX() - radius / 2, getY() - radius / 2, radius * 2, radius * 2);
 	}
 }

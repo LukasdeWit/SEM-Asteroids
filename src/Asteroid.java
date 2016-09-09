@@ -59,8 +59,8 @@ public class Asteroid extends Entity {
 	 * Calculate new position of Asteroid.
 	 */
 	public void update(ArrayList<String> input) {
-		x = x + getDX();
-		y = y + getDY();
+		setX(getX() + getDX());
+		setY(getY() + getDY());
 		wrapAround();
 	}
 
@@ -74,7 +74,7 @@ public class Asteroid extends Entity {
 			((Player) e2).die();
 		} else if (e2 instanceof Bullet) {
 			split();
-			thisGame.destroy(e2);
+			getThisGame().destroy(e2);
 		}
 	}
 
@@ -83,18 +83,18 @@ public class Asteroid extends Entity {
 	 */
 	public void split() {
 		if (radius == 20) {
-			thisGame.addAsteroid(x, y, (float) (getDX() + Math.random() - .5), (float) (getDY() + Math.random() - .5), 12);
-			thisGame.addAsteroid(x, y, (float) (getDX() + Math.random() - .5), (float) (getDY() + Math.random() - .5), 12);
-			thisGame.addScore(20);
-			thisGame.destroy(this);
+			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() - .5), (float) (getDY() + Math.random() - .5), 12);
+			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() - .5), (float) (getDY() + Math.random() - .5), 12);
+			getThisGame().addScore(20);
+			getThisGame().destroy(this);
 		} else if (radius == 12) {
-			thisGame.addAsteroid(x, y, (float) (getDX() + Math.random() * 2 - 1), (float) (getDY() + Math.random() - .5), 4);
-			thisGame.addAsteroid(x, y, (float) (getDX() + Math.random() * 2 - 1), (float) (getDY() + Math.random() - .5), 4);
-			thisGame.addScore(50);
-			thisGame.destroy(this);
+			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() * 2 - 1), (float) (getDY() + Math.random() - .5), 4);
+			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() * 2 - 1), (float) (getDY() + Math.random() - .5), 4);
+			getThisGame().addScore(50);
+			getThisGame().destroy(this);
 		} else {
-			thisGame.addScore(100);
-			thisGame.destroy(this);
+			getThisGame().addScore(100);
+			getThisGame().destroy(this);
 		}
 	}
 
@@ -106,18 +106,18 @@ public class Asteroid extends Entity {
 		double[] YShape = new double[12];
 		if (shape == 0) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = XShape0[i] * (radius / 4) + x;
-				YShape[i] = YShape0[i] * (radius / 4) + y;
+				XShape[i] = XShape0[i] * (radius / 4) + getX();
+				YShape[i] = YShape0[i] * (radius / 4) + getY();
 			}
 		} else if (shape == 1) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = XShape1[i] * (radius / 4) + x;
-				YShape[i] = YShape1[i] * (radius / 4) + y;
+				XShape[i] = XShape1[i] * (radius / 4) + getX();
+				YShape[i] = YShape1[i] * (radius / 4) + getY();
 			}
 		} else if (shape == 2) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = XShape2[i] * (radius / 4) + x;
-				YShape[i] = YShape2[i] * (radius / 4) + y;
+				XShape[i] = XShape2[i] * (radius / 4) + getX();
+				YShape[i] = YShape2[i] * (radius / 4) + getY();
 			}
 		}
 		gc.strokePolygon(XShape, YShape, 12);

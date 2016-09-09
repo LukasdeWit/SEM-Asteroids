@@ -38,8 +38,8 @@ public class UFO extends Entity {
 
 	@Override
 	public void update(ArrayList<String> input) {
-		x = x + getDX();
-		y = y + getDY();
+		setX(getX() + getDX());
+		setY(getY() + getDY());
 		checkEnd();
 		wrapAround();
 		changeDirection();
@@ -49,17 +49,17 @@ public class UFO extends Entity {
 	private void shoot() {
 		if (System.currentTimeMillis() - shotTime > 1000) {
 			float randomDir = (float) (Math.random() * 2 * Math.PI);
-			Bullet newBullet = new Bullet(x, y, getDX() + (float) Math.cos(randomDir) * 5,
-					getDY() - (float) Math.sin(randomDir) * 5, thisGame);
+			Bullet newBullet = new Bullet(getX(), getY(), getDX() + (float) Math.cos(randomDir) * 5,
+					getDY() - (float) Math.sin(randomDir) * 5, getThisGame());
 			newBullet.setFriendly(false);
-			thisGame.create(newBullet);
+			getThisGame().create(newBullet);
 			shotTime = System.currentTimeMillis();
 		}
 	}
 
 	private void checkEnd() {
-		if (x > thisGame.getScreenX() || x < 0) {
-			thisGame.destroy(this);
+		if (getX() > getThisGame().getScreenX() || getX() < 0) {
+			getThisGame().destroy(this);
 		}
 	}
 
@@ -77,8 +77,8 @@ public class UFO extends Entity {
 		double[] XShape = new double[8];
 		double[] YShape = new double[8];
 		for (int i = 0; i < 8; i++) {
-			XShape[i] = XShape0[i] * (radius * 5 / 15) + x;
-			YShape[i] = YShape0[i] * (radius * 4 / 15) + y;
+			XShape[i] = XShape0[i] * (radius * 5 / 15) + getX();
+			YShape[i] = YShape0[i] * (radius * 4 / 15) + getY();
 		}
 		gc.strokePolygon(XShape, YShape, 8);
 		gc.strokeLine(XShape[1], YShape[1], XShape[6], YShape[6]);
@@ -89,16 +89,16 @@ public class UFO extends Entity {
 	public void collide(Entity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			((Player) e2).die();
-			thisGame.addScore((int) (200 + (radius % 2 * 800)));
-			thisGame.destroy(this);
+			getThisGame().addScore((int) (200 + (radius % 2 * 800)));
+			getThisGame().destroy(this);
 		} else if (e2 instanceof Bullet && ((Bullet) e2).getFriendly()) {
-			thisGame.destroy(e2);
-			thisGame.addScore((int) (200 + (radius % 2 * 800)));
-			thisGame.destroy(this);
+			getThisGame().destroy(e2);
+			getThisGame().addScore((int) (200 + (radius % 2 * 800)));
+			getThisGame().destroy(this);
 		} else if (e2 instanceof Asteroid) {
 			((Asteroid) e2).split();
-			thisGame.addScore((int) (200 + (radius % 2 * 800)));
-			thisGame.destroy(this);
+			getThisGame().addScore((int) (200 + (radius % 2 * 800)));
+			getThisGame().destroy(this);
 		}
 	}
 }

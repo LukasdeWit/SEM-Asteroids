@@ -29,6 +29,8 @@ public abstract class Entity {
 	 * Radius of Entity, used for collision.
 	 */
 	private float radius;
+	
+
 	/**
 	 * The Game this Entity belongs to.
 	 */
@@ -50,11 +52,11 @@ public abstract class Entity {
 	 */
 	public Entity(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
-		this.x = x;
-		this.y = y;
+		this.setX(x);
+		this.setY(y);
 		this.setDX(dX);
 		this.setDY(dY);
-		this.thisGame = thisGame;
+		this.setThisGame(thisGame);
 	}
 
 	/**
@@ -78,17 +80,17 @@ public abstract class Entity {
 	 * reach the edge.
 	 */
 	public final void wrapAround() {
-		if (x < 0) {
-			x += thisGame.getScreenX();
+		if (getX() < 0) {
+			setX(getX() + getThisGame().getScreenX());
 		}
-		if (x > thisGame.getScreenX()) {
-			x -= thisGame.getScreenX();
+		if (getX() > getThisGame().getScreenX()) {
+			setX(getX() - getThisGame().getScreenX());
 		}
-		if (y < 0) {
-			y += thisGame.getScreenY();
+		if (getY() < 0) {
+			setY(getY() + getThisGame().getScreenY());
 		}
-		if (y > thisGame.getScreenY()) {
-			y -= thisGame.getScreenY();
+		if (getY() > getThisGame().getScreenY()) {
+			setY(getY() - getThisGame().getScreenY());
 		}
 	}
 
@@ -102,8 +104,8 @@ public abstract class Entity {
 	 * @return float containing the distance between the Entities.
 	 */
 	public static float distance(final Entity e1, final Entity e2) {
-		return (float) Math.sqrt(Math.pow(e1.x - e2.x, 2) 
-				+ Math.pow(e1.y - e2.y, 2));
+		return (float) Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) 
+				+ Math.pow(e1.getY() - e2.getY(), 2));
 	}
 
 	/**
@@ -158,5 +160,65 @@ public abstract class Entity {
 	 */
 	public final void setDX(final float dX) {
 		this.dX = dX;
+	}
+	
+	/**
+	 * Radius getter.
+	 * @return radius
+	 */
+	public final float getRadius() {
+		return radius;
+	}
+
+	/**
+	 * Radius setter.
+	 * @param radius - radius
+	 */
+	public final void setRadius(final float radius) {
+		this.radius = radius;
+	}
+	
+	/**
+	 * thisGame getter.
+	 * @return thisGame
+	 */
+	public final Game getThisGame() {
+		return thisGame;
+	}
+	
+	/**
+	 * thisGame setter.
+	 * @param thisGame - thisGame
+	 */
+	public final void setThisGame(final Game thisGame) {
+		this.thisGame = thisGame;
+	}
+
+	/**
+	 * @return the x
+	 */
+	public final float getX() {
+		return x;
+	}
+
+	/**
+	 * @param x the x to set
+	 */
+	public final void setX(final float x) {
+		this.x = x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public final float getY() {
+		return y;
+	}
+
+	/**
+	 * @param y the y to set
+	 */
+	public final void setY(final float y) {
+		this.y = y;
 	}
 }
