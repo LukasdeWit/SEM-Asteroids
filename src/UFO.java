@@ -32,14 +32,14 @@ public class UFO extends Entity {
 	}
 
 	public void setDirection(float direction) {
-		dX = (float) Math.cos(direction) * 2;
-		dY = (float) -Math.sin(direction) * 2;
+		setDX((float) Math.cos(direction) * 2);
+		setDY((float) -Math.sin(direction) * 2);
 	}
 
 	@Override
 	public void update(ArrayList<String> input) {
-		X = X + dX;
-		Y = Y + dY;
+		x = x + getDX();
+		y = y + getDY();
 		checkEnd();
 		wrapAround();
 		changeDirection();
@@ -49,8 +49,8 @@ public class UFO extends Entity {
 	private void shoot() {
 		if (System.currentTimeMillis() - shotTime > 1000) {
 			float randomDir = (float) (Math.random() * 2 * Math.PI);
-			Bullet newBullet = new Bullet(X, Y, dX + (float) Math.cos(randomDir) * 5,
-					dY - (float) Math.sin(randomDir) * 5, thisGame);
+			Bullet newBullet = new Bullet(x, y, getDX() + (float) Math.cos(randomDir) * 5,
+					getDY() - (float) Math.sin(randomDir) * 5, thisGame);
 			newBullet.setFriendly(false);
 			thisGame.create(newBullet);
 			shotTime = System.currentTimeMillis();
@@ -58,7 +58,7 @@ public class UFO extends Entity {
 	}
 
 	private void checkEnd() {
-		if (X > thisGame.getScreenX() || X < 0) {
+		if (x > thisGame.getScreenX() || x < 0) {
 			thisGame.destroy(this);
 		}
 	}
@@ -77,8 +77,8 @@ public class UFO extends Entity {
 		double[] XShape = new double[8];
 		double[] YShape = new double[8];
 		for (int i = 0; i < 8; i++) {
-			XShape[i] = XShape0[i] * (radius * 5 / 15) + X;
-			YShape[i] = YShape0[i] * (radius * 4 / 15) + Y;
+			XShape[i] = XShape0[i] * (radius * 5 / 15) + x;
+			YShape[i] = YShape0[i] * (radius * 4 / 15) + y;
 		}
 		gc.strokePolygon(XShape, YShape, 8);
 		gc.strokeLine(XShape[1], YShape[1], XShape[6], YShape[6]);

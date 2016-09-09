@@ -9,22 +9,37 @@ import javafx.scene.canvas.GraphicsContext;
  *
  */
 public abstract class Entity {
-	// Location
-	protected float X;
-	protected float Y;
-	// Speed
-	protected float dX;
-	protected float dY;
-
-	protected float radius;
-	protected Game thisGame;
+	/**
+	 * X coordinate of Entity.
+	 */
+	private float x;
+	/**
+	 * Y coordinate of Entity.
+	 */
+	private float y;
+	/**
+	 * Horizontal speed.
+	 */
+	private float dX;
+	/**
+	 * Vertical speed.
+	 */
+	private float dY;
+	/**
+	 * Radius of Entity, used for collision.
+	 */
+	private float radius;
+	/**
+	 * The Game this Entity belongs to.
+	 */
+	private Game thisGame;
 
 	/**
 	 * Constructor for the Entity class.
 	 * 
-	 * @param X
+	 * @param x
 	 *            location of Entity along the X-axis.
-	 * @param Y
+	 * @param y
 	 *            location of Entity along the Y-axis.
 	 * @param dX
 	 *            velocity of Entity along the X-axis.
@@ -33,11 +48,12 @@ public abstract class Entity {
 	 * @param thisGame
 	 *            Game the Entity exists in.
 	 */
-	public Entity(float X, float Y, float dX, float dY, Game thisGame) {
-		this.X = X;
-		this.Y = Y;
-		this.dX = dX;
-		this.dY = dY;
+	public Entity(final float x, final float y, 
+			final float dX, final float dY, final Game thisGame) {
+		this.x = x;
+		this.y = y;
+		this.setDX(dX);
+		this.setDY(dY);
 		this.thisGame = thisGame;
 	}
 
@@ -61,18 +77,18 @@ public abstract class Entity {
 	 * Function that moves entities to the other side of the screen when they
 	 * reach the edge.
 	 */
-	public void wrapAround() {
-		if (X < 0) {
-			X += thisGame.getScreenX();
+	public final void wrapAround() {
+		if (x < 0) {
+			x += thisGame.getScreenX();
 		}
-		if (X > thisGame.getScreenX()) {
-			X -= thisGame.getScreenX();
+		if (x > thisGame.getScreenX()) {
+			x -= thisGame.getScreenX();
 		}
-		if (Y < 0) {
-			Y += thisGame.getScreenY();
+		if (y < 0) {
+			y += thisGame.getScreenY();
 		}
-		if (Y > thisGame.getScreenY()) {
-			Y -= thisGame.getScreenY();
+		if (y > thisGame.getScreenY()) {
+			y -= thisGame.getScreenY();
 		}
 	}
 
@@ -85,8 +101,9 @@ public abstract class Entity {
 	 *            second Entity
 	 * @return float containing the distance between the Entities.
 	 */
-	public static float distance(Entity e1, Entity e2) {
-		return (float) Math.sqrt(Math.pow(e1.X - e2.X, 2) + Math.pow(e1.Y - e2.Y, 2));
+	public static float distance(final Entity e1, final Entity e2) {
+		return (float) Math.sqrt(Math.pow(e1.x - e2.x, 2) 
+				+ Math.pow(e1.y - e2.y, 2));
 	}
 
 	/**
@@ -98,7 +115,7 @@ public abstract class Entity {
 	 *            second Entity
 	 * @return boolean that is true when entities collide
 	 */
-	public static boolean collision(Entity e1, Entity e2) {
+	public static boolean collision(final Entity e1, final Entity e2) {
 		return (e1.radius + e2.radius) > distance(e1, e2);
 	}
 
@@ -110,4 +127,36 @@ public abstract class Entity {
 	 *            Entity to be collided with.
 	 */
 	public abstract void collide(Entity e2);
+	
+	/**
+	 * dY getter.
+	 * @return dY
+	 */
+	public final float getDY() {
+		return dY;
+	}
+	
+	/**
+	 * dY setter.
+	 * @param dY - dY
+	 */
+	public final void setDY(final float dY) {
+		this.dY = dY;
+	}
+	
+	/**
+	 * dX getter.
+	 * @return dX
+	 */
+	public final float getDX() {
+		return dX;
+	}
+	
+	/**
+	 * dX setter.
+	 * @param dX - dX
+	 */
+	public final void setDX(final float dX) {
+		this.dX = dX;
+	}
 }

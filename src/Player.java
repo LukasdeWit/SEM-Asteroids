@@ -44,10 +44,10 @@ public class Player extends Entity {
 			thisGame.over();
 			invincibleStart(500);
 		} else {
-			X = thisGame.getScreenX() / 2;
-			Y = thisGame.getScreenY() / 2;
-			dX = 0;
-			dY = 0;
+			x = thisGame.getScreenX() / 2;
+			y = thisGame.getScreenY() / 2;
+			setDX(0);
+			setDY(0);
 			rotation = 0;
 			invincibleStart(500);
 		}
@@ -55,8 +55,8 @@ public class Player extends Entity {
 
 	@Override
 	public void update(ArrayList<String> input) {
-		X = X + dX;
-		Y = Y + dY;
+		x = x + getDX();
+		y = y + getDY();
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
@@ -110,8 +110,8 @@ public class Player extends Entity {
 	 * Makes player move faster.
 	 */
 	private void accelerate() {
-		dX += Math.cos(rotation) / 10;
-		dY -= Math.sin(rotation) / 10;
+		setDX(getDX() + Math.cos(rotation) / 10);
+		setDY(getDY() - Math.sin(rotation) / 10);
 		boost = true;
 	}
 
@@ -119,9 +119,9 @@ public class Player extends Entity {
 	 * Makes player move slower.
 	 */
 	private void slowDown() {
-		if (Math.abs(dX) + Math.abs(dY) != 0) {
-			dX -= (.02 * dX) / (Math.abs(dX) + Math.abs(dY));
-			dY -= (.02 * dY) / (Math.abs(dX) + Math.abs(dY));
+		if (Math.abs(getDX()) + Math.abs(getDY()) != 0) {
+			setDX(getDX() - (.02 * getDX()) / (Math.abs(getDX()) + Math.abs(getDY())));
+			setDY(getDY() - (.02 * getDY()) / (Math.abs(getDX()) + Math.abs(getDY())));
 		}
 	}
 
@@ -147,10 +147,10 @@ public class Player extends Entity {
 	 * Method to handle hyperspace mechanic.
 	 */
 	private void goHyperspace() {
-		X = (float) (thisGame.getScreenX() * Math.random());
-		Y = (float) (thisGame.getScreenY() * Math.random());
-		dX = 0;
-		dY = 0;
+		x = (float) (thisGame.getScreenX() * Math.random());
+		y = (float) (thisGame.getScreenY() * Math.random());
+		setDX(0);
+		setDY(0);
 		invincibleStart(2000);
 		hyperspaceStart = System.currentTimeMillis();
 	}
@@ -167,8 +167,8 @@ public class Player extends Entity {
 	 */
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > 200) {
-			Bullet b = new Bullet(X, Y, dX + ((float) Math.sin(rotation + Math.PI / 2)) * 10,
-					dY + ((float) Math.cos(rotation + Math.PI / 2)) * 10, thisGame);
+			Bullet b = new Bullet(x, y, getDX() + ((float) Math.sin(rotation + Math.PI / 2)) * 10,
+					getDY() + ((float) Math.cos(rotation + Math.PI / 2)) * 10, thisGame);
 			thisGame.create(b);
 			lastShot = System.currentTimeMillis();
 		}
@@ -212,8 +212,8 @@ public class Player extends Entity {
 			gc.setStroke(Color.BLACK);
 		}
 		gc.setLineWidth(2);
-		gc.strokePolygon(new double[] { X + 10 * c1, X + 10 * c2, X + 10 * c3 },
-				new double[] { Y - 10 * s1, Y - 10 * s2, Y - 10 * s3 }, 3);
+		gc.strokePolygon(new double[] { x + 10 * c1, x + 10 * c2, x + 10 * c3 },
+				new double[] { y - 10 * s1, y - 10 * s2, y - 10 * s3 }, 3);
 
 		if (boost) {
 			double s4 = Math.sin(rotation + (Math.PI * 7 / 8));
@@ -224,8 +224,8 @@ public class Player extends Entity {
 
 			double s6 = Math.sin(rotation + (Math.PI));
 			double c6 = Math.cos(rotation + (Math.PI));
-			gc.strokePolygon(new double[] { X + 9 * c4, X + 9 * c5, X + 12 * c6 },
-					new double[] { Y - 9 * s4, Y - 9 * s5, Y - 12 * s6 }, 3);
+			gc.strokePolygon(new double[] { x + 9 * c4, x + 9 * c5, x + 12 * c6 },
+					new double[] { y - 9 * s4, y - 9 * s5, y - 12 * s6 }, 3);
 			boost = false;
 		}
 	}

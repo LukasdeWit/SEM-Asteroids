@@ -21,12 +21,17 @@ import javafx.util.Duration;
  */
 public class Launcher extends Application {
 	/**
+	 * Time of one frame.
+	 */
+	private static final double FRAME_TIME = 0.017;
+
+	/**
 	 * Main method.
 	 * 
 	 * @param args
 	 *            - standard
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		launch(args);
 	}
 
@@ -37,7 +42,7 @@ public class Launcher extends Application {
 	 *            - the stage for the scenes
 	 */
 	@Override
-	public void start(Stage stage) throws Exception {
+	public final void start(final Stage stage) throws Exception {
 		// set up the title
 		stage.setTitle("ASTEROIDS!");
 
@@ -47,7 +52,7 @@ public class Launcher extends Application {
 		stage.setScene(scene);
 
 		// set up the canvas
-		Canvas canvas = new Canvas(500, 500);
+		Canvas canvas = new Canvas(Game.CANVAS_SIZE, Game.CANVAS_SIZE);
 		root.getChildren().add(canvas);
 
 		// set up the graphicsContext
@@ -58,16 +63,17 @@ public class Launcher extends Application {
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
-			public void handle(KeyEvent e) {
+			public void handle(final KeyEvent e) {
 				String code = e.getCode().toString();
 
-				if (!input.contains(code))
+				if (!input.contains(code)) {
 					input.add(code);
+				}
 			}
 		});
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
-			public void handle(KeyEvent e) {
+			public void handle(final KeyEvent e) {
 				String code = e.getCode().toString();
 				input.remove(code);
 			}
@@ -82,9 +88,10 @@ public class Launcher extends Application {
 
 		// final long startTime = System.currentTimeMillis();
 
-		KeyFrame kf = new KeyFrame(Duration.seconds(0.017), new EventHandler<ActionEvent>() {
+		KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME), 
+				new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent e) {
+			public void handle(final ActionEvent e) {
 				thisGame.update(input);
 			}
 		});

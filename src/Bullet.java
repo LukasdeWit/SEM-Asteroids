@@ -18,8 +18,8 @@ public class Bullet extends Entity {
 	}
 
 	public void update(ArrayList<String> input) {
-		X = X + dX;
-		Y = Y + dY;
+		x = x + getDX();
+		y = y + getDY();
 		wrapAround();
 		if (System.currentTimeMillis() - birthTime > 1000) {
 			thisGame.destroy(this);
@@ -45,6 +45,6 @@ public class Bullet extends Entity {
 	@Override
 	public void draw(GraphicsContext gc) {
 		gc.setFill(Color.WHITE);
-		gc.fillOval(X - radius / 2, Y - radius / 2, radius * 2, radius * 2);
+		gc.fillOval(x - radius / 2, y - radius / 2, radius * 2, radius * 2);
 	}
 }
