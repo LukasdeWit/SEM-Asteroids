@@ -64,6 +64,12 @@ public class Player extends Entity {
     }
   }
 
+  /**
+   * Method that translates keyboard input into player character movement.
+   * 
+   * @param input
+   *          arraylist containing the keyboard input
+   */
   public void keyHandler(ArrayList<String> input) {
     if (input.contains("LEFT") && !input.contains("RIGHT")) {
       turnLeft();
@@ -86,36 +92,58 @@ public class Player extends Entity {
     }
   }
 
+  /**
+   * Turn the player left.
+   */
   private void turnLeft() {
     rotation += .1;
   }
 
+  /**
+   * Turn the player right.
+   */
   private void turnRight() {
     rotation -= .1;
   }
 
+  /**
+   * Makes player move faster.
+   */
   private void accelerate() {
-    dX += (Math.cos(rotation) / 10);
-    dY -= (Math.sin(rotation) / 10);
+    dX += Math.cos(rotation) / 10;
+    dY -= Math.sin(rotation) / 10;
     boost = true;
   }
 
+  /**
+   * Makes player move slower.
+   */
   private void slowDown() {
-    if ((Math.abs(dX) + Math.abs(dY)) != 0) {
+    if (Math.abs(dX) + Math.abs(dY) != 0) {
       dX -= (.02 * dX) / (Math.abs(dX) + Math.abs(dY));
       dY -= (.02 * dY) / (Math.abs(dX) + Math.abs(dY));
     }
   }
 
-  private void invincableStart(int miliseconds) {
+  /**
+   * Starts invincibility that lasts the given amount of milliseconds.
+   * @param milliseconds amount of milliseconds the player should stay invicible.
+   */
+  private void invincableStart(int milliseconds) {
     invincableStart = System.currentTimeMillis();
-    invincableMS = miliseconds;
+    invincableMS = milliseconds;
   }
 
+  /**
+   * @return whether or not the player is invincible at this moment.
+   */
   public boolean invincable() {
     return (invincableStart + invincableMS > System.currentTimeMillis());
   }
 
+  /**
+   * Method to handle hyperspace mechanic.
+   */
   private void goHyperspace() {
     X = (float) (thisGame.getScreenX() * Math.random());
     Y = (float) (thisGame.getScreenY() * Math.random());
@@ -125,10 +153,16 @@ public class Player extends Entity {
     hyperspaceStart = System.currentTimeMillis();
   }
 
+  /**
+   * @return whether or not the player is in hyperspace at this moment.
+   */
   private boolean hyperspace() {
-    return (hyperspaceStart + invincableMS > System.currentTimeMillis());
+    return hyperspaceStart + invincableMS > System.currentTimeMillis();
   }
 
+  /**
+   * Method to handle firing bullets.
+   */
   private void fire() {
     if (System.currentTimeMillis() - lastShot > 200) {
       Bullet b = new Bullet(X, Y, dX + ((float) Math.sin(rotation + Math.PI / 2)) * 10,
@@ -138,6 +172,9 @@ public class Player extends Entity {
     }
   }
 
+  /**
+   * Method to handle collisions of entities with the player.
+   */
   public void collide(Entity e2) {
     if (e2 instanceof Asteroid) {
       if (invincable() && !hyperspace()) {
@@ -191,6 +228,10 @@ public class Player extends Entity {
     }
   }
 
+  /**
+   * Method to help display the amount of lives the player has left.
+   * @param gc graphicscontext
+   */
   private void drawLives(GraphicsContext gc) {
     for (int i = 0; i < lives; i++) {
       gc.setStroke(Color.WHITE);
