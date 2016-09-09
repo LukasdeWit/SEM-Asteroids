@@ -7,14 +7,34 @@ import javafx.scene.paint.Color;
  * Class that represents an Asteroid.
  */
 public class Asteroid extends Entity {
-	private int shape; // either 0, 1 or 2.
-
-	private final int[] XShape0 = { -2, 0, 2, 4, 3, 4, 1, 0, -2, -4, -4, -4 };
-	private final int[] YShape0 = { -4, -2, -4, -2, 0, 2, 4, 4, 4, 2, 0, -2 };
-	private final int[] XShape1 = { -2, 0, 2, 4, 2, 4, 2, -1, -2, -4, -3, -4 };
-	private final int[] YShape1 = { -4, -3, -4, -2, -1, 0, 3, 2, 3, 1, 0, -2 };
-	private final int[] XShape2 = { -2, 1, 4, 4, 2, 4, 2, 1, -2, -4, -4, -1 };
-	private final int[] YShape2 = { -4, -4, -2, -1, 0, 2, 4, 3, 4, 1, -2, -2 };
+	/**
+	 * Shape of Asteroid, either 0, 1 or 2.
+	 */
+	private int shape;
+	/**
+	 * X coordinates of shape 0.
+	 */
+	private final int[] xShape0 = { -2, 0, 2, 4, 3, 4, 1, 0, -2, -4, -4, -4 };
+	/**
+	 * Y coordinates of shape 0.
+	 */
+	private final int[] yShape0 = { -4, -2, -4, -2, 0, 2, 4, 4, 4, 2, 0, -2 };
+	/**
+	 * X coordinates of shape 1.
+	 */
+	private final int[] xShape1 = { -2, 0, 2, 4, 2, 4, 2, -1, -2, -4, -3, -4 };
+	/**
+	 * Y coordinates of shape 1.
+	 */
+	private final int[] yShape1 = { -4, -3, -4, -2, -1, 0, 3, 2, 3, 1, 0, -2 };
+	/**
+	 * X coordinates of shape 2.
+	 */
+	private final int[] xShape2 = { -2, 1, 4, 4, 2, 4, 2, 1, -2, -4, -4, -1 };
+	/**
+	 * Y coordinates of shape 2.
+	 */
+	private final int[] yShape2 = { -4, -4, -2, -1, 0, 2, 4, 3, 4, 1, -2, -2 };
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -30,7 +50,7 @@ public class Asteroid extends Entity {
 	 * @param thisGame
 	 *            Game the Asteroid exists in.
 	 */
-	public Asteroid(float X, float Y, float dX, float dY, Game thisGame) {
+	public Asteroid(final float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		radius = 20;
 		shape = (int) (Math.random() * 3);
@@ -106,18 +126,18 @@ public class Asteroid extends Entity {
 		double[] YShape = new double[12];
 		if (shape == 0) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = XShape0[i] * (radius / 4) + getX();
-				YShape[i] = YShape0[i] * (radius / 4) + getY();
+				XShape[i] = xShape0[i] * (radius / 4) + getX();
+				YShape[i] = yShape0[i] * (radius / 4) + getY();
 			}
 		} else if (shape == 1) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = XShape1[i] * (radius / 4) + getX();
-				YShape[i] = YShape1[i] * (radius / 4) + getY();
+				XShape[i] = xShape1[i] * (radius / 4) + getX();
+				YShape[i] = yShape1[i] * (radius / 4) + getY();
 			}
 		} else if (shape == 2) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = XShape2[i] * (radius / 4) + getX();
-				YShape[i] = YShape2[i] * (radius / 4) + getY();
+				XShape[i] = xShape2[i] * (radius / 4) + getX();
+				YShape[i] = yShape2[i] * (radius / 4) + getY();
 			}
 		}
 		gc.strokePolygon(XShape, YShape, 12);
