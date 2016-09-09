@@ -4,11 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Player extends Entity {
+  private int lives;
+  private double rotation;
+  private long lastShot;
+
   private long invincableStart;
   private int invincableMS;
   private long hyperspaceStart;
-  private int lives;
-  private double rotation;
   private boolean boost;
 
   /**
@@ -85,11 +87,11 @@ public class Player extends Entity {
   }
 
   private void turnLeft() {
-    rotation += .2;
+    rotation += .1;
   }
 
   private void turnRight() {
-    rotation -= .2;
+    rotation -= .1;
   }
 
   private void accelerate() {
@@ -128,12 +130,24 @@ public class Player extends Entity {
   }
 
   private void fire() {
-    // TODO: fire
+    if (System.currentTimeMillis() - lastShot > 200) {
+      Bullet b = new Bullet(X, Y, dX + ((float) Math.sin(rotation + Math.PI / 2)) * 10,
+          dY + ((float) Math.cos(rotation + Math.PI / 2)) * 10, thisGame);
+      thisGame.create(b);
+      lastShot = System.currentTimeMillis();
+    }
   }
 
   public void collide(Entity e2) {
-    if (e2 instanceof Asteroid && !invincable()) {
-      ((Asteroid) e2).split();
+    if (e2 instanceof Asteroid) {
+      if (invincable() && !hyperspace()) {
+        invincableStart = System.currentTimeMillis();
+      } else if (!invincable()) {
+        ((Asteroid) e2).split();
+        this.die();
+      }
+    } else if (e2 instanceof Bullet && !((Bullet) e2).getFriendly()) {
+      thisGame.destroy(e2);
       this.die();
     }
   }

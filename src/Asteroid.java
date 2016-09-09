@@ -85,12 +85,15 @@ public class Asteroid extends Entity {
     if (radius == 20) {
       thisGame.addAsteroid(X, Y, (float) (dX + Math.random() - .5), (float) (dY + Math.random() - .5), 12);
       thisGame.addAsteroid(X, Y, (float) (dX + Math.random() - .5), (float) (dY + Math.random() - .5), 12);
+      thisGame.addScore(20);
       thisGame.destroy(this);
     } else if (radius == 12) {
       thisGame.addAsteroid(X, Y, (float) (dX + Math.random() * 2 - 1), (float) (dY + Math.random() - .5), 4);
       thisGame.addAsteroid(X, Y, (float) (dX + Math.random() * 2 - 1), (float) (dY + Math.random() - .5), 4);
+      thisGame.addScore(50);
       thisGame.destroy(this);
     } else {
+      thisGame.addScore(100);
       thisGame.destroy(this);
     }
   }

@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * This class is the main launcher of the game.
+ * This class is the main launcher of the game
  * 
  * @author Lukas
  *
@@ -36,7 +36,7 @@ public class Launcher extends Application {
     stage.setScene(scene);
 
     // set up the canvas
-    Canvas canvas = new Canvas(1024, 512);
+    Canvas canvas = new Canvas(500, 500);
     root.getChildren().add(canvas);
 
     // set up the graphicsContext
@@ -50,9 +50,8 @@ public class Launcher extends Application {
       public void handle(KeyEvent e) {
         String code = e.getCode().toString();
 
-        if (!input.contains(code)) {
+        if (!input.contains(code))
           input.add(code);
-        }
       }
     });
     scene.setOnKeyReleased(new EventHandler<KeyEvent>() {

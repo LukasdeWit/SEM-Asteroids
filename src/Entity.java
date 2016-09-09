@@ -21,11 +21,17 @@ public abstract class Entity {
 
   /**
    * Constructor for the Entity class.
-   * @param X location of Entity along the X-axis.
-   * @param Y location of Entity along the Y-axis.
-   * @param dX velocity of Entity along the X-axis.
-   * @param dY velocity of Entity along the Y-axis.
-   * @param thisGame Game the Entity exists in.
+   * 
+   * @param X
+   *          location of Entity along the X-axis.
+   * @param Y
+   *          location of Entity along the Y-axis.
+   * @param dX
+   *          velocity of Entity along the X-axis.
+   * @param dY
+   *          velocity of Entity along the Y-axis.
+   * @param thisGame
+   *          Game the Entity exists in.
    */
   public Entity(float X, float Y, float dX, float dY, Game thisGame) {
     this.X = X;
@@ -40,7 +46,8 @@ public abstract class Entity {
   public abstract void draw(GraphicsContext gc);
 
   /**
-   * Function that moves entities to the other side of the screen when they reach the edge.
+   * Function that moves entities to the other side of the screen when they
+   * reach the edge.
    */
   public void wrapAround() {
     if (X < 0) {
@@ -59,8 +66,11 @@ public abstract class Entity {
 
   /**
    * Calculate distance between 2 Entities.
-   * @param e1 first Entity
-   * @param e2 second Entity
+   * 
+   * @param e1
+   *          first Entity
+   * @param e2
+   *          second Entity
    * @return float containing the distance between the Entities.
    */
   public static float distance(Entity e1, Entity e2) {
@@ -69,8 +79,11 @@ public abstract class Entity {
 
   /**
    * Check whether or not Entities are colliding.
-   * @param e1 first Entity
-   * @param e2 second Entity
+   * 
+   * @param e1
+   *          first Entity
+   * @param e2
+   *          second Entity
    * @return boolean that is true when entities collide
    */
   public static boolean collision(Entity e1, Entity e2) {
@@ -79,7 +92,9 @@ public abstract class Entity {
 
   /**
    * Function that describes how the Entity behaves when colliding with another.
-   * @param e2 Entity to be collided with.
+   * 
+   * @param e2
+   *          Entity to be collided with.
    */
   public abstract void collide(Entity e2);
 }
