@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Class that represents a UFO.
+ */
 public class UFO extends Entity {
 	private int toRight; // general direction 1 is to right 0 is to left
 	private long dirChangeTime;
@@ -10,6 +13,20 @@ public class UFO extends Entity {
 	private final double[] XShape0 = { 1, 2, 4, 2, -2, -4, -2, -1 };
 	private final double[] YShape0 = { -3, -1, 1, 3, 3, 1, -1, -3 };
 
+	/**
+	 * Constructor for UFO class.
+	 * 
+	 * @param X
+	 *            position of UFO along the X-axis
+	 * @param Y
+	 *            position of UFO along the Y-axis
+	 * @param dX
+	 *            velocity of UFO along the X-axis
+	 * @param dY
+	 *            velocity of UFO along the Y-axis
+	 * @param thisGame
+	 *            game this ufo is placed in
+	 */
 	public UFO(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
 		setRadius(10);
@@ -18,11 +35,20 @@ public class UFO extends Entity {
 		setPath((X > (thisGame.getScreenX() / 2)) ? 1 : 0, (int) (Math.random() * 3));
 	}
 
+	/**
+	 * Set UFO path.
+	 * @param toRight
+	 * @param path
+	 */
 	public void setPath(int toRight, int path) {
 		this.toRight = toRight;
 		setDirection((float) (toRight * Math.PI + (path - 1) * Math.PI / 4));
 	}
 
+	/**
+	 * Set UFO path.
+	 * @param path
+	 */
 	public void setPath(int path) {
 		setPath(toRight, path);
 	}
@@ -42,6 +68,9 @@ public class UFO extends Entity {
 		shoot();
 	}
 
+	/**
+	 * Makes the UFO shoot.
+	 */
 	private void shoot() {
 		if (System.currentTimeMillis() - shotTime > 1000) {
 			float randomDir = (float) (Math.random() * 2 * Math.PI);
@@ -53,12 +82,18 @@ public class UFO extends Entity {
 		}
 	}
 
+	/**
+	 * Destroy this if it's outside the screen.
+	 */
 	private void checkEnd() {
 		if (getX() > getThisGame().getScreenX() || getX() < 0) {
 			getThisGame().destroy(this);
 		}
 	}
 
+	/**
+	 * Change the ufo direction randomly at certain times in a random direction.
+	 */
 	private void changeDirection() {
 		if (System.currentTimeMillis() - dirChangeTime > 2000) {
 			dirChangeTime = System.currentTimeMillis();
