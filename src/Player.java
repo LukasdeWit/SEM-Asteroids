@@ -76,11 +76,11 @@ public class Player extends Entity {
 	/**
 	 * A quarter pi.
 	 */
-	private static final double QUARTER_PI = (Math.PI / 4);
+	private static final double QUARTER_PI = Math.PI / 4;
 	/**
 	 * One eigth pi.
 	 */
-	private static final double EIGTH_PI = (Math.PI / 8);
+	private static final double EIGTH_PI = Math.PI / 8;
 	/**
 	 * Time of flicker while respawning.
 	 */
