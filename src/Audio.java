@@ -18,4 +18,32 @@ public class Audio {
 	private AudioClip largeexplosion;
 	// background beat, longer sound so mediaplayer instead of audioclip
 	private MediaPlayer background;
+	
+	public void FlyingNoise() {
+		flyingnoise.play();
+	}
+	
+	public void ShootingNoise() {
+		shootingnoise.play();
+	}
+	
+	public void DeathNoise() {
+		deathnoise.play();
+	}
+	
+	public void SmallExplosion() {
+		smallexplosion.play();
+	}
+	
+	public void MediumExplosion() {
+		mediumexplosion.play();
+	}
+	
+	public void LargeExplosion() {
+		largeexplosion.play();
+	}
+	
+	public void BackgroundMusic() {
+		background.play();
+	}
 }
