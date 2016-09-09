@@ -12,7 +12,7 @@ public class Bullet extends Entity {
 
 	public Bullet(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
-		radius = 2;
+		setRadius(2);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
 	}
@@ -44,6 +44,7 @@ public class Bullet extends Entity {
 
 	@Override
 	public void draw(GraphicsContext gc) {
+		float radius = getRadius();
 		gc.setFill(Color.WHITE);
 		gc.fillOval(getX() - radius / 2, getY() - radius / 2, radius * 2, radius * 2);
 	}

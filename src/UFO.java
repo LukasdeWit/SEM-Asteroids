@@ -12,14 +12,10 @@ public class UFO extends Entity {
 
 	public UFO(float X, float Y, float dX, float dY, Game thisGame) {
 		super(X, Y, dX, dY, thisGame);
-		radius = 10;
+		setRadius(10);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
 		setPath((X > (thisGame.getScreenX() / 2)) ? 1 : 0, (int) (Math.random() * 3));
-	}
-
-	public void setRadius(float radius) {
-		this.radius = radius;
 	}
 
 	public void setPath(int toRight, int path) {
@@ -77,8 +73,8 @@ public class UFO extends Entity {
 		double[] XShape = new double[8];
 		double[] YShape = new double[8];
 		for (int i = 0; i < 8; i++) {
-			XShape[i] = XShape0[i] * (radius * 5 / 15) + getX();
-			YShape[i] = YShape0[i] * (radius * 4 / 15) + getY();
+			XShape[i] = XShape0[i] * (getRadius() * 5 / 15) + getX();
+			YShape[i] = YShape0[i] * (getRadius() * 4 / 15) + getY();
 		}
 		gc.strokePolygon(XShape, YShape, 8);
 		gc.strokeLine(XShape[1], YShape[1], XShape[6], YShape[6]);
@@ -89,15 +85,15 @@ public class UFO extends Entity {
 	public void collide(Entity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			((Player) e2).die();
-			getThisGame().addScore((int) (200 + (radius % 2 * 800)));
+			getThisGame().addScore((int) (200 + (getRadius() % 2 * 800)));
 			getThisGame().destroy(this);
 		} else if (e2 instanceof Bullet && ((Bullet) e2).getFriendly()) {
 			getThisGame().destroy(e2);
-			getThisGame().addScore((int) (200 + (radius % 2 * 800)));
+			getThisGame().addScore((int) (200 + (getRadius() % 2 * 800)));
 			getThisGame().destroy(this);
 		} else if (e2 instanceof Asteroid) {
 			((Asteroid) e2).split();
-			getThisGame().addScore((int) (200 + (radius % 2 * 800)));
+			getThisGame().addScore((int) (200 + (getRadius() % 2 * 800)));
 			getThisGame().destroy(this);
 		}
 	}
