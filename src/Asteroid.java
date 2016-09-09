@@ -39,9 +39,9 @@ public class Asteroid extends Entity {
 	/**
 	 * Constructor for the Asteroid class.
 	 * 
-	 * @param X
+	 * @param x
 	 *            location of Asteroid along the X-axis.
-	 * @param Y
+	 * @param y
 	 *            location of Asteroid along the Y-axis.
 	 * @param dX
 	 *            velocity of Asteroid along the X-axis.
@@ -50,35 +50,17 @@ public class Asteroid extends Entity {
 	 * @param thisGame
 	 *            Game the Asteroid exists in.
 	 */
-	public Asteroid(final float X, float Y, float dX, float dY, Game thisGame) {
-		super(X, Y, dX, dY, thisGame);
-		radius = 20;
+	public Asteroid(final float x, final float y,
+			final float dX, final float dY, final Game thisGame) {
+		super(x, y, dX, dY, thisGame);
+		setRadius(20);
 		shape = (int) (Math.random() * 3);
-	}
-
-	/**
-	 * Get radius of Asteroid.
-	 * 
-	 * @return float containing the Radius.
-	 */
-	public float getRadius() {
-		return radius;
-	}
-
-	/**
-	 * Set a new radius for the Asteroid.
-	 * 
-	 * @param radius
-	 *            float containing the new radius.
-	 */
-	public void setRadius(float radius) {
-		this.radius = radius;
 	}
 
 	/**
 	 * Calculate new position of Asteroid.
 	 */
-	public void update(ArrayList<String> input) {
+	public final void update(ArrayList<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		wrapAround();
@@ -88,7 +70,7 @@ public class Asteroid extends Entity {
 	 * Behaviour when Asteroid collides with entities.
 	 */
 	@Override
-	public void collide(Entity e2) {
+	public final void collide(final Entity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			split();
 			((Player) e2).die();
@@ -101,13 +83,13 @@ public class Asteroid extends Entity {
 	/**
 	 * Split asteroid into 2 small ones, or if it's too small destroy it.
 	 */
-	public void split() {
-		if (radius == 20) {
+	public final void split() {
+		if (getRadius() == 20) {
 			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() - .5), (float) (getDY() + Math.random() - .5), 12);
 			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() - .5), (float) (getDY() + Math.random() - .5), 12);
 			getThisGame().addScore(20);
 			getThisGame().destroy(this);
-		} else if (radius == 12) {
+		} else if (getRadius() == 12) {
 			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() * 2 - 1), (float) (getDY() + Math.random() - .5), 4);
 			getThisGame().addAsteroid(getX(), getY(), (float) (getDX() + Math.random() * 2 - 1), (float) (getDY() + Math.random() - .5), 4);
 			getThisGame().addScore(50);
@@ -126,18 +108,18 @@ public class Asteroid extends Entity {
 		double[] YShape = new double[12];
 		if (shape == 0) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = xShape0[i] * (radius / 4) + getX();
-				YShape[i] = yShape0[i] * (radius / 4) + getY();
+				XShape[i] = xShape0[i] * (getRadius() / 4) + getX();
+				YShape[i] = yShape0[i] * (getRadius() / 4) + getY();
 			}
 		} else if (shape == 1) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = xShape1[i] * (radius / 4) + getX();
-				YShape[i] = yShape1[i] * (radius / 4) + getY();
+				XShape[i] = xShape1[i] * (getRadius() / 4) + getX();
+				YShape[i] = yShape1[i] * (getRadius() / 4) + getY();
 			}
 		} else if (shape == 2) {
 			for (int i = 0; i < 12; i++) {
-				XShape[i] = xShape2[i] * (radius / 4) + getX();
-				YShape[i] = yShape2[i] * (radius / 4) + getY();
+				XShape[i] = xShape2[i] * (getRadius() / 4) + getX();
+				YShape[i] = yShape2[i] * (getRadius() / 4) + getY();
 			}
 		}
 		gc.strokePolygon(XShape, YShape, 12);

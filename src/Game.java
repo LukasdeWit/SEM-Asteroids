@@ -73,7 +73,7 @@ public class Game {
 	/**
 	 * Number of starting asteroids.
 	 */
-	public static final int STARTING_ASTEROIDS = 4;
+	public static final int STARTING_ASTEROIDS = 0;
 	/**
 	 * Radius of small UFO.
 	 */
