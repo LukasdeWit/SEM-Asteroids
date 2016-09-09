@@ -87,7 +87,7 @@ public class UFO extends Entity {
 
   @Override
   public void collide(Entity e2) {
-    if (e2 instanceof Player && !((Player) e2).invincable()) {
+    if (e2 instanceof Player && !((Player) e2).invincible()) {
       ((Player) e2).die();
       thisGame.addScore((int) (200 + (radius % 2 * 800)));
       thisGame.destroy(this);

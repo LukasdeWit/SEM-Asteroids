@@ -69,7 +69,7 @@ public class Asteroid extends Entity {
    */
   @Override
   public void collide(Entity e2) {
-    if (e2 instanceof Player && !((Player) e2).invincable()) {
+    if (e2 instanceof Player && !((Player) e2).invincible()) {
       split();
       ((Player) e2).die();
     } else if (e2 instanceof Bullet) {

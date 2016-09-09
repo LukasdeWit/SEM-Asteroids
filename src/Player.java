@@ -8,8 +8,8 @@ public class Player extends Entity {
   private double rotation;
   private long lastShot;
 
-  private long invincableStart;
-  private int invincableMS;
+  private long invincibleStart;
+  private int invincibleMS;
   private long hyperspaceStart;
   private boolean boost;
 
@@ -32,7 +32,7 @@ public class Player extends Entity {
     lives = 3;
     radius = 5;
     rotation = 0;
-    invincableStart(500);
+    invincibleStart(500);
   }
 
   /**
@@ -42,14 +42,14 @@ public class Player extends Entity {
     lives--;
     if (lives == 0) {
       thisGame.over();
-      invincableStart(500);
+      invincibleStart(500);
     } else {
       X = thisGame.getScreenX() / 2;
       Y = thisGame.getScreenY() / 2;
       dX = 0;
       dY = 0;
       rotation = 0;
-      invincableStart(500);
+      invincibleStart(500);
     }
   }
 
@@ -59,7 +59,7 @@ public class Player extends Entity {
     Y = Y + dY;
     slowDown();
     wrapAround();
-    if (!invincable()) {
+    if (!invincible()) {
       keyHandler(input);
     }
   }
@@ -129,16 +129,16 @@ public class Player extends Entity {
    * Starts invincibility that lasts the given amount of milliseconds.
    * @param milliseconds amount of milliseconds the player should stay invicible.
    */
-  private void invincableStart(int milliseconds) {
-    invincableStart = System.currentTimeMillis();
-    invincableMS = milliseconds;
+  private void invincibleStart(int milliseconds) {
+    invincibleStart = System.currentTimeMillis();
+    invincibleMS = milliseconds;
   }
 
   /**
    * @return whether or not the player is invincible at this moment.
    */
-  public boolean invincable() {
-    return (invincableStart + invincableMS > System.currentTimeMillis());
+  public boolean invincible() {
+    return (invincibleStart + invincibleMS > System.currentTimeMillis());
   }
 
   /**
@@ -149,7 +149,7 @@ public class Player extends Entity {
     Y = (float) (thisGame.getScreenY() * Math.random());
     dX = 0;
     dY = 0;
-    invincableStart(2000);
+    invincibleStart(2000);
     hyperspaceStart = System.currentTimeMillis();
   }
 
@@ -157,7 +157,7 @@ public class Player extends Entity {
    * @return whether or not the player is in hyperspace at this moment.
    */
   private boolean hyperspace() {
-    return hyperspaceStart + invincableMS > System.currentTimeMillis();
+    return hyperspaceStart + invincibleMS > System.currentTimeMillis();
   }
 
   /**
@@ -177,9 +177,9 @@ public class Player extends Entity {
    */
   public void collide(Entity e2) {
     if (e2 instanceof Asteroid) {
-      if (invincable() && !hyperspace()) {
-        invincableStart = System.currentTimeMillis();
-      } else if (!invincable()) {
+      if (invincible() && !hyperspace()) {
+        invincibleStart = System.currentTimeMillis();
+      } else if (!invincible()) {
         ((Asteroid) e2).split();
         this.die();
       }
@@ -203,7 +203,7 @@ public class Player extends Entity {
     double c3 = Math.cos(rotation + (Math.PI * 5 / 4));
 
     gc.setStroke(Color.WHITE);
-    if (invincable() && (System.currentTimeMillis() + invincableMS) % 500 < 250) {
+    if (invincible() && (System.currentTimeMillis() + invincibleMS) % 500 < 250) {
       gc.setStroke(Color.GREY);
     }
     if (hyperspace()) {
