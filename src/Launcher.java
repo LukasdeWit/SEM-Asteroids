@@ -14,17 +14,24 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * This class is the main launcher of the game
+ * This class is the main launcher of the game.
  * 
  * @author Lukas
  *
  */
 public class Launcher extends Application {
-
+  /**
+   * Main method.
+   * @param args - standard
+   */
   public static void main(String[] args) {
     launch(args);
   }
 
+  /**
+   * starts the window and boots the game.
+   * @param stage - the stage for the scenes
+   */
   @Override
   public void start(Stage stage) throws Exception {
     // set up the title
