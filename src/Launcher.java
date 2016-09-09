@@ -20,77 +20,81 @@ import javafx.util.Duration;
  *
  */
 public class Launcher extends Application {
-  /**
-   * Main method.
-   * @param args - standard
-   */
-  public static void main(String[] args) {
-    launch(args);
-  }
+	/**
+	 * Main method.
+	 * 
+	 * @param args
+	 *            - standard
+	 */
+	public static void main(String[] args) {
+		launch(args);
+	}
 
-  /**
-   * starts the window and boots the game.
-   * @param stage - the stage for the scenes
-   */
-  @Override
-  public void start(Stage stage) throws Exception {
-    // set up the title
-    stage.setTitle("ASTEROIDS!");
+	/**
+	 * starts the window and boots the game.
+	 * 
+	 * @param stage
+	 *            - the stage for the scenes
+	 */
+	@Override
+	public void start(Stage stage) throws Exception {
+		// set up the title
+		stage.setTitle("ASTEROIDS!");
 
-    // set up the scene
-    Group root = new Group();
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
+		// set up the scene
+		Group root = new Group();
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
 
-    // set up the canvas
-    Canvas canvas = new Canvas(500, 500);
-    root.getChildren().add(canvas);
+		// set up the canvas
+		Canvas canvas = new Canvas(500, 500);
+		root.getChildren().add(canvas);
 
-    // set up the graphicsContext
-    GraphicsContext gc = canvas.getGraphicsContext2D();
+		// set up the graphicsContext
+		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-    // set up the keyhandler
-    ArrayList<String> input = new ArrayList<String>();
+		// set up the keyhandler
+		ArrayList<String> input = new ArrayList<String>();
 
-    scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-      @Override
-      public void handle(KeyEvent e) {
-        String code = e.getCode().toString();
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent e) {
+				String code = e.getCode().toString();
 
-        if (!input.contains(code))
-          input.add(code);
-      }
-    });
-    scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-      @Override
-      public void handle(KeyEvent e) {
-        String code = e.getCode().toString();
-        input.remove(code);
-      }
-    });
+				if (!input.contains(code))
+					input.add(code);
+			}
+		});
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent e) {
+				String code = e.getCode().toString();
+				input.remove(code);
+			}
+		});
 
-    // Make a new Game
-    Game thisGame = new Game(gc);
+		// Make a new Game
+		Game thisGame = new Game(gc);
 
-    // set up the timing control
-    Timeline renderloop = new Timeline();
-    renderloop.setCycleCount(Timeline.INDEFINITE);
+		// set up the timing control
+		Timeline renderloop = new Timeline();
+		renderloop.setCycleCount(Timeline.INDEFINITE);
 
-    // final long startTime = System.currentTimeMillis();
+		// final long startTime = System.currentTimeMillis();
 
-    KeyFrame kf = new KeyFrame(Duration.seconds(0.017), new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent e) {
-        thisGame.update(input);
-      }
-    });
+		KeyFrame kf = new KeyFrame(Duration.seconds(0.017), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				thisGame.update(input);
+			}
+		});
 
-    // add game to scene
-    renderloop.getKeyFrames().add(kf);
-    renderloop.play();
+		// add game to scene
+		renderloop.getKeyFrames().add(kf);
+		renderloop.play();
 
-    // show game
-    stage.show();
-  }
+		// show game
+		stage.show();
+	}
 
 }

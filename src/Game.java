@@ -314,7 +314,7 @@ public class Game {
 
 	/**
 	 * Adds score to this.score.
-	 * @param score - the score to be added
+	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
 		this.score += score;
