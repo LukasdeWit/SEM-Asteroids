@@ -7,18 +7,81 @@ import javafx.scene.paint.Color;
  * Class that represents a UFO.
  */
 public class UFO extends Entity {
-	private int toRight; // general direction 1 is to right 0 is to left
+	/**
+	 * 1 if this UFO is going to the right, and 0 if going to the left.
+	 */
+	private int toRight;
+	/**
+	 * Time since previous change of direction in miliseconds.
+	 */
 	private long dirChangeTime;
+	/**
+	 * Time since previous shot in miliseconds.
+	 */
 	private long shotTime;
-	private final double[] XShape0 = { 1, 2, 4, 2, -2, -4, -2, -1 };
-	private final double[] YShape0 = { -3, -1, 1, 3, 3, 1, -1, -3 };
+	/**
+	 * X coordinates of UFO shape.
+	 */
+	private final double[] xShape0 = { 1, 2, 4, 2, -2, -4, -2, -1 };
+	/**
+	 * Y coordinates of UFO shape.
+	 */
+	private final double[] yShape0 = { -3, -1, 1, 3, 3, 1, -1, -3 };
+	/**
+	 * The points of horizontal lines of UFO shape. point 1 to point 6, etc.
+	 */
+	private final int[][] horLines = {{1, 6}, {2, 5}};
+	/**
+	 * Radius of UFO.
+	 */
+	private static final float RADIUS = 10;
+	/**
+	 * Number of paths.
+	 */
+	private static final double PATHS = 3;
+	/**
+	 * A quarter pi.
+	 */
+	private static final double QUARTER_PI = Math.PI / 4;
+	/**
+	 * Time between shots.
+	 */
+	private static final long SHOTTIME = 1000;
+	/**
+	 * Speed multiplier.
+	 */
+	private static final float SPEED = 5;
+	/**
+	 * Time between changes of direction in miliseconds.
+	 */
+	private static final long CHANGE_DIR_TIME = 2000;
+	/**
+	 * Number of lines per shape.
+	 */
+	private static final int SHAPE_LINES = 8;
+	/**
+	 * Heigth Multiplier.
+	 */
+	private static final float HEIGTH = 5 / 15;
+	/**
+	 * Width Multiplier.
+	 */
+	private static final float WIDTH = 4 / 15;
+	/**
+	 * Score of big UFO.
+	 */
+	private static final int BIG_SCORE = 200;
+	/**
+	 * Extra score of big UFO.
+	 */
+	private static final int SMALL_SCORE = 1000;
 
 	/**
 	 * Constructor for UFO class.
 	 * 
-	 * @param X
+	 * @param x
 	 *            position of UFO along the X-axis
-	 * @param Y
+	 * @param y
 	 *            position of UFO along the Y-axis
 	 * @param dX
 	 *            velocity of UFO along the X-axis
@@ -27,39 +90,49 @@ public class UFO extends Entity {
 	 * @param thisGame
 	 *            game this ufo is placed in
 	 */
-	public UFO(float X, float Y, float dX, float dY, Game thisGame) {
-		super(X, Y, dX, dY, thisGame);
-		setRadius(10);
+	public UFO(final float x, final float y, 
+			final float dX, final float dY, final Game thisGame) {
+		super(x, y, dX, dY, thisGame);
+		setRadius(RADIUS);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
-		setPath((X > (thisGame.getScreenX() / 2)) ? 1 : 0, (int) (Math.random() * 3));
+		int nextToRight = 0;
+		if (x > (thisGame.getScreenX() / 2)) {
+			nextToRight = 1;
+		}
+		setPath(nextToRight, (int) (Math.random() * PATHS));
 	}
 
 	/**
 	 * Set UFO path.
-	 * @param toRight
-	 * @param path
+	 * 
+	 * @param toRight - Direction of UFO
+	 * @param path - Low, mid or high path
 	 */
-	public void setPath(int toRight, int path) {
+	public final void setPath(final int toRight, final int path) {
 		this.toRight = toRight;
-		setDirection((float) (toRight * Math.PI + (path - 1) * Math.PI / 4));
+		setDirection((float) (toRight * Math.PI + (path - 1) * QUARTER_PI));
 	}
 
 	/**
 	 * Set UFO path.
-	 * @param path
+	 * @param path - Low, mid or high path
 	 */
-	public void setPath(int path) {
+	public final void setPath(final int path) {
 		setPath(toRight, path);
 	}
-
-	public void setDirection(float direction) {
+	
+	/**
+	 * Set the direction of the UFO, so change the dX and dY using direction.
+	 * @param direction - the direction in radians, 0 being right
+	 */
+	public final void setDirection(final float direction) {
 		setDX((float) Math.cos(direction) * 2);
 		setDY((float) -Math.sin(direction) * 2);
 	}
 
 	@Override
-	public void update(ArrayList<String> input) {
+	public final void update(final ArrayList<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		checkEnd();
@@ -72,10 +145,12 @@ public class UFO extends Entity {
 	 * Makes the UFO shoot.
 	 */
 	private void shoot() {
-		if (System.currentTimeMillis() - shotTime > 1000) {
+		if (System.currentTimeMillis() - shotTime > SHOTTIME) {
 			float randomDir = (float) (Math.random() * 2 * Math.PI);
-			Bullet newBullet = new Bullet(getX(), getY(), getDX() + (float) Math.cos(randomDir) * 5,
-					getDY() - (float) Math.sin(randomDir) * 5, getThisGame());
+			Bullet newBullet = new Bullet(getX(), getY(), 
+					getDX() + (float) Math.cos(randomDir) * SPEED,
+					getDY() - (float) Math.sin(randomDir) * SPEED, 
+					getThisGame());
 			newBullet.setFriendly(false);
 			getThisGame().create(newBullet);
 			shotTime = System.currentTimeMillis();
@@ -95,40 +170,46 @@ public class UFO extends Entity {
 	 * Change the ufo direction randomly at certain times in a random direction.
 	 */
 	private void changeDirection() {
-		if (System.currentTimeMillis() - dirChangeTime > 2000) {
+		if (System.currentTimeMillis() - dirChangeTime > CHANGE_DIR_TIME) {
 			dirChangeTime = System.currentTimeMillis();
-			setPath((int) (Math.random() * 3));
+			setPath((int) (Math.random() * PATHS));
 		}
 	}
 
 	@Override
-	public void draw(GraphicsContext gc) {
+	public final void draw(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(2);
-		double[] XShape = new double[8];
-		double[] YShape = new double[8];
-		for (int i = 0; i < 8; i++) {
-			XShape[i] = XShape0[i] * (getRadius() * 5 / 15) + getX();
-			YShape[i] = YShape0[i] * (getRadius() * 4 / 15) + getY();
+		double[] xShape = new double[SHAPE_LINES];
+		double[] yShape = new double[SHAPE_LINES];
+		for (int i = 0; i < SHAPE_LINES; i++) {
+			xShape[i] = xShape0[i] * (getRadius() * HEIGTH) + getX();
+			yShape[i] = yShape0[i] * (getRadius() * WIDTH) + getY();
 		}
-		gc.strokePolygon(XShape, YShape, 8);
-		gc.strokeLine(XShape[1], YShape[1], XShape[6], YShape[6]);
-		gc.strokeLine(XShape[2], YShape[2], XShape[5], YShape[5]);
+		gc.strokePolygon(xShape, yShape, SHAPE_LINES);
+		for (int i = 0; i < 2; i++) {
+			gc.strokeLine(xShape[horLines[i][1]], yShape[horLines[i][1]], 
+					xShape[horLines[i][2]], yShape[horLines[i][2]]);
+		}
 	}
 
 	@Override
-	public void collide(Entity e2) {
+	public final void collide(final Entity e2) {
+		int points = BIG_SCORE;
+		if (getRadius() != RADIUS) {
+			points = SMALL_SCORE;
+		}
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			((Player) e2).die();
-			getThisGame().addScore((int) (200 + (getRadius() % 2 * 800)));
+			getThisGame().addScore(points);
 			getThisGame().destroy(this);
 		} else if (e2 instanceof Bullet && ((Bullet) e2).getFriendly()) {
 			getThisGame().destroy(e2);
-			getThisGame().addScore((int) (200 + (getRadius() % 2 * 800)));
+			getThisGame().addScore(points);
 			getThisGame().destroy(this);
 		} else if (e2 instanceof Asteroid) {
 			((Asteroid) e2).split();
-			getThisGame().addScore((int) (200 + (getRadius() % 2 * 800)));
+			getThisGame().addScore(points);
 			getThisGame().destroy(this);
 		}
 	}
