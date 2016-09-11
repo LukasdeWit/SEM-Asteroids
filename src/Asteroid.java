@@ -148,7 +148,7 @@ public class Asteroid extends Entity {
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(2);
+		gc.setLineWidth(1);
 		double[] xShape = new double[SHAPE_LINES];
 		double[] yShape = new double[SHAPE_LINES];
 		if (shape == 0) {

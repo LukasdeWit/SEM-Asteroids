@@ -72,7 +72,7 @@ public class Player extends Entity {
 	/**
 	 * Speed of bullets relative to player in pixels per tick.
 	 */
-	private static final float BULLETSPEED = 10;
+	private static final float BULLETSPEED = 2;
 	/**
 	 * A quarter pi.
 	 */
@@ -93,6 +93,10 @@ public class Player extends Entity {
 	 * The number of corners of a triangle.
 	 */
 	private static final int TRIANGLE_CORNERS = 3;
+	/**
+	 * Draw size of Player.
+	 */
+	private static final double SIZE = PLAYER_RADIUS * 1.25;
 	
 
 	/**
@@ -154,19 +158,21 @@ public class Player extends Entity {
 	 *            arraylist containing the keyboard input
 	 */
 	public final void keyHandler(final ArrayList<String> input) {
-		if (input.contains("LEFT") && !input.contains("RIGHT")) {
+		if ((input.contains("LEFT") || input.contains("A"))
+				&& !(input.contains("RIGHT") || input.contains("D"))) {
 			turnLeft();
 		}
 
-		if (input.contains("RIGHT") && !input.contains("LEFT")) {
+		if ((input.contains("RIGHT") || input.contains("D")) 
+				&& !(input.contains("LEFT") || input.contains("A"))) {
 			turnRight();
 		}
 
-		if (input.contains("UP")) {
+		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
 		}
 
-		if (input.contains("DOWN")) {
+		if (input.contains("DOWN") || input.contains("S")) {
 			goHyperspace();
 		}
 
@@ -302,14 +308,14 @@ public class Player extends Entity {
 		if (hyperspace()) {
 			gc.setStroke(Color.BLACK);
 		}
-		gc.setLineWidth(2);
+		gc.setLineWidth(1);
 		gc.strokePolygon(
-				new double[] { getX() + PLAYER_RADIUS * 2 * c1, 
-				getX() + PLAYER_RADIUS * 2 * c2, 
-				getX() + PLAYER_RADIUS * 2 * c3 },
-				new double[] { getY() - PLAYER_RADIUS * 2 * s1, 
-				getY() - PLAYER_RADIUS * 2 * s2, 
-				getY() - PLAYER_RADIUS * 2 * s3 }, TRIANGLE_CORNERS);
+				new double[] { getX() + SIZE * c1, 
+				getX() + SIZE * c2, 
+				getX() + SIZE * c3 },
+				new double[] { getY() - SIZE * s1, 
+				getY() - SIZE * s2, 
+				getY() - SIZE * s3 }, TRIANGLE_CORNERS);
 
 		if (boost) {
 			double s4 = Math.sin(rotation + (Math.PI - EIGTH_PI));
@@ -321,13 +327,13 @@ public class Player extends Entity {
 			double s6 = Math.sin(rotation + (Math.PI));
 			double c6 = Math.cos(rotation + (Math.PI));
 			gc.strokePolygon(new double[] { 
-					getX() + (PLAYER_RADIUS * 2 - 1) * c4, 
-					getX() + (PLAYER_RADIUS * 2 - 1) * c5, 
-					getX() + (PLAYER_RADIUS * 2 + 2) * c6 },
+					getX() + (SIZE - 1) * c4, 
+					getX() + (SIZE - 1) * c5, 
+					getX() + (SIZE + 2) * c6 },
 					new double[] { 
-					getY() - (PLAYER_RADIUS * 2 - 1) * s4, 
-					getY() - (PLAYER_RADIUS * 2 - 1) * s5, 
-					getY() - (PLAYER_RADIUS * 2 + 2) * s6 }, TRIANGLE_CORNERS);
+					getY() - (SIZE - 1) * s4, 
+					getY() - (SIZE - 1) * s5, 
+					getY() - (SIZE + 2) * s6 }, TRIANGLE_CORNERS);
 			//TODO: PLEASE MAKE THIS BETTER
 			boost = false;
 		}
@@ -342,7 +348,7 @@ public class Player extends Entity {
 	private void drawLives(final GraphicsContext gc) {
 		for (int i = 0; i < lives; i++) {
 			gc.setStroke(Color.WHITE);
-			gc.setLineWidth(2);
+			gc.setLineWidth(1);
 			gc.strokePolygon(new double[] { 
 					LIVES_SIZE * (i + 1), 
 					LIVES_SIZE * (i + 1) - 2, 

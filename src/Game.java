@@ -229,13 +229,17 @@ public class Game {
 	 */
 	public final void drawScore(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(2);
-		int rest = score;
-		int digit;
-		for (int i = 1; rest != 0; i++) {
-			digit = (int) (rest % TEN);
-			rest = (rest - digit) / TEN;
-			drawDigit(gc, digit, i);
+		gc.setLineWidth(1);
+		if (score == 0) {
+			drawDigit(gc, 0, 0);
+		} else {
+			int rest = score;
+			int digit;
+			for (int i = 0; rest != 0; i++) {
+				digit = (int) (rest % TEN);
+				rest = (rest - digit) / TEN;
+				drawDigit(gc, digit, i);
+			}
 		}
 	}
 

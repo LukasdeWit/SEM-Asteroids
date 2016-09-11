@@ -22,11 +22,12 @@ public class UFO extends Entity {
 	/**
 	 * X coordinates of UFO shape.
 	 */
-	private final double[] xShape0 = { 1, 2, 4, 2, -2, -4, -2, -1 };
+	private final double[] xShape0 = 
+		{ 1.25, 2.5, 5, 2.5, -2.5, -5, -2.5, -1.25 };
 	/**
 	 * Y coordinates of UFO shape.
 	 */
-	private final double[] yShape0 = { -3, -1, 1, 3, 3, 1, -1, -3 };
+	private final double[] yShape0 = { -3.5, -0.75, 1, 3, 3, 1, -0.75, -3.5 };
 	/**
 	 * The points of horizontal lines of UFO shape. point 1 to point 6, etc.
 	 */
@@ -34,7 +35,7 @@ public class UFO extends Entity {
 	/**
 	 * Radius of UFO.
 	 */
-	private static final float RADIUS = 10;
+	private static final float BIG_RADIUS = 10;
 	/**
 	 * Number of paths.
 	 */
@@ -48,9 +49,9 @@ public class UFO extends Entity {
 	 */
 	private static final long SHOTTIME = 1000;
 	/**
-	 * Speed multiplier.
+	 * Bullet speed multiplier.
 	 */
-	private static final float SPEED = 5;
+	private static final float BULLET_SPEED = 2;
 	/**
 	 * Time between changes of direction in miliseconds.
 	 */
@@ -62,11 +63,7 @@ public class UFO extends Entity {
 	/**
 	 * Heigth Multiplier.
 	 */
-	private static final float HEIGTH = 5 / 15;
-	/**
-	 * Width Multiplier.
-	 */
-	private static final float WIDTH = 4 / 15;
+	private static final float SIZE = .20f;
 	/**
 	 * Score of big UFO.
 	 */
@@ -93,7 +90,7 @@ public class UFO extends Entity {
 	public UFO(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
-		setRadius(RADIUS);
+		setRadius(BIG_RADIUS);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
 		int nextToRight = 0;
@@ -148,8 +145,8 @@ public class UFO extends Entity {
 		if (System.currentTimeMillis() - shotTime > SHOTTIME) {
 			float randomDir = (float) (Math.random() * 2 * Math.PI);
 			Bullet newBullet = new Bullet(getX(), getY(), 
-					getDX() + (float) Math.cos(randomDir) * SPEED,
-					getDY() - (float) Math.sin(randomDir) * SPEED, 
+					getDX() + (float) Math.cos(randomDir) * BULLET_SPEED,
+					getDY() - (float) Math.sin(randomDir) * BULLET_SPEED, 
 					getThisGame());
 			newBullet.setFriendly(false);
 			getThisGame().create(newBullet);
@@ -179,24 +176,24 @@ public class UFO extends Entity {
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(2);
+		gc.setLineWidth(.5);
 		double[] xShape = new double[SHAPE_LINES];
 		double[] yShape = new double[SHAPE_LINES];
 		for (int i = 0; i < SHAPE_LINES; i++) {
-			xShape[i] = xShape0[i] * (getRadius() * HEIGTH) + getX();
-			yShape[i] = yShape0[i] * (getRadius() * WIDTH) + getY();
+			xShape[i] = xShape0[i] * (getRadius() * SIZE) + getX();
+			yShape[i] = yShape0[i] * (getRadius() * SIZE) + getY();
 		}
 		gc.strokePolygon(xShape, yShape, SHAPE_LINES);
 		for (int i = 0; i < 2; i++) {
 			gc.strokeLine(xShape[horLines[i][1]], yShape[horLines[i][1]], 
-					xShape[horLines[i][2]], yShape[horLines[i][2]]);
+					xShape[horLines[i][0]], yShape[horLines[i][1]]);
 		}
 	}
 
 	@Override
 	public final void collide(final Entity e2) {
 		int points = BIG_SCORE;
-		if (getRadius() != RADIUS) {
+		if (getRadius() != BIG_RADIUS) {
 			points = SMALL_SCORE;
 		}
 		if (e2 instanceof Player && !((Player) e2).invincible()) {

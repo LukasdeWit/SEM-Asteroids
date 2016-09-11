@@ -19,7 +19,7 @@ public class Bullet extends Entity {
 	/**
 	 * Lifetime of a bullet in miliseconds.
 	 */
-	private static final long LIFETIME = 1000;
+	private static final long LIFETIME = 2000;
 
 	/**
 	 * Constructor for the bullet class.
