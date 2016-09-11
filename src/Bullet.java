@@ -75,6 +75,14 @@ public class Bullet extends Entity {
 	public final void setFriendly(final boolean friendly) {
 		this.friendly = friendly;
 	}
+	
+	/**
+	 * getter for friendly.
+	 * @return friendly
+	 */
+	public final boolean isFriendly() {
+		return friendly;
+	}
 
 	/**
 	 * Describes what happens when the bullet collides with entities.

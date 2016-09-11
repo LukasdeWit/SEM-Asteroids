@@ -72,7 +72,7 @@ public class Player extends Entity {
 	/**
 	 * Speed of bullets relative to player in pixels per tick.
 	 */
-	private static final float BULLETSPEED = 2;
+	private static final float BULLETSPEED = 4;
 	/**
 	 * A quarter pi.
 	 */
@@ -101,6 +101,10 @@ public class Player extends Entity {
 	 * Maximum speed of Player in pixels per tick.
 	 */
 	private static final float MAXSPEED = 4;
+	/**
+	 * Maximum amount of friendly bullets simulatiously in a game.
+	 */
+	private static final int MAX_BULLETS = 4;
 	
 
 	/**
@@ -265,13 +269,16 @@ public class Player extends Entity {
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS) {
+		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
+				&& getThisGame().bullets() < MAX_BULLETS) {
 			Bullet b = new Bullet(getX(), getY(), 
 					(float) (getDX() / 2 + (Math.cos(rotation) * BULLETSPEED)), 
 					(float) (getDY() / 2 - (Math.sin(rotation) * BULLETSPEED)), 
 					getThisGame());
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
+		} else if (getThisGame().bullets() >= MAX_BULLETS) {
+			System.out.println('t');
 		}
 	}
 

@@ -193,13 +193,6 @@ public class Game {
 		}
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
-
-		for (Entity destroyEntity : destroyList) {
-			entities.remove(destroyEntity);
-		}
-		for (Entity createEntity : createList) {
-			entities.add(createEntity);
-		}
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
@@ -330,5 +323,19 @@ public class Game {
 	 */
 	public static float getCanvasSize() {
 		return CANVAS_SIZE;
+	}
+
+	/**
+	 * Amount of bullets currently in game.
+	 * @return amount of bullets
+	 */
+	public final int bullets() {
+		int bullets = 0;
+		for (Entity e : entities) {
+			if (e instanceof Bullet && ((Bullet) e).isFriendly()) {
+				bullets++;
+			}
+		}
+		return bullets;
 	}
 }
