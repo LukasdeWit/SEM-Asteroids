@@ -38,6 +38,10 @@ public class Player extends Entity {
 	 */
 	private boolean boost;
 	/**
+	 * margin between two lives in pixels.
+	 */
+	private double margin;
+	/**
 	 * Amount of lives at the start of a game.
 	 */
 	private static final int STARTING_LIVES = 3;
@@ -105,6 +109,18 @@ public class Player extends Entity {
 	 * Maximum amount of friendly bullets simulatiously in a game.
 	 */
 	private static final int MAX_BULLETS = 4;
+	/**
+	 * Y ofset of drawn lives.
+	 */
+	private static final double LIVES_Y_OFSET = 40;
+	/**
+	 * The margin between two lives at the start.
+	 */
+	private static final double START_MARGIN = 10;
+	/**
+	 * Maximum amount of lives next to eachother with START_MARGIN as margin.
+	 */
+	private static final double FULL_LIVES = 20;
 	
 
 	/**
@@ -128,6 +144,7 @@ public class Player extends Entity {
 		setRadius(RADIUS);
 		rotation = 0;
 		invincibleStart(INVINC_START_TIME);
+		margin = START_MARGIN;
 	}
 
 	/**
@@ -135,6 +152,7 @@ public class Player extends Entity {
 	 */
 	public final void die() {
 		lives--;
+		updateMargin();
 		if (lives == 0) {
 			getThisGame().over();
 			invincibleStart(INVINC_START_TIME); //TODO: Game over
@@ -145,6 +163,23 @@ public class Player extends Entity {
 			setDY(0);
 			rotation = 0;
 			invincibleStart(INVINC_START_TIME);
+		}
+	}
+	
+	/**
+	 * Gain a live.
+	 */
+	public final void gainLive() {
+		lives++;
+		updateMargin();
+	}
+
+	/**
+	 * Update the margin between lives to fit on screen.
+	 */
+	private void updateMargin() {
+		if (lives >= FULL_LIVES) {
+			margin = START_MARGIN * FULL_LIVES / lives;
 		}
 	}
 
@@ -271,6 +306,7 @@ public class Player extends Entity {
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
 				&& getThisGame().bullets() < MAX_BULLETS) {
+			gainLive(); //temp
 			Bullet b = new Bullet(getX(), getY(), 
 					(float) (getDX() / 2 + (Math.cos(rotation) * BULLETSPEED)), 
 					(float) (getDY() / 2 - (Math.sin(rotation) * BULLETSPEED)), 
@@ -362,13 +398,13 @@ public class Player extends Entity {
 			gc.setStroke(Color.WHITE);
 			gc.setLineWidth(1);
 			gc.strokePolygon(new double[] { 
-					LIVES_SIZE * (i + 1), 
-					LIVES_SIZE * (i + 1) - 2, 
-					LIVES_SIZE * (i + 1) + 2}, 
+					margin * (i + 1), 
+					margin * (i + 1) - 2, 
+					margin * (i + 1) + 2}, 
 					new double[] { 
-					LIVES_SIZE, 
-					LIVES_SIZE * 2 - 2, 
-					LIVES_SIZE * 2 - 2}, TRIANGLE_CORNERS);
+					LIVES_Y_OFSET, 
+					LIVES_Y_OFSET + LIVES_SIZE  - 2, 
+					LIVES_Y_OFSET + LIVES_SIZE  - 2}, TRIANGLE_CORNERS);
 		}
 	}
 }
