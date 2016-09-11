@@ -1,7 +1,5 @@
-package Entity;
 import java.util.ArrayList;
 
-import Game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

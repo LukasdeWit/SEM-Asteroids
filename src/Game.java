@@ -1,10 +1,5 @@
-package Game;
 import java.util.ArrayList;
 
-import Entity.Asteroid;
-import Entity.Entity;
-import Entity.Player;
-import Entity.UFO;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
