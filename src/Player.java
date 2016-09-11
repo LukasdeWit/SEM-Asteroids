@@ -167,9 +167,9 @@ public class Player extends Entity {
 	}
 	
 	/**
-	 * Gain a live.
+	 * Achievement: get a life.
 	 */
-	public final void gainLive() {
+	public final void gainLife() {
 		lives++;
 		updateMargin();
 	}
@@ -306,7 +306,6 @@ public class Player extends Entity {
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
 				&& getThisGame().bullets() < MAX_BULLETS) {
-			gainLive(); //temp
 			Bullet b = new Bullet(getX(), getY(), 
 					(float) (getDX() / 2 + (Math.cos(rotation) * BULLETSPEED)), 
 					(float) (getDY() / 2 - (Math.sin(rotation) * BULLETSPEED)), 

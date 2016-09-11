@@ -12,6 +12,10 @@ import javafx.scene.paint.Color;
  */
 public class Game {
 	/**
+	 * The player of this game.
+	 */
+	private Player player;
+	/**
 	 * The spawner of this game.
 	 */
 	private Spawner spawner;
@@ -95,6 +99,10 @@ public class Game {
 	 * Ofset of raster for digits in pixels.
 	 */
 	private static final int OFSET_PIXELS = 20;
+	/**
+	 * Number of points needed to gain a life.
+	 */
+	private static final int LIFE_SCORE = 10000;
 
 	/**
 	 * Constructor for a new game.
@@ -119,7 +127,8 @@ public class Game {
 	public final void startGame() {
 		restartTime = System.currentTimeMillis();
 		entities.clear();
-		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
+		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
+		entities.add(player);
 		score = 0;
 		spawner.reset();
 	}
@@ -317,6 +326,9 @@ public class Game {
 	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
+		if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
+			player.gainLife();
+		}
 		this.score += score;
 	}
 	/**
