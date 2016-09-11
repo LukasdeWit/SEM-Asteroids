@@ -11,13 +11,18 @@ public class Audio {
 	// ship noises
 	private AudioClip flyingnoise;
 	private AudioClip shootingnoise;
-	private AudioClip deathnoise;
+	private AudioClip extralife;
 	// asteroid noises
 	private AudioClip smallexplosion;
 	private AudioClip mediumexplosion;
 	private AudioClip largeexplosion;
-	// background beat, longer sound so mediaplayer instead of audioclip
-	private MediaPlayer background;
+	// background beat
+	private AudioClip beat1;
+	private AudioClip beat2;
+	
+	public Audio() {
+		
+	}
 	
 	public void FlyingNoise() {
 		flyingnoise.play();
@@ -27,8 +32,8 @@ public class Audio {
 		shootingnoise.play();
 	}
 	
-	public void DeathNoise() {
-		deathnoise.play();
+	public void LifeUpNoise() {
+		extralife.play();
 	}
 	
 	public void SmallExplosion() {
@@ -44,6 +49,6 @@ public class Audio {
 	}
 	
 	public void BackgroundMusic() {
-		background.play();
+		// method to generate background noise from beat1 and beat2
 	}
 }
