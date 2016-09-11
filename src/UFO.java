@@ -192,22 +192,28 @@ public class UFO extends Entity {
 
 	@Override
 	public final void collide(final Entity e2) {
+		if (e2 instanceof Player && !((Player) e2).invincible()) {
+			((Player) e2).die();
+			die();
+		} else if (e2 instanceof Bullet && ((Bullet) e2).getFriendly()) {
+			getThisGame().destroy(e2);
+			die();
+		} else if (e2 instanceof Asteroid) {
+			((Asteroid) e2).split();
+			die();
+		}
+	}
+
+	/**
+	 * kills this UFO, adds the points to score and explodes.
+	 */
+	private void die() {
 		int points = BIG_SCORE;
 		if (getRadius() != BIG_RADIUS) {
 			points = SMALL_SCORE;
 		}
-		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			((Player) e2).die();
-			getThisGame().addScore(points);
-			getThisGame().destroy(this);
-		} else if (e2 instanceof Bullet && ((Bullet) e2).getFriendly()) {
-			getThisGame().destroy(e2);
-			getThisGame().addScore(points);
-			getThisGame().destroy(this);
-		} else if (e2 instanceof Asteroid) {
-			((Asteroid) e2).split();
-			getThisGame().addScore(points);
-			getThisGame().destroy(this);
-		}
+		getThisGame().addScore(points);
+		Particle.explosion(getX(), getY(), getThisGame());
+		getThisGame().destroy(this);
 	}
 }

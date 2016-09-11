@@ -151,6 +151,7 @@ public class Asteroid extends Entity {
 			getThisGame().addScore(SMALL_SCORE);
 			getThisGame().destroy(this);
 		}
+		Particle.explosion(getX(), getY(), getThisGame());
 	}
 
 	@Override

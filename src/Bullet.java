@@ -23,7 +23,7 @@ public class Bullet extends Entity {
 	/**
 	 * Draw size of bullet.
 	 */
-	private static final float SIZE = 1;
+	private static final float SIZE = 1.5f;
 
 	/**
 	 * Constructor for the bullet class.
