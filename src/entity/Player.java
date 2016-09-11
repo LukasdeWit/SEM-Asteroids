@@ -1,5 +1,7 @@
-import java.util.ArrayList;
+package entity;
+import java.util.List;
 
+import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -140,8 +142,12 @@ public class Player extends Entity {
 		}
 	}
 
+	/**
+	 * Calculate new position of player.
+	 * @param input - the pressed keys
+	 */
 	@Override
-	public final void update(final ArrayList<String> input) {
+	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		slowDown();
@@ -157,7 +163,7 @@ public class Player extends Entity {
 	 * @param input
 	 *            arraylist containing the keyboard input
 	 */
-	public final void keyHandler(final ArrayList<String> input) {
+	public final void keyHandler(final List<String> input) {
 		if ((input.contains("LEFT") || input.contains("A"))
 				&& !(input.contains("RIGHT") || input.contains("D"))) {
 			turnLeft();
@@ -280,12 +286,15 @@ public class Player extends Entity {
 				((Asteroid) e2).split();
 				this.die();
 			}
-		} else if (e2 instanceof Bullet && !((Bullet) e2).getFriendly()) {
+		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			this.die();
 		}
 	}
 
+	/**
+	 * Display Player on screen.
+	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		drawLives(gc);

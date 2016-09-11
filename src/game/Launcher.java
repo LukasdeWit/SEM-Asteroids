@@ -1,5 +1,7 @@
+package game;
 import java.util.ArrayList;
 
+import game.Game;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
