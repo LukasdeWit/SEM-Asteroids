@@ -20,6 +20,10 @@ public class Bullet extends Entity {
 	 * Lifetime of a bullet in miliseconds.
 	 */
 	private static final long LIFETIME = 2000;
+	/**
+	 * Draw size of bullet.
+	 */
+	private static final float SIZE = 1;
 
 	/**
 	 * Constructor for the bullet class.
@@ -87,9 +91,9 @@ public class Bullet extends Entity {
 	public final void draw(final GraphicsContext gc) {
 		float radius = getRadius();
 		gc.setFill(Color.WHITE);
-		gc.fillOval(getX() - radius / 2, 
-				getY() - radius / 2, 
-				radius * 2, 
-				radius * 2);
+		gc.fillOval(getX() - radius / SIZE, 
+				getY() - radius / SIZE, 
+				radius * SIZE, 
+				radius * SIZE);
 	}
 }

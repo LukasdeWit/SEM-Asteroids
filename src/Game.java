@@ -69,19 +69,20 @@ public class Game {
 	/**
 	 * Size of canvas.
 	 */
-	public static final float CANVAS_SIZE = 500;
+	private static final float CANVAS_SIZE = 500;
+
 	/**
 	 * Number of starting asteroids.
 	 */
-	public static final int STARTING_ASTEROIDS = 0;
+	private static final int STARTING_ASTEROIDS = 1;
 	/**
 	 * Radius of small UFO.
 	 */
-	public static final float SMALL_UFO_RADIUS = 5;
+	private static final float SMALL_UFO_RADIUS = 5;
 	/**
 	 * Speed multiplier of initial Asteroids.
 	 */
-	public static final float ASTEROID_SPEED = 4;
+	private static final float ASTEROID_SPEED = 1;
 	/**
 	 * Minimal restart time.
 	 */
@@ -119,7 +120,7 @@ public class Game {
 		entities.clear();
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
 		addRandomAsteroid(STARTING_ASTEROIDS);
-		addRandomUFO();
+		//addRandomUFO();
 		score = 0;
 	}
 	
@@ -322,5 +323,12 @@ public class Game {
 	 */
 	public final void addScore(final int score) {
 		this.score += score;
+	}
+	/**
+	 * CanvasSize getter.
+	 * @return canvas size
+	 */
+	public static float getCanvasSize() {
+		return CANVAS_SIZE;
 	}
 }

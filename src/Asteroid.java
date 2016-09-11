@@ -71,6 +71,10 @@ public class Asteroid extends Entity {
 	 * Size multiplier.
 	 */
 	private static final float SIZE = .25f;
+	/**
+	 * Minimum speed of any asteroid in pixels per tick.
+	 */
+	private static final float MIN_SPEED = .5f;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -91,6 +95,10 @@ public class Asteroid extends Entity {
 		super(x, y, dX, dY, thisGame);
 		setRadius(BIG_RADIUS);
 		shape = (int) (Math.random() * SHAPES);
+		while (speed() < MIN_SPEED) {
+			setDX(getDX() * 2);
+			setDY(getDY() * 2);
+		}
 	}
 
 	/**

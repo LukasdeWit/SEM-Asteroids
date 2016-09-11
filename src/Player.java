@@ -52,15 +52,15 @@ public class Player extends Entity {
 	/**
 	 * Rotation in radians per tick.
 	 */
-	private static final double ROTATION_MULTIPLIER = .1;
+	private static final double ROTATION_MULTIPLIER = .06;
 	/**
 	 * Acceleration in pixels per ticks squared.
 	 */
-	private static final double ACCELERATION_MULTIPLIER = .1;
+	private static final double ACCELERATION_MULTIPLIER = .04;
 	/**
 	 * Deceleration in pixels per ticks squared.
 	 */
-	private static final float DECELERATION_MULTIPLIER = .02f;
+	private static final float DECELERATION_MULTIPLIER = .01f;
 	/**
 	 * Time in miliseconds per hyperspace jump.
 	 */
@@ -97,6 +97,10 @@ public class Player extends Entity {
 	 * Draw size of Player.
 	 */
 	private static final double SIZE = PLAYER_RADIUS * 1.25;
+	/**
+	 * Maximum speed of Player in pixels per tick.
+	 */
+	private static final float MAXSPEED = 4;
 	
 
 	/**
@@ -201,6 +205,10 @@ public class Player extends Entity {
 	private void accelerate() {
 		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION_MULTIPLIER));
 		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION_MULTIPLIER));
+		if (speed() > MAXSPEED) {
+			setDX(getDX() * (MAXSPEED / speed()));
+			setDY(getDY() * (MAXSPEED / speed()));
+		}
 		boost = true;
 	}
 
@@ -258,10 +266,9 @@ public class Player extends Entity {
 	 */
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS) {
-			Bullet b = new Bullet(getX(), getY(), getDX() 
-					+ ((float) Math.sin(rotation + Math.PI / 2)) * BULLETSPEED, 
-					getDY() 
-					+ ((float) Math.cos(rotation + Math.PI / 2)) * BULLETSPEED, 
+			Bullet b = new Bullet(getX(), getY(), 
+					(float) (getDX() / 2 + (Math.cos(rotation) * BULLETSPEED)), 
+					(float) (getDY() / 2 - (Math.sin(rotation) * BULLETSPEED)), 
 					getThisGame());
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
