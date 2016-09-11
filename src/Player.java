@@ -44,7 +44,7 @@ public class Player extends Entity {
 	/**
 	 * Radius of Player.
 	 */
-	private static final float PLAYER_RADIUS = 5;
+	private static final float RADIUS = 5;
 	/**
 	 * Invincible time at the start of a game.
 	 */
@@ -52,15 +52,15 @@ public class Player extends Entity {
 	/**
 	 * Rotation in radians per tick.
 	 */
-	private static final double ROTATION_MULTIPLIER = .06;
+	private static final double ROTATION = .06;
 	/**
 	 * Acceleration in pixels per ticks squared.
 	 */
-	private static final double ACCELERATION_MULTIPLIER = .04;
+	private static final double ACCELERATION = .04;
 	/**
 	 * Deceleration in pixels per ticks squared.
 	 */
-	private static final float DECELERATION_MULTIPLIER = .01f;
+	private static final float DECELERATION = .01f;
 	/**
 	 * Time in miliseconds per hyperspace jump.
 	 */
@@ -96,7 +96,7 @@ public class Player extends Entity {
 	/**
 	 * Draw size of Player.
 	 */
-	private static final double SIZE = PLAYER_RADIUS * 1.25;
+	private static final double SIZE = RADIUS * 1.25;
 	/**
 	 * Maximum speed of Player in pixels per tick.
 	 */
@@ -125,7 +125,7 @@ public class Player extends Entity {
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		lives = STARTING_LIVES;
-		this.setRadius(PLAYER_RADIUS);
+		setRadius(RADIUS);
 		rotation = 0;
 		invincibleStart(INVINC_START_TIME);
 	}
@@ -193,22 +193,22 @@ public class Player extends Entity {
 	 * Turn the player left.
 	 */
 	private void turnLeft() {
-		rotation += ROTATION_MULTIPLIER;
+		rotation += ROTATION;
 	}
 
 	/**
 	 * Turn the player right.
 	 */
 	private void turnRight() {
-		rotation -= ROTATION_MULTIPLIER;
+		rotation -= ROTATION;
 	}
 
 	/**
 	 * Makes player move faster.
 	 */
 	private void accelerate() {
-		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION_MULTIPLIER));
-		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION_MULTIPLIER));
+		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION));
+		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION));
 		if (speed() > MAXSPEED) {
 			setDX(getDX() * (MAXSPEED / speed()));
 			setDY(getDY() * (MAXSPEED / speed()));
@@ -221,9 +221,9 @@ public class Player extends Entity {
 	 */
 	private void slowDown() {
 		if (Math.abs(getDX()) + Math.abs(getDY()) != 0) {
-			setDX((float) (getDX() - (DECELERATION_MULTIPLIER * getDX()) 
+			setDX((float) (getDX() - (DECELERATION * getDX()) 
 					/ (Math.abs(getDX()) + Math.abs(getDY()))));
-			setDY((float) (getDY() - (DECELERATION_MULTIPLIER * getDY()) 
+			setDY((float) (getDY() - (DECELERATION * getDY()) 
 					/ (Math.abs(getDX()) + Math.abs(getDY()))));
 		}
 	}
@@ -277,8 +277,6 @@ public class Player extends Entity {
 					getThisGame());
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
-		} else if (getThisGame().bullets() >= MAX_BULLETS) {
-			System.out.println('t');
 		}
 	}
 
