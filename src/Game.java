@@ -3,77 +3,184 @@ import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Game {
-	private ArrayList<Entity> entities;
-	private ArrayList<Entity> destroyList;
-	private ArrayList<Entity> createList;
-	private ArrayList<Entity> addList;
-	private float screenX;
-	private float screenY;
-	private GraphicsContext gc;
-	private long restartTime;
-	private int score;
-	
-	private final double[] ScoreDisplayX={190,200,190,200,190,200}; //first one only
-	private final double[] ScoreDisplayY={ 20, 20, 30, 30, 40, 40};
 
-	private final int[][] NumberLines={
-			{0,1,5,4,0},
-			{1,5},
-			{0,1,3,2,4,5},
-			{0,1,3,2,3,5,4},
-			{0,2,3,1,5},
-			{1,0,2,3,5,4},
-			{1,0,4,5,3,2},
-			{0,1,5},
-			{2,0,1,5,4,2,3},
-			{4,5,1,0,2,3}
-	};
+/**
+ * This class defines everything within the game.
+ * 
+ * @author Kibo
+ *
+ */
+public class Game {
+	/**
+	 * List of all entities currently in the game.
+	 */
+	private ArrayList<Entity> entities;
+	/**
+	 * List of all entities to be destroyed at the and of the tick.
+	 */
+	private ArrayList<Entity> destroyList;
+	/**
+	 * List of all entities to be created at the and of the tick.
+	 */
+	private ArrayList<Entity> createList;
+	/**
+	 * length of canvas in pixels.
+	 */
+	private float screenX;
+	/**
+	 * heigth of canvas in pixels.
+	 */
+	private float screenY;
+	/**
+	 * the GraphicsContext, needed to draw things.
+	 */
+	private GraphicsContext gc;
+	/**
+	 * the start time of the current game.
+	 */
+	private long restartTime;
+	/**
+	 * current score.
+	 */
+	private int score;
+	/**
+	 * Xcoordinates of the raster of the first digit.
+	 */
+	private final double[] scoreDisplayX = { 190, 200, 190, 200, 190, 200 }; 
+	/**
+	 * Ycoordinates of the raster of the first digit.
+	 */
+	private final double[] scoreDisplayY = { 20, 20, 30, 30, 40, 40 };
+	/**
+	 * the raster dots to be connected to form a digit.
+	 */
+	private final int[][] numberLines = { 
+			{ 0, 1, 5, 4, 0 }, 
+			{ 1, 5 }, 
+			{ 0, 1, 3, 2, 4, 5 }, 
+			{ 0, 1, 3, 2, 3, 5, 4 },
+			{ 0, 2, 3, 1, 5 }, 
+			{ 1, 0, 2, 3, 5, 4 }, 
+			{ 1, 0, 4, 5, 3, 2 }, 
+			{ 0, 1, 5 }, 
+			{ 2, 0, 1, 5, 4, 2, 3 },
+			{ 4, 5, 1, 0, 2, 3 } };
 	
-	public Game(GraphicsContext gc) {
+	/**
+	 * Size of canvas.
+	 */
+	public static final float CANVAS_SIZE = 500;
+	/**
+	 * Number of starting asteroids.
+	 */
+	public static final int STARTING_ASTEROIDS = 0;
+	/**
+	 * Radius of small UFO.
+	 */
+	public static final float SMALL_UFO_RADIUS = 5;
+	/**
+	 * Speed multiplier of initial Asteroids.
+	 */
+	public static final float ASTEROID_SPEED = 4;
+	/**
+	 * Minimal restart time.
+	 */
+	private static final long MINIMAL_RESTART_TIME = 300;
+	/**
+	 * Ten.
+	 */
+	private static final int TEN = 10;
+	/**
+	 * Ofset of raster for digits in pixels.
+	 */
+	private static final int OFSET_PIXELS = 20;
+
+	/**
+	 * Constructor for a new game.
+	 * 
+	 * @param gc
+	 *            - the GraphicsContext of the canvas
+	 */
+	public Game(final GraphicsContext gc) {
 		this.gc = gc;
-		screenX = 500;
-		screenY = 500;
+		screenX = CANVAS_SIZE;
+		screenY = CANVAS_SIZE;
 		entities = new ArrayList<Entity>();
-		addList = new ArrayList<Entity>();
 		destroyList = new ArrayList<Entity>();
 		createList = new ArrayList<Entity>();
 		startGame();
 	}
 
-	public void startGame() {
-		restartTime=System.currentTimeMillis();
+	/**
+	 * Starts or restarts the game, with initial entities.
+	 */
+	public final void startGame() {
+		restartTime = System.currentTimeMillis();
 		entities.clear();
 		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
-		addRandomAsteroid(4);
+		addRandomAsteroid(STARTING_ASTEROIDS);
 		addRandomUFO();
-		score=0;
+		score = 0;
 	}
 	
-	public void addRandomUFO(){
-		UFO newUFO = new UFO(((int)(Math.random()*2))*screenX,(float)Math.random()*screenY,0,0,this);
-		if(Math.random()<.5){
-			newUFO.setRadius(5);
+	/**
+	 * adds a UFO with random Y, side of screen, path and size.
+	 */
+	public final void addRandomUFO() {
+		UFO newUFO = new UFO(((int) (Math.random() * 2)) * screenX, 
+				(float) Math.random() * screenY, 0, 0, this);
+		if (Math.random() < .5) {
+			newUFO.setRadius(SMALL_UFO_RADIUS);
 		}
 		create(newUFO);
-		
-	}
-	
-	public void addRandomAsteroid(int times){
-		for (int i = 0; i < times; i++) {
-			entities.add(new Asteroid(0, screenY * (float) Math.random(), (float) Math.random() * 4 - 2,
-				(float) Math.random() * 4 - 2, this));
-		}
-	}
-	
-	public void addAsteroid(float X, float Y, float dX, float dY, float radius){
-		Asteroid newAsteroid = new Asteroid(X, Y, dX, dY, this);
-		newAsteroid.setRadius(radius);
-		addList.add(newAsteroid);
+
 	}
 
-	public void update(ArrayList<String> input) {
-		if (input.contains("R")&&System.currentTimeMillis()-restartTime>300){
+	/**
+	 * adds asteroids with random Y, side of screen and direction, but with
+	 * radius 20.
+	 * 
+	 * @param times
+	 *            - the number of asteroids
+	 */
+	public final void addRandomAsteroid(final int times) {
+		for (int i = 0; i < times; i++) {
+			entities.add(new Asteroid(0, screenY * (float) Math.random(), 
+					(float) (Math.random() - .5) * ASTEROID_SPEED, 
+					(float) (Math.random() - .5) * ASTEROID_SPEED, this));
+		}
+	}
+
+	/**
+	 * adds an asteroid.
+	 * 
+	 * @param x
+	 *            - x coordinate
+	 * @param y
+	 *            - y coordinate
+	 * @param dX
+	 *            - horizontal speed
+	 * @param dY
+	 *            - vertical speed
+	 * @param radius
+	 *            - size
+	 */
+	public final void addAsteroid(final float x, final float y, 
+			final float dX, final float dY, final float radius) {
+		Asteroid newAsteroid = new Asteroid(x, y, dX, dY, this);
+		newAsteroid.setRadius(radius);
+		createList.add(newAsteroid);
+	}
+
+	/**
+	 * update runs every game tick and updates all necessary entities.
+	 * 
+	 * @param input
+	 *            - all keys pressed at the time of update
+	 */
+	public final void update(final ArrayList<String> input) {
+		if (input.contains("R") && System.currentTimeMillis() 
+				- restartTime > MINIMAL_RESTART_TIME) {
 			startGame();
 		}
 		gc.setFill(Color.BLACK);
@@ -85,79 +192,135 @@ public class Game {
 		}
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
-		
+
 		for (Entity destroyEntity : destroyList) {
 			entities.remove(destroyEntity);
 		}
-		for (Entity addEntity : addList) {
-			entities.add(addEntity);
+		for (Entity createEntity : createList) {
+			entities.add(createEntity);
 		}
-		addList.clear();
+		createList.clear();
 		destroyList.clear();
 		createList.clear();
 		drawScore(gc);
 	}
 
-	public void checkCollision(Entity e1){
+	/**
+	 * checks all collisions of an entity, if there is a hit then collide of the
+	 * entity class will be run.
+	 * 
+	 * @param e1
+	 *            - the entity
+	 */
+	public final void checkCollision(final Entity e1) {
 		for (Entity e2 : entities) {
-			if (!e1.equals(e2) && Entity.collision(e1, e2) && !destroyList.contains(e1) && !destroyList.contains(e2)){
+			if (!e1.equals(e2) && Entity.collision(e1, e2) 
+					&& !destroyList.contains(e1) && !destroyList.contains(e2)) {
 				e1.collide(e2);
 			}
 		}
 	}
-	
-	public void drawScore(GraphicsContext gc) {
+
+	/**
+	 * draws the current score on the canvas.
+	 * 
+	 * @param gc
+	 *            - the GraphicsContext of the canvas
+	 */
+	public final void drawScore(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(2);
-		int rest=score;
-		int digit;
-		for (int i = 1; rest!=0; i++) {
-			digit=(int) (rest%10);
-			rest=(rest-digit)/10;
-			drawDigit(gc,digit,i);
+		gc.setLineWidth(1);
+		if (score == 0) {
+			drawDigit(gc, 0, 0);
+		} else {
+			int rest = score;
+			int digit;
+			for (int i = 0; rest != 0; i++) {
+				digit = (int) (rest % TEN);
+				rest = (rest - digit) / TEN;
+				drawDigit(gc, digit, i);
+			}
 		}
 	}
 
-	private void drawDigit(GraphicsContext gc, int digit, int ofset) {
-		int l=NumberLines[digit].length;
+	/**
+	 * Draws a single digit on a predifined raster.
+	 * 
+	 * @param gc
+	 *            - the GraphicsContext of the canvas
+	 * @param digit
+	 *            - the digit
+	 * @param ofset
+	 *            - the ofset to the left of the starting position (the '1' in
+	 *            12 should have an ofset of 1 and the '2' 0)
+	 */
+	private void drawDigit(final GraphicsContext gc, 
+			final int digit, final int ofset) {
+		int l = numberLines[digit].length;
 		double[] scoreX = new double[l];
 		double[] scoreY = new double[l];
 		for (int i = 0; i < l; i++) {
-			scoreX[i]=ScoreDisplayX[NumberLines[digit][i]]-ofset*20;
-			scoreY[i]=ScoreDisplayY[NumberLines[digit][i]];
+			scoreX[i] = scoreDisplayX[numberLines[digit][i]] 
+					- ofset * OFSET_PIXELS;
+			scoreY[i] = scoreDisplayY[numberLines[digit][i]];
 		}
 		gc.strokePolyline(scoreX, scoreY, l);
 	}
 
-	public void destroy(Entity e) {
+	/**
+	 * adds an Entity to the destroy list and will be destroyed at the and of
+	 * the current tick.
+	 * 
+	 * @param e
+	 *            - the Entity
+	 */
+	public final void destroy(final Entity e) {
 		destroyList.add(e);
 	}
-	
-	public void create(Entity e) {
+
+	/**
+	 * adds an Entity to the createList, and will be added to the game at the
+	 * and of the current tick.
+	 * 
+	 * @param e
+	 *            - the Entity
+	 */
+	public final void create(final Entity e) {
 		createList.add(e);
 	}
-	
-	public ArrayList<Entity> getEntities(){
-		return entities;
-	}
 
-	public float getScreenX() {
+	/**
+	 * getter for screenX.
+	 * @return - screenX
+	 */
+	public final float getScreenX() {
 		return screenX;
 	}
 
-	public float getScreenY() {
+	/**
+	 * getter for screenY.
+	 * @return - screenY
+	 */
+	public final float getScreenY() {
 		return screenY;
 	}
 
-  public void over() {
+	/**
+	 * Game over function, destroys the player.
+	 */
+	public final void over() {
 		for (Entity entity : entities) {
-			if (entity instanceof Player){
+			if (entity instanceof Player) {
 				destroy(entity);
 			}
 		}
 	}
 
-	public void addScore(int score) {
-		this.score+=score;
+	/**
+	 * Adds score to this.score.
+	 * @param score - the score to be added.
+	 */
+	public final void addScore(final int score) {
+		this.score += score;
 	}
 }
