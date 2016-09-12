@@ -373,4 +373,13 @@ public class Game {
 		}
 		return enemies;
 	}
+	
+	/**
+	 * Score getter.
+	 * @return score
+	 */
+
+	public long getScore() {
+		return score;
+	}
 }

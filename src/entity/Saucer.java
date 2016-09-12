@@ -47,10 +47,6 @@ public class Saucer extends Entity {
 	 */
 	private static final double QUARTER_PI = Math.PI / 4;
 	/**
-	 * Time between shots.
-	 */
-	private static final long SHOTTIME = 1000;
-	/**
 	 * Bullet speed multiplier.
 	 */
 	private static final float BULLET_SPEED = 2;
@@ -74,6 +70,19 @@ public class Saucer extends Entity {
 	 * Extra score of big Saucer.
 	 */
 	private static final int SMALL_SCORE = 1000;
+	/**
+	 * Time between shots of Saucer.
+	 */
+	private static final long SHOT_TIME = 1000;
+	/**
+	 * Steps of score at which the game becomes more difficult.
+	 */
+	private static final long SCORE_STEP = 10000;
+	/**
+	 * The amount of time the time between shots 
+	 * becomes shorter per difficulty step.
+	 */
+	private static final long LESS_SHOT = 50;
 
 	/**
 	 * Constructor for Saucer class.
@@ -144,15 +153,44 @@ public class Saucer extends Entity {
 	 * Makes the Saucer shoot.
 	 */
 	private void shoot() {
-		if (System.currentTimeMillis() - shotTime > SHOTTIME) {
-			float randomDir = (float) (Math.random() * 2 * Math.PI);
+		if (getRadius() == BIG_RADIUS 
+				&& System.currentTimeMillis() - shotTime > SHOT_TIME) {
+			float shotDir = (float) (Math.random() * 2 * Math.PI);
+			
 			Bullet newBullet = new Bullet(getX(), getY(), 
-					(float) Math.cos(randomDir) * BULLET_SPEED,
-					(float) Math.sin(randomDir) * BULLET_SPEED, 
+					(float) Math.cos(shotDir) * BULLET_SPEED,
+					(float) Math.sin(shotDir) * BULLET_SPEED, 
 					getThisGame());
 			newBullet.setFriendly(false);
 			getThisGame().create(newBullet);
 			shotTime = System.currentTimeMillis();
+			
+		} else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
+			float shotDir = (float) (Math.random() * 2 * Math.PI);
+			
+			Bullet newBullet = new Bullet(getX(), getY(), 
+					(float) Math.cos(shotDir) * BULLET_SPEED,
+					(float) Math.sin(shotDir) * BULLET_SPEED, 
+					getThisGame());
+			newBullet.setFriendly(false);
+			getThisGame().create(newBullet);
+			shotTime = System.currentTimeMillis();
+		}
+	}
+
+	/**
+	 * The time between shots of the small Saucer,
+	 * becomes more smaller when score is higher.
+	 * @return shot time of small saucer
+	 */
+	private long smallShotTime() {
+		long score = getThisGame().getScore() / SCORE_STEP;
+		if (score == 0) {
+			return SHOT_TIME;
+		} else if (score <= (SHOT_TIME * LESS_SHOT) / 2) {
+			return SHOT_TIME - (LESS_SHOT * score);
+		} else {
+			return SHOT_TIME / 2;
 		}
 	}
 
