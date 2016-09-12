@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 /**
  * Class that represents a UFO.
  */
-public class UFO extends Entity {
+public class UFO extends AbstractEntity {
 	/**
 	 * 1 if this UFO is going to the right, and 0 if going to the left.
 	 */
@@ -79,16 +79,11 @@ public class UFO extends Entity {
 	/**
 	 * Constructor for UFO class.
 	 * 
-	 * @param x
-	 *            position of UFO along the X-axis
-	 * @param y
-	 *            position of UFO along the Y-axis
-	 * @param dX
-	 *            velocity of UFO along the X-axis
-	 * @param dY
-	 *            velocity of UFO along the Y-axis
-	 * @param thisGame
-	 *            game this ufo is placed in
+	 * @param x position of UFO along the X-axis
+	 * @param y position of UFO along the Y-axis
+	 * @param dX velocity of UFO along the X-axis
+	 * @param dY velocity of UFO along the Y-axis
+	 * @param thisGame game this ufo is placed in
 	 */
 	public UFO(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
@@ -204,7 +199,7 @@ public class UFO extends Entity {
 	 * Describes what happens when UFO collides with entities.
 	 */
 	@Override
-	public final void collide(final Entity e2) {
+	public final void collide(final AbstractEntity e2) {
 		int points = BIG_SCORE;
 		if (getRadius() != BIG_RADIUS) {
 			points = SMALL_SCORE;

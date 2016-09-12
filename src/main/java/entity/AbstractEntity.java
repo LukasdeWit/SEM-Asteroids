@@ -10,13 +10,13 @@ import javafx.scene.canvas.GraphicsContext;
  * @author Kibo
  *
  */
-public abstract class Entity {
+public abstract class AbstractEntity {
 	/**
-	 * X coordinate of Entity.
+	 * X coordinate of AbstractEntity.
 	 */
 	private float x;
 	/**
-	 * Y coordinate of Entity.
+	 * Y coordinate of AbstractEntity.
 	 */
 	private float y;
 	/**
@@ -28,27 +28,27 @@ public abstract class Entity {
 	 */
 	private float dY;
 	/**
-	 * Radius of Entity, used for collision.
+	 * Radius of AbstractEntity, used for collision.
 	 */
 	private float radius;
 	
 
 	/**
-	 * The Game this Entity belongs to.
+	 * The Game this AbstractEntity belongs to.
 	 */
 	private Game thisGame;
 
 	/**
-	 * Constructor for the Entity class.
+	 * Constructor for the AbstractEntity class.
 	 * 
-	 * @param x location of Entity along the X-axis.
-	 * @param y location of Entity along the Y-axis.
-	 * @param dX velocity of Entity along the X-axis.
-	 * @param dY velocity of Entity along the Y-axis.
-	 * @param thisGame Game the Entity exists in.
+	 * @param x location of AbstractEntity along the X-axis.
+	 * @param y location of AbstractEntity along the Y-axis.
+	 * @param dX velocity of AbstractEntity along the X-axis.
+	 * @param dY velocity of AbstractEntity along the Y-axis.
+	 * @param thisGame Game the AbstractEntity exists in.
 	 */
-	public Entity(final float x, final float y,
-			final float dX, final float dY, final Game thisGame) {
+	public AbstractEntity(final float x, final float y,
+                          final float dX, final float dY, final Game thisGame) {
 		this.setX(x);
 		this.setY(y);
 		this.setDX(dX);
@@ -94,11 +94,11 @@ public abstract class Entity {
 	/**
 	 * Calculate distance between 2 Entities.
 	 * 
-	 * @param e1 first Entity
-	 * @param e2 second Entity
+	 * @param e1 first AbstractEntity
+	 * @param e2 second AbstractEntity
 	 * @return float containing the distance between the Entities.
 	 */
-	public static float distance(final Entity e1, final Entity e2) {
+	public static float distance(final AbstractEntity e1, final AbstractEntity e2) {
 		return (float) Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) 
 				+ Math.pow(e1.getY() - e2.getY(), 2));
 	}
@@ -106,22 +106,22 @@ public abstract class Entity {
 	/**
 	 * Check whether or not Entities are colliding.
 	 * 
-	 * @param e1 first Entity
-	 * @param e2 second Entity
+	 * @param e1 first AbstractEntity
+	 * @param e2 second AbstractEntity
 	 * @return boolean that is true when entities collide
 	 */
-	public static boolean collision(final Entity e1, final Entity e2) {
+	public static boolean collision(final AbstractEntity e1, final AbstractEntity e2) {
 		return (e1.radius + e2.radius) > distance(e1, e2);
 	}
 
 	/**
-	 * Function that describes how the Entity behaves when colliding with
+	 * Function that describes how the AbstractEntity behaves when colliding with
 	 * another.
 	 * 
 	 * @param e2
-	 *            Entity to be collided with.
+	 *            AbstractEntity to be collided with.
 	 */
-	public abstract void collide(Entity e2);
+	public abstract void collide(AbstractEntity e2);
 	
 	/**
 	 * dY getter.

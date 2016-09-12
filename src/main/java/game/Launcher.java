@@ -33,7 +33,7 @@ public class Launcher extends Application {
 	 * @param args
 	 *            - standard
 	 */
-	public static void main(final String[] args) {
+	public static void main(final String... args) {
 		launch(args);
 	}
 
@@ -44,7 +44,7 @@ public class Launcher extends Application {
 	 *            - the stage for the scenes
 	 */
 	@Override
-	public final void start(final Stage stage) throws Exception {
+	public final void start(final Stage stage) {
 		// set up the title
 		stage.setTitle("ASTEROIDS!");
 
@@ -61,13 +61,12 @@ public class Launcher extends Application {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
 
 		// set up the keyhandler
-		final ArrayList<String> input = new ArrayList<String>();
+		final ArrayList<String> input = new ArrayList<>();
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			/**
 			 * Add key code to input when key is pressed.
 			 */
-			@Override
 			public void handle(final KeyEvent e) {
 				final String code = e.getCode().toString();
 
@@ -80,7 +79,6 @@ public class Launcher extends Application {
 			/**
 			 * Remove key code from input when key is released.
 			 */
-			@Override
 			public void handle(final KeyEvent e) {
 				final String code = e.getCode().toString();
 				input.remove(code);
@@ -96,12 +94,10 @@ public class Launcher extends Application {
 
 		// final long startTime = System.currentTimeMillis();
 
-		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME), 
-				new EventHandler<ActionEvent>() {
+		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME), new EventHandler<ActionEvent>() {
 			/**
 			 * Updates game based on keyboard input.
 			 */
-			@Override
 			public void handle(final ActionEvent e) {
 				thisGame.update(input);
 			}

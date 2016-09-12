@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 /**
  * Class that represents an Asteroid.
  */
-public class Asteroid extends Entity {
+public class Asteroid extends AbstractEntity {
 	/**
 	 * Shape of Asteroid, either 0, 1 or 2.
 	 */
@@ -83,16 +83,11 @@ public class Asteroid extends Entity {
 	/**
 	 * Constructor for the Asteroid class.
 	 * 
-	 * @param x
-	 *            location of Asteroid along the X-axis.
-	 * @param y
-	 *            location of Asteroid along the Y-axis.
-	 * @param dX
-	 *            velocity of Asteroid along the X-axis.
-	 * @param dY
-	 *            velocity of Asteroid along the Y-axis.
-	 * @param thisGame
-	 *            Game the Asteroid exists in.
+	 * @param x location of Asteroid along the X-axis.
+	 * @param y location of Asteroid along the Y-axis.
+	 * @param dX velocity of Asteroid along the X-axis.
+	 * @param dY velocity of Asteroid along the Y-axis.
+	 * @param thisGame Game the Asteroid exists in.
 	 */
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, final Game thisGame) {
@@ -115,7 +110,7 @@ public class Asteroid extends Entity {
 	 * Behaviour when Asteroid collides with entities.
 	 */
 	@Override
-	public final void collide(final Entity e2) {
+	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			split();
 			((Player) e2).onDeath();
@@ -153,6 +148,9 @@ public class Asteroid extends Entity {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);

@@ -8,11 +8,11 @@ import javafx.scene.paint.Color;
 /**
  * Class that stores the information for a bullet.
  */
-public class Bullet extends Entity {
+public class Bullet extends AbstractEntity {
 	/**
 	 * Time of creation.
 	 */
-	private long birthTime;
+	private final long birthTime;
 	/**
 	 * true if this bullet is shot by the player, 
 	 * false if it can hit the player.
@@ -25,17 +25,12 @@ public class Bullet extends Entity {
 
 	/**
 	 * Constructor for the bullet class.
-	 * 
-	 * @param x
-	 *            position of bullet along the x-axis
-	 * @param y
-	 *            position of bullet along the y-axis
-	 * @param dX
-	 *            velocity of bullet along the x-axis
-	 * @param dY
-	 *            velocity of bullet along the y-axis
-	 * @param thisGame
-	 *            game the bullet exists in
+	 *
+	 * @param x position of bullet along the x-axis
+	 * @param y position of bullet along the y-axis
+	 * @param dX velocity of bullet along the x-axis
+	 * @param dY velocity of bullet along the y-axis
+	 * @param thisGame game the bullet exists in
 	 */
 	public Bullet(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
@@ -78,7 +73,7 @@ public class Bullet extends Entity {
 	 * Describes what happens when the bullet collides with entities.
 	 */
 	@Override
-	public final void collide(final Entity e2) {
+	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
 			getThisGame().destroy(this);
 			((Asteroid) e2).split();
@@ -90,7 +85,7 @@ public class Bullet extends Entity {
 	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
-		float radius = getRadius();
+		final float radius = getRadius();
 		gc.setFill(Color.WHITE);
 		gc.fillOval(getX() - radius / 2, 
 				getY() - radius / 2, 
