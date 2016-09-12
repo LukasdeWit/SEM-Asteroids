@@ -6,11 +6,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
- * Class that represents a UFO.
+ * Class that represents a Saucer.
  */
-public class UFO extends Entity {
+public class Saucer extends Entity {
 	/**
-	 * 1 if this UFO is going to the right, and 0 if going to the left.
+	 * 1 if this Saucer is going to the right, and 0 if going to the left.
 	 */
 	private int toRight;
 	/**
@@ -22,20 +22,20 @@ public class UFO extends Entity {
 	 */
 	private long shotTime;
 	/**
-	 * X coordinates of UFO shape.
+	 * X coordinates of Saucer shape.
 	 */
 	private final double[] xShape0 = 
 		{ 1.25, 2.5, 5, 2.5, -2.5, -5, -2.5, -1.25 };
 	/**
-	 * Y coordinates of UFO shape.
+	 * Y coordinates of Saucer shape.
 	 */
 	private final double[] yShape0 = { -3.5, -0.75, 1, 3, 3, 1, -0.75, -3.5 };
 	/**
-	 * The points of horizontal lines of UFO shape. point 1 to point 6, etc.
+	 * The points of horizontal lines of Saucer shape. point 1 to point 6, etc.
 	 */
 	private final int[][] horLines = {{1, 6}, {2, 5}};
 	/**
-	 * Radius of UFO.
+	 * Radius of Saucer.
 	 */
 	private static final float BIG_RADIUS = 10;
 	/**
@@ -67,29 +67,29 @@ public class UFO extends Entity {
 	 */
 	private static final float SIZE = .20f;
 	/**
-	 * Score of big UFO.
+	 * Score of big Saucer.
 	 */
 	private static final int BIG_SCORE = 200;
 	/**
-	 * Extra score of big UFO.
+	 * Extra score of big Saucer.
 	 */
 	private static final int SMALL_SCORE = 1000;
 
 	/**
-	 * Constructor for UFO class.
+	 * Constructor for Saucer class.
 	 * 
 	 * @param x
-	 *            position of UFO along the X-axis
+	 *            position of Saucer along the X-axis
 	 * @param y
-	 *            position of UFO along the Y-axis
+	 *            position of Saucer along the Y-axis
 	 * @param dX
-	 *            velocity of UFO along the X-axis
+	 *            velocity of Saucer along the X-axis
 	 * @param dY
-	 *            velocity of UFO along the Y-axis
+	 *            velocity of Saucer along the Y-axis
 	 * @param thisGame
 	 *            game this ufo is placed in
 	 */
-	public UFO(final float x, final float y, 
+	public Saucer(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		setRadius(BIG_RADIUS);
@@ -103,9 +103,9 @@ public class UFO extends Entity {
 	}
 
 	/**
-	 * Set UFO path.
+	 * Set Saucer path.
 	 * 
-	 * @param toRight - Direction of UFO
+	 * @param toRight - Direction of Saucer
 	 * @param path - Low, mid or high path
 	 */
 	public final void setPath(final int toRight, final int path) {
@@ -114,7 +114,7 @@ public class UFO extends Entity {
 	}
 
 	/**
-	 * Set UFO path.
+	 * Set Saucer path.
 	 * @param path - Low, mid or high path
 	 */
 	public final void setPath(final int path) {
@@ -122,7 +122,7 @@ public class UFO extends Entity {
 	}
 	
 	/**
-	 * Set the direction of the UFO, so change the dX and dY using direction.
+	 * Set the direction of the Saucer, so change the dX and dY using direction.
 	 * @param direction - the direction in radians, 0 being right
 	 */
 	public final void setDirection(final float direction) {
@@ -130,10 +130,6 @@ public class UFO extends Entity {
 		setDY((float) -Math.sin(direction) * 2);
 	}
 
-	/**
-	 * Calculate new position of UFO.
-	 * @param input - the pressed keys
-	 */
 	@Override
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
@@ -145,14 +141,14 @@ public class UFO extends Entity {
 	}
 
 	/**
-	 * Makes the UFO shoot.
+	 * Makes the Saucer shoot.
 	 */
 	private void shoot() {
 		if (System.currentTimeMillis() - shotTime > SHOTTIME) {
-			final float randomDir = (float) (Math.random() * 2 * Math.PI);
-			final Bullet newBullet = new Bullet(getX(), getY(), 
-					getDX() + (float) Math.cos(randomDir) * BULLET_SPEED,
-					getDY() - (float) Math.sin(randomDir) * BULLET_SPEED, 
+			float randomDir = (float) (Math.random() * 2 * Math.PI);
+			Bullet newBullet = new Bullet(getX(), getY(), 
+					(float) Math.cos(randomDir) * BULLET_SPEED,
+					(float) Math.sin(randomDir) * BULLET_SPEED, 
 					getThisGame());
 			newBullet.setFriendly(false);
 			getThisGame().create(newBullet);
@@ -179,9 +175,6 @@ public class UFO extends Entity {
 		}
 	}
 
-	/**
-	 * Display UFO on screen.
-	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
@@ -199,27 +192,30 @@ public class UFO extends Entity {
 		}
 	}
 
-	/**
-	 * Describes what happens when UFO collides with entities.
-	 */
 	@Override
 	public final void collide(final Entity e2) {
+		if (e2 instanceof Player && !((Player) e2).invincible()) {
+			((Player) e2).die();
+			die();
+		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
+			getThisGame().destroy(e2);
+			die();
+		} else if (e2 instanceof Asteroid) {
+			((Asteroid) e2).split();
+			die();
+		}
+	}
+
+	/**
+	 * kills this Saucer, adds the points to score and explodes.
+	 */
+	private void die() {
 		int points = BIG_SCORE;
 		if (getRadius() != BIG_RADIUS) {
 			points = SMALL_SCORE;
 		}
-		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			((Player) e2).die();
-			getThisGame().addScore(points);
-			getThisGame().destroy(this);
-		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
-			getThisGame().destroy(e2);
-			getThisGame().addScore(points);
-			getThisGame().destroy(this);
-		} else if (e2 instanceof Asteroid) {
-			((Asteroid) e2).split();
-			getThisGame().addScore(points);
-			getThisGame().destroy(this);
-		}
+		getThisGame().addScore(points);
+		Particle.explosion(getX(), getY(), getThisGame());
+		getThisGame().destroy(this);
 	}
 }
