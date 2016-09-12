@@ -49,7 +49,7 @@ public class Saucer extends Entity {
 	/**
 	 * Bullet speed multiplier.
 	 */
-	private static final float BULLET_SPEED = 2;
+	private static final float BULLET_SPEED = 4;
 	/**
 	 * Time between changes of direction in miliseconds.
 	 */
@@ -75,14 +75,14 @@ public class Saucer extends Entity {
 	 */
 	private static final long SHOT_TIME = 1000;
 	/**
-	 * Steps of score at which the game becomes more difficult.
-	 */
-	private static final long SCORE_STEP = 10000;
-	/**
 	 * The amount of time the time between shots 
 	 * becomes shorter per difficulty step.
 	 */
 	private static final long LESS_SHOT = 50;
+	/**
+	 * Maximum accuracy.
+	 */
+	private static final float MAX_ACCURACY = 10;
 
 	/**
 	 * Constructor for Saucer class.
@@ -166,7 +166,7 @@ public class Saucer extends Entity {
 			shotTime = System.currentTimeMillis();
 			
 		} else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
-			float shotDir = (float) (Math.random() * 2 * Math.PI);
+			float shotDir = smallShotDir();
 			
 			Bullet newBullet = new Bullet(getX(), getY(), 
 					(float) Math.cos(shotDir) * BULLET_SPEED,
@@ -179,20 +179,53 @@ public class Saucer extends Entity {
 	}
 
 	/**
+	 * generates the shot direction of small saucer.
+	 * @return direction in radians.
+	 */
+	private float smallShotDir() {
+		float playerX = getThisGame().getPlayer().getX();
+		float playerY = getThisGame().getPlayer().getY();
+		float accuracy = getThisGame().getScore() 
+				/ Game.getDifficultyStep(); 
+		if (accuracy > MAX_ACCURACY) {
+			accuracy = MAX_ACCURACY;
+		}
+			//0 is completely random, 10 is perfect.
+		float randomRange = (float) (Math.PI 
+				* ((MAX_ACCURACY - accuracy) / MAX_ACCURACY) * Math.random());
+			//The angle of error.
+		float straightDir;
+		if (playerX > getX()) {
+			straightDir = 
+					(float) Math.atan((playerY - getY()) / (playerX - getX()));
+		} else {
+			straightDir = (float) (Math.PI 
+					+ Math.atan((playerY - getY()) / (playerX - getX())));
+		}
+		//straightDir = (float) -(Math.PI / 2); //debug.
+			//Straigth direction from saucer to player in radians.
+		float errorRight = (int) (Math.random() * 2) * 2 - 1;
+			//-1 is error left, 1 is error right.
+		return (float) (straightDir + errorRight * randomRange);
+	}
+	
+
+	/**
 	 * The time between shots of the small Saucer,
 	 * becomes more smaller when score is higher.
 	 * @return shot time of small saucer
 	 */
 	private long smallShotTime() {
-		long score = getThisGame().getScore() / SCORE_STEP;
+		long score = getThisGame().getScore() / Game.getDifficultyStep();
 		if (score == 0) {
 			return SHOT_TIME;
-		} else if (score <= (SHOT_TIME * LESS_SHOT) / 2) {
+		} else if (score <= SHOT_TIME / (2 * LESS_SHOT)) {
 			return SHOT_TIME - (LESS_SHOT * score);
 		} else {
 			return SHOT_TIME / 2;
 		}
 	}
+	
 
 	/**
 	 * Destroy this if it's outside the screen.

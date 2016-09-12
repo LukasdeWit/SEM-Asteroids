@@ -110,6 +110,14 @@ public class Game {
 	 * Number of points needed to gain a life.
 	 */
 	private static final int LIFE_SCORE = 10000;
+	/**
+	 * Step per difficulty level of score.
+	 */
+	private static final long DIFFICULTY_STEP = 1000;
+	/**
+	 * Max difficulty score.
+	 */
+	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
 
 	/**
 	 * Constructor for a new game.
@@ -146,11 +154,26 @@ public class Game {
 	public final void addRandomSaucer() {
 		Saucer newSaucer = new Saucer(((int) (Math.random() * 2)) * screenX, 
 				(float) Math.random() * screenY, 0, 0, this);
-		if (Math.random() < .5) {
+		if (Math.random() < smallSaucerRatio()) {
 			newSaucer.setRadius(SMALL_SAUCER_RADIUS);
 		}
 		create(newSaucer);
 
+	}
+
+	/**
+	 * Calculates the ratio of small saucers.
+	 * @return the ratio
+	 */
+	private double smallSaucerRatio() {
+		if (score < DIFFICULTY_STEP) {
+			return .5;
+		} else if (score < MAX_DIFFICULTY_SCORE) {
+			return .5 + ((long) (score / DIFFICULTY_STEP) 
+					* .5 / (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
+		} else {
+			return 1;
+		}
 	}
 
 	/**
@@ -379,7 +402,23 @@ public class Game {
 	 * @return score
 	 */
 
-	public long getScore() {
+	public final long getScore() {
 		return score;
+	}
+
+	/**
+	 * Player getter.
+	 * @return the player
+	 */
+	public final Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * Getter for difficultyStep.
+	 * @return the difficultyStep
+	 */
+	public static long getDifficultyStep() {
+		return DIFFICULTY_STEP;
 	}
 }
