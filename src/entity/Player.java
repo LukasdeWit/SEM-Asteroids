@@ -40,13 +40,17 @@ public class Player extends Entity {
 	 */
 	private boolean boost;
 	/**
+	 * margin between two lives in pixels.
+	 */
+	private double margin;
+	/**
 	 * Amount of lives at the start of a game.
 	 */
 	private static final int STARTING_LIVES = 3;
 	/**
 	 * Radius of Player.
 	 */
-	private static final float PLAYER_RADIUS = 5;
+	private static final float RADIUS = 5;
 	/**
 	 * Invincible time at the start of a game.
 	 */
@@ -54,15 +58,15 @@ public class Player extends Entity {
 	/**
 	 * Rotation in radians per tick.
 	 */
-	private static final double ROTATION_MULTIPLIER = .1;
+	private static final double ROTATION = .06;
 	/**
 	 * Acceleration in pixels per ticks squared.
 	 */
-	private static final double ACCELERATION_MULTIPLIER = .1;
+	private static final double ACCELERATION = .04;
 	/**
 	 * Deceleration in pixels per ticks squared.
 	 */
-	private static final float DECELERATION_MULTIPLIER = .02f;
+	private static final float DECELERATION = .01f;
 	/**
 	 * Time in miliseconds per hyperspace jump.
 	 */
@@ -74,7 +78,7 @@ public class Player extends Entity {
 	/**
 	 * Speed of bullets relative to player in pixels per tick.
 	 */
-	private static final float BULLETSPEED = 2;
+	private static final float BULLETSPEED = 4;
 	/**
 	 * A quarter pi.
 	 */
@@ -98,7 +102,27 @@ public class Player extends Entity {
 	/**
 	 * Draw size of Player.
 	 */
-	private static final double SIZE = PLAYER_RADIUS * 1.25;
+	private static final double SIZE = RADIUS * 1.25;
+	/**
+	 * Maximum speed of Player in pixels per tick.
+	 */
+	private static final float MAXSPEED = 4;
+	/**
+	 * Maximum amount of friendly bullets simulatiously in a game.
+	 */
+	private static final int MAX_BULLETS = 4;
+	/**
+	 * Y ofset of drawn lives.
+	 */
+	private static final double LIVES_Y_OFSET = 40;
+	/**
+	 * The margin between two lives at the start.
+	 */
+	private static final double START_MARGIN = 10;
+	/**
+	 * Maximum amount of lives next to eachother with START_MARGIN as margin.
+	 */
+	private static final double FULL_LIVES = 20;
 	
 
 	/**
@@ -119,9 +143,10 @@ public class Player extends Entity {
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		lives = STARTING_LIVES;
-		this.setRadius(PLAYER_RADIUS);
+		setRadius(RADIUS);
 		rotation = 0;
 		invincibleStart(INVINC_START_TIME);
+		margin = START_MARGIN;
 	}
 
 	/**
@@ -129,6 +154,7 @@ public class Player extends Entity {
 	 */
 	public final void die() {
 		lives--;
+		updateMargin();
 		if (lives == 0) {
 			getThisGame().over();
 			invincibleStart(INVINC_START_TIME); //TODO: Game over
@@ -139,6 +165,23 @@ public class Player extends Entity {
 			setDY(0);
 			rotation = 0;
 			invincibleStart(INVINC_START_TIME);
+		}
+	}
+	
+	/**
+	 * Achievement: get a life.
+	 */
+	public final void gainLife() {
+		lives++;
+		updateMargin();
+	}
+
+	/**
+	 * Update the margin between lives to fit on screen.
+	 */
+	private void updateMargin() {
+		if (lives >= FULL_LIVES) {
+			margin = START_MARGIN * FULL_LIVES / lives;
 		}
 	}
 
@@ -191,22 +234,26 @@ public class Player extends Entity {
 	 * Turn the player left.
 	 */
 	private void turnLeft() {
-		rotation += ROTATION_MULTIPLIER;
+		rotation += ROTATION;
 	}
 
 	/**
 	 * Turn the player right.
 	 */
 	private void turnRight() {
-		rotation -= ROTATION_MULTIPLIER;
+		rotation -= ROTATION;
 	}
 
 	/**
 	 * Makes player move faster.
 	 */
 	private void accelerate() {
-		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION_MULTIPLIER));
-		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION_MULTIPLIER));
+		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION));
+		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION));
+		if (speed() > MAXSPEED) {
+			setDX(getDX() * (MAXSPEED / speed()));
+			setDY(getDY() * (MAXSPEED / speed()));
+		}
 		boost = true;
 	}
 
@@ -215,9 +262,9 @@ public class Player extends Entity {
 	 */
 	private void slowDown() {
 		if (Math.abs(getDX()) + Math.abs(getDY()) != 0) {
-			setDX((float) (getDX() - (DECELERATION_MULTIPLIER * getDX()) 
+			setDX((float) (getDX() - (DECELERATION * getDX()) 
 					/ (Math.abs(getDX()) + Math.abs(getDY()))));
-			setDY((float) (getDY() - (DECELERATION_MULTIPLIER * getDY()) 
+			setDY((float) (getDY() - (DECELERATION * getDY()) 
 					/ (Math.abs(getDX()) + Math.abs(getDY()))));
 		}
 	}
@@ -263,11 +310,11 @@ public class Player extends Entity {
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS) {
-			Bullet b = new Bullet(getX(), getY(), getDX() 
-					+ ((float) Math.sin(rotation + Math.PI / 2)) * BULLETSPEED, 
-					getDY() 
-					+ ((float) Math.cos(rotation + Math.PI / 2)) * BULLETSPEED, 
+		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
+				&& getThisGame().bullets() < MAX_BULLETS) {
+			Bullet b = new Bullet(getX(), getY(), 
+					(float) (getDX() / 2 + (Math.cos(rotation) * BULLETSPEED)), 
+					(float) (getDY() / 2 - (Math.sin(rotation) * BULLETSPEED)), 
 					getThisGame());
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
@@ -359,13 +406,13 @@ public class Player extends Entity {
 			gc.setStroke(Color.WHITE);
 			gc.setLineWidth(1);
 			gc.strokePolygon(new double[] { 
-					LIVES_SIZE * (i + 1), 
-					LIVES_SIZE * (i + 1) - 2, 
-					LIVES_SIZE * (i + 1) + 2}, 
+					margin * (i + 1), 
+					margin * (i + 1) - 2, 
+					margin * (i + 1) + 2}, 
 					new double[] { 
-					LIVES_SIZE, 
-					LIVES_SIZE * 2 - 2, 
-					LIVES_SIZE * 2 - 2}, TRIANGLE_CORNERS);
+					LIVES_Y_OFSET, 
+					LIVES_Y_OFSET + LIVES_SIZE  - 2, 
+					LIVES_Y_OFSET + LIVES_SIZE  - 2}, TRIANGLE_CORNERS);
 		}
 	}
 }

@@ -95,6 +95,15 @@ public abstract class Entity {
 			setY(getY() - getThisGame().getScreenY());
 		}
 	}
+	
+	/**
+	 * returns speed of Asteroid.
+	 * @return speed
+	 */
+	public final float speed() {
+		return (float) Math.sqrt(Math.pow(Math.abs(getDX()), 2) 
+				+ Math.pow(Math.abs(getDY()), 2));
+	}
 
 	/**
 	 * Calculate distance between 2 Entities.

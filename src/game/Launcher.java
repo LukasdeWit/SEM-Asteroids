@@ -1,7 +1,6 @@
 package game;
 import java.util.ArrayList;
 
-import game.Game;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -54,7 +53,7 @@ public class Launcher extends Application {
 		stage.setScene(scene);
 
 		// set up the canvas
-		final Canvas canvas = new Canvas(Game.CANVAS_SIZE, Game.CANVAS_SIZE);
+		Canvas canvas = new Canvas(Game.getCanvasSize(), Game.getCanvasSize());
 		root.getChildren().add(canvas);
 
 		// set up the graphicsContext
