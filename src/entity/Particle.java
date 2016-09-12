@@ -1,6 +1,7 @@
 package entity;
-import java.util.ArrayList;
+import java.util.List;
 
+import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -77,16 +78,6 @@ public class Particle extends Entity {
 	}
 
 	@Override
-	public final void update(final ArrayList<String> input) {
-		setX(getX() + getDX());
-		setY(getY() + getDY());
-		wrapAround();
-		if (System.currentTimeMillis() - birthTime > LIFETIME) {
-			getThisGame().destroy(this);
-		}
-	}
-
-	@Override
 	public final void draw(final GraphicsContext gc) {
 		float radius = getRadius();
 		gc.setFill(Color.GREY);
@@ -102,4 +93,13 @@ public class Particle extends Entity {
 		//doesn't collide
 	}
 
+	@Override
+	public final void update(final List<String> input) {
+		setX(getX() + getDX());
+		setY(getY() + getDY());
+		wrapAround();
+		if (System.currentTimeMillis() - birthTime > LIFETIME) {
+			getThisGame().destroy(this);
+		}
+	}
 }

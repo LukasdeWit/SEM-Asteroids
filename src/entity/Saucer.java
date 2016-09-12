@@ -1,7 +1,7 @@
 package entity;
-import java.util.ArrayList;
+import java.util.List;
 
-import entity.Particle;
+import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -131,7 +131,7 @@ public class Saucer extends Entity {
 	}
 
 	@Override
-	public final void update(final ArrayList<String> input) {
+	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		checkEnd();
@@ -197,7 +197,7 @@ public class Saucer extends Entity {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			((Player) e2).die();
 			die();
-		} else if (e2 instanceof Bullet && ((Bullet) e2).getFriendly()) {
+		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			die();
 		} else if (e2 instanceof Asteroid) {

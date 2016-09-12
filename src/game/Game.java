@@ -3,9 +3,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Asteroid;
+import entity.Bullet;
 import entity.Entity;
 import entity.Player;
-import entity.UFO;
+import entity.Saucer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
