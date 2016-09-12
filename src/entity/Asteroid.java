@@ -83,6 +83,10 @@ public class Asteroid extends Entity {
 	 * Minimum speed of any asteroid in pixels per tick.
 	 */
 	private static final float MIN_SPEED = .5f;
+	/**
+	 * Amount of asteroids after a split.
+	 */
+	private static final int SPLIT = 10;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -138,21 +142,19 @@ public class Asteroid extends Entity {
 	 */
 	public final void split() {
 		if (getRadius() == BIG_RADIUS) {
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() - .5), 
-					(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() - .5), 
-					(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
+			for (int i = 0; i < SPLIT; i++) {
+				getThisGame().addAsteroid(getX(), getY(), 
+						(float) (getDX() + Math.random() - .5), 
+						(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
+			}
 			getThisGame().addScore(BIG_SCORE);
 			getThisGame().destroy(this);
 		} else if (getRadius() == MEDIUM_RADIUS) {
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() * 2 - 1), 
-					(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() * 2 - 1), 
-					(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
+			for (int i = 0; i < SPLIT; i++) {
+				getThisGame().addAsteroid(getX(), getY(), 
+						(float) (getDX() + Math.random() * 2 - 1), 
+						(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
+			}
 			getThisGame().addScore(MEDIUM_SCORE);
 			getThisGame().destroy(this);
 		} else {
