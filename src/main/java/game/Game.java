@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import entity.AbstractEntity;
 import entity.Asteroid;
@@ -22,6 +23,10 @@ public class Game {
 	 * List of all entities currently in the game.
 	 */
 	private final List<AbstractEntity> entities;
+	/**
+	 * Object of random used to get random numbers
+	 */
+	private final Random random;
 	/**
 	 * List of all entities to be destroyed at the and of the tick.
 	 */
@@ -112,9 +117,10 @@ public class Game {
 		this.gc = gc;
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
-		entities = new ArrayList<AbstractEntity>();
-		destroyList = new ArrayList<AbstractEntity>();
-		createList = new ArrayList<AbstractEntity>();
+		entities = new ArrayList<>();
+		destroyList = new ArrayList<>();
+		createList = new ArrayList<>();
+		random = new Random();
 		startGame();
 	}
 
@@ -134,7 +140,7 @@ public class Game {
 	 * adds a UFO with random Y, side of screen, path and size.
 	 */
 	public final void addRandomUFO() {
-		final UFO newUFO = new UFO(((int) (Math.random() * 2)) * screenX,
+		final UFO newUFO = new UFO(random.nextInt(1) * 2 * screenX,
 				(float) Math.random() * screenY, 0, 0, this);
 		if (Math.random() < .5) {
 			newUFO.setRadius(SMALL_UFO_RADIUS);

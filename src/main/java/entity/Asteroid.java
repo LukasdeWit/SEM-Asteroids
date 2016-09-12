@@ -1,5 +1,6 @@
 package entity;
 import java.util.List;
+import java.util.Random;
 
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
@@ -92,8 +93,9 @@ public class Asteroid extends AbstractEntity {
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
+		final Random random = new Random();
 		setRadius(BIG_RADIUS);
-		shape = (int) (Math.random() * SHAPES);
+		shape = (int) (random.nextInt(1) * SHAPES);
 	}
 
 	/**

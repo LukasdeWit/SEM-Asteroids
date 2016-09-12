@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.List;
+import java.util.Random;
 
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,6 +15,10 @@ public class UFO extends AbstractEntity {
 	 * 1 if this UFO is going to the right, and 0 if going to the left.
 	 */
 	private int toRight;
+	/**
+	 * used to get random numbers
+	 */
+	private final Random random;
 	/**
 	 * Time since previous change of direction in miliseconds.
 	 */
@@ -88,6 +93,7 @@ public class UFO extends AbstractEntity {
 	public UFO(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
+		random = new Random();
 		setRadius(BIG_RADIUS);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
@@ -95,7 +101,7 @@ public class UFO extends AbstractEntity {
 		if (x > (thisGame.getScreenX() / 2)) {
 			nextToRight = 1;
 		}
-		setPath(nextToRight, (int) (Math.random() * PATHS));
+		setPath(nextToRight, (int) (random.nextInt(1) * PATHS));
 	}
 
 	/**
@@ -171,7 +177,7 @@ public class UFO extends AbstractEntity {
 	private void changeDirection() {
 		if (System.currentTimeMillis() - dirChangeTime > CHANGE_DIR_TIME) {
 			dirChangeTime = System.currentTimeMillis();
-			setPath((int) (Math.random() * PATHS));
+			setPath((int) (random.nextInt(1) * PATHS));
 		}
 	}
 
