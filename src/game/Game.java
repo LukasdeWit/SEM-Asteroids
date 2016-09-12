@@ -50,6 +50,10 @@ public class Game {
 	 */
 	private int score;
 	/**
+	 * Class that helps play audio.
+	 */
+	//private Audio audio;
+	/**
 	 * Xcoordinates of the raster of the first digit.
 	 */
 	private final double[] scoreDisplayX = { 190, 200, 190, 200, 190, 200 }; 
@@ -114,6 +118,7 @@ public class Game {
 		entities = new ArrayList<Entity>();
 		destroyList = new ArrayList<Entity>();
 		createList = new ArrayList<Entity>();
+		//audio = new Audio();
 		startGame();
 	}
 
@@ -310,6 +315,14 @@ public class Game {
 	public final float getScreenY() {
 		return screenY;
 	}
+	
+	/**
+	 * Getter for audio.
+	 * @return - audio
+	 */
+	//public final Audio getAudio() {
+	//	return audio;
+	//}
 
 	/**
 	 * Game over function, destroys the player.
