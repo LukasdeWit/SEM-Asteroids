@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Sound files #
-*.mp3
 
 # Package Files #
 *.jar
