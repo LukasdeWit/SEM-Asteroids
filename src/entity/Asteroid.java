@@ -84,9 +84,9 @@ public class Asteroid extends Entity {
 	 */
 	private static final float MIN_SPEED = .5f;
 	/**
-	 * Amount of asteroids after a split.
+	 * Number of asteroids after a split.
 	 */
-	private static final int SPLIT = 10;
+	private static final int SPLIT = 2;
 
 	/**
 	 * Constructor for the Asteroid class.
