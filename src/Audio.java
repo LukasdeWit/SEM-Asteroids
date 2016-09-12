@@ -21,7 +21,14 @@ public class Audio {
 	private AudioClip beat2;
 	
 	public Audio() {
-		
+		flyingnoise = new AudioClip("thrust.mp3");
+		shootingnoise = new AudioClip("fire.mp3");
+		extralife = new AudioClip("extraShip.mp3");
+		smallexplosion = new AudioClip("bangSmall.mp3");
+		mediumexplosion = new AudioClip("bangMedium.mp3");
+		largeexplosion = new AudioClip("bangLarge.mp3");
+		beat1 = new AudioClip("beat1.mp3");
+		beat2 = new AudioClip("beat2.mp3");
 	}
 	
 	public void FlyingNoise() {
@@ -50,5 +57,6 @@ public class Audio {
 	
 	public void BackgroundMusic() {
 		// method to generate background noise from beat1 and beat2
+		
 	}
 }
