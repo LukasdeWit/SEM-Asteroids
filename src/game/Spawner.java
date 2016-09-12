@@ -1,3 +1,4 @@
+package game;
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.
  * @author Kibo

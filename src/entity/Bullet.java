@@ -1,5 +1,7 @@
-import java.util.ArrayList;
+package entity;
+import java.util.List;
 
+import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -51,7 +53,7 @@ public class Bullet extends Entity {
 	 * Calculate new position of Bullet.
 	 * @param input - the pressed keys
 	 */
-	public final void update(final ArrayList<String> input) {
+	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		wrapAround();
@@ -64,7 +66,7 @@ public class Bullet extends Entity {
 	 * Get whether the bullet is friendly.
 	 * @return boolean that is true when bullet is friendly
 	 */
-	public final boolean getFriendly() {
+	public final boolean isFriendly() {
 		return friendly;
 	}
 
@@ -95,6 +97,9 @@ public class Bullet extends Entity {
 		}
 	}
 
+	/**
+	 * Display bullet on screen.
+	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		float radius = getRadius();
