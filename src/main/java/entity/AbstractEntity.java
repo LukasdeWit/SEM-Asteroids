@@ -41,18 +41,13 @@ public abstract class Entity {
 	/**
 	 * Constructor for the Entity class.
 	 * 
-	 * @param x
-	 *            location of Entity along the X-axis.
-	 * @param y
-	 *            location of Entity along the Y-axis.
-	 * @param dX
-	 *            velocity of Entity along the X-axis.
-	 * @param dY
-	 *            velocity of Entity along the Y-axis.
-	 * @param thisGame
-	 *            Game the Entity exists in.
+	 * @param x location of Entity along the X-axis.
+	 * @param y location of Entity along the Y-axis.
+	 * @param dX velocity of Entity along the X-axis.
+	 * @param dY velocity of Entity along the Y-axis.
+	 * @param thisGame Game the Entity exists in.
 	 */
-	public Entity(final float x, final float y, 
+	public Entity(final float x, final float y,
 			final float dX, final float dY, final Game thisGame) {
 		this.setX(x);
 		this.setY(y);
@@ -99,10 +94,8 @@ public abstract class Entity {
 	/**
 	 * Calculate distance between 2 Entities.
 	 * 
-	 * @param e1
-	 *            first Entity
-	 * @param e2
-	 *            second Entity
+	 * @param e1 first Entity
+	 * @param e2 second Entity
 	 * @return float containing the distance between the Entities.
 	 */
 	public static float distance(final Entity e1, final Entity e2) {
@@ -113,10 +106,8 @@ public abstract class Entity {
 	/**
 	 * Check whether or not Entities are colliding.
 	 * 
-	 * @param e1
-	 *            first Entity
-	 * @param e2
-	 *            second Entity
+	 * @param e1 first Entity
+	 * @param e2 second Entity
 	 * @return boolean that is true when entities collide
 	 */
 	public static boolean collision(final Entity e1, final Entity e2) {

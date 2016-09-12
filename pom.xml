@@ -16,7 +16,9 @@
                 <version>3.6</version>
 
                 <configuration>
-                    <rulesets>AsteroidsCheck.xml</rulesets>
+                    <rulesets>
+                        <ruleset>./AstroidsPMD.xml</ruleset>
+                    </rulesets>
                 </configuration>
             </plugin>
         </plugins>
