@@ -1,5 +1,7 @@
-import java.util.ArrayList;
+package entity;
+import java.util.List;
 
+import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -128,8 +130,12 @@ public class UFO extends Entity {
 		setDY((float) -Math.sin(direction) * 2);
 	}
 
+	/**
+	 * Calculate new position of UFO.
+	 * @param input - the pressed keys
+	 */
 	@Override
-	public final void update(final ArrayList<String> input) {
+	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		checkEnd();
@@ -143,8 +149,8 @@ public class UFO extends Entity {
 	 */
 	private void shoot() {
 		if (System.currentTimeMillis() - shotTime > SHOTTIME) {
-			float randomDir = (float) (Math.random() * 2 * Math.PI);
-			Bullet newBullet = new Bullet(getX(), getY(), 
+			final float randomDir = (float) (Math.random() * 2 * Math.PI);
+			final Bullet newBullet = new Bullet(getX(), getY(), 
 					getDX() + (float) Math.cos(randomDir) * BULLET_SPEED,
 					getDY() - (float) Math.sin(randomDir) * BULLET_SPEED, 
 					getThisGame());
@@ -173,6 +179,9 @@ public class UFO extends Entity {
 		}
 	}
 
+	/**
+	 * Display UFO on screen.
+	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
@@ -190,6 +199,9 @@ public class UFO extends Entity {
 		}
 	}
 
+	/**
+	 * Describes what happens when UFO collides with entities.
+	 */
 	@Override
 	public final void collide(final Entity e2) {
 		int points = BIG_SCORE;
@@ -200,7 +212,7 @@ public class UFO extends Entity {
 			((Player) e2).die();
 			getThisGame().addScore(points);
 			getThisGame().destroy(this);
-		} else if (e2 instanceof Bullet && ((Bullet) e2).getFriendly()) {
+		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			getThisGame().addScore(points);
 			getThisGame().destroy(this);
