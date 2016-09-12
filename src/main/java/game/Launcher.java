@@ -1,7 +1,5 @@
 package game;
-import java.util.ArrayList;
 
-import game.Game;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,6 +12,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
 
 /**
  * This class is the main launcher of the game.

@@ -118,7 +118,7 @@ public class Asteroid extends Entity {
 	public final void collide(final Entity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			split();
-			((Player) e2).die();
+			((Player) e2).onDeath();
 		} else if (e2 instanceof Bullet) {
 			split();
 			getThisGame().destroy(e2);

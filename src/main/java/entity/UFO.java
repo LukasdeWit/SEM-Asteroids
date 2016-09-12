@@ -1,4 +1,5 @@
 package entity;
+
 import java.util.List;
 
 import game.Game;
@@ -49,7 +50,7 @@ public class UFO extends Entity {
 	/**
 	 * Time between shots.
 	 */
-	private static final long SHOTTIME = 1000;
+	private static final long SHOT_TIME = 1000;
 	/**
 	 * Bullet speed multiplier.
 	 */
@@ -148,7 +149,7 @@ public class UFO extends Entity {
 	 * Makes the UFO shoot.
 	 */
 	private void shoot() {
-		if (System.currentTimeMillis() - shotTime > SHOTTIME) {
+		if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
 			final float randomDir = (float) (Math.random() * 2 * Math.PI);
 			final Bullet newBullet = new Bullet(getX(), getY(), 
 					getDX() + (float) Math.cos(randomDir) * BULLET_SPEED,
@@ -209,7 +210,7 @@ public class UFO extends Entity {
 			points = SMALL_SCORE;
 		}
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			((Player) e2).die();
+			((Player) e2).onDeath();
 			getThisGame().addScore(points);
 			getThisGame().destroy(this);
 		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {

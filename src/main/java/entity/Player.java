@@ -50,7 +50,7 @@ public class Player extends Entity {
 	/**
 	 * Invincible time at the start of a game.
 	 */
-	private static final int INVINC_START_TIME = 500;
+	private static final int INVINC_START_TIME = 3000;
 	/**
 	 * Rotation in radians per tick.
 	 */
@@ -127,7 +127,7 @@ public class Player extends Entity {
 	/**
 	 * Perform actions that happen when a player dies.
 	 */
-	public final void die() {
+	public final void onDeath() {
 		lives--;
 		if (lives == 0) {
 			getThisGame().over();
@@ -284,11 +284,11 @@ public class Player extends Entity {
 				invincibleStart = System.currentTimeMillis();
 			} else if (!invincible()) {
 				((Asteroid) e2).split();
-				this.die();
+				this.onDeath();
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
-			this.die();
+			this.onDeath();
 		}
 	}
 
