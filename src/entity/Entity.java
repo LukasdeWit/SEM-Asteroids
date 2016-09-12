@@ -1,5 +1,7 @@
-import java.util.ArrayList;
+package entity;
+import java.util.List;
 
+import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -65,7 +67,7 @@ public abstract class Entity {
 	 * @param input
 	 *            the keyboard input of the player
 	 */
-	public abstract void update(ArrayList<String> input);
+	public abstract void update(List<String> input);
 
 	/**
 	 * Method that helps show the entity on the screen.

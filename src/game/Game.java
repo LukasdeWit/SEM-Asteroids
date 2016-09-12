@@ -1,5 +1,11 @@
+package game;
 import java.util.ArrayList;
+import java.util.List;
 
+import entity.Asteroid;
+import entity.Entity;
+import entity.Player;
+import entity.UFO;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -14,15 +20,15 @@ public class Game {
 	/**
 	 * List of all entities currently in the game.
 	 */
-	private ArrayList<Entity> entities;
+	private List<Entity> entities;
 	/**
 	 * List of all entities to be destroyed at the and of the tick.
 	 */
-	private ArrayList<Entity> destroyList;
+	private List<Entity> destroyList;
 	/**
 	 * List of all entities to be created at the and of the tick.
 	 */
-	private ArrayList<Entity> createList;
+	private List<Entity> createList;
 	/**
 	 * length of canvas in pixels.
 	 */

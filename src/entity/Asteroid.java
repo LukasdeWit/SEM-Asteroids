@@ -1,5 +1,7 @@
-import java.util.ArrayList;
+package entity;
+import java.util.List;
 
+import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -14,27 +16,33 @@ public class Asteroid extends Entity {
 	/**
 	 * X coordinates of shape 0.
 	 */
-	private final int[] xShape0 = { -2, 0, 2, 4, 3, 4, 1, 0, -2, -4, -4, -4 };
+	private static final int[] XSHAPE0 = 
+		{ -2, 0, 2, 4, 3, 4, 1, 0, -2, -4, -4, -4 };
 	/**
 	 * Y coordinates of shape 0.
 	 */
-	private final int[] yShape0 = { -4, -2, -4, -2, 0, 2, 4, 4, 4, 2, 0, -2 };
+	private static final int[] YSHAPE0 = 
+		{ -4, -2, -4, -2, 0, 2, 4, 4, 4, 2, 0, -2 };
 	/**
 	 * X coordinates of shape 1.
 	 */
-	private final int[] xShape1 = { -2, 0, 2, 4, 2, 4, 2, -1, -2, -4, -3, -4 };
+	private static final int[] XSHAPE1 = 
+		{ -2, 0, 2, 4, 2, 4, 2, -1, -2, -4, -3, -4 };
 	/**
 	 * Y coordinates of shape 1.
 	 */
-	private final int[] yShape1 = { -4, -3, -4, -2, -1, 0, 3, 2, 3, 1, 0, -2 };
+	private static final int[] YSHAPE1 = 
+		{ -4, -3, -4, -2, -1, 0, 3, 2, 3, 1, 0, -2 };
 	/**
 	 * X coordinates of shape 2.
 	 */
-	private final int[] xShape2 = { -2, 1, 4, 4, 2, 4, 2, 1, -2, -4, -4, -1 };
+	private static final int[] XSHAPE2 = 
+		{ -2, 1, 4, 4, 2, 4, 2, 1, -2, -4, -4, -1 };
 	/**
 	 * Y coordinates of shape 2.
 	 */
-	private final int[] yShape2 = { -4, -4, -2, -1, 0, 2, 4, 3, 4, 1, -2, -2 };
+	private static final int[] YSHAPE2 = 
+		{ -4, -4, -2, -1, 0, 2, 4, 3, 4, 1, -2, -2 };
 	/**
 	 * Radius of big asteroid in pixels.
 	 */
@@ -97,7 +105,7 @@ public class Asteroid extends Entity {
 	 * Calculate new position of Asteroid.
 	 * @param input - the pressed keys
 	 */
-	public final void update(final ArrayList<String> input) {
+	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		wrapAround();
@@ -153,20 +161,36 @@ public class Asteroid extends Entity {
 		double[] yShape = new double[SHAPE_LINES];
 		if (shape == 0) {
 			for (int i = 0; i < SHAPE_LINES; i++) {
-				xShape[i] = xShape0[i] * (getRadius() * SIZE) + getX();
-				yShape[i] = yShape0[i] * (getRadius() * SIZE) + getY();
+				xShape[i] = XSHAPE0[i] * (getRadius() * SIZE) + getX();
+				yShape[i] = YSHAPE0[i] * (getRadius() * SIZE) + getY();
 			}
 		} else if (shape == 1) {
 			for (int i = 0; i < SHAPE_LINES; i++) {
-				xShape[i] = xShape1[i] * (getRadius() * SIZE) + getX();
-				yShape[i] = yShape1[i] * (getRadius() * SIZE) + getY();
+				xShape[i] = XSHAPE1[i] * (getRadius() * SIZE) + getX();
+				yShape[i] = YSHAPE1[i] * (getRadius() * SIZE) + getY();
 			}
 		} else if (shape == 2) {
 			for (int i = 0; i < SHAPE_LINES; i++) {
-				xShape[i] = xShape2[i] * (getRadius() * SIZE) + getX();
-				yShape[i] = yShape2[i] * (getRadius() * SIZE) + getY();
+				xShape[i] = XSHAPE2[i] * (getRadius() * SIZE) + getX();
+				yShape[i] = YSHAPE2[i] * (getRadius() * SIZE) + getY();
 			}
 		}
 		gc.strokePolygon(xShape, yShape, SHAPE_LINES);
+	}
+	
+	/**
+	 * Getter for shape.
+	 * @return int describing the shape of the asteroid
+	 */
+	public final int getShape() {
+		return shape;
+	}
+	
+	/**
+	 * Setter for shape.
+	 * @param newShape int describing the shape of the asteroid
+	 */
+	public final void setShape(final int newShape) {
+		shape = newShape;
 	}
 }
