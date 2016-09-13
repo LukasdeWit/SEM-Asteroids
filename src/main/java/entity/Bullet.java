@@ -88,6 +88,9 @@ public class Bullet extends AbstractEntity {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final void onDeath() {
 		//no-op

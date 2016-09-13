@@ -170,7 +170,7 @@ public class Player extends AbstractEntity {
 	 * @param input List containing the keyboard input
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
-	public final void keyHandler(final List<String> input) {
+	private void keyHandler(final List<String> input) {
 		if ((input.contains("LEFT") || input.contains("A"))
 				&& !(input.contains("RIGHT") || input.contains("D"))) {
 			turnLeft();
@@ -277,8 +277,8 @@ public class Player extends AbstractEntity {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
 				&& getThisGame().bullets() < MAX_BULLETS) {
 			final Bullet b = new Bullet(getX(), getY(),
-					(float) (getDX() / 2 + (Math.cos(rotation) * BULLET_SPEED)),
-					(float) (getDY() / 2 - (Math.sin(rotation) * BULLET_SPEED)),
+					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
+					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
 					getThisGame());
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
@@ -289,6 +289,7 @@ public class Player extends AbstractEntity {
 	 * Method to handle collisions of entities with the player.
 	 * @param e2 - second AbstractEntity
 	 */
+	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
 			if (invincible() && !hyperspace()) {
@@ -318,7 +319,7 @@ public class Player extends AbstractEntity {
 		final double c3 = Math.cos(rotation + (Math.PI + QUARTER_PI));
 
 		gc.setStroke(Color.WHITE);
-		if (invincible() 
+		if (invincible()
 				&& (System.currentTimeMillis() + invincibleMS) 
 				% RESPAWN_FLICKER_TIME * 2 < RESPAWN_FLICKER_TIME) {
 			gc.setStroke(Color.GREY);

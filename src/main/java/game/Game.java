@@ -286,8 +286,8 @@ public class Game {
 	 */
 	public final int bullets() {
 		int bullets = 0;
-		for (AbstractEntity e : entities) {
-			if (e instanceof Bullet && ((Bullet) e).isFriendly()) {
+		for (final AbstractEntity entity : entities) {
+			if (entity instanceof Bullet && ((Bullet) entity).isFriendly()) {
 				bullets++;
 			}
 		}
@@ -300,8 +300,8 @@ public class Game {
 	 */
 	public final int enemies() {
 		int enemies = 0;
-		for (AbstractEntity e : entities) {
-			if (e instanceof Asteroid || e instanceof Saucer) {
+		for (final AbstractEntity entity : entities) {
+			if (entity instanceof Asteroid || entity instanceof Saucer) {
 				enemies++;
 			}
 		}

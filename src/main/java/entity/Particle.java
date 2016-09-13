@@ -76,9 +76,13 @@ public class Particle extends AbstractEntity {
 				thisGame);
 	}
 
+	/**
+	 * draw a particle on the screen.
+	 * @param gc graphics context the current graphics context
+	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
-		float radius = getRadius();
+		final float radius = getRadius();
 		gc.setFill(Color.GREY);
 		gc.fillOval(getX() - radius / SIZE, 
 				getY() - radius / SIZE, 
@@ -87,16 +91,26 @@ public class Particle extends AbstractEntity {
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		//no-op
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final void onDeath() {
 		//no-op
 	}
 
+	/**
+	 * update the location of this particle, called every tick.
+	 * @param input list of current key inputs this tick (not used)
+	 */
 	@Override
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
