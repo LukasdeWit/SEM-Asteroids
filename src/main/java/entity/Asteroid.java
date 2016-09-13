@@ -80,6 +80,10 @@ public class Asteroid extends AbstractEntity {
 	 * Size multiplier.
 	 */
 	private static final float SIZE = .25f;
+	/**
+	 * Minimum speed of any asteroid in pixels per tick.
+	 */
+	private static final float MIN_SPEED = .5f;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -95,7 +99,11 @@ public class Asteroid extends AbstractEntity {
 		super(x, y, dX, dY, thisGame);
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
-		shape = (int) (random.nextInt(1) * SHAPES);
+		shape = (int) (random.nextInt(1)* SHAPES);
+		while (speed() < MIN_SPEED) {
+			setDX(getDX() * 2);
+			setDY(getDY() * 2);
+		}
 	}
 
 	/**
@@ -110,44 +118,45 @@ public class Asteroid extends AbstractEntity {
 
 	/**
 	 * Behaviour when Asteroid collides with entities.
+	 *
+	 * @param e2 entity this asteroid collided with
 	 */
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			split();
-			((Player) e2).onDeath();
+			getThisGame().destroy(this);
+			e2.onDeath();
 		} else if (e2 instanceof Bullet) {
-			split();
+			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
 		}
 	}
 
 	/**
-	 * Split asteroid into 2 small ones, or if it's too small destroy it.
+	 * on death split asteroid into 2 small ones, or if it's too small destroy it.
 	 */
-	public final void split() {
+	@Override
+	public void onDeath() {
 		if (getRadius() == BIG_RADIUS) {
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() - .5), 
+			getThisGame().addAsteroid(getX(), getY(),
+					(float) (getDX() + Math.random() - .5),
 					(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() - .5), 
+			getThisGame().addAsteroid(getX(), getY(),
+					(float) (getDX() + Math.random() - .5),
 					(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
 			getThisGame().addScore(BIG_SCORE);
-			getThisGame().destroy(this);
 		} else if (getRadius() == MEDIUM_RADIUS) {
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() * 2 - 1), 
+			getThisGame().addAsteroid(getX(), getY(),
+					(float) (getDX() + Math.random() * 2 - 1),
 					(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
-			getThisGame().addAsteroid(getX(), getY(), 
-					(float) (getDX() + Math.random() * 2 - 1), 
+			getThisGame().addAsteroid(getX(), getY(),
+					(float) (getDX() + Math.random() * 2 - 1),
 					(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
 			getThisGame().addScore(MEDIUM_SCORE);
-			getThisGame().destroy(this);
 		} else {
 			getThisGame().addScore(SMALL_SCORE);
-			getThisGame().destroy(this);
 		}
+		Particle.explosion(getX(), getY(), getThisGame());
 	}
 
 	/**

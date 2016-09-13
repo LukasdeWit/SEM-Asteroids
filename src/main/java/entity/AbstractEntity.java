@@ -12,11 +12,11 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public abstract class AbstractEntity {
 	/**
-	 * X coordinate of AbstractEntity.
+	 * X coordinate of Entity.
 	 */
 	private float x;
 	/**
-	 * Y coordinate of AbstractEntity.
+	 * Y coordinate of Entity.
 	 */
 	private float y;
 	/**
@@ -28,18 +28,18 @@ public abstract class AbstractEntity {
 	 */
 	private float dY;
 	/**
-	 * Radius of AbstractEntity, used for collision.
+	 * Radius of Entity, used for collision.
 	 */
 	private float radius;
 	
 
 	/**
-	 * The Game this AbstractEntity belongs to.
+	 * The Game this Entity belongs to.
 	 */
 	private Game thisGame;
 
 	/**
-	 * Constructor for the AbstractEntity class.
+	 * Constructor for the Entity class.
 	 * 
 	 * @param x location of AbstractEntity along the X-axis.
 	 * @param y location of AbstractEntity along the Y-axis.
@@ -92,6 +92,15 @@ public abstract class AbstractEntity {
 	}
 
 	/**
+	 * returns speed of entity.
+	 * @return the speed
+	 */
+	public final float speed() {
+		return (float) Math.sqrt(Math.pow(Math.abs(getDX()), 2)
+				+ Math.pow(Math.abs(getDY()), 2));
+	}
+
+	/**
 	 * Calculate distance between 2 Entities.
 	 * 
 	 * @param e1 first AbstractEntity
@@ -122,6 +131,11 @@ public abstract class AbstractEntity {
 	 *            AbstractEntity to be collided with.
 	 */
 	public abstract void collide(AbstractEntity e2);
+
+	/**
+	 * describes what this entity does when it dies
+	 */
+	public abstract void onDeath();
 	
 	/**
 	 * dY getter.

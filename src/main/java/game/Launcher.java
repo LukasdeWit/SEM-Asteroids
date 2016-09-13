@@ -30,8 +30,7 @@ public class Launcher extends Application {
 	/**
 	 * Main method.
 	 * 
-	 * @param args
-	 *            - standard
+	 * @param args - standard
 	 */
 	public static void main(final String... args) {
 		launch(args);
@@ -40,8 +39,7 @@ public class Launcher extends Application {
 	/**
 	 * starts the window and boots the game.
 	 * 
-	 * @param stage
-	 *            - the stage for the scenes
+	 * @param stage - the stage for the scenes
 	 */
 	@Override
 	public final void start(final Stage stage) {
@@ -54,7 +52,7 @@ public class Launcher extends Application {
 		stage.setScene(scene);
 
 		// set up the canvas
-		final Canvas canvas = new Canvas(Game.CANVAS_SIZE, Game.CANVAS_SIZE);
+		final Canvas canvas = new Canvas(Game.getCanvasSize(), Game.getCanvasSize());
 		root.getChildren().add(canvas);
 
 		// set up the graphicsContext
@@ -67,6 +65,7 @@ public class Launcher extends Application {
 			/**
 			 * Add key code to input when key is pressed.
 			 */
+			@Override
 			public void handle(final KeyEvent e) {
 				final String code = e.getCode().toString();
 
@@ -79,6 +78,7 @@ public class Launcher extends Application {
 			/**
 			 * Remove key code from input when key is released.
 			 */
+			@Override
 			public void handle(final KeyEvent e) {
 				final String code = e.getCode().toString();
 				input.remove(code);
@@ -92,12 +92,12 @@ public class Launcher extends Application {
 		final Timeline renderloop = new Timeline();
 		renderloop.setCycleCount(Timeline.INDEFINITE);
 
-		// final long startTime = System.currentTimeMillis();
-
-		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME), new EventHandler<ActionEvent>() {
+		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME),
+				new EventHandler<ActionEvent>() {
 			/**
 			 * Updates game based on keyboard input.
 			 */
+			@Override
 			public void handle(final ActionEvent e) {
 				thisGame.update(input);
 			}

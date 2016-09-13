@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import entity.AbstractEntity;
-import entity.Asteroid;
-import entity.Player;
-import entity.UFO;
+import entity.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -19,6 +16,14 @@ import javafx.scene.paint.Color;
  *
  */
 public class Game {
+	/**
+	 * The player of this game.
+	 */
+	private Player player;
+	/**
+	 * The spawner of this game.
+	 */
+	private Spawner spawner;
 	/**
 	 * List of all entities currently in the game.
 	 */
@@ -54,7 +59,7 @@ public class Game {
 	/**
 	 * current score.
 	 */
-	private int score;
+	private long score;
 	/**
 	 * Xcoordinates of the raster of the first digit.
 	 */
@@ -62,7 +67,7 @@ public class Game {
 	/**
 	 * Ycoordinates of the raster of the first digit.
 	 */
-	private final double[] scoreDisplayY = { 20, 20, 30, 30, 40, 40 };
+	private final double[] scoreDisplayY = { 10, 10, 20, 20, 30, 30 };
 	/**
 	 * the raster dots to be connected to form a digit.
 	 */
@@ -81,19 +86,16 @@ public class Game {
 	/**
 	 * Size of canvas.
 	 */
-	public static final float CANVAS_SIZE = 500;
+	private static final float CANVAS_SIZE = 500;
+
 	/**
-	 * Number of starting asteroids.
+	 * Radius of small Saucer.
 	 */
-	public static final int STARTING_ASTEROIDS = 0;
-	/**
-	 * Radius of small UFO.
-	 */
-	public static final float SMALL_UFO_RADIUS = 5;
+	private static final float SMALL_SAUCER_RADIUS = 5;
 	/**
 	 * Speed multiplier of initial Asteroids.
 	 */
-	public static final float ASTEROID_SPEED = 4;
+	private static final float ASTEROID_SPEED = 1;
 	/**
 	 * Minimal restart time.
 	 */
@@ -106,6 +108,10 @@ public class Game {
 	 * Ofset of raster for digits in pixels.
 	 */
 	private static final int OFSET_PIXELS = 20;
+	/**
+	 * Number of points needed to gain a life.
+	 */
+	private static final int LIFE_SCORE = 10000;
 
 	/**
 	 * Constructor for a new game.
@@ -117,6 +123,7 @@ public class Game {
 		this.gc = gc;
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
+		spawner = new Spawner(this);
 		entities = new ArrayList<>();
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
@@ -130,22 +137,22 @@ public class Game {
 	public final void startGame() {
 		restartTime = System.currentTimeMillis();
 		entities.clear();
-		entities.add(new Player(screenX / 2, screenY / 2, 0, 0, this));
-		addRandomAsteroid(STARTING_ASTEROIDS);
-		addRandomUFO();
+		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
+		entities.add(player);
 		score = 0;
+		spawner.reset();
 	}
 	
 	/**
-	 * adds a UFO with random Y, side of screen, path and size.
+	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
-	public final void addRandomUFO() {
-		final UFO newUFO = new UFO(random.nextInt(1) * 2 * screenX,
+	public final void addRandomSaucer() {
+		Saucer newSaucer = new Saucer(((int) (random.nextInt(1) * 2)) * screenX,
 				(float) Math.random() * screenY, 0, 0, this);
 		if (Math.random() < .5) {
-			newUFO.setRadius(SMALL_UFO_RADIUS);
+			newSaucer.setRadius(SMALL_SAUCER_RADIUS);
 		}
-		create(newUFO);
+		create(newSaucer);
 
 	}
 
@@ -198,15 +205,10 @@ public class Game {
 			checkCollision(e);
 			e.draw(gc);
 		}
+		spawner.update();
+		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
-
-		for (final AbstractEntity destroyEntity : destroyList) {
-			entities.remove(destroyEntity);
-		}
-		for (final AbstractEntity createEntity : createList) {
-			entities.add(createEntity);
-		}
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
@@ -241,7 +243,7 @@ public class Game {
 		if (score == 0) {
 			drawDigit(gc, 0, 0);
 		} else {
-			int rest = score;
+			long rest = score;
 			int digit;
 			for (int i = 0; rest != 0; i++) {
 				digit = (int) (rest % TEN);
@@ -269,26 +271,27 @@ public class Game {
 					- offset * OFSET_PIXELS;
 			scoreY[i] = scoreDisplayY[numberLines[digit][i]];
 		}
+		gc.setStroke(Color.WHITE);
 		gc.strokePolyline(scoreX, scoreY, l);
 	}
 
 	/**
-	 * adds an AbstractEntity to the destroy list and will be destroyed at the and of
+	 * adds an Entity to the destroy list and will be destroyed at the and of
 	 * the current tick.
 	 * 
 	 * @param e
-	 *            - the AbstractEntity
+	 *            - the Entity
 	 */
 	public final void destroy(final AbstractEntity e) {
 		destroyList.add(e);
 	}
 
 	/**
-	 * adds an AbstractEntity to the createList, and will be added to the game at the
+	 * adds an Entity to the createList, and will be added to the game at the
 	 * and of the current tick.
 	 * 
 	 * @param e
-	 *            - the AbstractEntity
+	 *            - the Entity
 	 */
 	public final void create(final AbstractEntity e) {
 		createList.add(e);
@@ -326,6 +329,44 @@ public class Game {
 	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
+		if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
+			player.gainLife();
+		}
 		this.score += score;
+	}
+	/**
+	 * CanvasSize getter.
+	 * @return canvas size
+	 */
+	public static float getCanvasSize() {
+		return CANVAS_SIZE;
+	}
+
+	/**
+	 * Amount of bullets currently in game.
+	 * @return amount of bullets
+	 */
+	public final int bullets() {
+		int bullets = 0;
+		for (AbstractEntity e : entities) {
+			if (e instanceof Bullet && ((Bullet) e).isFriendly()) {
+				bullets++;
+			}
+		}
+		return bullets;
+	}
+
+	/**
+	 * Amount of enemies currently in game.
+	 * @return amount of enemies
+	 */
+	public final int enemies() {
+		int enemies = 0;
+		for (AbstractEntity e : entities) {
+			if (e instanceof Asteroid || e instanceof Saucer) {
+				enemies++;
+			}
+		}
+		return enemies;
 	}
 }
