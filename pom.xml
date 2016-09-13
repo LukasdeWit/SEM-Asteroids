@@ -39,7 +39,7 @@
                 <version>3.6</version>
                 <configuration>
                     <rulesets>
-                        <ruleset>./AstroidsPMD.xml</ruleset>
+                        <ruleset>./AsteroidsPMD.xml</ruleset>
                     </rulesets>
                 </configuration>
             </plugin>

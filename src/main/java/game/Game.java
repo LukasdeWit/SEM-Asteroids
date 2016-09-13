@@ -29,7 +29,7 @@ public class Game {
 	/**
 	 * The spawner of this game.
 	 */
-	private Spawner spawner;
+	private final Spawner spawner;
 	/**
 	 * List of all entities currently in the game.
 	 */
@@ -51,7 +51,7 @@ public class Game {
 	 */
 	private final float screenX;
 	/**
-	 * heigth of canvas in pixels.
+	 * height of canvas in pixels.
 	 */
 	private final float screenY;
 	/**
@@ -205,12 +205,13 @@ public class Game {
 	 *            - the entity
 	 */
 	public final void checkCollision(final AbstractEntity e1) {
-		for (final AbstractEntity e2 : entities) {
-			if (!e1.equals(e2) && AbstractEntity.collision(e1, e2)
-					&& !destroyList.contains(e1) && !destroyList.contains(e2)) {
-				e1.collide(e2);
-			}
-		}
+		entities
+				.stream()
+				.filter(e2 -> !e1.equals(e2)
+						&& AbstractEntity.collision(e1, e2)
+						&& !destroyList.contains(e1)
+						&& !destroyList.contains(e2))
+				.forEach(e1::collide);
 	}
 	
 	/**

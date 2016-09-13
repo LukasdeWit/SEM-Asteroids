@@ -12,9 +12,9 @@ import javafx.scene.paint.Color;
  */
 public class Particle extends AbstractEntity {
 	/**
-	 * The time of birth of this particle in miliseconds.
+	 * The time of birth of this particle in milliseconds.
 	 */
-	private long birthTime;
+	private final long birthTime;
 	/**
 	 * The draw size of the particle.
 	 */
@@ -38,7 +38,7 @@ public class Particle extends AbstractEntity {
 	 * @param x - x coordinate
 	 * @param y - y coordinate
 	 * @param dX - horizontal speed
-	 * @param dY - verticle speed
+	 * @param dY - vertical speed
 	 * @param thisGame - the game this particle belongs to
 	 */
 	public Particle(final float x, final float y, 

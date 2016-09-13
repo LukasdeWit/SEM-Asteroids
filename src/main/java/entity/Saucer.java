@@ -21,11 +21,11 @@ public class Saucer extends AbstractEntity {
 	 */
 	private final Random random;
 	/**
-	 * Time since previous change of direction in miliseconds.
+	 * Time since previous change of direction in milliseconds.
 	 */
 	private long dirChangeTime;
 	/**
-	 * Time since previous shot in miliseconds.
+	 * Time since previous shot in milliseconds.
 	 */
 	private long shotTime;
 	/**
@@ -63,7 +63,7 @@ public class Saucer extends AbstractEntity {
 	 */
 	private static final float BULLET_SPEED = 4;
 	/**
-	 * Time between changes of direction in miliseconds.
+	 * Time between changes of direction in milliseconds.
 	 */
 	private static final long CHANGE_DIR_TIME = 2000;
 	/**
@@ -71,7 +71,7 @@ public class Saucer extends AbstractEntity {
 	 */
 	private static final int SHAPE_LINES = 8;
 	/**
-	 * Heigth Multiplier.
+	 * Height Multiplier.
 	 */
 	private static final float SIZE = .20f;
 	/**

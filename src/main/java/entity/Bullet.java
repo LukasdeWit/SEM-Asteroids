@@ -19,7 +19,7 @@ public class Bullet extends AbstractEntity {
 	 */
 	private boolean friendly;
 	/**
-	 * Lifetime of a bullet in miliseconds.
+	 * Lifetime of a bullet in milliseconds.
 	 */
 	private static final long LIFETIME = 2000;
 	/**

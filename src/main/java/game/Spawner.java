@@ -12,7 +12,7 @@ public class Spawner {
 	/**
 	 * The Game this spawner belongs to.
 	 */
-	private Game thisGame;
+	private final Game thisGame;
 	/**
 	 * Start time of saucer timer in ms.
 	 */
