@@ -1,12 +1,10 @@
 package game;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import entity.Asteroid;
-import entity.Bullet;
-import entity.Entity;
-import entity.Player;
-import entity.Saucer;
+import entity.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -29,27 +27,31 @@ public class Game {
 	/**
 	 * List of all entities currently in the game.
 	 */
-	private List<Entity> entities;
+	private final List<AbstractEntity> entities;
+	/**
+	 * Object of random used to get random numbers
+	 */
+	private final Random random;
 	/**
 	 * List of all entities to be destroyed at the and of the tick.
 	 */
-	private List<Entity> destroyList;
+	private final List<AbstractEntity> destroyList;
 	/**
 	 * List of all entities to be created at the and of the tick.
 	 */
-	private List<Entity> createList;
+	private final List<AbstractEntity> createList;
 	/**
 	 * length of canvas in pixels.
 	 */
-	private float screenX;
+	private final float screenX;
 	/**
 	 * heigth of canvas in pixels.
 	 */
-	private float screenY;
+	private final float screenY;
 	/**
 	 * the GraphicsContext, needed to draw things.
 	 */
-	private GraphicsContext gc;
+	private final GraphicsContext gc;
 	/**
 	 * the start time of the current game.
 	 */
@@ -122,9 +124,10 @@ public class Game {
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
 		spawner = new Spawner(this);
-		entities = new ArrayList<Entity>();
-		destroyList = new ArrayList<Entity>();
-		createList = new ArrayList<Entity>();
+		entities = new ArrayList<>();
+		destroyList = new ArrayList<>();
+		createList = new ArrayList<>();
+		random = new Random();
 		startGame();
 	}
 
@@ -144,7 +147,7 @@ public class Game {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	public final void addRandomSaucer() {
-		Saucer newSaucer = new Saucer(((int) (Math.random() * 2)) * screenX, 
+		Saucer newSaucer = new Saucer(((int) (random.nextInt(1) * 2)) * screenX,
 				(float) Math.random() * screenY, 0, 0, this);
 		if (Math.random() < .5) {
 			newSaucer.setRadius(SMALL_SAUCER_RADIUS);
@@ -171,20 +174,15 @@ public class Game {
 	/**
 	 * adds an asteroid.
 	 * 
-	 * @param x
-	 *            - x coordinate
-	 * @param y
-	 *            - y coordinate
-	 * @param dX
-	 *            - horizontal speed
-	 * @param dY
-	 *            - vertical speed
-	 * @param radius
-	 *            - size
+	 * @param x - x coordinate
+	 * @param y - y coordinate
+	 * @param dX - horizontal speed
+	 * @param dY - vertical speed
+	 * @param radius - size
 	 */
 	public final void addAsteroid(final float x, final float y, 
 			final float dX, final float dY, final float radius) {
-		Asteroid newAsteroid = new Asteroid(x, y, dX, dY, this);
+		final Asteroid newAsteroid = new Asteroid(x, y, dX, dY, this);
 		newAsteroid.setRadius(radius);
 		createList.add(newAsteroid);
 	}
@@ -195,19 +193,20 @@ public class Game {
 	 * @param input
 	 *            - all keys pressed at the time of update
 	 */
-	public final void update(final ArrayList<String> input) {
+	public final void update(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			startGame();
 		}
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenX, screenY);
-		for (Entity e : entities) {
+		for (final AbstractEntity e : entities) {
 			e.update(input);
 			checkCollision(e);
 			e.draw(gc);
 		}
 		spawner.update();
+		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
 		createList.clear();
@@ -223,9 +222,9 @@ public class Game {
 	 * @param e1
 	 *            - the entity
 	 */
-	public final void checkCollision(final Entity e1) {
-		for (Entity e2 : entities) {
-			if (!e1.equals(e2) && Entity.collision(e1, e2) 
+	public final void checkCollision(final AbstractEntity e1) {
+		for (final AbstractEntity e2 : entities) {
+			if (!e1.equals(e2) && AbstractEntity.collision(e1, e2)
 					&& !destroyList.contains(e1) && !destroyList.contains(e2)) {
 				e1.collide(e2);
 			}
@@ -257,22 +256,19 @@ public class Game {
 	/**
 	 * Draws a single digit on a predifined raster.
 	 * 
-	 * @param gc
-	 *            - the GraphicsContext of the canvas
-	 * @param digit
-	 *            - the digit
-	 * @param ofset
-	 *            - the ofset to the left of the starting position (the '1' in
-	 *            12 should have an ofset of 1 and the '2' 0)
+	 * @param gc - the GraphicsContext of the canvas
+	 * @param digit - the digit
+	 * @param offset - the offset to the left of the starting position
+	 *                 (the '1' in 12 should have an offset of 1 and the '2' 0)
 	 */
 	private void drawDigit(final GraphicsContext gc, 
-			final int digit, final int ofset) {
-		int l = numberLines[digit].length;
+			final int digit, final int offset) {
+		final int l = numberLines[digit].length;
 		double[] scoreX = new double[l];
 		double[] scoreY = new double[l];
 		for (int i = 0; i < l; i++) {
 			scoreX[i] = scoreDisplayX[numberLines[digit][i]] 
-					- ofset * OFSET_PIXELS;
+					- offset * OFSET_PIXELS;
 			scoreY[i] = scoreDisplayY[numberLines[digit][i]];
 		}
 		gc.setStroke(Color.WHITE);
@@ -286,7 +282,7 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void destroy(final Entity e) {
+	public final void destroy(final AbstractEntity e) {
 		destroyList.add(e);
 	}
 
@@ -297,7 +293,7 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void create(final Entity e) {
+	public final void create(final AbstractEntity e) {
 		createList.add(e);
 	}
 
@@ -321,7 +317,7 @@ public class Game {
 	 * Game over function, destroys the player.
 	 */
 	public final void over() {
-		for (Entity entity : entities) {
+		for (final AbstractEntity entity : entities) {
 			if (entity instanceof Player) {
 				destroy(entity);
 			}
@@ -352,7 +348,7 @@ public class Game {
 	 */
 	public final int bullets() {
 		int bullets = 0;
-		for (Entity e : entities) {
+		for (AbstractEntity e : entities) {
 			if (e instanceof Bullet && ((Bullet) e).isFriendly()) {
 				bullets++;
 			}
@@ -366,7 +362,7 @@ public class Game {
 	 */
 	public final int enemies() {
 		int enemies = 0;
-		for (Entity e : entities) {
+		for (AbstractEntity e : entities) {
 			if (e instanceof Asteroid || e instanceof Saucer) {
 				enemies++;
 			}
