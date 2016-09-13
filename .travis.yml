@@ -2,5 +2,10 @@ language: java
 script: 
 - "mvn test"
 - "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+- mvn verify -B jacoco:report coveralls:report
+
+after_success:
+- mvn clean test jacoco:report coveralls:report
+
 jdk:
 - oraclejdk8
