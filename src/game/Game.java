@@ -235,7 +235,6 @@ public class Game {
 		entities.addAll(createList);
 		createList.clear();
 		destroyList.clear();
-		createList.clear();
 		drawScore(gc);
 	}
 
@@ -344,11 +343,7 @@ public class Game {
 	 * Game over function, destroys the player.
 	 */
 	public final void over() {
-		for (Entity entity : entities) {
-			if (entity instanceof Player) {
-				destroy(entity);
-			}
-		}
+		destroy(player);
 	}
 
 	/**

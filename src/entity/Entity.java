@@ -97,7 +97,7 @@ public abstract class Entity {
 	}
 	
 	/**
-	 * returns speed of Asteroid.
+	 * returns speed of Entity.
 	 * @return speed
 	 */
 	public final float speed() {
