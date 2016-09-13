@@ -153,7 +153,9 @@ public class Saucer extends Entity {
 	 * Makes the Saucer shoot.
 	 */
 	private void shoot() {
-		if (getRadius() == BIG_RADIUS 
+		if (getThisGame().getPlayer().invincible()) {
+			shotTime = System.currentTimeMillis();
+		} else if (getRadius() == BIG_RADIUS 
 				&& System.currentTimeMillis() - shotTime > SHOT_TIME) {
 			float shotDir = (float) (Math.random() * 2 * Math.PI);
 			

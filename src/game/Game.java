@@ -113,7 +113,7 @@ public class Game {
 	/**
 	 * Step per difficulty level of score.
 	 */
-	private static final long DIFFICULTY_STEP = 1000;
+	private static final long DIFFICULTY_STEP = 10000;
 	/**
 	 * Max difficulty score.
 	 */

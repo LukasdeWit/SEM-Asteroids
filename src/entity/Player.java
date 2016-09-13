@@ -54,7 +54,7 @@ public class Player extends Entity {
 	/**
 	 * Invincible time at the start of a game.
 	 */
-	private static final int INVINC_START_TIME = 500;
+	private static final int INVINC_START_TIME = 1000;
 	/**
 	 * Rotation in radians per tick.
 	 */
