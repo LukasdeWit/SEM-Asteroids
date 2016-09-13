@@ -60,7 +60,7 @@
                     </reportSet>
                 </reportSets>
                 <configuration>
-                    <configLocation>google_checks.xml</configLocation>
+                    <configLocation>AsteroidsChecks.xml</configLocation>
                 </configuration>
             </plugin>
             <plugin>
