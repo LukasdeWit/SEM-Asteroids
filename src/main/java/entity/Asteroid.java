@@ -1,5 +1,6 @@
 package entity;
 import java.util.List;
+import java.util.Random;
 
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,7 +9,7 @@ import javafx.scene.paint.Color;
 /**
  * Class that represents an Asteroid.
  */
-public class Asteroid extends Entity {
+public class Asteroid extends AbstractEntity {
 	/**
 	 * Shape of Asteroid, either 0, 1 or 2.
 	 */
@@ -91,22 +92,18 @@ public class Asteroid extends Entity {
 	/**
 	 * Constructor for the Asteroid class.
 	 * 
-	 * @param x
-	 *            location of Asteroid along the X-axis.
-	 * @param y
-	 *            location of Asteroid along the Y-axis.
-	 * @param dX
-	 *            velocity of Asteroid along the X-axis.
-	 * @param dY
-	 *            velocity of Asteroid along the Y-axis.
-	 * @param thisGame
-	 *            Game the Asteroid exists in.
+	 * @param x location of Asteroid along the X-axis.
+	 * @param y location of Asteroid along the Y-axis.
+	 * @param dX velocity of Asteroid along the X-axis.
+	 * @param dY velocity of Asteroid along the Y-axis.
+	 * @param thisGame Game the Asteroid exists in.
 	 */
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
+		final Random random = new Random();
 		setRadius(BIG_RADIUS);
-		shape = (int) (Math.random() * SHAPES);
+		shape = random.nextInt((int) SHAPES);
 		while (speed() < MIN_SPEED) {
 			setDX(getDX() * 2);
 			setDY(getDY() * 2);
@@ -125,45 +122,48 @@ public class Asteroid extends Entity {
 
 	/**
 	 * Behaviour when Asteroid collides with entities.
+	 *
+	 * @param e2 entity this asteroid collided with
 	 */
 	@Override
-	public final void collide(final Entity e2) {
+	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			split();
-			((Player) e2).die();
+			getThisGame().destroy(this);
+			e2.onDeath();
 		} else if (e2 instanceof Bullet) {
-			split();
+			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
 		}
 	}
 
 	/**
-	 * Split asteroid into 2 small ones, or if it's too small destroy it.
+	 * on death split asteroid into 2 small ones, or if it's too small destroy it.
 	 */
-	public final void split() {
+	@Override
+	public void onDeath() {
 		if (getRadius() == BIG_RADIUS) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().addAsteroid(getX(), getY(), 
-						(float) (getDX() + Math.random() - .5), 
+				getThisGame().addAsteroid(getX(), getY(),
+						(float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
 			}
 			getThisGame().addScore(BIG_SCORE);
-			getThisGame().destroy(this);
 		} else if (getRadius() == MEDIUM_RADIUS) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().addAsteroid(getX(), getY(), 
-						(float) (getDX() + Math.random() * 2 - 1), 
+				getThisGame().addAsteroid(getX(), getY(),
+						(float) (getDX() + Math.random() * 2 - 1),
 						(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
 			}
 			getThisGame().addScore(MEDIUM_SCORE);
-			getThisGame().destroy(this);
 		} else {
 			getThisGame().addScore(SMALL_SCORE);
-			getThisGame().destroy(this);
 		}
 		Particle.explosion(getX(), getY(), getThisGame());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);

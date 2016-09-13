@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
  * @author Kibo
  *
  */
-public class Particle extends Entity {
+public class Particle extends AbstractEntity {
 	/**
 	 * The time of birth of this particle in miliseconds.
 	 */
@@ -70,11 +70,10 @@ public class Particle extends Entity {
 	 */
 	private static Particle randomParticle(final float x, final float y, 
 			final Game thisGame) {
-		Particle p = new Particle(x, y,
-				(float) (Math.random() - .5) * SPEED, 
+		return new Particle(x, y,
+				(float) (Math.random() - .5) * SPEED,
 				(float) (Math.random() - .5) * SPEED,
 				thisGame);
-		return p;
 	}
 
 	@Override
@@ -89,8 +88,13 @@ public class Particle extends Entity {
 	}
 
 	@Override
-	public void collide(final Entity e2) {
-		//doesn't collide
+	public void collide(final AbstractEntity e2) {
+		//no-op
+	}
+
+	@Override
+	public void onDeath() {
+		//no-op
 	}
 
 	@Override

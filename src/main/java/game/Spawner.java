@@ -47,7 +47,7 @@ public class Spawner {
 		thisGame = game;
 		startSaucerTime = System.currentTimeMillis();
 		startRest = 0;
-		level = 1;
+		level = 0;
 	}
 
 	/**
@@ -64,6 +64,7 @@ public class Spawner {
 		if (startRest == 0) {
 			thisGame.addRandomAsteroid(STARTING_ASTEROIDS);
 			startRest = System.currentTimeMillis();
+			level++;
 		} else if (System.currentTimeMillis() - startRest > REST) {
 			int extra = level * 2;
 			if (extra > MAX_EXTRA) {
@@ -79,7 +80,7 @@ public class Spawner {
 	 * reset.
 	 */
 	public final void reset() {
-		level = 1;
+		level = 0;
 		startSaucerTime = System.currentTimeMillis();
 		startRest = 0;
 	}
