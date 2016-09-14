@@ -337,11 +337,14 @@ public class Game {
 	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
-		if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
-			player.gainLife();
+		if (player.isAlive()) {
+			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
+				player.gainLife();
+			}
+			this.score += score;
 		}
-		this.score += score;
 	}
+	
 	/**
 	 * CanvasSize getter.
 	 * @return canvas size

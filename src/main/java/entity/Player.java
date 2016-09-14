@@ -382,4 +382,12 @@ public class Player extends AbstractEntity {
 					LIVES_Y_OFSET + LIVES_SIZE  - 2}, TRIANGLE_CORNERS);
 		}*/
 	}
+
+	/**
+	 * True if more than 0 lives.
+	 * @return true if alive
+	 */
+	public final boolean isAlive() {
+		return (lives > 0);
+	}
 }
