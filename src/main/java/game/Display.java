@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
  *
  */
 public final class Display {
-		//what does this checkstyle warning mean?
 	/**
 	 * The SPACE.
 	 */
@@ -394,6 +393,12 @@ public final class Display {
 	 */
 	private static final float LIVES_SIZE = 2;
 	
+	/**
+	 * private constructor for utility class.
+	 */
+	private Display() {
+	      //not called
+	   }
 	/**
 	 * Display the score.
 	 * @param score - score
