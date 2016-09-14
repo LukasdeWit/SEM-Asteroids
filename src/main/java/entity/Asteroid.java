@@ -84,6 +84,10 @@ public class Asteroid extends AbstractEntity {
 	 * Minimum speed of any asteroid in pixels per tick.
 	 */
 	private static final float MIN_SPEED = .5f;
+	/**
+	 * Number of asteroids after a split.
+	 */
+	private static final int SPLIT = 2;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -99,7 +103,7 @@ public class Asteroid extends AbstractEntity {
 		super(x, y, dX, dY, thisGame);
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
-		shape = (int) (random.nextInt(1)* SHAPES);
+		shape = random.nextInt((int) SHAPES);
 		while (speed() < MIN_SPEED) {
 			setDX(getDX() * 2);
 			setDY(getDY() * 2);
@@ -133,25 +137,24 @@ public class Asteroid extends AbstractEntity {
 	}
 
 	/**
-	 * on death split asteroid into 2 small ones, or if it's too small destroy it.
+	 * on death split asteroid into 2 small ones, 
+	 * or if it's too small destroy it.
 	 */
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		if (getRadius() == BIG_RADIUS) {
-			getThisGame().addAsteroid(getX(), getY(),
-					(float) (getDX() + Math.random() - .5),
-					(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
-			getThisGame().addAsteroid(getX(), getY(),
-					(float) (getDX() + Math.random() - .5),
-					(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
+			for (int i = 0; i < SPLIT; i++) {
+				getThisGame().addAsteroid(getX(), getY(),
+						(float) (getDX() + Math.random() - .5),
+						(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
+			}
 			getThisGame().addScore(BIG_SCORE);
 		} else if (getRadius() == MEDIUM_RADIUS) {
-			getThisGame().addAsteroid(getX(), getY(),
-					(float) (getDX() + Math.random() * 2 - 1),
-					(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
-			getThisGame().addAsteroid(getX(), getY(),
-					(float) (getDX() + Math.random() * 2 - 1),
-					(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
+			for (int i = 0; i < SPLIT; i++) {
+				getThisGame().addAsteroid(getX(), getY(),
+						(float) (getDX() + Math.random() * 2 - 1),
+						(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
+			}
 			getThisGame().addScore(MEDIUM_SCORE);
 		} else {
 			getThisGame().addScore(SMALL_SCORE);

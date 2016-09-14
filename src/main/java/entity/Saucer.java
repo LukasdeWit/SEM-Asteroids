@@ -16,7 +16,7 @@ public class Saucer extends AbstractEntity {
 	 */
 	private int toRight;
 	/**
-	 * used to get random numbers
+	 * Used to get random numbers.
 	 */
 	private final Random random;
 	/**
@@ -53,13 +53,9 @@ public class Saucer extends AbstractEntity {
 	 */
 	private static final double QUARTER_PI = Math.PI / 4;
 	/**
-	 * Time between shots.
-	 */
-	private static final long SHOT_TIME = 1000;
-	/**
 	 * Bullet speed multiplier.
 	 */
-	private static final float BULLET_SPEED = 2;
+	private static final float BULLET_SPEED = 4;
 	/**
 	 * Time between changes of direction in miliseconds.
 	 */
@@ -80,6 +76,19 @@ public class Saucer extends AbstractEntity {
 	 * Extra score of big Saucer.
 	 */
 	private static final int SMALL_SCORE = 1000;
+	/**
+	 * Time between shots of Saucer.
+	 */
+	private static final long SHOT_TIME = 1000;
+	/**
+	 * The amount of time the time between shots
+	 * becomes shorter per difficulty step.
+	 */
+	private static final long LESS_SHOT = 50;
+	/**
+	 * Maximum accuracy.
+	 */
+	private static final float MAX_ACCURACY = 10;
 
 	/**
 	 * Constructor for Saucer class.
@@ -101,7 +110,7 @@ public class Saucer extends AbstractEntity {
 		if (x > (thisGame.getScreenX() / 2)) {
 			nextToRight = 1;
 		}
-		setPath(nextToRight, (int) (random.nextInt(1) * PATHS));
+		setPath(nextToRight, random.nextInt((int) PATHS));
 	}
 
 	/**
@@ -150,17 +159,81 @@ public class Saucer extends AbstractEntity {
 	 * Makes the Saucer shoot.
 	 */
 	private void shoot() {
-		if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
-			final float randomDir = (float) (Math.random() * 2 * Math.PI);
-			final Bullet newBullet = new Bullet(getX(), getY(),
-					(float) Math.cos(randomDir) * BULLET_SPEED,
-					(float) Math.sin(randomDir) * BULLET_SPEED,
+		if (getThisGame().getPlayer().invincible()) {
+			shotTime = System.currentTimeMillis();
+		} else if (getRadius() == BIG_RADIUS
+				&& System.currentTimeMillis() - shotTime > SHOT_TIME) {
+			float shotDir = (float) (Math.random() * 2 * Math.PI);
+
+			Bullet newBullet = new Bullet(getX(), getY(),
+					(float) Math.cos(shotDir) * BULLET_SPEED,
+					(float) Math.sin(shotDir) * BULLET_SPEED,
+					getThisGame());
+			newBullet.setFriendly(false);
+			getThisGame().create(newBullet);
+			shotTime = System.currentTimeMillis();
+
+		} else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
+			float shotDir = smallShotDir();
+
+			Bullet newBullet = new Bullet(getX(), getY(),
+					(float) Math.cos(shotDir) * BULLET_SPEED,
+					(float) Math.sin(shotDir) * BULLET_SPEED,
 					getThisGame());
 			newBullet.setFriendly(false);
 			getThisGame().create(newBullet);
 			shotTime = System.currentTimeMillis();
 		}
 	}
+
+	/**
+	 * generates the shot direction of small saucer.
+	 * @return direction in radians.
+	 */
+	private float smallShotDir() {
+		float playerX = getThisGame().getPlayer().getX();
+		float playerY = getThisGame().getPlayer().getY();
+		float accuracy = getThisGame().getScore()
+				/ Game.getDifficultyStep();
+		if (accuracy > MAX_ACCURACY) {
+			accuracy = MAX_ACCURACY;
+		}
+			//0 is completely random, 10 is perfect.
+		float randomRange = (float) (Math.PI
+				* ((MAX_ACCURACY - accuracy) / MAX_ACCURACY) * Math.random());
+			//The angle of error.
+		float straightDir;
+		if (playerX > getX()) {
+			straightDir =
+					(float) Math.atan((playerY - getY()) / (playerX - getX()));
+		} else {
+			straightDir = (float) (Math.PI
+					+ Math.atan((playerY - getY()) / (playerX - getX())));
+		}
+		//straightDir = (float) -(Math.PI / 2); //debug.
+			//Straigth direction from saucer to player in radians.
+		float errorRight = (int) (Math.random() * 2) * 2 - 1;
+			//-1 is error left, 1 is error right.
+		return (float) (straightDir + errorRight * randomRange);
+	}
+
+
+	/**
+	 * The time between shots of the small Saucer,
+	 * becomes more smaller when score is higher.
+	 * @return shot time of small saucer
+	 */
+	private long smallShotTime() {
+		long score = getThisGame().getScore() / Game.getDifficultyStep();
+		if (score == 0) {
+			return SHOT_TIME;
+		} else if (score <= SHOT_TIME / (2 * LESS_SHOT)) {
+			return SHOT_TIME - (LESS_SHOT * score);
+		} else {
+			return SHOT_TIME / 2;
+		}
+	}
+
 
 	/**
 	 * Destroy this if it's outside the screen.
@@ -177,7 +250,7 @@ public class Saucer extends AbstractEntity {
 	private void changeDirection() {
 		if (System.currentTimeMillis() - dirChangeTime > CHANGE_DIR_TIME) {
 			dirChangeTime = System.currentTimeMillis();
-			setPath((int) (random.nextInt(1) * PATHS));
+			setPath(random.nextInt((int) PATHS));
 		}
 	}
 
@@ -222,7 +295,7 @@ public class Saucer extends AbstractEntity {
 	 * kills this Saucer, adds the points to score and explodes.
 	 */
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		int points = BIG_SCORE;
 		if (getRadius() != BIG_RADIUS) {
 			points = SMALL_SCORE;

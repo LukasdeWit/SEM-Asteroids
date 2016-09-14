@@ -107,7 +107,8 @@ public abstract class AbstractEntity {
 	 * @param e2 second AbstractEntity
 	 * @return float containing the distance between the Entities.
 	 */
-	public static float distance(final AbstractEntity e1, final AbstractEntity e2) {
+	public static float distance(final AbstractEntity e1, 
+			final AbstractEntity e2) {
 		return (float) Math.sqrt(Math.pow(e1.getX() - e2.getX(), 2) 
 				+ Math.pow(e1.getY() - e2.getY(), 2));
 	}
@@ -119,13 +120,14 @@ public abstract class AbstractEntity {
 	 * @param e2 second AbstractEntity
 	 * @return boolean that is true when entities collide
 	 */
-	public static boolean collision(final AbstractEntity e1, final AbstractEntity e2) {
+	public static boolean collision(final AbstractEntity e1, 
+			final AbstractEntity e2) {
 		return (e1.radius + e2.radius) > distance(e1, e2);
 	}
 
 	/**
-	 * Function that describes how the AbstractEntity behaves when colliding with
-	 * another.
+	 * Function that describes how the AbstractEntity 
+	 * behaves when colliding with another.
 	 * 
 	 * @param e2
 	 *            AbstractEntity to be collided with.
@@ -133,7 +135,7 @@ public abstract class AbstractEntity {
 	public abstract void collide(AbstractEntity e2);
 
 	/**
-	 * describes what this entity does when it dies
+	 * Describes what this entity does when it dies.
 	 */
 	public abstract void onDeath();
 	
