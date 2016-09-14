@@ -1,9 +1,9 @@
 package entity;
-import java.util.List;
-
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.List;
 
 /**
  * This class is the player of the game.
@@ -50,11 +50,11 @@ public class Player extends AbstractEntity {
 	/**
 	 * Invincible time at the start of a game.
 	 */
-	private static final int INVINC_START_TIME = 1000;
+	private static final int INVINCIBILITY_START_TIME = 1000;
 	/**
 	 * Rotation in radians per tick.
 	 */
-	private static final double ROTATION = .06;
+	private static final double ROTATION_SPEED = .06;
 	/**
 	 * Acceleration in pixels per ticks squared.
 	 */
@@ -120,7 +120,7 @@ public class Player extends AbstractEntity {
 		lives = STARTING_LIVES;
 		setRadius(RADIUS);
 		rotation = 0;
-		makeInvincible(INVINC_START_TIME);
+		makeInvincible(INVINCIBILITY_START_TIME);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class Player extends AbstractEntity {
 		lives--;
 		if (lives == 0) {
 			getThisGame().over();
-			makeInvincible(INVINCIBILITY_START_TIME); //TODO: Game over
+			makeInvincible(INVINCIBILITY_START_TIME);
 		} else {
 			setX(getThisGame().getScreenX() / 2);
 			setY(getThisGame().getScreenY() / 2);
@@ -171,13 +171,9 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandler(final List<String> input) {
-		if ((input.contains("LEFT") || input.contains("A"))
-				&& !(input.contains("RIGHT") || input.contains("D"))) {
+		if (input.contains("LEFT") || input.contains("A")) {
 			turnLeft();
-		}
-
-		if ((input.contains("RIGHT") || input.contains("D")) 
-				&& !(input.contains("LEFT") || input.contains("A"))) {
+		} else if (input.contains("RIGHT") || input.contains("D")) {
 			turnRight();
 		}
 
@@ -198,14 +194,14 @@ public class Player extends AbstractEntity {
 	 * Turn the player left.
 	 */
 	private void turnLeft() {
-		rotation += ROTATION;
+		rotation += ROTATION_SPEED;
 	}
 
 	/**
 	 * Turn the player right.
 	 */
 	private void turnRight() {
-		rotation -= ROTATION;
+		rotation -= ROTATION_SPEED;
 	}
 
 	/**
@@ -225,7 +221,7 @@ public class Player extends AbstractEntity {
 	 * Makes player move slower.
 	 */
 	private void slowDown() {
-		if (Math.abs(getDX()) + Math.abs(getDY()) != 0) {
+		if (((int) (Math.abs(getDX()) + Math.abs(getDY()))) != 0) {
 			setDX(getDX() - (DECELERATION * getDX())
 					/ (Math.abs(getDX()) + Math.abs(getDY())));
 			setDY(getDY() - (DECELERATION * getDY())
@@ -353,7 +349,6 @@ public class Player extends AbstractEntity {
 					getY() - (SIZE - 1) * s4, 
 					getY() - (SIZE - 1) * s5, 
 					getY() - (SIZE + 2) * s6 }, TRIANGLE_CORNERS);
-			//TODO: PLEASE MAKE THIS BETTER
 			boost = false;
 		}
 	}
@@ -363,7 +358,7 @@ public class Player extends AbstractEntity {
 	 * @return true if alive
 	 */
 	public final boolean isAlive() {
-		return (lives > 0);
+		return lives > 0;
 	}
 
 	/**

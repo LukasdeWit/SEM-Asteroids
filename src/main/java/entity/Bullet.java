@@ -52,6 +52,7 @@ public class Bullet extends AbstractEntity {
 	 * Calculate new position of Bullet.
 	 * @param input - the pressed keys
 	 */
+	@Override
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
