@@ -137,10 +137,11 @@ public class Asteroid extends AbstractEntity {
 	}
 
 	/**
-	 * on death split asteroid into 2 small ones, or if it's too small destroy it.
+	 * on death split asteroid into 2 small ones, 
+	 * or if it's too small destroy it.
 	 */
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		if (getRadius() == BIG_RADIUS) {
 			for (int i = 0; i < SPLIT; i++) {
 				getThisGame().addAsteroid(getX(), getY(),

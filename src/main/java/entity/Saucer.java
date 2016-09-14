@@ -16,7 +16,7 @@ public class Saucer extends AbstractEntity {
 	 */
 	private int toRight;
 	/**
-	 * used to get random numbers
+	 * Used to get random numbers.
 	 */
 	private final Random random;
 	/**
@@ -295,7 +295,7 @@ public class Saucer extends AbstractEntity {
 	 * kills this Saucer, adds the points to score and explodes.
 	 */
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		int points = BIG_SCORE;
 		if (getRadius() != BIG_RADIUS) {
 			points = SMALL_SCORE;

@@ -29,7 +29,7 @@ public class Game {
 	 */
 	private final List<AbstractEntity> entities;
 	/**
-	 * Object of random used to get random numbers
+	 * Object of random used to get random numbers.
 	 */
 	private final Random random;
 	/**
