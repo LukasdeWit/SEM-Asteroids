@@ -41,10 +41,6 @@ public class Player extends AbstractEntity {
 	 */
 	private boolean boost;
 	/**
-	 * margin between two lives in pixels.
-	 */
-	private double margin;
-	/**
 	 * Amount of lives at the start of a game.
 	 */
 	private static final int STARTING_LIVES = 3;
@@ -93,10 +89,6 @@ public class Player extends AbstractEntity {
 	 */
 	private static final int RESPAWN_FLICKER_TIME = 250;
 	/**
-	 * Size of lives in pixels.
-	 */
-	private static final int LIVES_SIZE = 10;
-	/**
 	 * The number of corners of a triangle.
 	 */
 	private static final int TRIANGLE_CORNERS = 3;
@@ -112,18 +104,6 @@ public class Player extends AbstractEntity {
 	 * Maximum amount of friendly bullets simulatiously in a game.
 	 */
 	private static final int MAX_BULLETS = 4;
-	/**
-	 * Y ofset of drawn lives.
-	 */
-	private static final double LIVES_Y_OFSET = 40;
-	/**
-	 * The margin between two lives at the start.
-	 */
-	private static final double START_MARGIN = 10;
-	/**
-	 * Maximum amount of lives next to eachother with START_MARGIN as margin.
-	 */
-	private static final double FULL_LIVES = 20;
 	
 
 	/**
@@ -142,7 +122,6 @@ public class Player extends AbstractEntity {
 		setRadius(RADIUS);
 		rotation = 0;
 		makeInvincible(INVINC_START_TIME);
-		margin = START_MARGIN;
 	}
 
 	/**
@@ -151,7 +130,6 @@ public class Player extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		lives--;
-		updateMargin();
 		if (lives == 0) {
 			getThisGame().over();
 			makeInvincible(INVINC_START_TIME); //TODO: Game over
@@ -170,16 +148,6 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
-		updateMargin();
-	}
-
-	/**
-	 * Update the margin between lives to fit on screen.
-	 */
-	private void updateMargin() {
-		if (lives >= FULL_LIVES) {
-			margin = START_MARGIN * FULL_LIVES / lives;
-		}
 	}
 
 	/**
