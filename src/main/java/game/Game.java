@@ -264,15 +264,20 @@ public class Game {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
 		if (score == 0) {
-			drawDigit(gc, 0, 0);
+			Display.draw(Display.SCORE_X, Display.SCORE_Y, 
+					Display.SCORE_SIZE, "        00", gc);
+			//drawDigit(gc, 0, 0);
 		} else {
-			long rest = score;
+			String scoreString = String.format("%1$10s", score);
+			Display.draw(Display.SCORE_X, Display.SCORE_Y, 
+					Display.SCORE_SIZE, scoreString, gc);
+			/*long rest = score;
 			int digit;
 			for (int i = 0; rest != 0; i++) {
 				digit = (int) (rest % TEN);
 				rest = (rest - digit) / TEN;
 				drawDigit(gc, digit, i);
-			}
+			}*/
 		}
 	}
 
