@@ -109,6 +109,23 @@ public class Asteroid extends AbstractEntity {
 			setDY(getDY() * 2);
 		}
 	}
+	
+	/**
+	 * Constructor for the Asteroid class, with radius.
+	 * 
+	 * @param x location of Asteroid along the X-axis.
+	 * @param y location of Asteroid along the Y-axis.
+	 * @param dX velocity of Asteroid along the X-axis.
+	 * @param dY velocity of Asteroid along the Y-axis.
+	 * @param radius - radius of the new Asteroid.
+	 * @param thisGame Game the Asteroid exists in.
+	 */
+	public Asteroid(final float x, final float y,
+			final float dX, final float dY, 
+			final float radius, final Game thisGame) {
+		this(x, y, dX, dY, thisGame);
+		setRadius(radius);
+	}
 
 	/**
 	 * Calculate new position of Asteroid.
@@ -144,16 +161,18 @@ public class Asteroid extends AbstractEntity {
 	public final void onDeath() {
 		if (getRadius() == BIG_RADIUS) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().addAsteroid(getX(), getY(),
+				getThisGame().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
-						(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS);
+						(float) (getDY() + Math.random() - .5), 
+						MEDIUM_RADIUS, getThisGame()));
 			}
 			getThisGame().addScore(BIG_SCORE);
 		} else if (getRadius() == MEDIUM_RADIUS) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().addAsteroid(getX(), getY(),
-						(float) (getDX() + Math.random() * 2 - 1),
-						(float) (getDY() + Math.random() - .5), SMALL_RADIUS);
+				getThisGame().create(new Asteroid(getX(), getY(),
+						(float) (getDX() + Math.random() - .5),
+						(float) (getDY() + Math.random() - .5), 
+						SMALL_RADIUS, getThisGame()));
 			}
 			getThisGame().addScore(MEDIUM_SCORE);
 		} else {
