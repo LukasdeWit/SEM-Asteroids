@@ -461,7 +461,6 @@ public final class Display {
 		for (int i = 0; i < charList.length; i++) {
 			char c = charList[i];
 			if (c == ' ') {
-				System.out.println(' ');
 				drawChar(x + i * X_OFFSET * size, y, size, SPACE, gc);
 			} else {
 				int cInt = (int) c;

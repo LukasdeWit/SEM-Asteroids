@@ -1,5 +1,11 @@
 package game;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -109,7 +115,56 @@ public class Game {
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		random = new Random();
+		highscore = readHighscore();
 		startGame();
+	}
+	
+	/**
+	 * writes the highscore to file in resources folder.
+	 */
+	private void writeHighscore() {
+		try {
+			String content = String.valueOf(highscore);
+			File file = new File("src/main/resources/highscore.txt");
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(content);
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * reades the highscore from file in resources folder.
+	 * @return the highscore
+	 */
+	private long readHighscore() {
+		BufferedReader br = null;
+		long currentHighscore = 0;
+		try {
+			String sCurrentLine;
+			br = new BufferedReader(
+					new FileReader("src/main/resources/highscore.txt"));
+			while ((sCurrentLine = br.readLine()) != null) {
+				currentHighscore = Long.parseLong(sCurrentLine);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return currentHighscore;
 	}
 
 	/**
@@ -122,6 +177,7 @@ public class Game {
 		entities.add(player);
 		if (this.score > highscore) {
 			highscore = this.score;
+			writeHighscore();
 		}
 		score = 0;
 		spawner.reset();
