@@ -1,7 +1,6 @@
 package entity;
 import java.util.List;
 
-import game.Display;
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -309,8 +308,6 @@ public class Player extends AbstractEntity {
 	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
-		drawLives(gc);
-
 		final double s1 = Math.sin(rotation);
 		final double c1 = Math.cos(rotation);
 
@@ -361,33 +358,18 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * Method to help display the amount of lives the player has left.
-	 * 
-	 * @param gc
-	 *            graphicscontext
-	 */
-	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-	private void drawLives(final GraphicsContext gc) {
-		Display.lives(lives, gc);
-		/*for (int i = 0; i < lives; i++) {
-			gc.setStroke(Color.WHITE);
-			gc.setLineWidth(1);
-			gc.strokePolygon(new double[] { 
-					margin * (i + 1),
-					margin * (i + 1) - 2,
-					margin * (i + 1) + 2},
-					new double[] { 
-					LIVES_Y_OFSET,
-					LIVES_Y_OFSET + LIVES_SIZE  - 2,
-					LIVES_Y_OFSET + LIVES_SIZE  - 2}, TRIANGLE_CORNERS);
-		}*/
-	}
-
-	/**
 	 * True if more than 0 lives.
 	 * @return true if alive
 	 */
 	public final boolean isAlive() {
 		return (lives > 0);
+	}
+
+	/**
+	 * @return lives
+	 */
+
+	public final int getLives() {
+		return lives;
 	}
 }

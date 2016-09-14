@@ -87,7 +87,7 @@ public class Saucer extends AbstractEntity {
 	 */
 	private static final long SHOT_TIME = 1000;
 	/**
-	 * The amount of time the time between shots
+	 * The amount of time by which the time between shots
 	 * becomes shorter per difficulty step.
 	 */
 	private static final long LESS_SHOT = 50;
@@ -223,7 +223,6 @@ public class Saucer extends AbstractEntity {
 		return (float) (straightDir + errorRight * randomRange);
 	}
 
-
 	/**
 	 * The time between shots of the small Saucer,
 	 * becomes more smaller when score is higher.
@@ -239,7 +238,6 @@ public class Saucer extends AbstractEntity {
 			return SHOT_TIME / 2;
 		}
 	}
-
 
 	/**
 	 * Destroy this if it's outside the screen.

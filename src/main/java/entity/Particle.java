@@ -88,12 +88,12 @@ public class Particle extends AbstractEntity {
 	}
 
 	@Override
-	public void collide(final AbstractEntity e2) {
+	public final void collide(final AbstractEntity e2) {
 		//no-op
 	}
 
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		//no-op
 	}
 

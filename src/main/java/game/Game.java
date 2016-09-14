@@ -194,6 +194,7 @@ public class Game {
 		createList.clear();
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
+		Display.lives(player.getLives(), gc);
 	}
 
 	/**

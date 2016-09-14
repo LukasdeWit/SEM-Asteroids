@@ -208,20 +208,4 @@ public class Asteroid extends AbstractEntity {
 		}
 		gc.strokePolygon(xShape, yShape, SHAPE_LINES);
 	}
-	
-	/**
-	 * Getter for shape.
-	 * @return int describing the shape of the asteroid
-	 */
-	public final int getShape() {
-		return shape;
-	}
-	
-	/**
-	 * Setter for shape.
-	 * @param newShape int describing the shape of the asteroid
-	 */
-	public final void setShape(final int newShape) {
-		shape = newShape;
-	}
 }

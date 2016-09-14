@@ -26,6 +26,10 @@ public class Bullet extends AbstractEntity {
 	 * Draw size of bullet.
 	 */
 	private static final float SIZE = 1.5f;
+	/**
+	 * Radius of bullet.
+	 */
+	private static final float RADIUS = 2;
 
 	/**
 	 * Constructor for the bullet class.
@@ -39,7 +43,7 @@ public class Bullet extends AbstractEntity {
 	public Bullet(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
-		setRadius(2);
+		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
 	}
@@ -85,7 +89,7 @@ public class Bullet extends AbstractEntity {
 	}
 
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		//no-op
 	}
 
