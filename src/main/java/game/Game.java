@@ -61,6 +61,10 @@ public class Game {
 	 */
 	private long score;
 	/**
+	 * current highscore.
+	 */
+	private long highscore;
+	/**
 	 * Size of canvas.
 	 */
 	private static final float CANVAS_SIZE = 500;
@@ -116,6 +120,9 @@ public class Game {
 		entities.clear();
 		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
 		entities.add(player);
+		if (this.score > highscore) {
+			highscore = this.score;
+		}
 		score = 0;
 		spawner.reset();
 	}
@@ -205,6 +212,7 @@ public class Game {
 		destroyList.clear();
 		createList.clear();
 		Display.score(score, gc);
+		Display.highscore(highscore, gc);
 	}
 
 	/**

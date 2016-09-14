@@ -364,7 +364,19 @@ public final class Display {
 	/**
 	 * Size of score display.
 	 */
-	private static final float SCORE_SIZE = 4;
+	private static final float SCORE_SIZE = 3;
+	/**
+	 * X coordinate of highscore display.
+	 */
+	private static final float HIGHSCORE_X = 200;
+	/**
+	 * Y coordinate of highscore display.
+	 */
+	private static final float HIGHSCORE_Y = 15;
+	/**
+	 * Size of highscore display.
+	 */
+	private static final float HIGHSCORE_SIZE = 1.5f;
 	/**
 	 * Space between characters.
 	 */	
@@ -399,6 +411,23 @@ public final class Display {
 		//test
 		//draw(5, 100, 3, "abcdefghijklmnopqrstuvwxyz", gc);
 		//draw(5, 140, 3, "0123456789***", gc);
+	}
+	
+	/**
+	 * Display the score.
+	 * @param highscore - highscore
+	 * @param gc - graphics context
+	 */
+	public static void highscore(final long highscore, 
+			final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		if (highscore == 0) {
+			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, "        00", gc);
+		} else {
+			String highscoreString = String.format("%1$10s", highscore);
+			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, highscoreString, gc);
+		}
 	}
 	
 	/**
