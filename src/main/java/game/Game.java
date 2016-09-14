@@ -5,12 +5,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  * This class defines everything within the game.
@@ -110,8 +110,10 @@ public class Game {
 	 */
 	private long readHighscore() {
 		long currentHighscore = 0;
+		final String filePath = "src/main/resources/highscore.txt";
 		try (BufferedReader br = new BufferedReader(
-				new FileReader("src/main/resources/highscore.txt"))) {
+				new InputStreamReader(new FileInputStream(filePath),
+						StandardCharsets.UTF_8))) {
 			String sCurrentLine;
 			while ((sCurrentLine = br.readLine()) != null) {
 				currentHighscore = Long.parseLong(sCurrentLine);
@@ -128,10 +130,11 @@ public class Game {
 	private void writeHighscore() {
 		final String content = String.valueOf(highscore);
 		final File file = new File("src/main/resources/highscore.txt");
-		try (FileWriter fw = new FileWriter(file.getAbsoluteFile())) {
-			final BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(content);
-			bw.close();
+		try (FileOutputStream fos =
+					 new FileOutputStream(file.getAbsoluteFile())) {
+			fos.write(content.getBytes(StandardCharsets.UTF_8));
+			fos.flush();
+			fos.close();
 		} catch (IOException e) {
 			LOG.log(Level.ALL, "unable to write highscore to file", e);
 		}
