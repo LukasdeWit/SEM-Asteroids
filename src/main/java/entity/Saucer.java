@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import game.Game;
+import game.Spawner;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -40,6 +41,11 @@ public class Saucer extends AbstractEntity {
 	 * The points of horizontal lines of Saucer shape. point 1 to point 6, etc.
 	 */
 	private final int[][] horLines = {{1, 6}, {2, 5}};
+	
+	/**
+	 * Radius of small Saucer.
+	 */
+	private static final float SMALL_RADIUS = 5;
 	/**
 	 * Radius of Saucer.
 	 */
@@ -81,7 +87,7 @@ public class Saucer extends AbstractEntity {
 	 */
 	private static final long SHOT_TIME = 1000;
 	/**
-	 * The amount of time the time between shots
+	 * The amount of time by which the time between shots
 	 * becomes shorter per difficulty step.
 	 */
 	private static final long LESS_SHOT = 50;
@@ -194,7 +200,7 @@ public class Saucer extends AbstractEntity {
 		float playerX = getThisGame().getPlayer().getX();
 		float playerY = getThisGame().getPlayer().getY();
 		float accuracy = getThisGame().getScore()
-				/ Game.getDifficultyStep();
+				/ Spawner.getDifficultyStep();
 		if (accuracy > MAX_ACCURACY) {
 			accuracy = MAX_ACCURACY;
 		}
@@ -217,14 +223,13 @@ public class Saucer extends AbstractEntity {
 		return (float) (straightDir + errorRight * randomRange);
 	}
 
-
 	/**
 	 * The time between shots of the small Saucer,
 	 * becomes more smaller when score is higher.
 	 * @return shot time of small saucer
 	 */
 	private long smallShotTime() {
-		long score = getThisGame().getScore() / Game.getDifficultyStep();
+		long score = getThisGame().getScore() / Spawner.getDifficultyStep();
 		if (score == 0) {
 			return SHOT_TIME;
 		} else if (score <= SHOT_TIME / (2 * LESS_SHOT)) {
@@ -233,7 +238,6 @@ public class Saucer extends AbstractEntity {
 			return SHOT_TIME / 2;
 		}
 	}
-
 
 	/**
 	 * Destroy this if it's outside the screen.
@@ -302,5 +306,13 @@ public class Saucer extends AbstractEntity {
 		}
 		getThisGame().addScore(points);
 		Particle.explosion(getX(), getY(), getThisGame());
+	}
+	
+	/**
+	 * Getter for small radius.
+	 * @return small saucer radius
+	 */
+	public static float getSmallRadius() {
+		return SMALL_RADIUS;
 	}
 }
