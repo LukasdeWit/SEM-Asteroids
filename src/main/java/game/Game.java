@@ -61,29 +61,6 @@ public class Game {
 	 */
 	private long score;
 	/**
-	 * Xcoordinates of the raster of the first digit.
-	 */
-	private final double[] scoreDisplayX = { 190, 200, 190, 200, 190, 200 }; 
-	/**
-	 * Ycoordinates of the raster of the first digit.
-	 */
-	private final double[] scoreDisplayY = { 10, 10, 20, 20, 30, 30 };
-	/**
-	 * the raster dots to be connected to form a digit.
-	 */
-	private final int[][] numberLines = { 
-			{ 0, 1, 5, 4, 0 }, 
-			{ 1, 5 }, 
-			{ 0, 1, 3, 2, 4, 5 }, 
-			{ 0, 1, 3, 2, 3, 5, 4 },
-			{ 0, 2, 3, 1, 5 }, 
-			{ 1, 0, 2, 3, 5, 4 }, 
-			{ 1, 0, 4, 5, 3, 2 }, 
-			{ 0, 1, 5 }, 
-			{ 2, 0, 1, 5, 4, 2, 3 },
-			{ 4, 5, 1, 0, 2, 3 } };
-	
-	/**
 	 * Size of canvas.
 	 */
 	private static final float CANVAS_SIZE = 500;
@@ -100,14 +77,6 @@ public class Game {
 	 * Minimal restart time.
 	 */
 	private static final long MINIMAL_RESTART_TIME = 300;
-	/**
-	 * Ten.
-	 */
-	private static final int TEN = 10;
-	/**
-	 * Ofset of raster for digits in pixels.
-	 */
-	private static final int OFSET_PIXELS = 20;
 	/**
 	 * Number of points needed to gain a life.
 	 */
@@ -235,7 +204,7 @@ public class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		drawScore(gc);
+		Display.score(score, gc);
 	}
 
 	/**
@@ -253,56 +222,7 @@ public class Game {
 			}
 		}
 	}
-
-	/**
-	 * draws the current score on the canvas.
-	 * 
-	 * @param gc
-	 *            - the GraphicsContext of the canvas
-	 */
-	public final void drawScore(final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
-		if (score == 0) {
-			Display.draw(Display.SCORE_X, Display.SCORE_Y, 
-					Display.SCORE_SIZE, "        00", gc);
-			//drawDigit(gc, 0, 0);
-		} else {
-			String scoreString = String.format("%1$10s", score);
-			Display.draw(Display.SCORE_X, Display.SCORE_Y, 
-					Display.SCORE_SIZE, scoreString, gc);
-			/*long rest = score;
-			int digit;
-			for (int i = 0; rest != 0; i++) {
-				digit = (int) (rest % TEN);
-				rest = (rest - digit) / TEN;
-				drawDigit(gc, digit, i);
-			}*/
-		}
-	}
-
-	/**
-	 * Draws a single digit on a predifined raster.
-	 * 
-	 * @param gc - the GraphicsContext of the canvas
-	 * @param digit - the digit
-	 * @param offset - the offset to the left of the starting position
-	 *                 (the '1' in 12 should have an offset of 1 and the '2' 0)
-	 */
-	private void drawDigit(final GraphicsContext gc, 
-			final int digit, final int offset) {
-		final int l = numberLines[digit].length;
-		double[] scoreX = new double[l];
-		double[] scoreY = new double[l];
-		for (int i = 0; i < l; i++) {
-			scoreX[i] = scoreDisplayX[numberLines[digit][i]] 
-					- offset * OFSET_PIXELS;
-			scoreY[i] = scoreDisplayY[numberLines[digit][i]];
-		}
-		gc.setStroke(Color.WHITE);
-		gc.strokePolyline(scoreX, scoreY, l);
-	}
-
+	
 	/**
 	 * adds an Entity to the destroy list and will be destroyed at the and of
 	 * the current tick.

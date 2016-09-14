@@ -1,6 +1,7 @@
 package entity;
 import java.util.List;
 
+import game.Display;
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -399,7 +400,8 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 	private void drawLives(final GraphicsContext gc) {
-		for (int i = 0; i < lives; i++) {
+		Display.lives(lives, gc);
+		/*for (int i = 0; i < lives; i++) {
 			gc.setStroke(Color.WHITE);
 			gc.setLineWidth(1);
 			gc.strokePolygon(new double[] { 
@@ -410,6 +412,6 @@ public class Player extends AbstractEntity {
 					LIVES_Y_OFSET,
 					LIVES_Y_OFSET + LIVES_SIZE  - 2,
 					LIVES_Y_OFSET + LIVES_SIZE  - 2}, TRIANGLE_CORNERS);
-		}
+		}*/
 	}
 }

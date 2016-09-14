@@ -1,6 +1,7 @@
 package game;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This class displays all numbers, letters and lives.
@@ -27,7 +28,7 @@ public final class Display {
 	 * The B.
 	 */
 	private static final float[][] B = {
-			{0, 4, 0, 0},
+			{0, 6, 0, 0},
 			{0, 0, 3, 0},
 			{3, 0, 4, 1},
 			{4, 1, 4, 2},
@@ -355,20 +356,66 @@ public final class Display {
 	/**
 	 * X coordinate of score display.
 	 */
-	public static final float SCORE_X = 10;
+	private static final float SCORE_X = 10;
 	/**
 	 * Y coordinate of score display.
 	 */
-	public static final float SCORE_Y = 10;
+	private static final float SCORE_Y = 10;
 	/**
 	 * Size of score display.
 	 */
-	public static final float SCORE_SIZE = 4;
-	
+	private static final float SCORE_SIZE = 4;
 	/**
 	 * Space between characters.
 	 */	
-	private static final float X_OFFSET = 5.5f;
+	private static final int X_OFFSET = 6;
+	/**
+	 * X coordinate of lives display.
+	 */
+	private static final float LIVES_X = 10;
+	/**
+	 * Y coordinate of lives display.
+	 */
+	private static final float LIVES_Y = 40;
+	/**
+	 * Size of lives display.
+	 */
+	private static final float LIVES_SIZE = 2;
+	
+	/**
+	 * Display the score.
+	 * @param score - score
+	 * @param gc - graphics context
+	 */
+	public static void score(final long score, final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		if (score == 0) {
+			draw(SCORE_X, SCORE_Y, SCORE_SIZE, "        00", gc);
+		} else {
+			String scoreString = String.format("%1$10s", score);
+			draw(SCORE_X, SCORE_Y, SCORE_SIZE, scoreString, gc);
+		}
+		//test
+		//draw(5, 100, 3, "abcdefghijklmnopqrstuvwxyz", gc);
+		//draw(5, 140, 3, "0123456789***", gc);
+	}
+	
+	/**
+	 * Display the lives.
+	 * @param lives - number of lives
+	 * @param gc - graphics context
+	 */
+	public static void lives(final int lives, final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		StringBuffer outputBuffer = new StringBuffer(lives);
+		for (int i = 0; i < lives; i++) {
+		   outputBuffer.append("*");
+		}
+		String livesString = outputBuffer.toString();
+		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, gc);
+	}
 	
 	/**
 	 * Draw a letter, number or life.
@@ -390,19 +437,15 @@ public final class Display {
 			} else {
 				int cInt = (int) c;
 				if (cInt >= (int) 'a' && cInt <= (int) 'z') {
-					System.out.println(cInt - (int) 'a');
 					drawChar(x + i * X_OFFSET * size, y, 
 							size, LETTERS[cInt - (int) 'a'], gc);
 				} else if (cInt >= (int) 'A' && cInt <= (int) 'Z') {
-					System.out.println(cInt - (int) 'A');
 					drawChar(x + i * X_OFFSET * size, y, 
 							size, LETTERS[cInt - (int) 'A'], gc);
 				} else if (cInt >= (int) '0' && cInt <= (int) '9') {
-					System.out.println(cInt - (int) '0');
 					drawChar(x + i * X_OFFSET * size, y, 
 							size, NUMBERS[cInt - (int) '0'], gc);
 				} else {
-					System.out.println("*LIFE*");
 					drawChar(x + i * X_OFFSET * size, y, size, LIFE, gc);
 				}
 			}
@@ -428,12 +471,4 @@ public final class Display {
 				//3 is not a magic number in this case.
 		}
 	}
-	/*
-	*//**
-	 * test.
-	 * @param args - args
-	 *//*
-	public static void main(final String[] args) {
-		draw(0, 0, 0, "abcde#fghijklm^&NOPQRSTUV#WXYz1234567890");
-	}*/
 }
