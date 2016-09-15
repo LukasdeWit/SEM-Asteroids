@@ -289,7 +289,8 @@ public class Saucer extends AbstractEntity {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			((Player) e2).onHit();
 			getThisGame().destroy(this);
-		} else if ((e2 instanceof Bullet && ((Bullet) e2).isFriendly()) || e2 instanceof Asteroid) {
+		} else if ((e2 instanceof Bullet && ((Bullet) e2).isFriendly())
+				|| e2 instanceof Asteroid) {
 			getThisGame().destroy(e2);
 			getThisGame().destroy(this);
 		}
@@ -301,7 +302,7 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		int points = BIG_SCORE;
-		if (Float.compare(BIG_RADIUS, getRadius()) >= 0 ) {
+		if (Float.compare(BIG_RADIUS, getRadius()) >= 0) {
 			points = SMALL_SCORE;
 		}
 		getThisGame().addScore(points);
