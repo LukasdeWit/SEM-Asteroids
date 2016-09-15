@@ -125,14 +125,34 @@ public class Player extends AbstractEntity {
 
 	/**
 	 * Perform actions that happen when a player dies.
+	 * <p>
+	 * this is called when the player has
+	 * <strong>no lives left</strong>
+	 * you probably don't need to call this directly, instead call onHit()
 	 */
 	@Override
 	public final void onDeath() {
+		// no-op
+	}
+
+	/**
+	 * handle the player taking a hit (and is not invincible)
+	 *
+	 * this happens when (for example) the player collides with an asteroid
+	 * or is hit by the bullet of an saucer.
+	 */
+	public final void onHit() {
 		lives--;
-		if (lives == 0) {
+		if (lives <= 0) {
+			// we are out of lives, call gameover
 			getThisGame().over();
+
+			// is this needed?
 			makeInvincible(INVINCIBILITY_START_TIME);
 		} else {
+			// we lose one live
+
+			// respawn the player
 			setX(getThisGame().getScreenX() / 2);
 			setY(getThisGame().getScreenY() / 2);
 			setDX(0);
@@ -292,11 +312,11 @@ public class Player extends AbstractEntity {
 				invincibleStart = System.currentTimeMillis();
 			} else if (!invincible()) {
 				getThisGame().destroy(e2);
-				this.onDeath();
+				onHit();
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
-			this.onDeath();
+			onHit();
 		}
 	}
 

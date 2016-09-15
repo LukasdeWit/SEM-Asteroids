@@ -168,8 +168,7 @@ public class Saucer extends AbstractEntity {
 		if (getThisGame().getPlayer().invincible()) {
 			shotTime = System.currentTimeMillis();
 		} else {
-			final double epsilon = 0.000001;
-			if (Float.compare(getRadius(), BIG_RADIUS) < epsilon
+			if (Float.compare(BIG_RADIUS, getRadius()) == 0
                     && System.currentTimeMillis() - shotTime > SHOT_TIME) {
                 final float shotDir = (float) (Math.random() * 2 * Math.PI);
 
@@ -288,10 +287,9 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			e2.onDeath();
+			((Player) e2).onHit();
 			getThisGame().destroy(this);
-		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()
-				|| e2 instanceof Asteroid) {
+		} else if ((e2 instanceof Bullet && ((Bullet) e2).isFriendly()) || e2 instanceof Asteroid) {
 			getThisGame().destroy(e2);
 			getThisGame().destroy(this);
 		}
@@ -303,8 +301,7 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		int points = BIG_SCORE;
-		final double epsilon = 0.00001;
-		if (Float.compare(getRadius(),  BIG_RADIUS) > epsilon) {
+		if (Float.compare(BIG_RADIUS, getRadius()) >= 0 ) {
 			points = SMALL_SCORE;
 		}
 		getThisGame().addScore(points);

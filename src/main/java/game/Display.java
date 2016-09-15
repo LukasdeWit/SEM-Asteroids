@@ -438,6 +438,9 @@ public final class Display {
 	 * @param gc - graphics context
 	 */
 	public static void lives(final int lives, final GraphicsContext gc) {
+		if (lives <= 0) {
+			return;
+		}
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
 		final StringBuilder outputBuffer = new StringBuilder(lives);

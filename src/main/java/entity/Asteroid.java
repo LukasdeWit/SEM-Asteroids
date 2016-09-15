@@ -147,7 +147,7 @@ public class Asteroid extends AbstractEntity {
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			getThisGame().destroy(this);
-			e2.onDeath();
+			((Player) e2).onHit();
 		} else if (e2 instanceof Bullet) {
 			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
@@ -160,8 +160,7 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void onDeath() {
-		final double epsilon = 0.00001;
-		if (Float.compare(getRadius(), BIG_RADIUS) < epsilon) {
+		if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
 				getThisGame().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
@@ -169,7 +168,7 @@ public class Asteroid extends AbstractEntity {
 						MEDIUM_RADIUS, getThisGame()));
 			}
 			getThisGame().addScore(BIG_SCORE);
-		} else if (Float.compare(getRadius(), MEDIUM_RADIUS) < epsilon) {
+		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
 				getThisGame().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
