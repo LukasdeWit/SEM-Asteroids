@@ -238,7 +238,7 @@ public class Player extends AbstractEntity {
 	 * Makes player move slower.
 	 */
 	private void slowDown() {
-		if (((int) (Math.abs(getDX()) + Math.abs(getDY()))) != 0) {
+		if (Float.compare(Math.abs(getDX()) + Math.abs(getDY()), 0) != 0) {
 			setDX(getDX() - (DECELERATION * getDX())
 					/ (Math.abs(getDX()) + Math.abs(getDY())));
 			setDY(getDY() - (DECELERATION * getDY())
