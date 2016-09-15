@@ -188,11 +188,13 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandler(final List<String> input) {
-		if (input.contains("LEFT") || input.contains("A") || !(input.contains("RIGHT") || input.contains("D"))) {
+		if (input.contains("LEFT") || input.contains("A")
+				|| !(input.contains("RIGHT") || input.contains("D"))) {
 			turnLeft();
 		}
 
-		if (input.contains("RIGHT") || input.contains("D") || !(input.contains("LEFT") || input.contains("A"))) {
+		if (input.contains("RIGHT") || input.contains("D")
+				|| !(input.contains("LEFT") || input.contains("A"))) {
 			turnRight();
 		}
 
