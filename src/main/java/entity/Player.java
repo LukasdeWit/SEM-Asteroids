@@ -146,9 +146,6 @@ public class Player extends AbstractEntity {
 		if (lives <= 0) {
 			// we are out of lives, call gameover
 			getThisGame().over();
-
-			// is this needed?
-			makeInvincible(INVINCIBILITY_START_TIME);
 		} else {
 			// we lose one live
 
