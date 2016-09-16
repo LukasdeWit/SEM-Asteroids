@@ -377,11 +377,11 @@ public final class Display {
 	 */
 	private static final float HIGHSCORE_SIZE = 1.5f;
 	/**
-	 * Size of big text (ie. the title)
+	 * Size of big text (ie. the title).
 	 */
 	private static final float BIG_TEXT_SIZE = 4.f;
 	/**
-	 * Size of small text (ie. menu text)
+	 * Size of small text (ie. menu text).
 	 */
 	private static final float SMALL_TEXT_SIZE = 2.f;
 	/**
