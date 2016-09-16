@@ -522,12 +522,7 @@ public final class Display {
 		}
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
-		StringBuffer outputBuffer;
-		if (lives > 0) { 
-			outputBuffer = new StringBuffer(lives);
-		} else {
-			outputBuffer = new StringBuffer(1);
-		}
+		StringBuffer outputBuffer = new StringBuffer(1);
 		for (int i = 0; i < lives; i++) {
 		   outputBuffer.append('*');
 		}
