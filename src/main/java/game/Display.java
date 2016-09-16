@@ -384,10 +384,22 @@ public final class Display {
 	 * Size of small text (ie. menu text)
 	 */
 	private static final float SMALL_TEXT_SIZE = 2.f;
-	private static final float ASTEROIDS_TEXT_X = 0;
-	private static final float ASTEROIDS_TEXT_Y = 0;
-	private static final float PRESS_START_TEXT_X = 100;
-	private static final float PRESS_START_TEXT_Y = 100;
+	/**
+	 * X coordinate of the title
+	 */
+	private static final float ASTEROIDS_TEXT_X = 140;
+	/**
+	 * Y coordinate of the title
+	 */
+	private static final float ASTEROIDS_TEXT_Y = 100;
+	/**
+	 * X coordinate of the "press space" text
+	 */
+	private static final float PRESS_START_TEXT_X = 122;
+	/**
+	 * Y coordinate of the "press space" text
+	 */
+	private static final float PRESS_START_TEXT_Y = 250;
 	/**
 	 * Space between characters.
 	 */	
@@ -452,15 +464,16 @@ public final class Display {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
 		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, "asteroids", gc);
-		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, "press any button", gc);
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, "press space to start", gc);
 	}
 	
 	public static void highscorescreen(final long highscore,
 			final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
-		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, "congratulations", gc);
-		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE,String.format("%1$10s", highscore), gc);
+		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, SMALL_TEXT_SIZE, "press r to restart", gc);
+		String highscoreString = String.format("%1$10s", highscore);
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, highscoreString, gc);
 	}
 	
 	/**
@@ -471,7 +484,12 @@ public final class Display {
 	public static void lives(final int lives, final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
-		StringBuffer outputBuffer = new StringBuffer(lives);
+		StringBuffer outputBuffer;
+		if (lives > 0) { 
+			outputBuffer = new StringBuffer(lives);
+		} else {
+			outputBuffer = new StringBuffer(1);
+		}
 		for (int i = 0; i < lives; i++) {
 		   outputBuffer.append("*");
 		}

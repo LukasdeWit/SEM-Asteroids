@@ -249,6 +249,7 @@ public class Game {
 			if(score <= highscore) {
 				startGame();
 			} else {
+				highscore = score;
 				gamemode = GAMEMODE_HIGHSCORESCREEN;
 			}
 		}
