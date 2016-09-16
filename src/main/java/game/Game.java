@@ -259,6 +259,12 @@ public class Game {
 		Display.lives(player.getLives(), gc);
 	}
 	
+	/**
+	 * handles the update logic of the highscore screen
+	 * 
+	 * @param input
+	 * 			  - all keys pressed at the time of update
+	 */
 	private final void updateHighscorescreen(final List<String> input) {
 		if (input.contains("R")) {
 			startGame();

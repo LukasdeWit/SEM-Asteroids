@@ -484,6 +484,10 @@ public final class Display {
 		}
 	}
 	
+	/**
+	 * draw the start screen
+	 * @param gc - the graphics context to draw to
+	 */
 	public static void startscreen(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
@@ -491,6 +495,10 @@ public final class Display {
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, "press space to start", gc);
 	}
 	
+	/**
+	 * draw the highscore screen
+	 * @param gc - the graphics context to draw to
+	 */
 	public static void highscorescreen(final long highscore,
 			final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
