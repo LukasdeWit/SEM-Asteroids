@@ -377,6 +377,18 @@ public final class Display {
 	 */
 	private static final float HIGHSCORE_SIZE = 1.5f;
 	/**
+	 * Size of big text (ie. the title)
+	 */
+	private static final float BIG_TEXT_SIZE = 4.f;
+	/**
+	 * Size of small text (ie. menu text)
+	 */
+	private static final float SMALL_TEXT_SIZE = 2.f;
+	private static final float ASTEROIDS_TEXT_X = 0;
+	private static final float ASTEROIDS_TEXT_Y = 0;
+	private static final float PRESS_START_TEXT_X = 100;
+	private static final float PRESS_START_TEXT_Y = 100;
+	/**
 	 * Space between characters.
 	 */	
 	private static final int X_OFFSET = 6;
@@ -392,6 +404,7 @@ public final class Display {
 	 * Size of lives display.
 	 */
 	private static final float LIVES_SIZE = 2;
+	
 	
 	/**
 	 * private constructor for utility class.
@@ -433,6 +446,21 @@ public final class Display {
 			String highscoreString = String.format("%1$10s", highscore);
 			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, highscoreString, gc);
 		}
+	}
+	
+	public static void startscreen(final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, "asteroids", gc);
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, "press any button", gc);
+	}
+	
+	public static void highscorescreen(final long highscore,
+			final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, "congratulations", gc);
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE,String.format("%1$10s", highscore), gc);
 	}
 	
 	/**
