@@ -72,7 +72,7 @@ public class Game {
 	 */
 	private long highscore;
 	/**
-	 * current gamemode
+	 * current gamemode.
 	 */
 	private int gamemode;
 	
@@ -89,15 +89,15 @@ public class Game {
 	 */
 	private static final int LIFE_SCORE = 10000;
 	/**
-	 * the startscreen gamemode
+	 * the startscreen gamemode.
 	 */
 	private static final int GAMEMODE_STARTSCREEN = 0;
 	/**
-	 * the "game" gamemode
+	 * the "game" gamemode.
 	 */
 	private static final int GAMEMODE_GAME = 1;
 	/**
-	 * the highscore screen
+	 * the highscore screen.
 	 */
 	private static final int GAMEMODE_HIGHSCORESCREEN = 2;
 
@@ -199,12 +199,12 @@ public class Game {
 	}
 	
 	/**
-	 * handles the update logic of the start screen
+	 * handles the update logic of the start screen.
 	 * 
 	 * @param input
-	 * 			  - all keys pressed at the time of update
+	 * 			  - all keys pressed at the time of update.
 	 */
-	private final void updateStartscreen(final List<String> input) {
+	private void updateStartscreen(final List<String> input) {
 		if (input.contains("SPACE")) {
 			gamemode = GAMEMODE_GAME;
 		}
@@ -212,12 +212,12 @@ public class Game {
 	}
 	
 	/**
-	 * handles the update logic of the game itself
+	 * handles the update logic of the game itself.
 	 * 
 	 * @param input
-	 * 			  - all keys pressed at the time of update
+	 * 			  - all keys pressed at the time of update.
 	 */
-	private final void updateGame(final List<String> input) {
+	private void updateGame(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			startGame();
@@ -235,7 +235,7 @@ public class Game {
 		destroyList.clear();
 		createList.clear();
 		if (!player.isAlive()) {
-			if(score <= highscore) {
+			if (score <= highscore) {
 				startGame();
 			} else {
 				highscore = score;
@@ -249,12 +249,12 @@ public class Game {
 	}
 	
 	/**
-	 * handles the update logic of the highscore screen
+	 * handles the update logic of the highscore screen.
 	 * 
 	 * @param input
-	 * 			  - all keys pressed at the time of update
+	 * 			  - all keys pressed at the time of update.
 	 */
-	private final void updateHighscorescreen(final List<String> input) {
+	private void updateHighscorescreen(final List<String> input) {
 		if (input.contains("R")) {
 			startGame();
 		}
