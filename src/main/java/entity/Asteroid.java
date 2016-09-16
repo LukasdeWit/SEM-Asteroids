@@ -1,10 +1,10 @@
 package entity;
-import java.util.List;
-import java.util.Random;
-
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents an Asteroid.
@@ -13,11 +13,11 @@ public class Asteroid extends AbstractEntity {
 	/**
 	 * Shape of Asteroid, either 0, 1 or 2.
 	 */
-	private int shape;
+	private final int shape;
 	/**
 	 * X coordinates of shape 0.
 	 */
-	private static final int[] XSHAPE0 = 
+	private static final int[] XSHAPE0 =
 		{ -2, 0, 2, 4, 3, 4, 1, 0, -2, -4, -4, -4 };
 	/**
 	 * Y coordinates of shape 0.
@@ -131,6 +131,7 @@ public class Asteroid extends AbstractEntity {
 	 * Calculate new position of Asteroid.
 	 * @param input - the pressed keys
 	 */
+	@Override
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
@@ -146,7 +147,7 @@ public class Asteroid extends AbstractEntity {
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			getThisGame().destroy(this);
-			e2.onDeath();
+			((Player) e2).onHit();
 		} else if (e2 instanceof Bullet) {
 			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
@@ -159,7 +160,7 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void onDeath() {
-		if (getRadius() == BIG_RADIUS) {
+		if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
 				getThisGame().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
@@ -167,7 +168,7 @@ public class Asteroid extends AbstractEntity {
 						MEDIUM_RADIUS, getThisGame()));
 			}
 			getThisGame().addScore(BIG_SCORE);
-		} else if (getRadius() == MEDIUM_RADIUS) {
+		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
 				getThisGame().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),

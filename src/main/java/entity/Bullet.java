@@ -19,7 +19,7 @@ public class Bullet extends AbstractEntity {
 	 */
 	private boolean friendly;
 	/**
-	 * Lifetime of a bullet in miliseconds.
+	 * Lifetime of a bullet in milliseconds.
 	 */
 	private static final long LIFETIME = 2000;
 	/**
@@ -52,6 +52,7 @@ public class Bullet extends AbstractEntity {
 	 * Calculate new position of Bullet.
 	 * @param input - the pressed keys
 	 */
+	@Override
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
@@ -88,6 +89,9 @@ public class Bullet extends AbstractEntity {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final void onDeath() {
 		//no-op

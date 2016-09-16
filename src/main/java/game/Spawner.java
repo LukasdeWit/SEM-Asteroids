@@ -12,7 +12,7 @@ public class Spawner {
 	/**
 	 * The Game this spawner belongs to.
 	 */
-	private Game thisGame;
+	private final Game thisGame;
 	/**
 	 * Start time of saucer timer in ms.
 	 */
@@ -96,8 +96,8 @@ public class Spawner {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	private void spawnSaucer() {
-		Saucer newSaucer = new Saucer(((int) (thisGame.getRandom().nextInt(1) 
-				* 2)) * thisGame.getScreenX(), (float) Math.random() 
+		final Saucer newSaucer = new Saucer(thisGame.getRandom().nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
 				* thisGame.getScreenY(), 0, 0, thisGame);
 		if (Math.random() < smallSaucerRatio()) {
 			newSaucer.setRadius(Saucer.getSmallRadius());
@@ -113,8 +113,8 @@ public class Spawner {
 		if (thisGame.getScore() < DIFFICULTY_STEP) {
 			return .5;
 		} else if (thisGame.getScore() < MAX_DIFFICULTY_SCORE) {
-			return .5 + ((long) (thisGame.getScore() / DIFFICULTY_STEP)
-					* .5 / (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
+			return .5 + ((thisGame.getScore() / (double) DIFFICULTY_STEP)
+					* .5 / (double) (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
 		} else {
 			return 1;
 		}
