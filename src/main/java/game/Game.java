@@ -250,6 +250,7 @@ public class Game {
 				startGame();
 			} else {
 				highscore = score;
+				writeHighscore();
 				gamemode = GAMEMODE_HIGHSCORESCREEN;
 			}
 		}
