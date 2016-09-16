@@ -345,7 +345,7 @@ public final class Display {
 	/**
 	 * A life.
 	 */
-	public static final float[][] LIFE = {
+	private static final float[][] LIFE = {
 			{0, 6, 2, 0},
 			{2, 0, 4, 6},
 			{4, 6, 3, 5},
@@ -459,12 +459,9 @@ public final class Display {
 		if (score == 0) {
 			draw(SCORE_X, SCORE_Y, SCORE_SIZE, "        00", gc);
 		} else {
-			String scoreString = String.format("%1$10s", score);
-			draw(SCORE_X, SCORE_Y, SCORE_SIZE, scoreString, gc);
+			draw(SCORE_X, SCORE_Y, SCORE_SIZE,
+					String.format("%1$10s", score), gc);
 		}
-		//test
-		//draw(5, 100, 3, "abcdefghijklmnopqrstuvwxyz", gc);
-		//draw(5, 140, 3, "0123456789***", gc);
 	}
 	
 	/**
@@ -479,8 +476,8 @@ public final class Display {
 		if (highscore == 0) {
 			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, "        00", gc);
 		} else {
-			String highscoreString = String.format("%1$10s", highscore);
-			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, highscoreString, gc);
+			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE,
+					String.format("%1$10s", highscore), gc);
 		}
 	}
 	
@@ -515,18 +512,23 @@ public final class Display {
 	 * @param gc - graphics context
 	 */
 	public static void lives(final int lives, final GraphicsContext gc) {
+		if (lives <= 0) {
+			return;
+		}
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
+		
 		StringBuffer outputBuffer;
 		if (lives > 0) { 
 			outputBuffer = new StringBuffer(lives);
 		} else {
 			outputBuffer = new StringBuffer(1);
 		}
+		
 		for (int i = 0; i < lives; i++) {
-		   outputBuffer.append("*");
+		   outputBuffer.append('*');
 		}
-		String livesString = outputBuffer.toString();
+		final String livesString = outputBuffer.toString();
 		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, gc);
 	}
 	
@@ -541,13 +543,13 @@ public final class Display {
 	 */
 	public static void draw(final float x, final float y, 
 			final float size, final String string, final GraphicsContext gc) {
-		char[] charList = string.toCharArray();
+		final char[] charList = string.toCharArray();
 		for (int i = 0; i < charList.length; i++) {
-			char c = charList[i];
+			final char c = charList[i];
 			if (c == ' ') {
 				drawChar(x + i * X_OFFSET * size, y, size, SPACE, gc);
 			} else {
-				int cInt = (int) c;
+				final int cInt = (int) c;
 				if (cInt >= (int) 'a' && cInt <= (int) 'z') {
 					drawChar(x + i * X_OFFSET * size, y, 
 							size, LETTERS[cInt - (int) 'a'], gc);
@@ -576,7 +578,7 @@ public final class Display {
 	private static void drawChar(final float x, final float y, 
 			final float size, final float[][] figure, 
 			final GraphicsContext gc) {
-		for (float[] stroke : figure) {
+		for (final float[] stroke : figure) {
 			gc.strokeLine(
 					stroke[0] * size + x, stroke[1] * size + y, 
 					stroke[2] * size + x, stroke[1 + 2] * size + y);

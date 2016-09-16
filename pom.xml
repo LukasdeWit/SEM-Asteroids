@@ -8,12 +8,24 @@
     <artifactId>SEM-Asteroids</artifactId>
     <version>0.666</version>
 
+    <properties>
+        <findbugsVersion>2.0.0</findbugsVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <mainClassPath>game.Launcher</mainClassPath>
+    </properties>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/annotations -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
-            <version>2.0.0</version>
+            <version>${findbugsVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 
@@ -28,6 +40,52 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainClassPath}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <failsOnError>true</failsOnError>
+                    <configLocation>AsteroidsChecks.xml</configLocation>
+                    <violationSeverity>warning</violationSeverity>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -39,14 +97,19 @@
                 <version>3.6</version>
                 <configuration>
                     <rulesets>
-                        <ruleset>./AstroidsPMD.xml</ruleset>
+                        <ruleset>./AsteroidsPMD.xml</ruleset>
                     </rulesets>
+                    <failOnViolation>true</failOnViolation>
+                    <skipEmptyReport>false</skipEmptyReport>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.4</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -61,14 +124,8 @@
                 </reportSets>
                 <configuration>
                     <configLocation>AsteroidsChecks.xml</configLocation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
-                <configuration>
-                    <skipEmptyReport>false</skipEmptyReport>
+                    <failOnViolation>true</failOnViolation>
+                    <violationSeverity>warning</violationSeverity>
                 </configuration>
             </plugin>
             <plugin>
@@ -90,5 +147,4 @@
         <system>Github</system>
         <url>https://github.com/SpadesAce/SEM-Asteroids/issues</url>
     </issueManagement>
-
 </project>

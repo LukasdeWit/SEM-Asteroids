@@ -67,8 +67,7 @@ public abstract class AbstractEntity {
 	/**
 	 * Method that helps show the entity on the screen.
 	 * 
-	 * @param gc
-	 *            graphicscontext
+	 * @param gc graphics context
 	 */
 	public abstract void draw(GraphicsContext gc);
 

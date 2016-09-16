@@ -1,19 +1,16 @@
 package game;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import entity.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class defines everything within the game.
@@ -23,13 +20,17 @@ import javafx.scene.paint.Color;
  */
 public class Game {
 	/**
+	 * class logger.
+	 */
+	private static final Logger LOG = Logger.getLogger(Game.class.getName());
+	/**
 	 * The player of this game.
 	 */
 	private Player player;
 	/**
 	 * The spawner of this game.
 	 */
-	private Spawner spawner;
+	private final Spawner spawner;
 	/**
 	 * List of all entities currently in the game.
 	 */
@@ -51,7 +52,7 @@ public class Game {
 	 */
 	private final float screenX;
 	/**
-	 * heigth of canvas in pixels.
+	 * height of canvas in pixels.
 	 */
 	private final float screenY;
 	/**
@@ -120,29 +121,21 @@ public class Game {
 	}
 	
 	/**
-	 * reades the highscore from file in resources folder.
+	 * reads the highscore from file in resources folder.
 	 * @return the highscore
 	 */
 	private long readHighscore() {
-		BufferedReader br = null;
 		long currentHighscore = 0;
-		try {
+		final String filePath = "src/main/resources/highscore.txt";
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(new FileInputStream(filePath),
+						StandardCharsets.UTF_8))) {
 			String sCurrentLine;
-			br = new BufferedReader(
-					new FileReader("src/main/resources/highscore.txt"));
 			while ((sCurrentLine = br.readLine()) != null) {
 				currentHighscore = Long.parseLong(sCurrentLine);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null) {
-					br.close();
-				}
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			LOG.log(Level.ALL, "unable to read highscore from file", e);
 		}
 		return currentHighscore;
 	}
@@ -151,19 +144,15 @@ public class Game {
 	 * writes the highscore to file in resources folder.
 	 */
 	private void writeHighscore() {
-		try {
-			String content = String.valueOf(highscore);
-			File file = new File("src/main/resources/highscore.txt");
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(content);
-			bw.close();
+		final String content = String.valueOf(highscore);
+		final File file = new File("src/main/resources/highscore.txt");
+		try (FileOutputStream fos =
+					 new FileOutputStream(file.getAbsoluteFile())) {
+			fos.write(content.getBytes(StandardCharsets.UTF_8));
+			fos.flush();
+			fos.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.log(Level.ALL, "unable to write highscore to file", e);
 		}
 	}
 	
@@ -280,12 +269,13 @@ public class Game {
 	 *            - the entity
 	 */
 	public final void checkCollision(final AbstractEntity e1) {
-		for (final AbstractEntity e2 : entities) {
-			if (!e1.equals(e2) && AbstractEntity.collision(e1, e2)
-					&& !destroyList.contains(e1) && !destroyList.contains(e2)) {
-				e1.collide(e2);
-			}
-		}
+		entities
+				.stream()
+				.filter(e2 -> !e1.equals(e2)
+						&& AbstractEntity.collision(e1, e2)
+						&& !destroyList.contains(e1)
+						&& !destroyList.contains(e2))
+				.forEach(e1::collide);
 	}
 	
 	/**
@@ -360,8 +350,8 @@ public class Game {
 	 */
 	public final int bullets() {
 		int bullets = 0;
-		for (AbstractEntity e : entities) {
-			if (e instanceof Bullet && ((Bullet) e).isFriendly()) {
+		for (final AbstractEntity entity : entities) {
+			if (entity instanceof Bullet && ((Bullet) entity).isFriendly()) {
 				bullets++;
 			}
 		}
@@ -374,8 +364,8 @@ public class Game {
 	 */
 	public final int enemies() {
 		int enemies = 0;
-		for (AbstractEntity e : entities) {
-			if (e instanceof Asteroid || e instanceof Saucer) {
+		for (final AbstractEntity entity : entities) {
+			if (entity instanceof Asteroid || entity instanceof Saucer) {
 				enemies++;
 			}
 		}

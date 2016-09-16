@@ -25,7 +25,6 @@ Slightly modified version of Sun Checks that better matches the default code for
         <module name="ParameterName"/>
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
-        <module name="AvoidStarImport"/>
         <module name="IllegalImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
