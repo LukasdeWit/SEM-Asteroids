@@ -12,6 +12,7 @@
         <findbugsVersion>2.0.0</findbugsVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <mainClassPath>game.Launcher</mainClassPath>
     </properties>
 
     <dependencies>
@@ -20,6 +21,11 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
             <version>${findbugsVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 
@@ -32,6 +38,18 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainClassPath}</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
