@@ -401,6 +401,30 @@ public final class Display {
 	 */
 	private static final float PRESS_START_TEXT_Y = 250;
 	/**
+	 * X coordinate of the "congratulations" text
+	 */
+	private static final float CONGRATULATIONS_TEXT_X = 80;
+	/**
+	 * Y coordinate of the "congratulations" text
+	 */
+	private static final float CONGRATULATIONS_TEXT_Y = 100;
+	/**
+	 * X coordinate of the "press r" text
+	 */
+	private static final float PRESS_R_TEXT_X = 80;
+	/**
+	 * Y coordinate of the "press r" text
+	 */
+	private static final float PRESS_R_TEXT_Y = 280;
+	/**
+	 * X coordinate of the "press r" text
+	 */
+	private static final float NEW_HIGHSCORE_TEXT_X = 80;
+	/**
+	 * Y coordinate of the "press r" text
+	 */
+	private static final float NEW_HIGHSCORE_TEXT_Y = 250;
+	/**
 	 * Space between characters.
 	 */	
 	private static final int X_OFFSET = 6;
@@ -471,9 +495,10 @@ public final class Display {
 			final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
-		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, SMALL_TEXT_SIZE, "press r to restart", gc);
-		String highscoreString = String.format("%1$10s", highscore);
-		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, highscoreString, gc);
+		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, "congratulations", gc);
+		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, "press r to restart", gc);
+		draw(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, SMALL_TEXT_SIZE, 
+				"your new highscore is " + highscore, gc);
 	}
 	
 	/**
