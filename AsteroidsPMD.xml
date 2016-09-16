@@ -63,6 +63,7 @@
     <rule ref="rulesets/java/codesize.xml/CyclomaticComplexity">
         <properties>
             <property name="reportLevel" value="8"/>
+            <property name="showClassesComplexity" value="false"/>
         </properties>
     </rule>
     

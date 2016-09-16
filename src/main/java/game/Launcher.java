@@ -59,7 +59,7 @@ public class Launcher extends Application {
 		// set up the graphicsContext
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		// set up the keyhandler
+		// set up the key handler
 		final ArrayList<String> input = new ArrayList<>();
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -90,8 +90,8 @@ public class Launcher extends Application {
 		final Game thisGame = new Game(gc);
 
 		// set up the timing control
-		final Timeline renderloop = new Timeline();
-		renderloop.setCycleCount(Timeline.INDEFINITE);
+		final Timeline renderLoop = new Timeline();
+		renderLoop.setCycleCount(Timeline.INDEFINITE);
 
 		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME),
 				new EventHandler<ActionEvent>() {
@@ -105,8 +105,8 @@ public class Launcher extends Application {
 		});
 
 		// add game to scene
-		renderloop.getKeyFrames().add(kf);
-		renderloop.play();
+		renderLoop.getKeyFrames().add(kf);
+		renderLoop.play();
 
 		// show game
 		stage.show();
