@@ -117,7 +117,6 @@ public class Game {
 		createList = new ArrayList<>();
 		random = new Random();
 		highscore = readHighscore();
-		startGame();
 	}
 	
 	/**
@@ -206,6 +205,7 @@ public class Game {
 	 */
 	private void updateStartscreen(final List<String> input) {
 		if (input.contains("SPACE")) {
+			startGame();
 			gamemode = GAMEMODE_GAME;
 		}
 		Display.startscreen(gc);
