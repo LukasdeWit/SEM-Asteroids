@@ -71,6 +71,10 @@ public class Game {
 	 * current highscore.
 	 */
 	private long highscore;
+	/**
+	 * current gamemode.
+	 */
+	private int gamemode;
 	
 	/**
 	 * Size of canvas.
@@ -84,6 +88,18 @@ public class Game {
 	 * Number of points needed to gain a life.
 	 */
 	private static final int LIFE_SCORE = 10000;
+	/**
+	 * the startscreen gamemode.
+	 */
+	private static final int GAMEMODE_STARTSCREEN = 0;
+	/**
+	 * the "game" gamemode.
+	 */
+	private static final int GAMEMODE_GAME = 1;
+	/**
+	 * the highscore screen.
+	 */
+	private static final int GAMEMODE_HIGHSCORESCREEN = 2;
 
 	/**
 	 * Constructor for a new game.
@@ -153,6 +169,7 @@ public class Game {
 			writeHighscore();
 		}
 		score = 0;
+		gamemode = GAMEMODE_STARTSCREEN;
 		spawner.reset();
 	}
 	
@@ -163,12 +180,48 @@ public class Game {
 	 *            - all keys pressed at the time of update
 	 */
 	public final void update(final List<String> input) {
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, screenX, screenY);
+		
+		switch(gamemode) {
+		case GAMEMODE_STARTSCREEN:
+			updateStartscreen(input);
+			break;
+		case GAMEMODE_GAME:
+			updateGame(input);
+			break;
+		case GAMEMODE_HIGHSCORESCREEN:
+			updateHighscorescreen(input);
+			break;
+		default:
+			gamemode = GAMEMODE_STARTSCREEN;
+		}
+	}
+	
+	/**
+	 * handles the update logic of the start screen.
+	 * 
+	 * @param input
+	 * 			  - all keys pressed at the time of update.
+	 */
+	private void updateStartscreen(final List<String> input) {
+		if (input.contains("SPACE")) {
+			gamemode = GAMEMODE_GAME;
+		}
+		Display.startscreen(gc);
+	}
+	
+	/**
+	 * handles the update logic of the game itself.
+	 * 
+	 * @param input
+	 * 			  - all keys pressed at the time of update.
+	 */
+	private void updateGame(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			startGame();
 		}
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, screenX, screenY);
 		for (final AbstractEntity e : entities) {
 			e.update(input);
 			checkCollision(e);
@@ -181,9 +234,31 @@ public class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
+		if (!player.isAlive()) {
+			if (score <= highscore) {
+				startGame();
+			} else {
+				highscore = score;
+				writeHighscore();
+				gamemode = GAMEMODE_HIGHSCORESCREEN;
+			}
+		}
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
 		Display.lives(player.getLives(), gc);
+	}
+	
+	/**
+	 * handles the update logic of the highscore screen.
+	 * 
+	 * @param input
+	 * 			  - all keys pressed at the time of update.
+	 */
+	private void updateHighscorescreen(final List<String> input) {
+		if (input.contains("R")) {
+			startGame();
+		}
+		Display.highscorescreen(highscore, gc);
 	}
 
 	/**
