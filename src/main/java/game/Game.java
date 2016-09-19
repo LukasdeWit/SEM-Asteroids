@@ -297,7 +297,7 @@ public class Game {
 	public final void over() {
 		destroy(player);
 		if (score <= highscore) {
-			startGame();
+			gamemode = GAMEMODE_START_SCREEN;
 		} else {
 			highscore = score;
 			writeHighscore();
