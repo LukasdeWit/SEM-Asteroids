@@ -142,10 +142,18 @@
             <email>d.koopmans@student.tudelft.nl</email>
             <name>Douwe Koopmans</name>
         </contributor>
+        <contributor>
+            <email>k.s.reinders@student.tudelft.nl</email>
+            <name>Kibo Reinders</name>
+        </contributor>
     </contributors>
 
     <issueManagement>
         <system>Github</system>
         <url>https://github.com/SpadesAce/SEM-Asteroids/issues</url>
     </issueManagement>
+    <ciManagement>
+    	<system>Travis-CI</system>
+    	<url>https://travis-ci.org/SpadesAce/SEM-Asteroids</url>
+    </ciManagement>
 </project>
