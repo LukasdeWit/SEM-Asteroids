@@ -3,6 +3,7 @@ import java.util.List;
 
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 
 /**
@@ -255,7 +256,7 @@ public class Player extends Entity {
 			setDY(getDY() * (MAXSPEED / speed()));
 		}
 		boost = true;
-		getGame().getAudio().play("flying");
+		AudioClip flyingnoise = getGame().getAudio().get("flying");
 	}
 
 	/**

@@ -87,6 +87,18 @@ public class Audio {
 		tracks.put("beat2", beat2);
 		 */
 	}
+	
+	/**
+	 * Get a track by title.
+	 * 
+	 * @param title
+	 *            title of track to be played
+	 * @return AudioClip with that title
+	 */
+	public final AudioClip get(final String title) {
+		final AudioClip track = tracks.get(title);
+		return track;
+	}
 
 	/**
 	 * Get a track by title and play it.
