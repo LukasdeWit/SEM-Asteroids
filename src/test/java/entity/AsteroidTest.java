@@ -1,31 +1,36 @@
 package entity;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock; 
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import game.Game;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.fail;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(MockitoJUnitRunner.class)
+import game.Game;
+
+//@RunWith(MockitoJUnitRunner.class)
+/**
+ * Tests for Asteroid.
+ * @author Kibo
+ *
+ */
 public class AsteroidTest {
-private Asteroid Ceres;
-private Game mockGame;
+	/**
+	 * Test Asteroid.
+	 */
+	private Asteroid ceres;
+	/**
+	 * Mocked Game.
+	 */
+	private Game mockGame;
 
+	/**
+	 * Setup for tests.
+	 * @throws Exception - the exception
+	 */
 	@Before
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 //		mockGame = new Game();
 		mockGame = mock(Game.class);
 		/**Group root = new Group();
@@ -34,19 +39,22 @@ private Game mockGame;
 		root.getChildren().add(canvas);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		mockGame = new Game(gc);**/
-		Ceres = new Asteroid(0, 0, 0, 0, mockGame);
+		ceres = new Asteroid(0, 0, 0, 0, mockGame);
 	}
 
+	/**
+	 * Test the constructor.
+	 */
 	@Test
-	public void testConstructor() {
+	public final void testConstructor() {
 		//Assert that the Asteroid was constructed.
-		assertFalse(Ceres == null);
+		assertFalse(ceres == null);
 		//Assert that the Asteroid's properties are correct.
-		assertTrue(Ceres.getDX()==0);
-		assertTrue(Ceres.getDY()==0);
-		assertTrue(Ceres.getX()==0);
-		assertTrue(Ceres.getY()==0);
-		assertTrue(Ceres.getThisGame()==mockGame);
+		assertTrue(ceres.getDX() == 0);
+		assertTrue(ceres.getDY() == 0);
+		assertTrue(ceres.getX() == 0);
+		assertTrue(ceres.getY() == 0);
+		assertTrue(ceres.getThisGame() == mockGame);
 	}
 	
 	@Test
