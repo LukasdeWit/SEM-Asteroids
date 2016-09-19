@@ -1,9 +1,11 @@
+package entity;
+
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class UFOTest {
+public class BulletTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -25,22 +27,17 @@ public class UFOTest {
 	}
 
 	@Test
-	public void testUFO() {
+	public void testBullet() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	public void testSetPathIntInt() {
+	public void testGetFriendly() {
 		fail("Not yet implemented");
 	}
 
 	@Test
-	public void testSetPathInt() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetDirection() {
+	public void testSetFriendly() {
 		fail("Not yet implemented");
 	}
 

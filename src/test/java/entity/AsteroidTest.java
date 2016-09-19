@@ -3,6 +3,7 @@ package entity;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock; 
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import game.Game;
 import javafx.scene.Group;
@@ -10,17 +11,22 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class AsteroidTest {
-Asteroid Ceres; 
-Game mockGame;
+private Asteroid Ceres;
+private Game mockGame;
 
 	@Before
 	public void setUp() throws Exception {
+//		mockGame = new Game();
 		mockGame = mock(Game.class);
 		/**Group root = new Group();
 		Scene scene = new Scene(root);
