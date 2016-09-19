@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,8 +33,7 @@ public class AsteroidTest {
 	 */
 	@Before
 	public final void setUp() throws Exception {
-//		mockGame = new Game();
-//		mockGame = mock(Game.class);
+		mockGame = mock(Game.class);
 		/**Group root = new Group();
 		Scene scene = new Scene(root);
 		Canvas canvas = new Canvas(500, 500);
