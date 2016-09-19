@@ -515,7 +515,7 @@ public final class Display {
 	 * draw the pauze screen.
 	 * @param gc - the graphics context
 	 */
-	public static void pausescreen(final GraphicsContext gc) {
+	public static void pauseScreen(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
 		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 

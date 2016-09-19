@@ -107,7 +107,7 @@ public class Game {
 	/**
 	 * the highscore screen.
 	 */
-	private static final int GAMEMODE_PAUSESCREEN = 3;
+	private static final int GAMEMODE_PAUSE_SCREEN = 3;
 	/**
 	 * Minimal pause time.
 	 */
@@ -205,8 +205,8 @@ public class Game {
 		case GAMEMODE_HIGHSCORE_SCREEN:
 			updateHighscoreScreen(input);
 			break;
-		case GAMEMODE_PAUSESCREEN:
-			updatePausescreen(input);
+		case GAMEMODE_PAUSE_SCREEN:
+			updatePauseScreen(input);
 			break;
 		default:
 			gamemode = GAMEMODE_START_SCREEN;
@@ -217,7 +217,7 @@ public class Game {
 	 * handles the update logic of the pause screen.
 	 * @param input - input of keyboard
 	 */
-	private void updatePausescreen(final List<String> input) {
+	private void updatePauseScreen(final List<String> input) {
 		if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
@@ -227,7 +227,7 @@ public class Game {
 			startGame();
 			gamemode = GAMEMODE_GAME;
 		}
-		Display.pausescreen(gc);
+		Display.pauseScreen(gc);
 	}
 	
 
@@ -258,7 +258,7 @@ public class Game {
 		} else if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
-			gamemode = GAMEMODE_PAUSESCREEN;
+			gamemode = GAMEMODE_PAUSE_SCREEN;
 		}
 		for (final AbstractEntity e : entities) {
 			e.update(input);
