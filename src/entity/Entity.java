@@ -232,4 +232,8 @@ public abstract class Entity {
 	public final void setY(final float y) {
 		this.y = y;
 	}
+	
+	public final Game getGame() {
+		return thisGame;
+	}
 }

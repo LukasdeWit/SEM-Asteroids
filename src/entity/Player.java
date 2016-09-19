@@ -255,6 +255,7 @@ public class Player extends Entity {
 			setDY(getDY() * (MAXSPEED / speed()));
 		}
 		boost = true;
+		getGame().getAudio().play("flying");
 	}
 
 	/**

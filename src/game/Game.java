@@ -61,7 +61,7 @@ public class Game {
 	/**
 	 * Class that helps play audio.
 	 */
-	//private Audio audio;
+	private Audio audio;
 	/**
 	 * Xcoordinates of the raster of the first digit.
 	 */
@@ -129,7 +129,7 @@ public class Game {
 		entities = new ArrayList<Entity>();
 		destroyList = new ArrayList<Entity>();
 		createList = new ArrayList<Entity>();
-		//audio = new Audio();
+		audio = new Audio();
 		startGame();
 	}
 
@@ -385,5 +385,9 @@ public class Game {
 			}
 		}
 		return enemies;
+	}
+	
+	public final Audio getAudio() {
+		return audio;
 	}
 }
