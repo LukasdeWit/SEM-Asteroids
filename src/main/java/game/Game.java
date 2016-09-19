@@ -301,22 +301,6 @@ public class Game {
 	}
 
 	/**
-	 * getter for screenX.
-	 * @return - screenX
-	 */
-	public final float getScreenX() {
-		return screenX;
-	}
-
-	/**
-	 * getter for screenY.
-	 * @return - screenY
-	 */
-	public final float getScreenY() {
-		return screenY;
-	}
-
-	/**
 	 * Game over function, destroys the player.
 	 */
 	public final void over() {
@@ -336,14 +320,6 @@ public class Game {
 		}
 	}
 	
-	/**
-	 * CanvasSize getter.
-	 * @return canvas size
-	 */
-	public static float getCanvasSize() {
-		return CANVAS_SIZE;
-	}
-
 	/**
 	 * Amount of bullets currently in game.
 	 * @return amount of bullets
@@ -373,10 +349,33 @@ public class Game {
 	}
 
 	/**
+	 * CanvasSize getter.
+	 * @return canvas size
+	 */
+	public static float getCanvasSize() {
+		return CANVAS_SIZE;
+	}
+
+	/**
+	 * getter for screenX.
+	 * @return - screenX
+	 */
+	public final float getScreenX() {
+		return screenX;
+	}
+
+	/**
+	 * getter for screenY.
+	 * @return - screenY
+	 */
+	public final float getScreenY() {
+		return screenY;
+	}
+
+	/**
 	 * Score getter.
 	 * @return score
 	 */
-
 	public final long getScore() {
 		return score;
 	}
@@ -389,8 +388,8 @@ public class Game {
 		return player;
 	}
 
-
 	/**
+	 * random getter.
 	 * @return the random
 	 */
 	public final Random getRandom() {
