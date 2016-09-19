@@ -71,6 +71,14 @@ public class Game {
 	 * current highscore.
 	 */
 	private long highscore;
+	/**
+	 * current gamemode.
+	 */
+	private int gamemode;
+	/**
+	 * the time at which the game was paused.
+	 */
+	private long pauseTime;
 	
 	/**
 	 * Size of canvas.
@@ -84,6 +92,26 @@ public class Game {
 	 * Number of points needed to gain a life.
 	 */
 	private static final int LIFE_SCORE = 10000;
+	/**
+	 * the startscreen gamemode.
+	 */
+	private static final int GAMEMODE_START_SCREEN = 0;
+	/**
+	 * the "game" gamemode.
+	 */
+	private static final int GAMEMODE_GAME = 1;
+	/**
+	 * the highscore screen.
+	 */
+	private static final int GAMEMODE_HIGHSCORE_SCREEN = 2;
+	/**
+	 * the highscore screen.
+	 */
+	private static final int GAMEMODE_PAUSE_SCREEN = 3;
+	/**
+	 * Minimal pause time.
+	 */
+	private static final long MINIMAL_PAUSE_TIME = 300;
 
 	/**
 	 * Constructor for a new game.
@@ -101,7 +129,6 @@ public class Game {
 		createList = new ArrayList<>();
 		random = new Random();
 		highscore = readHighscore();
-		startGame();
 	}
 	
 	/**
@@ -145,6 +172,7 @@ public class Game {
 	 */
 	public final void startGame() {
 		restartTime = System.currentTimeMillis();
+		pauseTime = restartTime;
 		entities.clear();
 		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
 		entities.add(player);
@@ -153,6 +181,7 @@ public class Game {
 			writeHighscore();
 		}
 		score = 0;
+		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
 	}
 	
@@ -163,12 +192,74 @@ public class Game {
 	 *            - all keys pressed at the time of update
 	 */
 	public final void update(final List<String> input) {
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, screenX, screenY);
+		
+		switch(gamemode) {
+		case GAMEMODE_START_SCREEN:
+			updateStartScreen(input);
+			break;
+		case GAMEMODE_GAME:
+			updateGame(input);
+			break;
+		case GAMEMODE_HIGHSCORE_SCREEN:
+			updateHighscoreScreen(input);
+			break;
+		case GAMEMODE_PAUSE_SCREEN:
+			updatePauseScreen(input);
+			break;
+		default:
+			gamemode = GAMEMODE_START_SCREEN;
+		}
+	}
+	
+	/**
+	 * handles the update logic of the pause screen.
+	 * @param input - input of keyboard
+	 */
+	private void updatePauseScreen(final List<String> input) {
+		if (input.contains("P") && System.currentTimeMillis() 
+				- pauseTime > MINIMAL_PAUSE_TIME) {
+			pauseTime = System.currentTimeMillis();
+			gamemode = GAMEMODE_GAME;
+		} else if (input.contains("R") && System.currentTimeMillis() 
+				- restartTime > MINIMAL_RESTART_TIME) {
+			startGame();
+			gamemode = GAMEMODE_GAME;
+		}
+		Display.pauseScreen(gc);
+	}
+	
+
+	/**
+	 * handles the update logic of the start screen.
+	 * 
+	 * @param input
+	 * 			  - all keys pressed at the time of update
+	 */
+	private void updateStartScreen(final List<String> input) {
+		if (input.contains("SPACE")) {
+			startGame();
+			gamemode = GAMEMODE_GAME;
+		}
+		Display.startScreen(gc);
+	}
+	
+	/**
+	 * handles the update logic of the game itself.
+	 * 
+	 * @param input
+	 * 			  - all keys pressed at the time of update
+	 */
+	private void updateGame(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			startGame();
+		} else if (input.contains("P") && System.currentTimeMillis() 
+				- pauseTime > MINIMAL_PAUSE_TIME) {
+			pauseTime = System.currentTimeMillis();
+			gamemode = GAMEMODE_PAUSE_SCREEN;
 		}
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, screenX, screenY);
 		for (final AbstractEntity e : entities) {
 			e.update(input);
 			checkCollision(e);
@@ -184,6 +275,19 @@ public class Game {
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
 		Display.lives(player.getLives(), gc);
+	}
+	
+	/**
+	 * handles the update logic of the highscore screen.
+	 * 
+	 * @param input
+	 * 			  - all keys pressed at the time of update
+	 */
+	private void updateHighscoreScreen(final List<String> input) {
+		if (input.contains("R")) {
+			startGame();
+		}
+		Display.highscoreScreen(highscore, gc);
 	}
 
 	/**
@@ -226,26 +330,17 @@ public class Game {
 	}
 
 	/**
-	 * getter for screenX.
-	 * @return - screenX
-	 */
-	public final float getScreenX() {
-		return screenX;
-	}
-
-	/**
-	 * getter for screenY.
-	 * @return - screenY
-	 */
-	public final float getScreenY() {
-		return screenY;
-	}
-
-	/**
 	 * Game over function, destroys the player.
 	 */
 	public final void over() {
 		destroy(player);
+		if (score <= highscore) {
+			gamemode = GAMEMODE_START_SCREEN;
+		} else {
+			highscore = score;
+			writeHighscore();
+			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
+		}
 	}
 
 	/**
@@ -261,14 +356,6 @@ public class Game {
 		}
 	}
 	
-	/**
-	 * CanvasSize getter.
-	 * @return canvas size
-	 */
-	public static float getCanvasSize() {
-		return CANVAS_SIZE;
-	}
-
 	/**
 	 * Amount of bullets currently in game.
 	 * @return amount of bullets
@@ -298,10 +385,33 @@ public class Game {
 	}
 
 	/**
+	 * CanvasSize getter.
+	 * @return canvas size
+	 */
+	public static float getCanvasSize() {
+		return CANVAS_SIZE;
+	}
+
+	/**
+	 * getter for screenX.
+	 * @return - screenX
+	 */
+	public final float getScreenX() {
+		return screenX;
+	}
+
+	/**
+	 * getter for screenY.
+	 * @return - screenY
+	 */
+	public final float getScreenY() {
+		return screenY;
+	}
+
+	/**
 	 * Score getter.
 	 * @return score
 	 */
-
 	public final long getScore() {
 		return score;
 	}
@@ -314,8 +424,8 @@ public class Game {
 		return player;
 	}
 
-
 	/**
+	 * random getter.
 	 * @return the random
 	 */
 	public final Random getRandom() {

@@ -377,6 +377,54 @@ public final class Display {
 	 */
 	private static final float HIGHSCORE_SIZE = 1.5f;
 	/**
+	 * Size of big text (ie. the title)
+	 */
+	private static final float BIG_TEXT_SIZE = 4.f;
+	/**
+	 * Size of small text (ie. menu text)
+	 */
+	private static final float SMALL_TEXT_SIZE = 2.f;
+	/**
+	 * X coordinate of the title.
+	 */
+	private static final float ASTEROIDS_TEXT_X = 140;
+	/**
+	 * Y coordinate of the title.
+	 */
+	private static final float ASTEROIDS_TEXT_Y = 100;
+	/**
+	 * X coordinate of the "press space" text.
+	 */
+	private static final float PRESS_START_TEXT_X = 122;
+	/**
+	 * Y coordinate of the "press space" text.
+	 */
+	private static final float PRESS_START_TEXT_Y = 250;
+	/**
+	 * X coordinate of the "congratulations" text.
+	 */
+	private static final float CONGRATULATIONS_TEXT_X = 80;
+	/**
+	 * Y coordinate of the "congratulations" text.
+	 */
+	private static final float CONGRATULATIONS_TEXT_Y = 100;
+	/**
+	 * X coordinate of the "press r" text.
+	 */
+	private static final float PRESS_R_TEXT_X = 80;
+	/**
+	 * Y coordinate of the "press r" text.
+	 */
+	private static final float PRESS_R_TEXT_Y = 280;
+	/**
+	 * X coordinate of the "press r" text.
+	 */
+	private static final float NEW_HIGHSCORE_TEXT_X = 80;
+	/**
+	 * Y coordinate of the "press r" text.
+	 */
+	private static final float NEW_HIGHSCORE_TEXT_Y = 250;
+	/**
 	 * Space between characters.
 	 */	
 	private static final int X_OFFSET = 6;
@@ -392,6 +440,7 @@ public final class Display {
 	 * Size of lives display.
 	 */
 	private static final float LIVES_SIZE = 2;
+	
 	
 	/**
 	 * private constructor for utility class.
@@ -430,6 +479,49 @@ public final class Display {
 			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE,
 					String.format("%1$10s", highscore), gc);
 		}
+	}
+	
+	/**
+	 * draw the start screen.
+	 * @param gc - the graphics context to draw to
+	 */
+	public static void startScreen(final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
+				"asteroids", gc);
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, 
+				"press space to start", gc);
+	}
+	
+	/**
+	 * draw the highscore screen.
+	 * @param gc - the graphics context to draw to
+	 * @param highscore - the highscore
+	 */
+	public static void highscoreScreen(final long highscore,
+			final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
+				"congratulations", gc);
+		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
+				"press r to restart", gc);
+		draw(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, SMALL_TEXT_SIZE, 
+				"your new highscore is " + highscore, gc);
+	}
+	
+	/**
+	 * draw the pauze screen.
+	 * @param gc - the graphics context
+	 */
+	public static void pauseScreen(final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
+				"Pauze", gc);
+		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
+				"press p to start", gc);
 	}
 	
 	/**
