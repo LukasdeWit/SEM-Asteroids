@@ -91,7 +91,7 @@ public class Game {
 	/**
 	 * the startscreen gamemode.
 	 */
-	private static final int GAMEMODE_STARTSCREEN = 0;
+	private static final int GAMEMODE_START_SCREEN = 0;
 	/**
 	 * the "game" gamemode.
 	 */
@@ -99,7 +99,7 @@ public class Game {
 	/**
 	 * the highscore screen.
 	 */
-	private static final int GAMEMODE_HIGHSCORESCREEN = 2;
+	private static final int GAMEMODE_HIGHSCORE_SCREEN = 2;
 
 	/**
 	 * Constructor for a new game.
@@ -168,7 +168,7 @@ public class Game {
 			writeHighscore();
 		}
 		score = 0;
-		gamemode = GAMEMODE_STARTSCREEN;
+		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
 	}
 	
@@ -183,17 +183,17 @@ public class Game {
 		gc.fillRect(0, 0, screenX, screenY);
 		
 		switch(gamemode) {
-		case GAMEMODE_STARTSCREEN:
-			updateStartscreen(input);
+		case GAMEMODE_START_SCREEN:
+			updateStartScreen(input);
 			break;
 		case GAMEMODE_GAME:
 			updateGame(input);
 			break;
-		case GAMEMODE_HIGHSCORESCREEN:
-			updateHighscorescreen(input);
+		case GAMEMODE_HIGHSCORE_SCREEN:
+			updateHighscoreScreen(input);
 			break;
 		default:
-			gamemode = GAMEMODE_STARTSCREEN;
+			gamemode = GAMEMODE_START_SCREEN;
 		}
 	}
 	
@@ -203,12 +203,12 @@ public class Game {
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateStartscreen(final List<String> input) {
+	private void updateStartScreen(final List<String> input) {
 		if (input.contains("SPACE")) {
 			startGame();
 			gamemode = GAMEMODE_GAME;
 		}
-		Display.startscreen(gc);
+		Display.startScreen(gc);
 	}
 	
 	/**
@@ -234,15 +234,6 @@ public class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		if (!player.isAlive()) {
-			if (score <= highscore) {
-				startGame();
-			} else {
-				highscore = score;
-				writeHighscore();
-				gamemode = GAMEMODE_HIGHSCORESCREEN;
-			}
-		}
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
 		Display.lives(player.getLives(), gc);
@@ -254,11 +245,11 @@ public class Game {
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateHighscorescreen(final List<String> input) {
+	private void updateHighscoreScreen(final List<String> input) {
 		if (input.contains("R")) {
 			startGame();
 		}
-		Display.highscorescreen(highscore, gc);
+		Display.highscoreScreen(highscore, gc);
 	}
 
 	/**
@@ -305,6 +296,13 @@ public class Game {
 	 */
 	public final void over() {
 		destroy(player);
+		if (score <= highscore) {
+			startGame();
+		} else {
+			highscore = score;
+			writeHighscore();
+			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
+		}
 	}
 
 	/**

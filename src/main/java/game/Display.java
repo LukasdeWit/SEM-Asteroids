@@ -485,7 +485,7 @@ public final class Display {
 	 * draw the start screen.
 	 * @param gc - the graphics context to draw to
 	 */
-	public static void startscreen(final GraphicsContext gc) {
+	public static void startScreen(final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
 		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
@@ -499,7 +499,7 @@ public final class Display {
 	 * @param gc - the graphics context to draw to
 	 * @param highscore - the highscore
 	 */
-	public static void highscorescreen(final long highscore,
+	public static void highscoreScreen(final long highscore,
 			final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
@@ -522,7 +522,7 @@ public final class Display {
 		}
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
-		StringBuffer outputBuffer = new StringBuffer(1);
+		final StringBuilder outputBuffer = new StringBuilder(lives);
 		for (int i = 0; i < lives; i++) {
 		   outputBuffer.append('*');
 		}
