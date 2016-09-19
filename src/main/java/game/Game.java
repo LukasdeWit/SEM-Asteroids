@@ -75,6 +75,10 @@ public class Game {
 	 * current gamemode.
 	 */
 	private int gamemode;
+	/**
+	 * the time at which the game was paused.
+	 */
+	private long pauseTime;
 	
 	/**
 	 * Size of canvas.
@@ -100,6 +104,14 @@ public class Game {
 	 * the highscore screen.
 	 */
 	private static final int GAMEMODE_HIGHSCORE_SCREEN = 2;
+	/**
+	 * the highscore screen.
+	 */
+	private static final int GAMEMODE_PAUSE_SCREEN = 3;
+	/**
+	 * Minimal pause time.
+	 */
+	private static final long MINIMAL_PAUSE_TIME = 300;
 
 	/**
 	 * Constructor for a new game.
@@ -160,6 +172,7 @@ public class Game {
 	 */
 	public final void startGame() {
 		restartTime = System.currentTimeMillis();
+		pauseTime = restartTime;
 		entities.clear();
 		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
 		entities.add(player);
@@ -192,11 +205,32 @@ public class Game {
 		case GAMEMODE_HIGHSCORE_SCREEN:
 			updateHighscoreScreen(input);
 			break;
+		case GAMEMODE_PAUSE_SCREEN:
+			updatePauseScreen(input);
+			break;
 		default:
 			gamemode = GAMEMODE_START_SCREEN;
 		}
 	}
 	
+	/**
+	 * handles the update logic of the pause screen.
+	 * @param input - input of keyboard
+	 */
+	private void updatePauseScreen(final List<String> input) {
+		if (input.contains("P") && System.currentTimeMillis() 
+				- pauseTime > MINIMAL_PAUSE_TIME) {
+			pauseTime = System.currentTimeMillis();
+			gamemode = GAMEMODE_GAME;
+		} else if (input.contains("R") && System.currentTimeMillis() 
+				- restartTime > MINIMAL_RESTART_TIME) {
+			startGame();
+			gamemode = GAMEMODE_GAME;
+		}
+		Display.pauseScreen(gc);
+	}
+	
+
 	/**
 	 * handles the update logic of the start screen.
 	 * 
@@ -221,6 +255,10 @@ public class Game {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			startGame();
+		} else if (input.contains("P") && System.currentTimeMillis() 
+				- pauseTime > MINIMAL_PAUSE_TIME) {
+			pauseTime = System.currentTimeMillis();
+			gamemode = GAMEMODE_PAUSE_SCREEN;
 		}
 		for (final AbstractEntity e : entities) {
 			e.update(input);

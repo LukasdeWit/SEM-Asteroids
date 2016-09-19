@@ -512,6 +512,19 @@ public final class Display {
 	}
 	
 	/**
+	 * draw the pauze screen.
+	 * @param gc - the graphics context
+	 */
+	public static void pauseScreen(final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
+				"Pauze", gc);
+		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
+				"press p to start", gc);
+	}
+	
+	/**
 	 * Display the lives.
 	 * @param lives - number of lives
 	 * @param gc - graphics context
