@@ -32,7 +32,7 @@ public class AsteroidTest {
 	@Before
 	public final void setUp() throws Exception {
 //		mockGame = new Game();
-		mockGame = mock(Game.class);
+//		mockGame = mock(Game.class);
 		/**Group root = new Group();
 		Scene scene = new Scene(root);
 		Canvas canvas = new Canvas(500, 500);
@@ -56,29 +56,44 @@ public class AsteroidTest {
 		assertTrue(ceres.getY() == 0);
 		assertTrue(ceres.getThisGame() == mockGame);
 	}
-	
+
+	/**
+	 * Test update.
+	 */
 	@Test
-	public void testUpdate() {
+	public final void testUpdate() {
 		fail("Not yet implemented");
 	}
 
+	/**
+	 * Test draw.
+	 */
 	@Test
-	public void testDraw() {
+	public final void testDraw() {
 		fail("Not yet implemented");
 	}
 
+	/**
+	 * Test collide.
+	 */
 	@Test
-	public void testCollide() {
+	public final void testCollide() {
 		fail("Not yet implemented");
 	}
 
+	/**
+	 * Test Asteroid.
+	 */
 	@Test
-	public void testAsteroid() {
+	public final void testAsteroid() {
 		fail("Not yet implemented");
 	}
 
+	/**
+	 * Test Split.
+	 */
 	@Test
-	public void testSplit() {
+	public final void testSplit() {
 		fail("Not yet implemented");
 	}
 
