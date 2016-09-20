@@ -64,13 +64,21 @@ public class Game {
 	 */
 	private long restartTime;
 	/**
-	 * current score.
+	 * current score for arcade mode.
 	 */
-	private long score;
+	private long arcadeScore;
 	/**
-	 * current highscore.
+	 * current score for survival mode
 	 */
-	private long highscore;
+	private long survivalScore;
+	/**
+	 * current highscore for arcade mode.
+	 */
+	private long arcadeHighscore;
+	/**
+	 * current highscore for survival mode.
+	 */
+	private long survivalHighscore;
 	/**
 	 * current gamemode.
 	 */
@@ -106,17 +114,21 @@ public class Game {
 	 */
 	private static final int GAMEMODE_ARCADE = 1;
 	/**
-	 * the highscore screen.
+	 * the arcade highscore screen.
 	 */
-	private static final int GAMEMODE_HIGHSCORE_SCREEN = 2;
+	private static final int GAMEMODE_ARCADE_HIGHSCORE_SCREEN = 2;
+	/**
+	 * the survival highscore screen.
+	 */
+	private static final int GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN = 3;
 	/**
 	 * the highscore screen.
 	 */
-	private static final int GAMEMODE_PAUSE_SCREEN = 3;
+	private static final int GAMEMODE_PAUSE_SCREEN = 4;
 	/**
 	 * the "survival" gamemode.
 	 */
-	private static final int GAMEMODE_SURVIVAL = 4;
+	private static final int GAMEMODE_SURVIVAL = 5;
 	////////////////////////////////////////
 	//                                    //
 	//    here is where gamemodes end     //
@@ -126,6 +138,10 @@ public class Game {
 	 * Minimal pause time.
 	 */
 	private static final long MINIMAL_PAUSE_TIME = 300;
+	/**
+	 * Size of a big asteroid in survival.
+	 */
+	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
 
 	/**
 	 * Constructor for a new game.
@@ -142,38 +158,43 @@ public class Game {
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		random = new Random();
-		highscore = readHighscore();
+		readHighscores();
 	}
 	
 	/**
 	 * reads the highscore from file in resources folder.
-	 * @return the highscore
 	 */
-	private long readHighscore() {
-		long currentHighscore = 0;
+	private void readHighscores() {
+		long[] highscores = {0, 0};
 		final String filePath = "src/main/resources/highscore.txt";
 		try (BufferedReader br = new BufferedReader(
 				new InputStreamReader(new FileInputStream(filePath),
 						StandardCharsets.UTF_8))) {
 			String sCurrentLine;
+			int index = 0;
 			while ((sCurrentLine = br.readLine()) != null) {
-				currentHighscore = Long.parseLong(sCurrentLine);
+				highscores[index] = Long.parseLong(sCurrentLine);
+				index++;
 			}
 		} catch (IOException e) {
 			LOG.log(Level.ALL, "unable to read highscore from file", e);
 		}
-		return currentHighscore;
+		arcadeHighscore = highscores[0];
+		survivalHighscore = highscores[1];
 	}
 
 	/**
 	 * writes the highscore to file in resources folder.
 	 */
-	private void writeHighscore() {
-		final String content = String.valueOf(highscore);
+	private void writeHighscores() {
+		final String arcadeContent = String.valueOf(arcadeHighscore);
+		final String survivalContent = String.valueOf(survivalHighscore);
 		final File file = new File("src/main/resources/highscore.txt");
 		try (FileOutputStream fos =
 					 new FileOutputStream(file.getAbsoluteFile())) {
-			fos.write(content.getBytes(StandardCharsets.UTF_8));
+			fos.write(arcadeContent.getBytes(StandardCharsets.UTF_8));
+			fos.write("\n".getBytes(StandardCharsets.UTF_8));
+			fos.write(survivalContent.getBytes(StandardCharsets.UTF_8));
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {
@@ -190,11 +211,14 @@ public class Game {
 		entities.clear();
 		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
 		entities.add(player);
-		if (this.score > highscore) {
-			highscore = this.score;
-			writeHighscore();
+		if (this.arcadeScore > arcadeHighscore) {
+			arcadeHighscore = this.arcadeScore;
 		}
-		score = 0;
+		if (this.survivalScore > survivalHighscore) {
+			survivalHighscore = this.survivalScore;
+		}
+		writeHighscores();
+		arcadeScore = 0;
 		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
 	}
@@ -217,7 +241,8 @@ public class Game {
 		case GAMEMODE_SURVIVAL:
 			updateGame(input);
 			break;
-		case GAMEMODE_HIGHSCORE_SCREEN:
+		case GAMEMODE_ARCADE_HIGHSCORE_SCREEN:
+		case GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN:
 			updateHighscoreScreen(input);
 			break;
 		case GAMEMODE_PAUSE_SCREEN:
@@ -253,9 +278,13 @@ public class Game {
 	 * 			  - all keys pressed at the time of update
 	 */
 	private void updateStartScreen(final List<String> input) {
-		if (input.contains("SPACE")) {
+		if (input.contains("A")) {
 			startGame();
 			gamemode = GAMEMODE_ARCADE;
+		}
+		if (input.contains("S")) {
+			startGame();
+			gamemode = GAMEMODE_SURVIVAL;
 		}
 		Display.startScreen(gc);
 	}
@@ -280,6 +309,7 @@ public class Game {
 			checkCollision(e);
 			e.draw(gc);
 		}
+		
 		switch (gamemode) {
 		case GAMEMODE_ARCADE:
 			spawner.updateArcade();
@@ -290,14 +320,25 @@ public class Game {
 		default:
 			gamemode = GAMEMODE_START_SCREEN;
 		} 
+		
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		Display.score(score, gc);
-		Display.highscore(highscore, gc);
+		switch (gamemode) {
+		case GAMEMODE_ARCADE:
+			Display.score(arcadeScore, gc);
+			Display.highscore(arcadeHighscore, gc);
+			break;
+		case GAMEMODE_SURVIVAL:
+			Display.score(survivalScore, gc);
+			Display.highscore(survivalHighscore, gc);
+			break;
+		default:
+			gamemode = GAMEMODE_START_SCREEN;
+		}
 		Display.lives(player.getLives(), gc);
 	}
 	
@@ -311,7 +352,13 @@ public class Game {
 		if (input.contains("R")) {
 			startGame();
 		}
-		Display.highscoreScreen(highscore, gc);
+		switch (gamemode) {
+		case GAMEMODE_ARCADE_HIGHSCORE_SCREEN:
+			Display.highscoreScreen(arcadeHighscore, gc);
+			break;
+		case GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN:
+			Display.highscoreScreen(survivalHighscore, gc);
+		}
 	}
 
 	/**
@@ -358,12 +405,31 @@ public class Game {
 	 */
 	public final void over() {
 		destroy(player);
+		long score;
+		long highscore;
+		
+		switch (gamemode) {
+		case GAMEMODE_ARCADE:
+			score = arcadeScore;
+			highscore = arcadeHighscore;
+		case GAMEMODE_SURVIVAL:
+			score = survivalScore;
+			highscore = survivalHighscore;
+		default:
+			score = 0;
+			highscore = 1;
+		}
+		
 		if (score <= highscore) {
 			gamemode = GAMEMODE_START_SCREEN;
 		} else {
 			highscore = score;
-			writeHighscore();
-			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
+			writeHighscores();
+			if (gamemode == GAMEMODE_ARCADE) {
+				gamemode = GAMEMODE_ARCADE_HIGHSCORE_SCREEN;
+			} else if (gamemode == GAMEMODE_SURVIVAL) {
+				gamemode = GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN;
+			}
 		}
 	}
 
@@ -372,11 +438,22 @@ public class Game {
 	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
+		int currentScore = 0;
+		if (gamemode == GAMEMODE_ARCADE) {
+			currentScore = (int) arcadeScore;
+		} else if (gamemode == GAMEMODE_SURVIVAL) {
+			currentScore = (int) survivalScore;
+		}
 		if (player.isAlive()) {
-			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
+			if (currentScore % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
 			}
-			this.score += score;
+			currentScore += score;
+		}
+		if (gamemode == GAMEMODE_ARCADE) {
+			arcadeScore = currentScore;
+		} else if (gamemode == GAMEMODE_SURVIVAL) {
+			survivalScore = currentScore;
 		}
 	}
 	
@@ -406,6 +483,24 @@ public class Game {
 			}
 		}
 		return enemies;
+	}
+	
+	/**
+	 * Amount of big enemies, where 2 medium asteroids count as 1 big
+	 * big asteroid, and 2 small asteroids count as 1 medium asteroid.
+	 * @return amount of converted big enemies
+	 */
+	public final int convertedBigEnemies() {
+		int enemies = 0;
+		for (final AbstractEntity entity : entities) {
+			if (entity instanceof Asteroid) {
+				enemies += ((Asteroid) entity).getSurvivalSize();
+			}
+		}
+		if (enemies % SURVIVAL_ASTEROID_SIZE_BIG == 0) {
+			return (int) (enemies / SURVIVAL_ASTEROID_SIZE_BIG);
+		}
+		return (int) (enemies / SURVIVAL_ASTEROID_SIZE_BIG) + 1;
 	}
 
 	/**
@@ -437,7 +532,12 @@ public class Game {
 	 * @return score
 	 */
 	public final long getScore() {
-		return score;
+		if (gamemode == GAMEMODE_ARCADE) {
+			return arcadeScore;
+		} else if (gamemode == GAMEMODE_SURVIVAL) {
+			return survivalScore;
+		}
+		return 0;
 	}
 
 	/**

@@ -401,6 +401,10 @@ public final class Display {
 	 */
 	private static final float PRESS_START_TEXT_Y = 250;
 	/**
+	 * The y offset needed for text not to overlap on the start screen
+	 */
+	private static final float PRESS_START_OFFSET_Y = 100;
+	/**
 	 * X coordinate of the "congratulations" text.
 	 */
 	private static final float CONGRATULATIONS_TEXT_X = 80;
@@ -491,7 +495,9 @@ public final class Display {
 		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
 				"asteroids", gc);
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, 
-				"press space to start", gc);
+				"press A to start arcade", gc);
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y + PRESS_START_OFFSET_Y,
+				SMALL_TEXT_SIZE, "press S to start survival", gc);
 	}
 	
 	/**

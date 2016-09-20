@@ -88,6 +88,18 @@ public class Asteroid extends AbstractEntity {
 	 * Number of asteroids after a split.
 	 */
 	private static final int SPLIT = 2;
+	/**
+	 * The converted size for big asteroids in survival mode.
+	 */
+	private static final int SURVIVAL_CONVERTED_SIZE_BIG = 4;
+	/**
+	 * The converted size for medium asteroids in survival mode.
+	 */
+	private static final int SURVIVAL_CONVERTED_SIZE_MEDIUM = 2;
+	/**
+	 * The converted size for small asteroids in survival mode.
+	 */
+	private static final int SURVIVAL_CONVERTED_SIZE_SMALL = 1;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -180,6 +192,20 @@ public class Asteroid extends AbstractEntity {
 			getThisGame().addScore(SMALL_SCORE);
 		}
 		Particle.explosion(getX(), getY(), getThisGame());
+	}
+	
+	/**
+	 * Returns the converted size for survival mode.
+	 * @return 4 for big asteroids, 2 for medium and 1 for small.
+	 */
+	public final int getSurvivalSize() {
+		if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
+			return SURVIVAL_CONVERTED_SIZE_BIG;
+		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
+			return SURVIVAL_CONVERTED_SIZE_MEDIUM;
+		} else {
+			return SURVIVAL_CONVERTED_SIZE_SMALL;
+		}
 	}
 
 	/**
