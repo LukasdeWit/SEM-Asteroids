@@ -97,9 +97,9 @@ public class Game {
 	 */
 	private static final int GAMEMODE_START_SCREEN = 0;
 	/**
-	 * the "game" gamemode.
+	 * the "arcade" gamemode.
 	 */
-	private static final int GAMEMODE_GAME = 1;
+	private static final int GAMEMODE_ARCADE = 1;
 	/**
 	 * the highscore screen.
 	 */
@@ -108,6 +108,10 @@ public class Game {
 	 * the highscore screen.
 	 */
 	private static final int GAMEMODE_PAUSE_SCREEN = 3;
+	/**
+	 * the "survival" gamemode.
+	 */
+	private static final int GAMEMODE_SURVIVAL = 4;
 	/**
 	 * Minimal pause time.
 	 */
@@ -199,7 +203,8 @@ public class Game {
 		case GAMEMODE_START_SCREEN:
 			updateStartScreen(input);
 			break;
-		case GAMEMODE_GAME:
+		case GAMEMODE_ARCADE:
+		case GAMEMODE_SURVIVAL:
 			updateGame(input);
 			break;
 		case GAMEMODE_HIGHSCORE_SCREEN:
@@ -221,11 +226,11 @@ public class Game {
 		if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
-			gamemode = GAMEMODE_GAME;
+			gamemode = GAMEMODE_ARCADE;
 		} else if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			startGame();
-			gamemode = GAMEMODE_GAME;
+			gamemode = GAMEMODE_ARCADE;
 		}
 		Display.pauseScreen(gc);
 	}
@@ -240,7 +245,7 @@ public class Game {
 	private void updateStartScreen(final List<String> input) {
 		if (input.contains("SPACE")) {
 			startGame();
-			gamemode = GAMEMODE_GAME;
+			gamemode = GAMEMODE_ARCADE;
 		}
 		Display.startScreen(gc);
 	}
@@ -275,6 +280,26 @@ public class Game {
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
 		Display.lives(player.getLives(), gc);
+	}
+	
+	/**
+	 * handles the update logic of the arcade gamemode.
+	 * 
+	 * @param input
+	 *  		  - all keys pressed at the time of update
+	 */
+	private void updateArcade(final List<String> input) {
+		
+	}
+	
+	/**
+	 * handles the update logic of the survival gamemode.
+	 * 
+	 * @param input
+	 *  		  - all keys pressed at the time of update
+	 */
+	private void updateSurvival(final List<String> input) {
+		
 	}
 	
 	/**
