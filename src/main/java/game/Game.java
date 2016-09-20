@@ -1,16 +1,13 @@
 package game;
 
 import entity.*;
+import game.highscore.HighscoreStore;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class defines everything within the game.
@@ -20,10 +17,6 @@ import java.util.logging.Logger;
  */
 public class Game {
 	/**
-	 * class logger.
-	 */
-	private static final Logger LOG = Logger.getLogger(Game.class.getName());
-	/**
 	 * The player of this game.
 	 */
 	private Player player;
@@ -31,6 +24,10 @@ public class Game {
 	 * The spawner of this game.
 	 */
 	private final Spawner spawner;
+	/**
+	 * used for handling and storing highscores.
+	 */
+	private final HighscoreStore highscoreStore;
 	/**
 	 * List of all entities currently in the game.
 	 */
@@ -67,10 +64,6 @@ public class Game {
 	 * current score.
 	 */
 	private long score;
-	/**
-	 * current highscore.
-	 */
-	private long highscore;
 	/**
 	 * current gamemode.
 	 */
@@ -116,8 +109,7 @@ public class Game {
 	/**
 	 * Constructor for a new game.
 	 * 
-	 * @param gc
-	 *            - the GraphicsContext of the canvas
+	 * @param gc - the GraphicsContext of the canvas
 	 */
 	public Game(final GraphicsContext gc) {
 		this.gc = gc;
@@ -128,43 +120,7 @@ public class Game {
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		random = new Random();
-		highscore = readHighscore();
-	}
-	
-	/**
-	 * reads the highscore from file in resources folder.
-	 * @return the highscore
-	 */
-	private long readHighscore() {
-		long currentHighscore = 0;
-		final String filePath = "src/main/resources/highscore.txt";
-		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(filePath),
-						StandardCharsets.UTF_8))) {
-			String sCurrentLine;
-			while ((sCurrentLine = br.readLine()) != null) {
-				currentHighscore = Long.parseLong(sCurrentLine);
-			}
-		} catch (IOException e) {
-			LOG.log(Level.ALL, "unable to read highscore from file", e);
-		}
-		return currentHighscore;
-	}
-
-	/**
-	 * writes the highscore to file in resources folder.
-	 */
-	private void writeHighscore() {
-		final String content = String.valueOf(highscore);
-		final File file = new File("src/main/resources/highscore.txt");
-		try (FileOutputStream fos =
-					 new FileOutputStream(file.getAbsoluteFile())) {
-			fos.write(content.getBytes(StandardCharsets.UTF_8));
-			fos.flush();
-			fos.close();
-		} catch (IOException e) {
-			LOG.log(Level.ALL, "unable to write highscore to file", e);
-		}
+		highscoreStore = new HighscoreStore();
 	}
 	
 	/**
@@ -176,9 +132,9 @@ public class Game {
 		entities.clear();
 		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
 		entities.add(player);
-		if (this.score > highscore) {
-			highscore = this.score;
-			writeHighscore();
+
+		if (this.score > highscoreStore.getHighestScore()) {
+			highscoreStore.addHighScore(score);
 		}
 		score = 0;
 		gamemode = GAMEMODE_START_SCREEN;
@@ -188,28 +144,27 @@ public class Game {
 	/**
 	 * update runs every game tick and updates all necessary entities.
 	 * 
-	 * @param input
-	 *            - all keys pressed at the time of update
+	 * @param input - all keys pressed at the time of update
 	 */
 	public final void update(final List<String> input) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenX, screenY);
-		
-		switch(gamemode) {
-		case GAMEMODE_START_SCREEN:
-			updateStartScreen(input);
-			break;
-		case GAMEMODE_GAME:
-			updateGame(input);
-			break;
-		case GAMEMODE_HIGHSCORE_SCREEN:
-			updateHighscoreScreen(input);
-			break;
-		case GAMEMODE_PAUSE_SCREEN:
-			updatePauseScreen(input);
-			break;
-		default:
-			gamemode = GAMEMODE_START_SCREEN;
+
+		switch (gamemode) {
+			case GAMEMODE_START_SCREEN:
+				updateStartScreen(input);
+				break;
+			case GAMEMODE_GAME:
+				updateGame(input);
+				break;
+			case GAMEMODE_HIGHSCORE_SCREEN:
+				updateHighscoreScreen(input);
+				break;
+			case GAMEMODE_PAUSE_SCREEN:
+				updatePauseScreen(input);
+				break;
+			default:
+				gamemode = GAMEMODE_START_SCREEN;
 		}
 	}
 	
@@ -234,8 +189,7 @@ public class Game {
 	/**
 	 * handles the update logic of the start screen.
 	 * 
-	 * @param input
-	 * 			  - all keys pressed at the time of update
+	 * @param input - all keys pressed at the time of update
 	 */
 	private void updateStartScreen(final List<String> input) {
 		if (input.contains("SPACE")) {
@@ -248,8 +202,7 @@ public class Game {
 	/**
 	 * handles the update logic of the game itself.
 	 * 
-	 * @param input
-	 * 			  - all keys pressed at the time of update
+	 * @param input - all keys pressed at the time of update
 	 */
 	private void updateGame(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
@@ -273,29 +226,30 @@ public class Game {
 		destroyList.clear();
 		createList.clear();
 		Display.score(score, gc);
-		Display.highscore(highscore, gc);
-		Display.lives(player.getLives(), gc);
+
+		Display.highscore(highscoreStore.getHighestScore(), gc);
+		if (player != null) {
+			Display.lives(player.getLives(), gc);
+		}
 	}
 	
 	/**
 	 * handles the update logic of the highscore screen.
 	 * 
-	 * @param input
-	 * 			  - all keys pressed at the time of update
+	 * @param input - all keys pressed at the time of update
 	 */
 	private void updateHighscoreScreen(final List<String> input) {
 		if (input.contains("R")) {
 			startGame();
 		}
-		Display.highscoreScreen(highscore, gc);
+		Display.highscoreScreen(highscoreStore.getHighestScore(), gc);
 	}
 
 	/**
 	 * checks all collisions of an entity, if there is a hit then collide of the
 	 * entity class will be run.
 	 * 
-	 * @param e1
-	 *            - the entity
+	 * @param e1 - the entity
 	 */
 	public final void checkCollision(final AbstractEntity e1) {
 		entities
@@ -311,8 +265,7 @@ public class Game {
 	 * adds an Entity to the destroy list and will be destroyed at the and of
 	 * the current tick.
 	 * 
-	 * @param e
-	 *            - the Entity
+	 * @param e - the Entity
 	 */
 	public final void destroy(final AbstractEntity e) {
 		destroyList.add(e);
@@ -322,8 +275,7 @@ public class Game {
 	 * adds an Entity to the createList, and will be added to the game at the
 	 * and of the current tick.
 	 * 
-	 * @param e
-	 *            - the Entity
+	 * @param e - the Entity
 	 */
 	public final void create(final AbstractEntity e) {
 		createList.add(e);
@@ -334,11 +286,11 @@ public class Game {
 	 */
 	public final void over() {
 		destroy(player);
-		if (score <= highscore) {
+		if (score <= highscoreStore.getHighestScore()) {
 			gamemode = GAMEMODE_START_SCREEN;
 		} else {
-			highscore = score;
-			writeHighscore();
+			highscoreStore.addHighScore(score);
+			highscoreStore.writeScores();
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
 		}
 	}
@@ -348,7 +300,7 @@ public class Game {
 	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
-		if (player.isAlive()) {
+		if (player != null && player.isAlive()) {
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
 			}
