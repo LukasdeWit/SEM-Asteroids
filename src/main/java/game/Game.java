@@ -92,6 +92,11 @@ public class Game {
 	 * Number of points needed to gain a life.
 	 */
 	private static final int LIFE_SCORE = 10000;
+	////////////////////////////////////////
+	//                                    //
+	//    here is where gamemodes start   //
+	//                                    //
+	////////////////////////////////////////
 	/**
 	 * the startscreen gamemode.
 	 */
@@ -112,6 +117,11 @@ public class Game {
 	 * the "survival" gamemode.
 	 */
 	private static final int GAMEMODE_SURVIVAL = 4;
+	////////////////////////////////////////
+	//                                    //
+	//    here is where gamemodes end     //
+	//                                    //
+	////////////////////////////////////////
 	/**
 	 * Minimal pause time.
 	 */
@@ -270,7 +280,16 @@ public class Game {
 			checkCollision(e);
 			e.draw(gc);
 		}
-		spawner.update();
+		switch (gamemode) {
+		case GAMEMODE_ARCADE:
+			spawner.updateArcade();
+			break;
+		case GAMEMODE_SURVIVAL:
+			spawner.updateSurvival();
+			break;
+		default:
+			gamemode = GAMEMODE_START_SCREEN;
+		} 
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
@@ -280,26 +299,6 @@ public class Game {
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
 		Display.lives(player.getLives(), gc);
-	}
-	
-	/**
-	 * handles the update logic of the arcade gamemode.
-	 * 
-	 * @param input
-	 *  		  - all keys pressed at the time of update
-	 */
-	private void updateArcade(final List<String> input) {
-		
-	}
-	
-	/**
-	 * handles the update logic of the survival gamemode.
-	 * 
-	 * @param input
-	 *  		  - all keys pressed at the time of update
-	 */
-	private void updateSurvival(final List<String> input) {
-		
 	}
 	
 	/**
