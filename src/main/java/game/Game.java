@@ -126,7 +126,7 @@ public class Game {
 	public Game(final GraphicsContext gc) {
 		this.gc = gc;
 		logger = new game.Logger(this);
-		logger.log("Game Constructed.");
+		logger.log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
 		spawner = new Spawner(this);
@@ -189,7 +189,7 @@ public class Game {
 		score = 0;
 		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
-		logger.log("Game Started.");
+		logger.log("Game started.");
 	}
 	
 	/**
@@ -228,9 +228,11 @@ public class Game {
 		if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
+			logger.log("Game unpaused.");
 			gamemode = GAMEMODE_GAME;
 		} else if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
+			logger.log("Game stopped.");
 			startGame();
 			gamemode = GAMEMODE_GAME;
 		}
@@ -261,10 +263,12 @@ public class Game {
 	private void updateGame(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
-			startGame();
+			logger.log("Game stopped.");
+			gamemode = GAMEMODE_START_SCREEN;
 		} else if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
+			logger.log("Game paused.");
 			gamemode = GAMEMODE_PAUSE_SCREEN;
 		}
 		for (final AbstractEntity e : entities) {
@@ -272,7 +276,7 @@ public class Game {
 			checkCollision(e);
 			e.draw(gc);
 		}
-		spawner.update();
+		spawner.update(logger);
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
@@ -292,6 +296,7 @@ public class Game {
 	 */
 	private void updateHighscoreScreen(final List<String> input) {
 		if (input.contains("R")) {
+			logger.log("Game stopped.");
 			startGame();
 		}
 		Display.highscoreScreen(highscore, gc);
@@ -341,11 +346,13 @@ public class Game {
 	 */
 	public final void over() {
 		destroy(player);
+		logger.log("Game over.");
 		if (score <= highscore) {
 			gamemode = GAMEMODE_START_SCREEN;
 		} else {
 			highscore = score;
 			writeHighscore();
+			logger.log("New highscore is " + highscore + ".");
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
 		}
 	}
@@ -356,8 +363,10 @@ public class Game {
 	 */
 	public final void addScore(final int score) {
 		if (player.isAlive()) {
+			logger.log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
+				logger.log("Player gained an extra life.");
 			}
 			this.score += score;
 		}
@@ -445,5 +454,13 @@ public class Game {
 	 */
 	public final Logger getLog() {
 		return LOG;
+	}
+
+	/**
+	 * logger getter.
+	 * @return the logger
+	 */
+	public final game.Logger getLogger() {
+		return logger;
 	}
 }

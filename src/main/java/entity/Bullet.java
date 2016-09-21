@@ -86,6 +86,7 @@ public class Bullet extends AbstractEntity {
 		if (e2 instanceof Asteroid) {
 			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
+			getThisGame().getLogger().log("Asteroid was hit by a bullet.");
 		}
 	}
 

@@ -152,6 +152,7 @@ public class Asteroid extends AbstractEntity {
 			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
 		}
+		//this is already done in Bullet.
 	}
 
 	/**
