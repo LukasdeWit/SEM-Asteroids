@@ -20,6 +20,10 @@ import java.util.logging.Logger;
  */
 public class Game {
 	/**
+	 * The logger of this game.
+	 */
+	private final game.Logger logger;
+	/**
 	 * class logger.
 	 */
 	private static final Logger LOG = Logger.getLogger(Game.class.getName());
@@ -121,6 +125,8 @@ public class Game {
 	 */
 	public Game(final GraphicsContext gc) {
 		this.gc = gc;
+		logger = new game.Logger(this);
+		logger.log("Game Constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
 		spawner = new Spawner(this);
@@ -183,6 +189,7 @@ public class Game {
 		score = 0;
 		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
+		logger.log("Game Started.");
 	}
 	
 	/**
@@ -430,5 +437,13 @@ public class Game {
 	 */
 	public final Random getRandom() {
 		return random;
+	}
+
+	/**
+	 * log getter.
+	 * @return the log
+	 */
+	public final Logger getLog() {
+		return LOG;
 	}
 }
