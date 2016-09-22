@@ -62,7 +62,6 @@ public class Audio {
 		try {
 			flyingnoise = new AudioClip(file.toURI().toURL().toString());
 		} catch (MalformedURLException e) {
-			System.out.println("Fail");
 			flyingnoise = null;
 		}
 		/*

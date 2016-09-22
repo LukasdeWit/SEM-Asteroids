@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<ruleset name="Custom ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    <description>
+        This is the custom rule-set for the SEM-Asteroids project :D
+    </description>
+
+    <!-- Entire rulesets -->
+    <rule ref="rulesets/java/strings.xml"/>
+    <rule ref="rulesets/java/braces.xml"/>
+    <rule ref="rulesets/java/basic.xml"/>
+    <rule ref="rulesets/java/empty.xml"/>
+    <rule ref="rulesets/java/finalizers.xml"/>
+    <rule ref="rulesets/java/imports.xml"/>
+    <rule ref="rulesets/java/junit.xml"/>
+    <rule ref="rulesets/java/logging-java.xml"/>
+    <rule ref="rulesets/java/migrating.xml"/>
+    <rule ref="rulesets/java/strictexception.xml"/>
+    <rule ref="rulesets/java/typeresolution.xml"/>
+    <rule ref="rulesets/java/unnecessary.xml"/>
+    <rule ref="rulesets/java/unusedcode.xml"/>
+
+    <!-- partial rulesets -->
+    <rule ref="rulesets/java/naming.xml">
+        <exclude name="ShortClassName"/>
+        <exclude name="ShortVariable"/>
+        <exclude name="LongVariable"/>
+        <exclude name="ShortMethodName"/>
+    </rule>
+
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="SwitchDensity"/>
+        <exclude name="ConstructorCallsOverridableMethod"/>
+        <exclude name="AccessorClassGeneration"/>
+        <exclude name="AssignmentToNonFinalStatic"/>
+        <exclude name="MissingBreakInSwitch"/>
+    </rule>
+    
+    <rule ref="rulesets/java/comments.xml">
+        <!-- we don't require contributes to be 'politically correct' -->
+        <exclude name="CommentContent"/>
+        <exclude name="CommentSize"/>
+    </rule>
+
+    <rule ref="rulesets/java/optimizations.xml">
+        <exclude name="AvoidInstantiatingObjectsInLoops"/>
+    </rule>
+
+    <!-- Individual rules-->
+    <rule ref="rulesets/java/unusedcode.xml/UnusedLocalVariable"/>
+    <rule ref="rulesets/java/unusedcode.xml/UnusedPrivateField"/>
+    <rule ref="rulesets/java/codesize.xml/ExcessiveMethodLength"/>
+    <rule ref="rulesets/java/codesize.xml/NPathComplexity"/>
+    <rule ref="rulesets/java/controversial.xml/DontImportSun"/>
+    <rule ref="rulesets/java/controversial.xml/AvoidUsingShortType"/>
+    <rule ref="rulesets/java/controversial.xml/AvoidUsingVolatile"/>
+    <rule ref="rulesets/java/controversial.xml/AvoidUsingNativeCode"/>
+    <rule ref="rulesets/java/controversial.xml/DoNotCallGarbageCollectionExplicitly"/>
+
+    <!-- Customized rules-->
+    <rule ref="rulesets/java/codesize.xml/CyclomaticComplexity">
+        <properties>
+            <property name="reportLevel" value="8"/>
+            <property name="showClassesComplexity" value="false"/>
+        </properties>
+    </rule>
+    
+    <rule ref="rulesets/java/junit.xml/JUnitTestContainsTooManyAsserts">
+        <properties>
+            <property name="maximumAsserts" value="3"/>
+        </properties>
+    </rule>
+
+</ruleset>

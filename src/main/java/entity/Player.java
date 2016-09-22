@@ -1,17 +1,16 @@
 package entity;
-import java.util.List;
-
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
+
+import java.util.List;
 
 /**
  * This class is the player of the game.
  * @author Kibo
  *
  */
-public class Player extends Entity {
+public class Player extends AbstractEntity {
 	/**
 	 * Amount of lives.
 	 */
@@ -29,7 +28,7 @@ public class Player extends Entity {
 	 */
 	private long invincibleStart;
 	/**
-	 * Amount of invincible time in miliseconds.
+	 * Amount of invincible time in milliseconds.
 	 */
 	private int invincibleMS;
 	/**
@@ -41,10 +40,6 @@ public class Player extends Entity {
 	 */
 	private boolean boost;
 	/**
-	 * margin between two lives in pixels.
-	 */
-	private double margin;
-	/**
 	 * Amount of lives at the start of a game.
 	 */
 	private static final int STARTING_LIVES = 3;
@@ -55,11 +50,11 @@ public class Player extends Entity {
 	/**
 	 * Invincible time at the start of a game.
 	 */
-	private static final int INVINC_START_TIME = 500;
+	private static final int INVINCIBILITY_START_TIME = 1000;
 	/**
 	 * Rotation in radians per tick.
 	 */
-	private static final double ROTATION = .06;
+	private static final double ROTATION_SPEED = .06;
 	/**
 	 * Acceleration in pixels per ticks squared.
 	 */
@@ -69,33 +64,29 @@ public class Player extends Entity {
 	 */
 	private static final float DECELERATION = .01f;
 	/**
-	 * Time in miliseconds per hyperspace jump.
+	 * Time in milliseconds per hyperspace jump.
 	 */
 	private static final int HYPERSPACE_TIME = 1000;
 	/**
-	 * Time between shots in miliseconds.
+	 * Time between shots in milliseconds.
 	 */
 	private static final long TIME_BETWEEN_SHOTS = 200;
 	/**
 	 * Speed of bullets relative to player in pixels per tick.
 	 */
-	private static final float BULLETSPEED = 4;
+	private static final float BULLET_SPEED = 4;
 	/**
 	 * A quarter pi.
 	 */
 	private static final double QUARTER_PI = Math.PI / 4;
 	/**
-	 * One eigth pi.
+	 * One eighth pi.
 	 */
-	private static final double EIGTH_PI = Math.PI / 8;
+	private static final double EIGHTH_PI = Math.PI / 8;
 	/**
 	 * Time of flicker while respawning.
 	 */
 	private static final int RESPAWN_FLICKER_TIME = 250;
-	/**
-	 * Size of lives in pixels.
-	 */
-	private static final int LIVES_SIZE = 10;
 	/**
 	 * The number of corners of a triangle.
 	 */
@@ -107,38 +98,21 @@ public class Player extends Entity {
 	/**
 	 * Maximum speed of Player in pixels per tick.
 	 */
-	private static final float MAXSPEED = 4;
+	private static final float MAX_SPEED = 4;
 	/**
-	 * Maximum amount of friendly bullets simulatiously in a game.
+	 * Maximum amount of friendly bullets simultaneously in a game.
 	 */
 	private static final int MAX_BULLETS = 4;
-	/**
-	 * Y ofset of drawn lives.
-	 */
-	private static final double LIVES_Y_OFSET = 40;
-	/**
-	 * The margin between two lives at the start.
-	 */
-	private static final double START_MARGIN = 10;
-	/**
-	 * Maximum amount of lives next to eachother with START_MARGIN as margin.
-	 */
-	private static final double FULL_LIVES = 20;
 	
 
 	/**
 	 * Constructor for the Player class.
 	 * 
-	 * @param x
-	 *            location of Player along the X-axis.
-	 * @param y
-	 *            location of Player along the Y-axis.
-	 * @param dX
-	 *            velocity of Player along the X-axis.
-	 * @param dY
-	 *            velocity of Player along the Y-axis.
-	 * @param thisGame
-	 *            Game the Player exists in.
+	 * @param x location of Player along the X-axis.
+	 * @param y location of Player along the Y-axis.
+	 * @param dX velocity of Player along the X-axis.
+	 * @param dY velocity of Player along the Y-axis.
+	 * @param thisGame Game the Player exists in.
 	 */
 	public Player(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
@@ -146,44 +120,50 @@ public class Player extends Entity {
 		lives = STARTING_LIVES;
 		setRadius(RADIUS);
 		rotation = 0;
-		invincibleStart(INVINC_START_TIME);
-		margin = START_MARGIN;
+		makeInvincible(INVINCIBILITY_START_TIME);
 	}
 
 	/**
 	 * Perform actions that happen when a player dies.
+	 * <p>
+	 * this is called when the player has
+	 * <strong>no lives left</strong>
+	 * you probably don't need to call this directly, instead call onHit()
 	 */
-	public final void die() {
+	@Override
+	public final void onDeath() {
+		// no-op
+	}
+
+	/**
+	 * handle the player taking a hit (and is not invincible)
+	 *
+	 * this happens when (for example) the player collides with an asteroid
+	 * or is hit by the bullet of an saucer.
+	 */
+	public final void onHit() {
 		lives--;
-		updateMargin();
-		if (lives == 0) {
+		if (lives <= 0) {
+			// we are out of lives, call gameover
 			getThisGame().over();
-			invincibleStart(INVINC_START_TIME); //TODO: Game over
 		} else {
+			// we lose one live
+
+			// respawn the player
 			setX(getThisGame().getScreenX() / 2);
 			setY(getThisGame().getScreenY() / 2);
 			setDX(0);
 			setDY(0);
 			rotation = 0;
-			invincibleStart(INVINC_START_TIME);
+			makeInvincible(INVINCIBILITY_START_TIME);
 		}
 	}
-	
+
 	/**
 	 * Achievement: get a life.
 	 */
 	public final void gainLife() {
 		lives++;
-		updateMargin();
-	}
-
-	/**
-	 * Update the margin between lives to fit on screen.
-	 */
-	private void updateMargin() {
-		if (lives >= FULL_LIVES) {
-			margin = START_MARGIN * FULL_LIVES / lives;
-		}
 	}
 
 	/**
@@ -204,17 +184,17 @@ public class Player extends Entity {
 	/**
 	 * Method that translates keyboard input into player character movement.
 	 * 
-	 * @param input
-	 *            arraylist containing the keyboard input
+	 * @param input List containing the keyboard input
 	 */
-	public final void keyHandler(final List<String> input) {
-		if ((input.contains("LEFT") || input.contains("A"))
-				&& !(input.contains("RIGHT") || input.contains("D"))) {
+	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
+	private void keyHandler(final List<String> input) {
+		if (input.contains("LEFT") || input.contains("A")
+				|| !(input.contains("RIGHT") || input.contains("D"))) {
 			turnLeft();
 		}
 
-		if ((input.contains("RIGHT") || input.contains("D")) 
-				&& !(input.contains("LEFT") || input.contains("A"))) {
+		if (input.contains("RIGHT") || input.contains("D")
+				|| !(input.contains("LEFT") || input.contains("A"))) {
 			turnRight();
 		}
 
@@ -235,14 +215,14 @@ public class Player extends Entity {
 	 * Turn the player left.
 	 */
 	private void turnLeft() {
-		rotation += ROTATION;
+		rotation += ROTATION_SPEED;
 	}
 
 	/**
 	 * Turn the player right.
 	 */
 	private void turnRight() {
-		rotation -= ROTATION;
+		rotation -= ROTATION_SPEED;
 	}
 
 	/**
@@ -251,33 +231,32 @@ public class Player extends Entity {
 	private void accelerate() {
 		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION));
 		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION));
-		if (speed() > MAXSPEED) {
-			setDX(getDX() * (MAXSPEED / speed()));
-			setDY(getDY() * (MAXSPEED / speed()));
+		if (speed() > MAX_SPEED) {
+			setDX(getDX() * (MAX_SPEED / speed()));
+			setDY(getDY() * (MAX_SPEED / speed()));
 		}
 		boost = true;
-		AudioClip flyingnoise = getGame().getAudio().get("flying");
 	}
 
 	/**
 	 * Makes player move slower.
 	 */
 	private void slowDown() {
-		if (Math.abs(getDX()) + Math.abs(getDY()) != 0) {
-			setDX((float) (getDX() - (DECELERATION * getDX()) 
-					/ (Math.abs(getDX()) + Math.abs(getDY()))));
-			setDY((float) (getDY() - (DECELERATION * getDY()) 
-					/ (Math.abs(getDX()) + Math.abs(getDY()))));
+		if (Float.compare(Math.abs(getDX()) + Math.abs(getDY()), 0) != 0) {
+			setDX(getDX() - (DECELERATION * getDX())
+					/ (Math.abs(getDX()) + Math.abs(getDY())));
+			setDY(getDY() - (DECELERATION * getDY())
+					/ (Math.abs(getDX()) + Math.abs(getDY())));
 		}
 	}
 
 	/**
 	 * Starts invincibility that lasts the given amount of milliseconds.
 	 * 
-	 * @param milliseconds
-	 *            amount of milliseconds the player should stay invicible.
+	 * @param milliseconds amount of milliseconds the player should stay
+	 *                        invincible.
 	 */
-	private void invincibleStart(final int milliseconds) {
+	private void makeInvincible(final int milliseconds) {
 		invincibleStart = System.currentTimeMillis();
 		invincibleMS = milliseconds;
 	}
@@ -286,7 +265,7 @@ public class Player extends Entity {
 	 * @return whether or not the player is invincible at this moment.
 	 */
 	public final boolean invincible() {
-		return (invincibleStart + invincibleMS > System.currentTimeMillis());
+		return invincibleStart + invincibleMS > System.currentTimeMillis();
 	}
 
 	/**
@@ -297,7 +276,7 @@ public class Player extends Entity {
 		setY((float) (getThisGame().getScreenY() * Math.random()));
 		setDX(0);
 		setDY(0);
-		invincibleStart(HYPERSPACE_TIME);
+		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
 	}
 
@@ -314,9 +293,9 @@ public class Player extends Entity {
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
 				&& getThisGame().bullets() < MAX_BULLETS) {
-			Bullet b = new Bullet(getX(), getY(), 
-					(float) (getDX() / 2 + (Math.cos(rotation) * BULLETSPEED)), 
-					(float) (getDY() / 2 - (Math.sin(rotation) * BULLETSPEED)), 
+			final Bullet b = new Bullet(getX(), getY(),
+					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
+					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
 					getThisGame());
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
@@ -325,19 +304,20 @@ public class Player extends Entity {
 
 	/**
 	 * Method to handle collisions of entities with the player.
-	 * @param e2 - second Entity
+	 * @param e2 - second AbstractEntity
 	 */
-	public final void collide(final Entity e2) {
+	@Override
+	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
 			if (invincible() && !hyperspace()) {
 				invincibleStart = System.currentTimeMillis();
 			} else if (!invincible()) {
-				((Asteroid) e2).split();
-				this.die();
+				getThisGame().destroy(e2);
+				onHit();
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
-			this.die();
+			onHit();
 		}
 	}
 
@@ -346,19 +326,17 @@ public class Player extends Entity {
 	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
-		drawLives(gc);
+		final double s1 = Math.sin(rotation);
+		final double c1 = Math.cos(rotation);
 
-		double s1 = Math.sin(rotation);
-		double c1 = Math.cos(rotation);
+		final double s2 = Math.sin(rotation + (Math.PI - QUARTER_PI));
+		final double c2 = Math.cos(rotation + (Math.PI - QUARTER_PI));
 
-		double s2 = Math.sin(rotation + (Math.PI - QUARTER_PI));
-		double c2 = Math.cos(rotation + (Math.PI - QUARTER_PI));
-
-		double s3 = Math.sin(rotation + (Math.PI + QUARTER_PI));
-		double c3 = Math.cos(rotation + (Math.PI + QUARTER_PI));
+		final double s3 = Math.sin(rotation + (Math.PI + QUARTER_PI));
+		final double c3 = Math.cos(rotation + (Math.PI + QUARTER_PI));
 
 		gc.setStroke(Color.WHITE);
-		if (invincible() 
+		if (invincible()
 				&& (System.currentTimeMillis() + invincibleMS) 
 				% RESPAWN_FLICKER_TIME * 2 < RESPAWN_FLICKER_TIME) {
 			gc.setStroke(Color.GREY);
@@ -376,14 +354,14 @@ public class Player extends Entity {
 				getY() - SIZE * s3 }, TRIANGLE_CORNERS);
 
 		if (boost) {
-			double s4 = Math.sin(rotation + (Math.PI - EIGTH_PI));
-			double c4 = Math.cos(rotation + (Math.PI - EIGTH_PI));
+			final double s4 = Math.sin(rotation + (Math.PI - EIGHTH_PI));
+			final double c4 = Math.cos(rotation + (Math.PI - EIGHTH_PI));
 
-			double s5 = Math.sin(rotation + (Math.PI + EIGTH_PI));
-			double c5 = Math.cos(rotation + (Math.PI + EIGTH_PI));
+			final double s5 = Math.sin(rotation + (Math.PI + EIGHTH_PI));
+			final double c5 = Math.cos(rotation + (Math.PI + EIGHTH_PI));
 
-			double s6 = Math.sin(rotation + (Math.PI));
-			double c6 = Math.cos(rotation + (Math.PI));
+			final double s6 = Math.sin(rotation + (Math.PI));
+			final double c6 = Math.cos(rotation + (Math.PI));
 			gc.strokePolygon(new double[] { 
 					getX() + (SIZE - 1) * c4, 
 					getX() + (SIZE - 1) * c5, 
@@ -392,29 +370,23 @@ public class Player extends Entity {
 					getY() - (SIZE - 1) * s4, 
 					getY() - (SIZE - 1) * s5, 
 					getY() - (SIZE + 2) * s6 }, TRIANGLE_CORNERS);
-			//TODO: PLEASE MAKE THIS BETTER
 			boost = false;
 		}
 	}
 
 	/**
-	 * Method to help display the amount of lives the player has left.
-	 * 
-	 * @param gc
-	 *            graphicscontext
+	 * True if more than 0 lives.
+	 * @return true if alive
 	 */
-	private void drawLives(final GraphicsContext gc) {
-		for (int i = 0; i < lives; i++) {
-			gc.setStroke(Color.WHITE);
-			gc.setLineWidth(1);
-			gc.strokePolygon(new double[] { 
-					margin * (i + 1), 
-					margin * (i + 1) - 2, 
-					margin * (i + 1) + 2}, 
-					new double[] { 
-					LIVES_Y_OFSET, 
-					LIVES_Y_OFSET + LIVES_SIZE  - 2, 
-					LIVES_Y_OFSET + LIVES_SIZE  - 2}, TRIANGLE_CORNERS);
-		}
+	public final boolean isAlive() {
+		return lives > 0;
+	}
+
+	/**
+	 * @return lives
+	 */
+
+	public final int getLives() {
+		return lives;
 	}
 }
