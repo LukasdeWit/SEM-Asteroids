@@ -1,17 +1,4 @@
-21 Sep, 2016 17:23:58.003 | Game constructed.
-21 Sep, 2016 17:23:58.659 | Game started.
-21 Sep, 2016 17:23:58.679 | Wave: 1.
-21 Sep, 2016 17:23:58.679 | 4 asteroids were spawned.
-21 Sep, 2016 17:24:01.042 | Asteroid was hit by a bullet.
-21 Sep, 2016 17:24:01.042 | Player gained 20 points.
-21 Sep, 2016 17:24:01.827 | Asteroid was hit by a bullet.
-21 Sep, 2016 17:24:01.827 | Player gained 50 points.
-21 Sep, 2016 17:24:02.722 | Game paused.
-21 Sep, 2016 17:24:03.554 | Game stopped.
-21 Sep, 2016 17:24:03.554 | Game started.
-21 Sep, 2016 17:24:03.570 | Wave: 1.
-21 Sep, 2016 17:24:03.570 | 4 asteroids were spawned.
-21 Sep, 2016 17:24:04.322 | Game stopped.
-21 Sep, 2016 17:24:05.058 | Game started.
-21 Sep, 2016 17:24:05.074 | Wave: 1.
-21 Sep, 2016 17:24:05.074 | 4 asteroids were spawned.
+22 Sep, 2016 12:43:32.268 | Game constructed.
+22 Sep, 2016 12:43:32.948 | Game started.
+22 Sep, 2016 12:43:32.969 | Wave: 1.
+22 Sep, 2016 12:43:32.970 | 4 asteroids were spawned.

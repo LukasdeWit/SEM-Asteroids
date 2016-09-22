@@ -18,5 +18,9 @@ SEM-Asteroids.iws
 .settings/
 bin/
 
+# save files
+**/highscore.txt
+**/log.txt
+
 # maven generated files
 target/

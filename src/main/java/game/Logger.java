@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
 
 /**
  * This class will log every action.
  * @author Kibo
  *
  */
-public class Logger {
+public final class Logger {
 	/**
 	 * The log file.
 	 */
@@ -28,40 +27,49 @@ public class Logger {
 	 */
 	private final SimpleDateFormat sdf;
 	/**
-	 * This Game.
+	 * the singleton instance.
 	 */
-	private final Game game;
+	private static Logger instance = null;
 	
 	/**
-	 * Constructor of Logger.
-	 *@param game - this game
+	 * Private constructor of Logger.
 	 */
-	public Logger(final Game game) {
+	private Logger() {
 		file = new File("src/main/resources/log.txt");
 		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS");
 		try {
 			fos = new FileOutputStream(file.getAbsoluteFile());
 		} catch (FileNotFoundException e) {
 			fos = null;
-			game.getLog().log(Level.ALL, "unable to write log to file", e
-					);
+			//this wouldn't work
+			//log("unable to write log to file");
 		}
-		this.game = game;
+	}
+	
+	/**
+	 * getter for the instance.
+	 * @return the logger.
+	 */
+	public static Logger getInstance() {
+		if (instance == null) {
+			instance = new Logger();
+		}
+		return instance;
 	}
 	
 	/**
 	 * This method logs a message with the current time to a file.
 	 * @param message - the message
 	 */
-	public final void log(final String message) {		
+	public void log(final String message) {		
 		String string = sdf.format(new Date(System.currentTimeMillis())) 
 				+ " | " + message + "\n";
 		try {
 			fos.write(string.getBytes(StandardCharsets.UTF_8));
 			fos.flush();
 		} catch (IOException e) {
-			game.getLog().log(Level.ALL, "unable to write log to file", e
-					);
+			//this wouldn't work
+			//log("unable to write log to file");
 		}
 	}
 }

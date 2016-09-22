@@ -68,20 +68,19 @@ public class Spawner {
 
 	/**
 	 * This method is called every tick.
-	 * @param logger - the logger
 	 */
-	public final void update(final Logger logger) {
+	public final void update() {
 		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
 			spawnSaucer();
-			logger.log("Saucer was spawned");
+			Logger.getInstance().log("Saucer was spawned");
 			startSaucerTime = System.currentTimeMillis();
 		}
 		if (thisGame.enemies() != 0) {
 			startRest = System.currentTimeMillis();
 		}
 		if (startRest == 0) {
-			logger.log("Wave: " + (level + 1) + ".");
-			spawnAsteroid(STARTING_ASTEROIDS, logger);
+			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			spawnAsteroid(STARTING_ASTEROIDS);
 			startRest = System.currentTimeMillis();
 			level++;
 		} else if (System.currentTimeMillis() - startRest > REST) {
@@ -89,8 +88,8 @@ public class Spawner {
 			if (extra > MAX_EXTRA) {
 				extra = MAX_EXTRA;
 			}
-			logger.log("Wave: " + (level + 1) + ".");
-			spawnAsteroid(STARTING_ASTEROIDS + extra, logger);
+			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			spawnAsteroid(STARTING_ASTEROIDS + extra);
 			level++;
 			startRest = System.currentTimeMillis();
 		}
@@ -130,16 +129,15 @@ public class Spawner {
 	 * 
 	 * @param times
 	 *            - the number of asteroids
-	 * @param logger - the logger
 	 */
-	private void spawnAsteroid(final int times, final Logger logger) {
+	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
 			thisGame.create(new Asteroid(0, thisGame.getScreenY() 
 					* (float) Math.random(), 
 					(float) (Math.random() - .5) * ASTEROID_SPEED, 
 					(float) (Math.random() - .5) * ASTEROID_SPEED, thisGame));
 		}
-		logger.log(times + " asteroids were spawned.");
+		Logger.getInstance().log(times + " asteroids were spawned.");
 	}
 
 	/**

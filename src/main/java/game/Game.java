@@ -1,16 +1,23 @@
 package game;
 
-import entity.*;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.Bullet;
+import entity.Player;
+import entity.Saucer;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This class defines everything within the game.
@@ -19,14 +26,6 @@ import java.util.logging.Logger;
  *
  */
 public class Game {
-	/**
-	 * The logger of this game.
-	 */
-	private final game.Logger logger;
-	/**
-	 * class logger.
-	 */
-	private static final Logger LOG = Logger.getLogger(Game.class.getName());
 	/**
 	 * The player of this game.
 	 */
@@ -125,8 +124,7 @@ public class Game {
 	 */
 	public Game(final GraphicsContext gc) {
 		this.gc = gc;
-		logger = new game.Logger(this);
-		logger.log("Game constructed.");
+		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
 		spawner = new Spawner(this);
@@ -152,7 +150,7 @@ public class Game {
 				currentHighscore = Long.parseLong(sCurrentLine);
 			}
 		} catch (IOException e) {
-			LOG.log(Level.ALL, "unable to read highscore from file", e);
+			Logger.getInstance().log("unable to read highscore from file");
 		}
 		return currentHighscore;
 	}
@@ -169,7 +167,7 @@ public class Game {
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {
-			LOG.log(Level.ALL, "unable to write highscore to file", e);
+			Logger.getInstance().log("unable to write highscore to file");
 		}
 	}
 	
@@ -189,7 +187,7 @@ public class Game {
 		score = 0;
 		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
-		logger.log("Game started.");
+		Logger.getInstance().log("Game started.");
 	}
 	
 	/**
@@ -228,11 +226,11 @@ public class Game {
 		if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
-			logger.log("Game unpaused.");
+			Logger.getInstance().log("Game unpaused.");
 			gamemode = GAMEMODE_GAME;
 		} else if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
-			logger.log("Game stopped.");
+			Logger.getInstance().log("Game stopped.");
 			startGame();
 			gamemode = GAMEMODE_GAME;
 		}
@@ -263,12 +261,12 @@ public class Game {
 	private void updateGame(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
-			logger.log("Game stopped.");
+			Logger.getInstance().log("Game stopped.");
 			gamemode = GAMEMODE_START_SCREEN;
 		} else if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
-			logger.log("Game paused.");
+			Logger.getInstance().log("Game paused.");
 			gamemode = GAMEMODE_PAUSE_SCREEN;
 		}
 		for (final AbstractEntity e : entities) {
@@ -276,7 +274,7 @@ public class Game {
 			checkCollision(e);
 			e.draw(gc);
 		}
-		spawner.update(logger);
+		spawner.update();
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
@@ -296,7 +294,7 @@ public class Game {
 	 */
 	private void updateHighscoreScreen(final List<String> input) {
 		if (input.contains("R")) {
-			logger.log("Game stopped.");
+			Logger.getInstance().log("Game stopped.");
 			startGame();
 		}
 		Display.highscoreScreen(highscore, gc);
@@ -346,13 +344,13 @@ public class Game {
 	 */
 	public final void over() {
 		destroy(player);
-		logger.log("Game over.");
+		Logger.getInstance().log("Game over.");
 		if (score <= highscore) {
 			gamemode = GAMEMODE_START_SCREEN;
 		} else {
 			highscore = score;
 			writeHighscore();
-			logger.log("New highscore is " + highscore + ".");
+			Logger.getInstance().log("New highscore is " + highscore + ".");
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
 		}
 	}
@@ -363,10 +361,10 @@ public class Game {
 	 */
 	public final void addScore(final int score) {
 		if (player.isAlive()) {
-			logger.log("Player gained " + score + " points.");
+			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
-				logger.log("Player gained an extra life.");
+				Logger.getInstance().log("Player gained an extra life.");
 			}
 			this.score += score;
 		}
@@ -446,21 +444,5 @@ public class Game {
 	 */
 	public final Random getRandom() {
 		return random;
-	}
-
-	/**
-	 * log getter.
-	 * @return the log
-	 */
-	public final Logger getLog() {
-		return LOG;
-	}
-
-	/**
-	 * logger getter.
-	 * @return the logger
-	 */
-	public final game.Logger getLogger() {
-		return logger;
 	}
 }
