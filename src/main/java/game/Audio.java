@@ -2,6 +2,7 @@ package game;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,99 +15,88 @@ import javafx.scene.media.AudioClip;
  *
  */
 public class Audio {
-	// ship noises
 	/**
-	 * Audioclip for the flying sound.
+	 * Path for the location of the audiofiles.
 	 */
-	private AudioClip flyingnoise;
+	private static final String PATH = "src/main/resources/audiofiles/";
+	/**
+	 * Track number for shooting.
+	 */
+	public static final int SHOOTING = 0;
+	/**
+	 * Track number for a small asteroid exploding.
+	 */
+	public static final int SMALLEXPLOSION = 1;
+	/**
+	 * Track number for a medium asteroid exploding.
+	 */
+	public static final int MEDIUMEXPLOSION = 2;
+	/**
+	 * Track number for a large asteroid exploding.
+	 */
+	public static final int LARGEEXPLOSION = 3;
 	/**
 	 * Audioclip for the shooting noise.
 	 */
-	//private final AudioClip shootingnoise;
+	private AudioClip shooting;
 	/**
-	 * Audioclip for life up.
+	 * Audioclip for the small asteroid explosion.
 	 */
-	//private final AudioClip extralife;
-	// asteroid noises
+	private AudioClip smallexplosion;
 	/**
-	 * Audioclip for small asteroid breaking.
+	 * Audioclip for the medium asteroid explosion.
 	 */
-	//private AudioClip smallexplosion;
+	private AudioClip mediumexplosion;
 	/**
-	 * Audioclip for medium asteroid breaking.
+	 * Audioclip for the large asteroid explosion.
 	 */
-	//private AudioClip mediumexplosion;
-	/**
-	 * Audioclip for large asteroid breaking.
-	 */
-	//private AudioClip largeexplosion;
-	// background beat
-	/**
-	 * First background beat noise.
-	 */
-	//private AudioClip beat1;
-	/**
-	 * Second background beat noise.
-	 */
-	//private AudioClip beat2;
+	private AudioClip largeexplosion;
 	/**
 	 * Map with key and value to easily find tracks.
 	 */
-	private Map<String, AudioClip> tracks;
+	private ArrayList<AudioClip> tracks;
 
 	/**
 	 * Constructor for audio class.
 	 */
 	public Audio() {
-		File file = new File("audiofiles/thrust.mp3");
 		try {
-			flyingnoise = new AudioClip(file.toURI().toURL().toString());
+			shooting = new AudioClip(
+					new File(PATH + "fire.mp3").toURI().toURL().toString());
+			smallexplosion = new AudioClip(new File(
+					PATH + "bangSmall.mp3").toURI().toURL().toString());
+			mediumexplosion = new AudioClip(new File(
+					PATH + "bangMedium.mp3").toURI().toURL().toString());
+			largeexplosion = new AudioClip(new File(
+					PATH + "bangLarge.mp3").toURI().toURL().toString());
 		} catch (MalformedURLException e) {
-			flyingnoise = null;
 		}
-		/*
-		shootingnoise = new AudioClip("fire.mp3");
-		extralife = new AudioClip("extraShip.mp3");
-		smallexplosion = new AudioClip("bangSmall.mp3");
-		mediumexplosion = new AudioClip("bangMedium.mp3");
-		largeexplosion = new AudioClip("bangLarge.mp3");
-		beat1 = new AudioClip("beat1.mp3");
-		beat2 = new AudioClip("beat2.mp3");*/
-
-		
-		tracks = new HashMap<String, AudioClip>();
-		tracks.put("flying", flyingnoise);
-		/*
-		tracks.put("shooting", flyingnoise);
-		tracks.put("1up", extralife);
-		tracks.put("bangsmall", smallexplosion);
-		tracks.put("bangmedium", mediumexplosion);
-		tracks.put("banglarge", largeexplosion);
-		tracks.put("beat1", beat1);
-		tracks.put("beat2", beat2);
-		 */
+		tracks = new ArrayList<AudioClip>();
+		tracks.add(shooting);
+		tracks.add(smallexplosion);
+		tracks.add(mediumexplosion);
+		tracks.add(largeexplosion);
 	}
-	
+
 	/**
 	 * Get a track by title.
 	 * 
-	 * @param title
-	 *            title of track to be played
+	 * @param tracknumber
+	 *            number of track to be played
 	 * @return AudioClip with that title
 	 */
-	public final AudioClip get(final String title) {
-		final AudioClip track = tracks.get(title);
+	public final AudioClip get(final int tracknumber) {
+		final AudioClip track = tracks.get(tracknumber);
 		return track;
 	}
 
 	/**
 	 * Get a track by title and play it.
 	 * 
-	 * @param title
-	 *            title of track to be played
+	 * @param tracknumber
+	 *            number of track to be played
 	 */
-	public final void play(final String title) {
-		final AudioClip track = tracks.get(title);
-		track.play();
+	public final void play(final int tracknumber) {
+		get(tracknumber).play();
 	}
 }

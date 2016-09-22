@@ -32,6 +32,10 @@ public class Game {
 	 */
 	private final Spawner spawner;
 	/**
+	 * Handles audio for game.
+	 */
+	private final Audio audio;
+	/**
 	 * List of all entities currently in the game.
 	 */
 	private final List<AbstractEntity> entities;
@@ -129,6 +133,7 @@ public class Game {
 		createList = new ArrayList<>();
 		random = new Random();
 		highscore = readHighscore();
+		audio = new Audio();
 	}
 	
 	/**
@@ -430,5 +435,13 @@ public class Game {
 	 */
 	public final Random getRandom() {
 		return random;
+	}
+	
+	/**
+	 * Audio getter.
+	 * @return the audio
+	 */
+	public final Audio getAudio() {
+		return audio;
 	}
 }

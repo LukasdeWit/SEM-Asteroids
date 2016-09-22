@@ -1,4 +1,5 @@
 package entity;
+import game.Audio;
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -299,6 +300,8 @@ public class Player extends AbstractEntity {
 					getThisGame());
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
+			
+			getThisGame().getAudio().play(Audio.SHOOTING);
 		}
 	}
 
