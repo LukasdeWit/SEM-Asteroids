@@ -150,6 +150,7 @@ public class Game {
 				currentHighscore = Long.parseLong(sCurrentLine);
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
 			Logger.getInstance().log("unable to read highscore from file");
 		}
 		return currentHighscore;
@@ -167,6 +168,7 @@ public class Game {
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 			Logger.getInstance().log("unable to write highscore to file");
 		}
 	}

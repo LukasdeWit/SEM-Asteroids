@@ -20,5 +20,4 @@ bin/
 
 # maven generated files
 target/
-src/main/resources/log.txt
-src/main/resources/highscore.txt
+log.txt

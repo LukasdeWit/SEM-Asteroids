@@ -35,14 +35,14 @@ public final class Logger {
 	 * Private constructor of Logger.
 	 */
 	private Logger() {
-		file = new File("src/main/resources/log.txt");
+		file = new File("log.txt");
 		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS");
 		try {
 			fos = new FileOutputStream(file.getAbsoluteFile());
 		} catch (FileNotFoundException e) {
 			fos = null;
-			//this wouldn't work
-			//log("unable to write log to file");
+			e.printStackTrace();
+			System.out.println("unable to write log to file");
 		}
 	}
 	
@@ -68,8 +68,8 @@ public final class Logger {
 			fos.write(string.getBytes(StandardCharsets.UTF_8));
 			fos.flush();
 		} catch (IOException e) {
-			//this wouldn't work
-			//log("unable to write log to file");
+			e.printStackTrace();
+			System.out.println("unable to write log to file");
 		}
 	}
 }
