@@ -72,12 +72,14 @@ public class Spawner {
 	public final void update() {
 		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
 			spawnSaucer();
+			Logger.getInstance().log("Saucer was spawned");
 			startSaucerTime = System.currentTimeMillis();
 		}
 		if (thisGame.enemies() != 0) {
 			startRest = System.currentTimeMillis();
 		}
 		if (startRest == 0) {
+			Logger.getInstance().log("Wave: " + (level + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS);
 			startRest = System.currentTimeMillis();
 			wave++;
@@ -86,6 +88,7 @@ public class Spawner {
 			if (extra > MAX_EXTRA) {
 				extra = MAX_EXTRA;
 			}
+			Logger.getInstance().log("Wave: " + (level + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS + extra);
 			wave++;
 			startRest = System.currentTimeMillis();
@@ -134,6 +137,7 @@ public class Spawner {
 					(float) (Math.random() - .5) * ASTEROID_SPEED, 
 					(float) (Math.random() - .5) * ASTEROID_SPEED, thisGame));
 		}
+		Logger.getInstance().log(times + " asteroids were spawned.");
 	}
 
 	/**
