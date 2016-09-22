@@ -79,7 +79,7 @@ public class Spawner {
 			startRest = System.currentTimeMillis();
 		}
 		if (startRest == 0) {
-			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS);
 			startRest = System.currentTimeMillis();
 			wave++;
@@ -88,7 +88,7 @@ public class Spawner {
 			if (extra > MAX_EXTRA) {
 				extra = MAX_EXTRA;
 			}
-			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS + extra);
 			wave++;
 			startRest = System.currentTimeMillis();
