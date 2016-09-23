@@ -358,6 +358,8 @@ public class Game {
 			break;
 		case GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN:
 			Display.highscoreScreen(survivalHighscore, gc);
+		default:
+			//do nothing
 		}
 	}
 
