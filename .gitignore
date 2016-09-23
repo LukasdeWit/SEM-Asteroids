@@ -14,9 +14,11 @@ SEM-Asteroids.iws
 
 # eclipse project files
 .classpath
+.checkstyle
 .project
 .settings/
 bin/
 
 # maven generated files
 target/
+log.txt

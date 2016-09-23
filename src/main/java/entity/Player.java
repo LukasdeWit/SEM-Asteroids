@@ -1,9 +1,11 @@
 package entity;
 import game.Game;
+import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is the player of the game.
@@ -103,6 +105,10 @@ public class Player extends AbstractEntity {
 	 * Maximum amount of friendly bullets simultaneously in a game.
 	 */
 	private static final int MAX_BULLETS = 4;
+	/**
+	 * Player has a chance of 1 in this number of dying in hyperspace.
+	 */
+	private static final int CHANCE_OF_DYING = 25;
 	
 
 	/**
@@ -272,12 +278,19 @@ public class Player extends AbstractEntity {
 	 * Method to handle hyperspace mechanic.
 	 */
 	private void goHyperspace() {
+		final Random random = new Random();
+		if (random.nextInt(CHANCE_OF_DYING) == 0) {
+			onHit();
+			Logger.getInstance().log("Player died in hyperspace.");
+		} else {
+		Logger.getInstance().log("Player went into hyperspace.");
 		setX((float) (getThisGame().getScreenX() * Math.random()));
 		setY((float) (getThisGame().getScreenY() * Math.random()));
 		setDX(0);
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
+		}
 	}
 
 	/**
@@ -314,10 +327,12 @@ public class Player extends AbstractEntity {
 			} else if (!invincible()) {
 				getThisGame().destroy(e2);
 				onHit();
+				Logger.getInstance().log("Player was hit by an asteroid.");
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			onHit();
+			Logger.getInstance().log("Player was hit by a bullet.");
 		}
 	}
 

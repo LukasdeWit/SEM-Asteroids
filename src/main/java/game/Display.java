@@ -401,7 +401,7 @@ public final class Display {
 	 */
 	private static final float PRESS_START_TEXT_Y = 250;
 	/**
-	 * The y offset needed for text not to overlap on the start screen
+	 * The y offset needed for text not to overlap on the start screen.
 	 */
 	private static final float PRESS_START_OFFSET_Y = 100;
 	/**
