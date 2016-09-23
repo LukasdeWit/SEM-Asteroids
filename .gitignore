@@ -21,3 +21,4 @@ bin/
 
 # maven generated files
 target/
+log.txt
