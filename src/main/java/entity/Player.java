@@ -1,6 +1,7 @@
 package entity;
 import game.Audio;
 import game.Game;
+import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -277,6 +278,7 @@ public class Player extends AbstractEntity {
 	 * Method to handle hyperspace mechanic.
 	 */
 	private void goHyperspace() {
+		Logger.getInstance().log("Player went into hyperspace.");
 		setX((float) (getThisGame().getScreenX() * Math.random()));
 		setY((float) (getThisGame().getScreenY() * Math.random()));
 		setDX(0);
@@ -321,10 +323,12 @@ public class Player extends AbstractEntity {
 			} else if (!invincible()) {
 				getThisGame().destroy(e2);
 				onHit();
+				Logger.getInstance().log("Player was hit by an asteroid.");
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			onHit();
+			Logger.getInstance().log("Player was hit by a bullet.");
 		}
 	}
 
