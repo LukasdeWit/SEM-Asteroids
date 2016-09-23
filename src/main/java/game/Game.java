@@ -218,6 +218,7 @@ public class Game {
 		default:
 			gamemode = GAMEMODE_START_SCREEN;
 		}
+		Display.wave(spawner.getWave(), gc);
 	}
 	
 	/**
