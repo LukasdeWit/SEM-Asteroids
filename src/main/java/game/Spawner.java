@@ -110,8 +110,9 @@ public class Spawner {
 		if (thisGame.enemies() != 0) {
 			startRest = System.currentTimeMillis();
 		}
-		int extra = (int) (thisGame.getScore() / SURVIVAL_POINTS_PER_ASTEROID);
-		int enemies = thisGame.convertedBigEnemies();
+		final int extra = (int) (thisGame.getScore() 
+				/ SURVIVAL_POINTS_PER_ASTEROID);
+		final int enemies = thisGame.convertedBigEnemies();
 		spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
 	}
 	

@@ -129,7 +129,7 @@ public class Game {
 	 */
 	private static final int GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN = 3;
 	/**
-	 * the highscore screen.
+	 * the pause screen.
 	 */
 	private static final int GAMEMODE_PAUSE_SCREEN = 4;
 	/**
@@ -375,8 +375,9 @@ public class Game {
 			break;
 		case GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN:
 			Display.highscoreScreen(survivalHighscore, gc);
+			break;
 		default:
-			//do nothing
+			gamemode = GAMEMODE_START_SCREEN;
 		}
 	}
 
@@ -432,9 +433,11 @@ public class Game {
 		case GAMEMODE_ARCADE:
 			score = arcadeScore;
 			highscore = arcadeHighscore;
+			break;
 		case GAMEMODE_SURVIVAL:
 			score = survivalScore;
 			highscore = survivalHighscore;
+			break;
 		default:
 			score = 0;
 			highscore = 1;
