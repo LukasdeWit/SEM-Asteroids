@@ -9,3 +9,5 @@ after_success:
 
 jdk:
 - oraclejdk8
+notifications:
+  slack: ti2206-2016:6BVqEMfsb6q9gJ1ziorrKQVc

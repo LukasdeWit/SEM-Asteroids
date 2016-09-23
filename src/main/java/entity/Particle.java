@@ -12,9 +12,9 @@ import javafx.scene.paint.Color;
  */
 public class Particle extends AbstractEntity {
 	/**
-	 * The time of birth of this particle in miliseconds.
+	 * The time of birth of this particle in milliseconds.
 	 */
-	private long birthTime;
+	private final long birthTime;
 	/**
 	 * The draw size of the particle.
 	 */
@@ -38,7 +38,7 @@ public class Particle extends AbstractEntity {
 	 * @param x - x coordinate
 	 * @param y - y coordinate
 	 * @param dX - horizontal speed
-	 * @param dY - verticle speed
+	 * @param dY - vertical speed
 	 * @param thisGame - the game this particle belongs to
 	 */
 	public Particle(final float x, final float y, 
@@ -76,9 +76,13 @@ public class Particle extends AbstractEntity {
 				thisGame);
 	}
 
+	/**
+	 * draw a particle on the screen.
+	 * @param gc graphics context the current graphics context
+	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
-		float radius = getRadius();
+		final float radius = getRadius();
 		gc.setFill(Color.GREY);
 		gc.fillOval(getX() - radius / SIZE, 
 				getY() - radius / SIZE, 
@@ -87,16 +91,26 @@ public class Particle extends AbstractEntity {
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void collide(final AbstractEntity e2) {
+	public final void collide(final AbstractEntity e2) {
 		//no-op
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		//no-op
 	}
 
+	/**
+	 * update the location of this particle, called every tick.
+	 * @param input list of current key inputs this tick (not used)
+	 */
 	@Override
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());

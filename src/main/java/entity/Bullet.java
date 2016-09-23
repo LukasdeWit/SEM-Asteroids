@@ -2,6 +2,7 @@ package entity;
 import java.util.List;
 
 import game.Game;
+import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -19,13 +20,17 @@ public class Bullet extends AbstractEntity {
 	 */
 	private boolean friendly;
 	/**
-	 * Lifetime of a bullet in miliseconds.
+	 * Lifetime of a bullet in milliseconds.
 	 */
 	private static final long LIFETIME = 2000;
 	/**
 	 * Draw size of bullet.
 	 */
 	private static final float SIZE = 1.5f;
+	/**
+	 * Radius of bullet.
+	 */
+	private static final float RADIUS = 2;
 
 	/**
 	 * Constructor for the bullet class.
@@ -39,7 +44,7 @@ public class Bullet extends AbstractEntity {
 	public Bullet(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
-		setRadius(2);
+		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
 	}
@@ -48,6 +53,7 @@ public class Bullet extends AbstractEntity {
 	 * Calculate new position of Bullet.
 	 * @param input - the pressed keys
 	 */
+	@Override
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
@@ -81,11 +87,15 @@ public class Bullet extends AbstractEntity {
 		if (e2 instanceof Asteroid) {
 			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
+			Logger.getInstance().log("Asteroid was hit by a bullet.");
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void onDeath() {
+	public final void onDeath() {
 		//no-op
 	}
 
