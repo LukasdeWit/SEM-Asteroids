@@ -41,6 +41,18 @@ public class Audio {
 	 */
 	public static final int LIFEUP = 4;
 	/**
+	 * Track number for small ufo.
+	 */
+	public static final int UFOSMALL = 5;
+	/**
+	 * Track number for big ufo.
+	 */
+	public static final int UFOBIG = 6;
+	/**
+	 * Track number for rocket boost.
+	 */
+	public static final int BOOST = 7;
+	/**
 	 * Map with key and value to easily find tracks.
 	 */
 	private final List<AudioClip> tracks;
@@ -61,12 +73,26 @@ public class Audio {
 					PATH + "bangLarge.mp3").toURI().toURL().toString());
 			final AudioClip lifeup = new AudioClip(new File(
 					PATH + "extraShip.mp3").toURI().toURL().toString());
+			final AudioClip ufosmall = new AudioClip(new File(
+					PATH + "ufoSmall.mp3").toURI().toURL().toString());
+			final AudioClip ufobig = new AudioClip(new File(
+					PATH + "ufoBig.mp3").toURI().toURL().toString());
+			final AudioClip boost = new AudioClip(new File(
+					PATH + "thrust.mp3").toURI().toURL().toString());
+
+			
+			ufosmall.setCycleCount(AudioClip.INDEFINITE);
+			ufobig.setCycleCount(AudioClip.INDEFINITE);
+			boost.setCycleCount(AudioClip.INDEFINITE);
 			
 			tracks.add(shooting);
 			tracks.add(smallexplosion);
 			tracks.add(mediumexplosion);
 			tracks.add(largeexplosion);
 			tracks.add(lifeup);
+			tracks.add(ufosmall);
+			tracks.add(ufobig);
+			tracks.add(boost);
 		} catch (MalformedURLException e) {
 		}
 	}
@@ -78,7 +104,7 @@ public class Audio {
 	 *            number of track to be played
 	 * @return AudioClip with that title
 	 */
-	private AudioClip get(final int tracknumber) {
+	public final AudioClip get(final int tracknumber) {
 		return tracks.get(tracknumber);
 	}
 
@@ -89,6 +115,18 @@ public class Audio {
 	 *            number of track to be played
 	 */
 	public final void play(final int tracknumber) {
-		get(tracknumber).play();
+		if (!get(tracknumber).isPlaying()) {
+			get(tracknumber).play();
+		}
+	}
+	
+	/**
+	 * Get a track by title and stop it from playing.
+	 * @param tracknumber number of track to be stopped
+	 */
+	public final void stop(final int tracknumber) {
+		if (get(tracknumber).isPlaying()) {
+			get(tracknumber).stop();
+		}
 	}
 }

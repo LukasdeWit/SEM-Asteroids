@@ -1,5 +1,6 @@
 package entity;
 
+import game.Audio;
 import game.Game;
 import game.Spawner;
 import javafx.scene.canvas.GraphicsContext;
@@ -159,6 +160,11 @@ public class Saucer extends AbstractEntity {
 		wrapAround();
 		changeDirection();
 		shoot();
+		if (isSmall()) {
+			getThisGame().getAudio().play(Audio.UFOSMALL);
+		} else {
+			getThisGame().getAudio().play(Audio.UFOBIG);
+		}
 	}
 
 	/**
@@ -307,6 +313,13 @@ public class Saucer extends AbstractEntity {
 		}
 		getThisGame().addScore(points);
 		Particle.explosion(getX(), getY(), getThisGame());
+		
+		Audio audio = getThisGame().getAudio();
+		if (isSmall()) {
+			audio.stop(Audio.UFOSMALL);
+		} else {
+			audio.stop(Audio.UFOBIG);
+		}
 	}
 	
 	/**
@@ -315,5 +328,13 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static float getSmallRadius() {
 		return SMALL_RADIUS;
+	}
+	
+	/**
+	 * Check the size of the ufo.
+	 * @return true if small
+	 */
+	public final boolean isSmall() {
+		return getRadius() == SMALL_RADIUS;
 	}
 }

@@ -202,6 +202,9 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
+			getThisGame().getAudio().play(Audio.BOOST);
+		} else {
+			getThisGame().getAudio().stop(Audio.BOOST);
 		}
 
 		if (input.contains("DOWN") || input.contains("S")) {
