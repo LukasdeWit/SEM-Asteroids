@@ -165,6 +165,7 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
+		getThisGame().getAudio().play(Audio.LIFEUP);
 	}
 
 	/**
