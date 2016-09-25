@@ -113,6 +113,7 @@ public class Game {
 	 */
 	public Game(final GraphicsContext gc) {
 		this.gc = gc;
+		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
 		spawner = new Spawner(this);
@@ -139,6 +140,7 @@ public class Game {
 		score = 0;
 		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
+		Logger.getInstance().log("Game started.");
 	}
 	
 	/**
@@ -166,6 +168,7 @@ public class Game {
 			default:
 				gamemode = GAMEMODE_START_SCREEN;
 		}
+		Display.wave(spawner.getWave(), gc);
 	}
 	
 	/**
@@ -176,9 +179,11 @@ public class Game {
 		if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
+			Logger.getInstance().log("Game unpaused.");
 			gamemode = GAMEMODE_GAME;
 		} else if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
+			Logger.getInstance().log("Game stopped.");
 			startGame();
 			gamemode = GAMEMODE_GAME;
 		}
@@ -207,10 +212,12 @@ public class Game {
 	private void updateGame(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
-			startGame();
+			Logger.getInstance().log("Game stopped.");
+			gamemode = GAMEMODE_START_SCREEN;
 		} else if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
+			Logger.getInstance().log("Game paused.");
 			gamemode = GAMEMODE_PAUSE_SCREEN;
 		}
 		for (final AbstractEntity e : entities) {
@@ -240,6 +247,7 @@ public class Game {
 	 */
 	private void updateHighscoreScreen(final List<String> input) {
 		if (input.contains("R")) {
+			Logger.getInstance().log("Game stopped.");
 			startGame();
 		}
 		Display.highscoreScreen(highscoreStore.getHighestScore(), gc);
@@ -286,11 +294,13 @@ public class Game {
 	 */
 	public final void over() {
 		destroy(player);
+		Logger.getInstance().log("Game over.");
 		if (score <= highscoreStore.getHighestScore()) {
 			gamemode = GAMEMODE_START_SCREEN;
 		} else {
 			highscoreStore.addHighScore(score);
 			highscoreStore.writeScores();
+			Logger.getInstance().log("New highscore is " + highscore + ".");
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
 		}
 	}
@@ -300,9 +310,11 @@ public class Game {
 	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
-		if (player != null && player.isAlive()) {
+		if (player.isAlive()) {
+			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
+				Logger.getInstance().log("Player gained an extra life.");
 			}
 			this.score += score;
 		}
