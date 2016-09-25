@@ -26,9 +26,21 @@ import game.Game;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class AsteroidTest {
+	/**
+	 * Starting value of x.
+	 */
 	private static final float X_START = 1;
+	/**
+	 * Starting value of y.
+	 */
 	private static final float Y_START = 2;
+	/**
+	 * Starting value of dX.
+	 */
 	private static final float DX_START = 3;
+	/**
+	 * Starting value of dY.
+	 */
 	private static final float DY_START = 4;
 	/**
 	 * Test Asteroid.

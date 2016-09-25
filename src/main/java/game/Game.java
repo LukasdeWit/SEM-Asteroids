@@ -413,7 +413,7 @@ public class Game {
 	 * getter for screenX.
 	 * @return - screenX
 	 */
-	public final float getScreenX() {
+	public float getScreenX() {
 		return screenX;
 	}
 

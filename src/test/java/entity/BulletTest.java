@@ -93,7 +93,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide() {
-		Asteroid e2 = new Asteroid(X_START,Y_START,DX_START,DY_START,mockGame);
+		Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START ,mockGame);
 		bill.collide(e2);
 		verify(mockGame, times(2)).destroy(Mockito.any(AbstractEntity.class));
 	}
@@ -103,7 +103,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide2() {
-		Player e2 = new Player(X_START,Y_START,0,0,mockGame);
+		Player e2 = new Player(X_START, Y_START, 0, 0, mockGame);
 		bill.collide(e2);
 		verify(mockGame, never()).destroy(Mockito.any(AbstractEntity.class));
 	}
