@@ -1,5 +1,6 @@
 package entity;
 import game.Game;
+import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -145,13 +146,12 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void collide(final AbstractEntity e2) {
-		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			getThisGame().destroy(this);
-			((Player) e2).onHit();
-		} else if (e2 instanceof Bullet) {
+		if (e2 instanceof Bullet) {
 			getThisGame().destroy(this);
 			getThisGame().destroy(e2);
+			Logger.getInstance().log("Asteroid was hit by a bullet.");
 		}
+		//this is already done in Bullet.
 	}
 
 	/**

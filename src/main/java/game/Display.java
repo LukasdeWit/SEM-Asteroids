@@ -440,6 +440,18 @@ public final class Display {
 	 * Size of lives display.
 	 */
 	private static final float LIVES_SIZE = 2;
+	/**
+	 * X coordinate of wave display.
+	 */
+	private static final float WAVE_X = 10;
+	/**
+	 * Y coordinate of wave display.
+	 */
+	private static final float WAVE_Y = 470;
+	/**
+	 * Size of wave display.
+	 */
+	private static final float WAVE_SIZE = 2;
 	
 	
 	/**
@@ -541,6 +553,18 @@ public final class Display {
 		}
 		final String livesString = outputBuffer.toString();
 		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, gc);
+	}
+
+	/**
+	 * Display the wave.
+	 * @param wave - the current wave
+	 * @param gc - graphics context
+	 */
+	public static void wave(final int wave, final GraphicsContext gc) {
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		final String waveString = "Wave " + wave;
+		draw(WAVE_X, WAVE_Y, WAVE_SIZE, waveString, gc);
 	}
 	
 	/**
