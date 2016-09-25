@@ -13,7 +13,7 @@ public class Bullet extends AbstractEntity {
 	/**
 	 * Time of creation.
 	 */
-	private final long birthTime;
+	private long birthTime;
 	/**
 	 * true if this bullet is shot by the player, 
 	 * false if it can hit the player.
@@ -110,5 +110,12 @@ public class Bullet extends AbstractEntity {
 				getY() - radius / SIZE,
 				radius * SIZE,
 				radius * SIZE);
+	}
+
+	/**
+	 * @param birthTime the birthTime to set
+	 */
+	public void setBirthTime(final long birthTime) {
+		this.birthTime = birthTime;
 	}
 }

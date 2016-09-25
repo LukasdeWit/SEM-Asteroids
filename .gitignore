@@ -22,3 +22,6 @@ bin/
 # maven generated files
 target/
 log.txt
+.checkstyle
+*.checkstyle
+*.project

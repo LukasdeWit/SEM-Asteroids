@@ -327,7 +327,7 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void destroy(final AbstractEntity e) {
+	public void destroy(final AbstractEntity e) {
 		destroyList.add(e);
 	}
 
@@ -338,7 +338,7 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void create(final AbstractEntity e) {
+	public void create(final AbstractEntity e) {
 		createList.add(e);
 	}
 
@@ -362,7 +362,7 @@ public class Game {
 	 * Adds score to this.score.
 	 * @param score - the score to be added.
 	 */
-	public final void addScore(final int score) {
+	public void addScore(final int score) {
 		if (player.isAlive()) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
