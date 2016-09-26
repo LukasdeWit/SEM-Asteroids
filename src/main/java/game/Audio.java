@@ -3,9 +3,7 @@ package game;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javafx.scene.media.AudioClip;
 
@@ -19,7 +17,7 @@ public class Audio {
 	/**
 	 * Path for the location of the audiofiles.
 	 */
-	private static final String PATH = "src/main/resources/audiofiles/";
+	protected final String PATH = "src/main/resources/audiofiles/";
 	/**
 	 * Track number for shooting.
 	 */
@@ -55,13 +53,21 @@ public class Audio {
 	/**
 	 * Map with key and value to easily find tracks.
 	 */
-	private final List<AudioClip> tracks;
+	private List<AudioClip> tracks;
+	/**
+	 * Class that regulates the background track.
+	 */
+	private BackgroundAudio backgroundtrack;
+
+	
 
 	/**
 	 * Constructor for audio class.
 	 */
 	public Audio() {
 		tracks = new ArrayList<AudioClip>();
+		backgroundtrack = new BackgroundAudio(this);
+		
 		try {
 			final AudioClip shooting = new AudioClip(new File(
 					PATH + "fire.mp3").toURI().toURL().toString());
@@ -94,6 +100,7 @@ public class Audio {
 			tracks.add(ufobig);
 			tracks.add(boost);
 		} catch (MalformedURLException e) {
+			Logger.getInstance().log("failed to initialize audio");
 		}
 	}
 
@@ -115,8 +122,9 @@ public class Audio {
 	 *            number of track to be played
 	 */
 	public final void play(final int tracknumber) {
-		if (!get(tracknumber).isPlaying()) {
-			get(tracknumber).play();
+		final AudioClip track = get(tracknumber);
+		if (!track.isPlaying()) {
+			track.play();
 		}
 	}
 	
@@ -128,5 +136,13 @@ public class Audio {
 		if (get(tracknumber).isPlaying()) {
 			get(tracknumber).stop();
 		}
+	}
+	
+	/**
+	 * Pass the background track on to the appropriate class.
+	 * @param enemies amount of enemies in the game.
+	 */
+	public final void backgroundTrack(final int enemies) {
+		backgroundtrack.update(enemies);
 	}
 }
