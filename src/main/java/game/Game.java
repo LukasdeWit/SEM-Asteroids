@@ -361,6 +361,7 @@ public class Game {
 			Logger.getInstance().log("New highscore is " + highscore + ".");
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
 		}
+		audio.mute();
 	}
 
 	/**

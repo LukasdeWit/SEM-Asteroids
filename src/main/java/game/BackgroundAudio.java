@@ -40,18 +40,18 @@ public class BackgroundAudio {
 	/**
 	 * Constructor for backgroundaudio.
 	 * 
-	 * @param audio
-	 *            audio class this works for
+	 * @param audiopath
+	 *            path where the audio is located
 	 */
-	public BackgroundAudio(final Audio audio) {
+	public BackgroundAudio(final String audiopath) {
 		bg = true;
 		time = System.currentTimeMillis();
 		interval = BASELINE;
 
 		try {
-			boop1 = new AudioClip(new File(audio.PATH 
+			boop1 = new AudioClip(new File(audiopath 
 					+ "beat1.mp3").toURI().toURL().toString());
-			boop2 = new AudioClip(new File(audio.PATH 
+			boop2 = new AudioClip(new File(audiopath
 					+ "beat2.mp3").toURI().toURL().toString());
 		} catch (MalformedURLException e) {
 			Logger.getInstance().log("failed to initialize background audio");
@@ -75,7 +75,7 @@ public class BackgroundAudio {
 				bg = true;
 			}
 			// make sure to avoid divide by 0
-			// reset interval when there are no enemies left
+			// music slows down again when there are no more enemies left
 			if (enemies > 1) {
 				if (BASELINE / enemies < interval) {
 				interval = BASELINE / enemies;

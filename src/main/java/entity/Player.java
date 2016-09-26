@@ -144,6 +144,9 @@ public class Player extends AbstractEntity {
 	 * or is hit by the bullet of an saucer.
 	 */
 	public final void onHit() {
+		// boost sound will not stop if player dies mid-flight
+		getThisGame().getAudio().stop(Audio.BOOST);
+		
 		lives--;
 		if (lives <= 0) {
 			// we are out of lives, call gameover
@@ -285,6 +288,7 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
+		getThisGame().getAudio().play(Audio.TELEPORT);
 	}
 
 	/**

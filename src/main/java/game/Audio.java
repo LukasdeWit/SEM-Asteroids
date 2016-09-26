@@ -17,7 +17,7 @@ public class Audio {
 	/**
 	 * Path for the location of the audiofiles.
 	 */
-	protected final String PATH = "src/main/resources/audiofiles/";
+	private static final String PATH = "src/main/resources/audiofiles/";
 	/**
 	 * Track number for shooting.
 	 */
@@ -51,13 +51,21 @@ public class Audio {
 	 */
 	public static final int BOOST = 7;
 	/**
+	 * Track number for hyperspace.
+	 */
+	public static final int TELEPORT = 8;
+	/**
 	 * Map with key and value to easily find tracks.
 	 */
-	private List<AudioClip> tracks;
+	private final List<AudioClip> tracks;
 	/**
 	 * Class that regulates the background track.
 	 */
-	private BackgroundAudio backgroundtrack;
+	private final BackgroundAudio bgtrack;
+	/**
+	 * Volume of rocket boost.
+	 */
+	private static final double BOOSTVOLUME = 35;
 
 	
 
@@ -66,7 +74,7 @@ public class Audio {
 	 */
 	public Audio() {
 		tracks = new ArrayList<AudioClip>();
-		backgroundtrack = new BackgroundAudio(this);
+		bgtrack = new BackgroundAudio(PATH);
 		
 		try {
 			final AudioClip shooting = new AudioClip(new File(
@@ -78,18 +86,22 @@ public class Audio {
 			final AudioClip largeexplosion = new AudioClip(new File(
 					PATH + "bangLarge.mp3").toURI().toURL().toString());
 			final AudioClip lifeup = new AudioClip(new File(
-					PATH + "extraShip.mp3").toURI().toURL().toString());
+					PATH + "lifeup.wav").toURI().toURL().toString());
 			final AudioClip ufosmall = new AudioClip(new File(
 					PATH + "ufoSmall.mp3").toURI().toURL().toString());
 			final AudioClip ufobig = new AudioClip(new File(
 					PATH + "ufoBig.mp3").toURI().toURL().toString());
 			final AudioClip boost = new AudioClip(new File(
-					PATH + "thrust.mp3").toURI().toURL().toString());
+					PATH + "boost.wav").toURI().toURL().toString());
+			final AudioClip teleport = new AudioClip(new File(
+					PATH + "teleport.wav").toURI().toURL().toString());
 
 			
 			ufosmall.setCycleCount(AudioClip.INDEFINITE);
 			ufobig.setCycleCount(AudioClip.INDEFINITE);
 			boost.setCycleCount(AudioClip.INDEFINITE);
+			
+			boost.setVolume(BOOSTVOLUME);
 			
 			tracks.add(shooting);
 			tracks.add(smallexplosion);
@@ -99,6 +111,7 @@ public class Audio {
 			tracks.add(ufosmall);
 			tracks.add(ufobig);
 			tracks.add(boost);
+			tracks.add(teleport);
 		} catch (MalformedURLException e) {
 			Logger.getInstance().log("failed to initialize audio");
 		}
@@ -143,6 +156,15 @@ public class Audio {
 	 * @param enemies amount of enemies in the game.
 	 */
 	public final void backgroundTrack(final int enemies) {
-		backgroundtrack.update(enemies);
+		bgtrack.update(enemies);
+	}
+	
+	/**
+	 * Silence all currently playing tracks.
+	 */
+	public final void mute() {
+		for (int i = 0; i < tracks.size(); i++) {
+			stop(i);
+		}
 	}
 }
