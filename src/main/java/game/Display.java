@@ -1,7 +1,10 @@
 package game;
 
+import game.highscore.model.HighScore;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.List;
 
 /**
  * This class displays all numbers, letters and lives.
@@ -458,8 +461,9 @@ public final class Display {
 	 * private constructor for utility class.
 	 */
 	private Display() {
-	      //not called
-	   }
+		//no-op
+	}
+
 	/**
 	 * Display the score.
 	 * @param score - score
@@ -511,8 +515,8 @@ public final class Display {
 	 * @param gc - the graphics context to draw to
 	 * @param highscore - the highscore
 	 */
-	public static void highscoreScreen(final long highscore,
-			final GraphicsContext gc) {
+	public static void newHighscoreScreen(final long highscore,
+										  final GraphicsContext gc) {
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(1);
 		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
@@ -521,6 +525,20 @@ public final class Display {
 				"press r to restart", gc);
 		draw(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, SMALL_TEXT_SIZE, 
 				"your new highscore is " + highscore, gc);
+	}
+
+	public static void highscoreScreen(final List<HighScore> highScores,
+									   final GraphicsContext gc){
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+
+		final int TEMP_HEIGH = (int) HIGHSCORE_SIZE;
+		final int TEMP_PADDING_TOP = (int) HIGHSCORE_SIZE;
+		final float numEntries = Game.getCanvasSize() - TEMP_PADDING_TOP * 2 / TEMP_HEIGH;
+
+		for (int i = 0; i < numEntries; i++) {
+			// TODO: 22-9-16 do drawing of the things
+		}
 	}
 	
 	/**
@@ -617,7 +635,6 @@ public final class Display {
 			gc.strokeLine(
 					stroke[0] * size + x, stroke[1] * size + y, 
 					stroke[2] * size + x, stroke[1 + 2] * size + y);
-				//3 is not a magic number in this case.
 		}
 	}
 }

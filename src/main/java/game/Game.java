@@ -250,7 +250,7 @@ public class Game {
 			Logger.getInstance().log("Game stopped.");
 			startGame();
 		}
-		Display.highscoreScreen(highscoreStore.getHighestScore(), gc);
+		Display.newHighscoreScreen(highscoreStore.getHighestScore(), gc);
 	}
 
 	/**
@@ -300,7 +300,7 @@ public class Game {
 		} else {
 			highscoreStore.addHighScore(score);
 			highscoreStore.writeScores();
-			Logger.getInstance().log("New highscore is " + highscore + ".");
+			Logger.getInstance().log("New highscore is " + highscoreStore.getHighestScore() + ".");
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
 		}
 	}
