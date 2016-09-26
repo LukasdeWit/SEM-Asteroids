@@ -29,7 +29,7 @@ public final class Logger {
 	/**
 	 * the singleton instance.
 	 */
-	private static Logger instance = null;
+	private static final Logger instance = new Logger();
 	
 	/**
 	 * Private constructor of Logger.
@@ -51,9 +51,6 @@ public final class Logger {
 	 * @return the logger.
 	 */
 	public static Logger getInstance() {
-		if (instance == null) {
-			instance = new Logger();
-		}
 		return instance;
 	}
 	
