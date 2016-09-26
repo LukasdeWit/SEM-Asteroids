@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import game.Logger;
 import game.highscore.model.HighScore;
 
 import java.io.*;
@@ -14,8 +15,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,11 +22,7 @@ import java.util.stream.Stream;
  * Created by douwe on 20-9-16.
  */
 public class HighscoreStore {
-    /**
-     * Class logger.
-     */
-    private static final Logger LOG =
-            Logger.getLogger(HighscoreStore.class.getName());
+
     /**
      * the local list of known highscores.
      */
@@ -65,7 +60,8 @@ public class HighscoreStore {
 
             return Lists.newArrayList(result);
         } catch (IOException e) {
-            LOG.log(Level.ALL, "was unable to read the highscores file", e);
+            Logger.getInstance().log("was unable to read the highscores file");
+            e.printStackTrace();
             if (highScores == null) {
                 highScores = Lists.newArrayList();
             }
@@ -132,8 +128,9 @@ public class HighscoreStore {
                     new HighScore[highScores.size()]), HighScore[].class,
                     writer);
         } catch (IOException e) {
-            LOG.log(Level.ALL, "an error occurred whilst trying to write "
-                    + "the highscore to file", e);
+            Logger.getInstance().log("an error occurred whilst trying to write "
+                    + "the highscore to file");
+            e.printStackTrace();
         }
     }
 
