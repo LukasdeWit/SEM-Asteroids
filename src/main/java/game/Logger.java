@@ -27,9 +27,9 @@ public final class Logger {
 	 */
 	private final SimpleDateFormat sdf;
 	/**
-	 * the singleton instance.
+	 * the singleton INSTANCE.
 	 */
-	private static final Logger instance = new Logger();
+	private static final Logger INSTANCE = new Logger();
 	
 	/**
 	 * Private constructor of Logger.
@@ -47,11 +47,11 @@ public final class Logger {
 	}
 	
 	/**
-	 * getter for the instance.
+	 * getter for the INSTANCE.
 	 * @return the logger.
 	 */
 	public static Logger getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 	
 	/**
