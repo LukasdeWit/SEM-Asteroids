@@ -22,9 +22,9 @@ public class Spawner {
 	 */
 	private long startRest;
 	/**
-	 * The spawn level of the game.
+	 * The spawn wave of the game.
 	 */
-	private int level;
+	private int wave;
 	/**
 	 * Time between saucers in ms.
 	 */
@@ -63,7 +63,7 @@ public class Spawner {
 		thisGame = game;
 		startSaucerTime = System.currentTimeMillis();
 		startRest = 0;
-		level = 0;
+		wave = 0;
 	}
 
 	/**
@@ -79,18 +79,18 @@ public class Spawner {
 			startRest = System.currentTimeMillis();
 		}
 		if (startRest == 0) {
-			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS);
 			startRest = System.currentTimeMillis();
-			level++;
+			wave++;
 		} else if (System.currentTimeMillis() - startRest > REST) {
-			int extra = level * 2;
+			int extra = wave * 2;
 			if (extra > MAX_EXTRA) {
 				extra = MAX_EXTRA;
 			}
-			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS + extra);
-			level++;
+			wave++;
 			startRest = System.currentTimeMillis();
 		}
 	}
@@ -144,7 +144,7 @@ public class Spawner {
 	 * reset.
 	 */
 	public final void reset() {
-		level = 0;
+		wave = 0;
 		startSaucerTime = System.currentTimeMillis();
 		startRest = 0;
 	}
@@ -155,5 +155,13 @@ public class Spawner {
 	 */
 	public static long getDifficultyStep() {
 		return DIFFICULTY_STEP;
+	}
+
+	/**
+	 * getter for wave.
+	 * @return the wave
+	 */
+	public final int getWave() {
+		return wave;
 	}
 }
