@@ -2,7 +2,7 @@ package entity;
 import java.util.List;
 
 import game.Game;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Group;
 
 /**
  * This is the superclass of all entities in the game.
@@ -67,9 +67,9 @@ public abstract class AbstractEntity {
 	/**
 	 * Method that helps show the entity on the screen.
 	 * 
-	 * @param gc graphics context
+	 * @param root graphics context
 	 */
-	public abstract void draw(GraphicsContext gc);
+	public abstract void draw(Group root);
 
 	/**
 	 * Function that moves entities to the other side of the screen when they

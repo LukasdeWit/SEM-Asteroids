@@ -1,6 +1,6 @@
 package game;
 
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
 /**
@@ -465,128 +465,127 @@ public final class Display {
 	/**
 	 * Display the score.
 	 * @param score - score
-	 * @param gc - graphics context
+	 * @param root - graphics context
 	 */
-	public static void score(final long score, final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+	public static void score(final long score, final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		if (score == 0) {
-			draw(SCORE_X, SCORE_Y, SCORE_SIZE, "        00", gc);
+			draw(SCORE_X, SCORE_Y, SCORE_SIZE, "        00", root);
 		} else {
 			draw(SCORE_X, SCORE_Y, SCORE_SIZE,
-					String.format("%1$10s", score), gc);
-		}
+					String.format("%1$10s", score), root);
+		}*/
 	}
 	
 	/**
 	 * Display the score.
 	 * @param highscore - highscore
-	 * @param gc - graphics context
+	 * @param root - graphics context
 	 */
-	public static void highscore(final long highscore, 
-			final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+	public static void highscore(final long highscore, final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		if (highscore == 0) {
-			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, "        00", gc);
+			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, "        00", root);
 		} else {
 			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE,
-					String.format("%1$10s", highscore), gc);
-		}
+					String.format("%1$10s", highscore), root);
+		}*/
 	}
 	
 	/**
 	 * draw the start screen.
-	 * @param gc - the graphics context to draw to
+	 * @param root - the graphics context to draw to
 	 */
-	public static void startScreen(final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+	public static void startScreen(final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
-				"asteroids", gc);
+				"asteroids", root);
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, 
-				"press x for Arcade Mode", gc);
+				"press x for Arcade Mode", root);
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_COOP_Y, SMALL_TEXT_SIZE, 
-				"press c for Coop", gc);
+				"press c for Coop", root);*/
 	}
 	
 	/**
 	 * draw the highscore screen.
-	 * @param gc - the graphics context to draw to
+	 * @param root - the graphics context to draw to
 	 * @param highscore - the highscore
 	 */
 	public static void highscoreScreen(final long highscore,
-			final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+			final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
-				"congratulations", gc);
+				"congratulations", root);
 		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
-				"press r to restart", gc);
+				"press r to restart", root);
 		draw(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, SMALL_TEXT_SIZE, 
-				"your new highscore is " + highscore, gc);
+				"your new highscore is " + highscore, root);*/
 	}
 	
 	/**
 	 * draw the pauze screen.
-	 * @param gc - the graphics context
+	 * @param root - the graphics context
 	 */
-	public static void pauseScreen(final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+	public static void pauseScreen(final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
-				"Pauze", gc);
+				"Pauze", root);
 		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
-				"press p to start", gc);
+				"press p to start", root);*/
 	}
 	
 	/**
 	 * Display the lives.
 	 * @param lives - number of lives
-	 * @param gc - graphics context
+	 * @param root - graphics context
 	 */
-	public static void lives(final int lives, final GraphicsContext gc) {
-		if (lives <= 0) {
+	public static void lives(final int lives, final Group root) {
+		/*if (lives <= 0) {
 			return;
 		}
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+		root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		final StringBuilder outputBuffer = new StringBuilder(lives);
 		for (int i = 0; i < lives; i++) {
 		   outputBuffer.append('*');
 		}
 		final String livesString = outputBuffer.toString();
-		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, gc);
+		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, root);*/
 	}
 	/**
 	 * draw lives for coop.
 	 * @param lives - lives of player one
-	 * @param gc - Graphics context
+	 * @param root - Graphics context
 	 */
-	public static void livesTwo(final int lives, final GraphicsContext gc) {
-		if (lives <= 0) {
+	public static void livesTwo(final int lives, final Group root) {
+		/*if (lives <= 0) {
 			return;
 		}
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+		root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		final StringBuilder outputBuffer = new StringBuilder(lives);
 		for (int i = 0; i < lives; i++) {
 		   outputBuffer.append('*');
 		}
 		final String livesString = outputBuffer.toString();
-		draw(LIVES_TWO_X, LIVES_Y, LIVES_SIZE, livesString, gc);
+		draw(LIVES_TWO_X, LIVES_Y, LIVES_SIZE, livesString, root);*/
 	}
 
 	/**
 	 * Display the wave.
 	 * @param wave - the current wave
-	 * @param gc - graphics context
+	 * @param root - graphics context
 	 */
-	public static void wave(final int wave, final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+	public static void wave(final int wave, final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		final String waveString = "Wave " + wave;
-		draw(WAVE_X, WAVE_Y, WAVE_SIZE, waveString, gc);
+		draw(WAVE_X, WAVE_Y, WAVE_SIZE, waveString, root);*/
 	}
 	
 	/**
@@ -595,29 +594,29 @@ public final class Display {
 	 * @param y - upper y coordinate
 	 * @param size - the size (1 equals 4 by 6 pixels)
 	 * @param string - the string you want to draw 
-	 * @param gc - the graphics context
+	 * @param root - the graphics context
 	 * (any non-letter, -number, -space will be drawn as a life)
 	 */
 	public static void draw(final float x, final float y, 
-			final float size, final String string, final GraphicsContext gc) {
+			final float size, final String string, final Group root) {
 		final char[] charList = string.toCharArray();
 		for (int i = 0; i < charList.length; i++) {
 			final char c = charList[i];
 			if (c == ' ') {
-				drawChar(x + i * X_OFFSET * size, y, size, SPACE, gc);
+				drawChar(x + i * X_OFFSET * size, y, size, SPACE, root);
 			} else {
 				final int cInt = (int) c;
 				if (cInt >= (int) 'a' && cInt <= (int) 'z') {
 					drawChar(x + i * X_OFFSET * size, y, 
-							size, LETTERS[cInt - (int) 'a'], gc);
+							size, LETTERS[cInt - (int) 'a'], root);
 				} else if (cInt >= (int) 'A' && cInt <= (int) 'Z') {
 					drawChar(x + i * X_OFFSET * size, y, 
-							size, LETTERS[cInt - (int) 'A'], gc);
+							size, LETTERS[cInt - (int) 'A'], root);
 				} else if (cInt >= (int) '0' && cInt <= (int) '9') {
 					drawChar(x + i * X_OFFSET * size, y, 
-							size, NUMBERS[cInt - (int) '0'], gc);
+							size, NUMBERS[cInt - (int) '0'], root);
 				} else {
-					drawChar(x + i * X_OFFSET * size, y, size, LIFE, gc);
+					drawChar(x + i * X_OFFSET * size, y, size, LIFE, root);
 				}
 			}
 		}
@@ -629,17 +628,17 @@ public final class Display {
 	 * @param y - upper y coordinate
 	 * @param size - the size (1 equals 4 by 6 pixels)
 	 * @param figure - the figure you want to draw  
-	 * @param gc - the graphics context
+	 * @param root - the graphics context
 	 * (any non-letter, -number, -space will be drawn as a life)
 	 */
 	private static void drawChar(final float x, final float y, 
 			final float size, final float[][] figure, 
-			final GraphicsContext gc) {
-		for (final float[] stroke : figure) {
-			gc.strokeLine(
+			final Group root) {
+		/*for (final float[] stroke : figure) {
+			root.strokeLine(
 					stroke[0] * size + x, stroke[1] * size + y, 
 					stroke[2] * size + x, stroke[1 + 2] * size + y);
 				//3 is not a magic number in this case.
-		}
+		}*/
 	}
 }

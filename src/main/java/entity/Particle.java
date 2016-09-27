@@ -2,7 +2,7 @@ package entity;
 import java.util.List;
 
 import game.Game;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
 /**
@@ -78,16 +78,16 @@ public class Particle extends AbstractEntity {
 
 	/**
 	 * draw a particle on the screen.
-	 * @param gc graphics context the current graphics context
+	 * @param root graphics context the current graphics context
 	 */
 	@Override
-	public final void draw(final GraphicsContext gc) {
+	public final void draw(final Group root) {
 		final float radius = getRadius();
-		gc.setFill(Color.GREY);
-		gc.fillOval(getX() - radius / SIZE, 
+		/*root.setFill(Color.GREY);
+		root.fillOval(getX() - radius / SIZE, 
 				getY() - radius / SIZE, 
 				radius * SIZE, 
-				radius * SIZE);
+				radius * SIZE);*/
 		
 	}
 

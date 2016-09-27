@@ -3,7 +3,7 @@ import java.util.List;
 
 import game.Game;
 import game.Logger;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
 /**
@@ -104,13 +104,13 @@ public class Bullet extends AbstractEntity {
 	 * Display bullet on screen.
 	 */
 	@Override
-	public final void draw(final GraphicsContext gc) {
-		final float radius = getRadius();
-		gc.setFill(Color.WHITE);
-		gc.fillOval(getX() - radius / SIZE,
+	public final void draw(final Group root) {
+		/*final float radius = getRadius();
+		root.setFill(Color.WHITE);
+		root.fillOval(getX() - radius / SIZE,
 				getY() - radius / SIZE,
 				radius * SIZE,
-				radius * SIZE);
+				radius * SIZE);*/
 	}
 
 	/**

@@ -1,11 +1,10 @@
 package entity;
-import game.Game;
-import game.Logger;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-
 import java.util.List;
 import java.util.Random;
+
+import game.Game;
+import game.Logger;
+import javafx.scene.Group;
 
 /**
  * Class that represents an Asteroid.
@@ -186,9 +185,9 @@ public class Asteroid extends AbstractEntity {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void draw(final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
+	public final void draw(final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(1);
 		double[] xShape = new double[SHAPE_LINES];
 		double[] yShape = new double[SHAPE_LINES];
 		if (shape == 0) {
@@ -207,6 +206,6 @@ public class Asteroid extends AbstractEntity {
 				yShape[i] = YSHAPE2[i] * (getRadius() * SIZE) + getY();
 			}
 		}
-		gc.strokePolygon(xShape, yShape, SHAPE_LINES);
+		root.strokePolygon(xShape, yShape, SHAPE_LINES);*/
 	}
 }

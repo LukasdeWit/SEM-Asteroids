@@ -16,8 +16,9 @@ import entity.Asteroid;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * This class defines everything within the game.
@@ -26,6 +27,7 @@ import javafx.scene.paint.Color;
  *
  */
 public class Game {
+	private final Group root;
 	private final Gamestate gamestate;
 	/**
 	 * The player of this game.
@@ -61,10 +63,6 @@ public class Game {
 	 */
 	private final float screenY;
 	/**
-	 * the GraphicsContext, needed to draw things.
-	 */
-	private final GraphicsContext gc;
-	/**
 	 * current score.
 	 */
 	private long score;
@@ -84,12 +82,10 @@ public class Game {
 
 	/**
 	 * Constructor for a new game.
-	 * 
-	 * @param gc
-	 *            - the GraphicsContext of the canvas
+	 * @param root - the root of the group of the canvas
 	 */
-	public Game(final GraphicsContext gc) {
-		this.gc = gc;
+	public Game(final Group root) {
+		this.root = root;
 		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
@@ -171,10 +167,14 @@ public class Game {
 	 *            - all keys pressed at the time of update
 	 */
 	public final void update(final List<String> input) {
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, screenX, screenY);
+		root.getChildren().clear();
+		Rectangle r = new Rectangle(0, 0, screenX, screenY);
+		r.setFill(Color.BLACK);
+		root.getChildren().add(r);
+		//root.setFill(Color.BLACK);
+		//root.fillRect(0, 0, screenX, screenY);
 		gamestate.update(input);
-		Display.wave(spawner.getWave(), gc);
+		Display.wave(spawner.getWave(), root);
 	}	
 	
 	/**
@@ -187,7 +187,7 @@ public class Game {
 		for (final AbstractEntity e : entities) {
 			e.update(input);
 			checkCollision(e);
-			e.draw(gc);
+			e.draw(root);
 		}
 		spawner.update();
 		destroyList.forEach(AbstractEntity::onDeath);
@@ -196,12 +196,12 @@ public class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		Display.score(score, gc);
-		Display.highscore(highscore, gc);
+		Display.score(score, root);
+		Display.highscore(highscore, root);
 		if (gamestate.isCoop()) {
-			Display.livesTwo(playerTwo.getLives(), gc);
+			Display.livesTwo(playerTwo.getLives(), root);
 		}
-		Display.lives(player.getLives(), gc);
+		Display.lives(player.getLives(), root);
 		
 	}
 
@@ -374,13 +374,6 @@ public class Game {
 	}
 
 	/**
-	 * @return the gc
-	 */
-	public final GraphicsContext getGc() {
-		return gc;
-	}
-
-	/**
 	 * @return the highscore
 	 */
 	public final long getHighscore() {
@@ -392,5 +385,12 @@ public class Game {
 	 */
 	public final Gamestate getGamestate() {
 		return gamestate;
+	}
+
+	/**
+	 * @return the root
+	 */
+	public final Group getRoot() {
+		return root;
 	}
 }

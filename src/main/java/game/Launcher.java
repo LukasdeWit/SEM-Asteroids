@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -10,10 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
 
 /**
  * This class is the main launcher of the game.
@@ -48,7 +49,7 @@ public class Launcher extends Application {
 
 		// set up the scene
 		final Group root = new Group();
-		final Scene scene = new Scene(root);
+		final Scene scene = new Scene(root, 500, 500, Color.BLACK);
 		stage.setScene(scene);
 
 		// set up the canvas
@@ -87,7 +88,7 @@ public class Launcher extends Application {
 		});
 
 		// Make a new Game
-		final Game thisGame = new Game(gc);
+		final Game thisGame = new Game(root);
 
 		// set up the timing control
 		final Timeline renderLoop = new Timeline();

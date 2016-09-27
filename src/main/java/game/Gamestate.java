@@ -54,7 +54,7 @@ public class Gamestate {
 		switch(state) {
 		case STATE_START_SCREEN:
 			startScreen(input);
-			Display.startScreen(game.getGc());
+			Display.startScreen(game.getRoot());
 			break;
 		case STATE_GAME:
 			game.updateGame(input);
@@ -62,10 +62,10 @@ public class Gamestate {
 			break;
 		case STATE_HIGHSCORE_SCREEN:
 			highscoreScreen(input);
-			Display.highscoreScreen(game.getHighscore(), game.getGc());
+			Display.highscoreScreen(game.getHighscore(), game.getRoot());
 			break;
 		case STATE_PAUSE_SCREEN:
-			Display.pauseScreen(game.getGc());
+			Display.pauseScreen(game.getRoot());
 			pauseScreen(input);
 			break;
 		default:

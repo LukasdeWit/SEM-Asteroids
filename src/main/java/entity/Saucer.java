@@ -1,13 +1,13 @@
 package entity;
 
+import java.util.List;
+import java.util.Random;
+
 import game.Game;
 import game.Logger;
 import game.Spawner;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Class that represents a Saucer.
@@ -266,20 +266,20 @@ public class Saucer extends AbstractEntity {
 	 * Display UFO on screen.
 	 */
 	@Override
-	public final void draw(final GraphicsContext gc) {
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(.5);
+	public final void draw(final Group root) {
+		/*root.setStroke(Color.WHITE);
+		root.setLineWidth(.5);
 		double[] xShape = new double[SHAPE_LINES];
 		double[] yShape = new double[SHAPE_LINES];
 		for (int i = 0; i < SHAPE_LINES; i++) {
 			xShape[i] = X_SHAPE_0[i] * (getRadius() * SIZE) + getX();
 			yShape[i] = Y_SHAPE_0[i] * (getRadius() * SIZE) + getY();
 		}
-		gc.strokePolygon(xShape, yShape, SHAPE_LINES);
+		root.strokePolygon(xShape, yShape, SHAPE_LINES);
 		for (int i = 0; i < 2; i++) {
-			gc.strokeLine(xShape[HOR_LINES[i][1]], yShape[HOR_LINES[i][1]],
+			root.strokeLine(xShape[HOR_LINES[i][1]], yShape[HOR_LINES[i][1]],
 					xShape[HOR_LINES[i][0]], yShape[HOR_LINES[i][1]]);
-		}
+		}*/
 	}
 
 	/**

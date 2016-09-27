@@ -1,11 +1,13 @@
 package entity;
-import game.Game;
-import game.Logger;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-
 import java.util.List;
 import java.util.Random;
+
+import game.Game;
+import game.Logger;
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 /**
  * This class is the player of the game.
@@ -111,6 +113,21 @@ public class Player extends AbstractEntity {
 	 */
 	private static final int CHANCE_OF_DYING = 25;
 	private static final float SPAWN_OFFSET = 40;
+	private static final float[] PLAYER_TWO_CIRCLE = {-11, 0, 9};
+	private static final float[][] PLAYER_TWO_LINES = {
+			{-11,  0,  7,  0},
+			{  2,  0,  8,  6},
+			{  2,  0,  8, -6},
+			{  0,  6, 18,  6},
+			{  0, -6, 18, -6}
+	};
+	private static final float PLAYER_TWO_SIZE = .5f;
+	private static final float[][] PLAYER_ONE_LINES = {
+			{10, 0, -8, 8},
+			{-8, 8, -8, -8},
+			{-8, -8, 10, 0}
+	};
+	private static final float PLAYER_ONE_SIZE = .5f;
 	
 	
 
@@ -418,38 +435,61 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * Display Player on screen.
+	 * draw the player.
+	 * @param root - Group
 	 */
 	@Override
-	public final void draw(final GraphicsContext gc) {
-		final double s1 = Math.sin(rotation);
-		final double c1 = Math.cos(rotation);
-
-		final double s2 = Math.sin(rotation + (Math.PI - QUARTER_PI));
-		final double c2 = Math.cos(rotation + (Math.PI - QUARTER_PI));
-
-		final double s3 = Math.sin(rotation + (Math.PI + QUARTER_PI));
-		final double c3 = Math.cos(rotation + (Math.PI + QUARTER_PI));
-
-		gc.setStroke(Color.WHITE);
-		if (invincible()
-				&& (System.currentTimeMillis() + invincibleMS) 
-				% RESPAWN_FLICKER_TIME * 2 < RESPAWN_FLICKER_TIME) {
-			gc.setStroke(Color.GREY);
+	public final void draw(final Group root) {
+		if (playerTwo) {
+			drawTwo(root);
+		} else {
+			drawOne(root);
 		}
-		if (hyperspace()) {
-			gc.setStroke(Color.BLACK);
+	}
+	
+	/**
+	 * Display Player two on screen.
+	 * @param root - Group
+	 */
+	public final void drawTwo(final Group root) {
+		Group group = new Group();
+		for (float[] f : PLAYER_TWO_LINES) {
+			Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
+					f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
+			l.setStroke(Color.WHITE);
+			l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
+			group.getChildren().add(l);
 		}
-		gc.setLineWidth(1);
-		gc.strokePolygon(
-				new double[] { getX() + SIZE * c1, 
-				getX() + SIZE * c2, 
-				getX() + SIZE * c3 },
-				new double[] { getY() - SIZE * s1, 
-				getY() - SIZE * s2, 
-				getY() - SIZE * s3 }, TRIANGLE_CORNERS);
-
-		if (boost) {
+		Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE, 
+				PLAYER_TWO_CIRCLE[1] * PLAYER_TWO_SIZE, PLAYER_TWO_CIRCLE[2] * PLAYER_TWO_SIZE);
+		c.setFill(Color.WHITE);
+		group.getChildren().add(c);
+		group.setRotate(Math.toDegrees(-rotation) + 180);
+		group.setTranslateX(getX());
+		group.setTranslateY(getY());
+		getThisGame().getRoot().getChildren().add(group);
+	}
+	
+	/**
+	 * Display Player one on screen.
+	 * @param root - Group
+	 */
+	public final void drawOne(final Group root) {
+		Group group = new Group();
+		for (float[] f : PLAYER_ONE_LINES) {
+			Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
+					f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
+			l.setStroke(Color.WHITE);
+			l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
+			group.getChildren().add(l);
+		}
+		group.setRotate(Math.toDegrees(-rotation));
+		group.setTranslateX(getX());
+		group.setTranslateY(getY());
+		
+		getThisGame().getRoot().getChildren().add(group);
+		
+		/*if (boost) {
 			final double s4 = Math.sin(rotation + (Math.PI - EIGHTH_PI));
 			final double c4 = Math.cos(rotation + (Math.PI - EIGHTH_PI));
 
@@ -458,7 +498,7 @@ public class Player extends AbstractEntity {
 
 			final double s6 = Math.sin(rotation + (Math.PI));
 			final double c6 = Math.cos(rotation + (Math.PI));
-			gc.strokePolygon(new double[] { 
+			root.strokePolygon(new double[] { 
 					getX() + (SIZE - 1) * c4, 
 					getX() + (SIZE - 1) * c5, 
 					getX() + (SIZE + 2) * c6 },
@@ -467,7 +507,7 @@ public class Player extends AbstractEntity {
 					getY() - (SIZE - 1) * s5, 
 					getY() - (SIZE + 2) * s6 }, TRIANGLE_CORNERS);
 			boost = false;
-		}
+		}*/
 	}
 
 	/**
