@@ -26,6 +26,7 @@ import javafx.scene.paint.Color;
  *
  */
 public class Game {
+	private final Gamestate gamestate;
 	/**
 	 * The player of this game.
 	 */
@@ -63,10 +64,6 @@ public class Game {
 	 */
 	private final GraphicsContext gc;
 	/**
-	 * the start time of the current game.
-	 */
-	private long restartTime;
-	/**
 	 * current score.
 	 */
 	private long score;
@@ -74,47 +71,15 @@ public class Game {
 	 * current highscore.
 	 */
 	private long highscore;
-	/**
-	 * current gamemode.
-	 */
-	private int gamemode;
-	/**
-	 * the time at which the game was paused.
-	 */
-	private long pauseTime;
 	
 	/**
 	 * Size of canvas.
 	 */
 	private static final float CANVAS_SIZE = 500;
 	/**
-	 * Minimal restart time.
-	 */
-	private static final long MINIMAL_RESTART_TIME = 300;
-	/**
 	 * Number of points needed to gain a life.
 	 */
 	private static final int LIFE_SCORE = 10000;
-	/**
-	 * the startscreen gamemode.
-	 */
-	private static final int GAMEMODE_START_SCREEN = 0;
-	/**
-	 * the "game" gamemode.
-	 */
-	private static final int GAMEMODE_GAME = 1;
-	/**
-	 * the highscore screen.
-	 */
-	private static final int GAMEMODE_HIGHSCORE_SCREEN = 2;
-	/**
-	 * the highscore screen.
-	 */
-	private static final int GAMEMODE_PAUSE_SCREEN = 3;
-	/**
-	 * Minimal pause time.
-	 */
-	private static final long MINIMAL_PAUSE_TIME = 300;
 
 	/**
 	 * Constructor for a new game.
@@ -127,6 +92,7 @@ public class Game {
 		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
+		gamestate = new Gamestate(this);
 		spawner = new Spawner(this);
 		entities = new ArrayList<>();
 		destroyList = new ArrayList<>();
@@ -177,8 +143,7 @@ public class Game {
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public final void startGame() {
-		restartTime = System.currentTimeMillis();
-		pauseTime = restartTime;
+		gamestate.start();
 		entities.clear();
 		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
 		entities.add(player);
@@ -187,7 +152,6 @@ public class Game {
 			writeHighscore();
 		}
 		score = 0;
-		gamemode = GAMEMODE_START_SCREEN;
 		spawner.reset();
 		Logger.getInstance().log("Game started.");
 	}
@@ -201,59 +165,9 @@ public class Game {
 	public final void update(final List<String> input) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenX, screenY);
-		
-		switch(gamemode) {
-		case GAMEMODE_START_SCREEN:
-			updateStartScreen(input);
-			break;
-		case GAMEMODE_GAME:
-			updateGame(input);
-			break;
-		case GAMEMODE_HIGHSCORE_SCREEN:
-			updateHighscoreScreen(input);
-			break;
-		case GAMEMODE_PAUSE_SCREEN:
-			updatePauseScreen(input);
-			break;
-		default:
-			gamemode = GAMEMODE_START_SCREEN;
-		}
+		gamestate.update(input);
 		Display.wave(spawner.getWave(), gc);
-	}
-	
-	/**
-	 * handles the update logic of the pause screen.
-	 * @param input - input of keyboard
-	 */
-	private void updatePauseScreen(final List<String> input) {
-		if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game unpaused.");
-			gamemode = GAMEMODE_GAME;
-		} else if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			startGame();
-			gamemode = GAMEMODE_GAME;
-		}
-		Display.pauseScreen(gc);
-	}
-	
-
-	/**
-	 * handles the update logic of the start screen.
-	 * 
-	 * @param input
-	 * 			  - all keys pressed at the time of update
-	 */
-	private void updateStartScreen(final List<String> input) {
-		if (input.contains("SPACE")) {
-			startGame();
-			gamemode = GAMEMODE_GAME;
-		}
-		Display.startScreen(gc);
-	}
+	}	
 	
 	/**
 	 * handles the update logic of the game itself.
@@ -261,17 +175,7 @@ public class Game {
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateGame(final List<String> input) {
-		if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			gamemode = GAMEMODE_START_SCREEN;
-		} else if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game paused.");
-			gamemode = GAMEMODE_PAUSE_SCREEN;
-		}
+	public final void updateGame(final List<String> input) {
 		for (final AbstractEntity e : entities) {
 			e.update(input);
 			checkCollision(e);
@@ -287,20 +191,6 @@ public class Game {
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
 		Display.lives(player.getLives(), gc);
-	}
-	
-	/**
-	 * handles the update logic of the highscore screen.
-	 * 
-	 * @param input
-	 * 			  - all keys pressed at the time of update
-	 */
-	private void updateHighscoreScreen(final List<String> input) {
-		if (input.contains("R")) {
-			Logger.getInstance().log("Game stopped.");
-			startGame();
-		}
-		Display.highscoreScreen(highscore, gc);
 	}
 
 	/**
@@ -349,12 +239,12 @@ public class Game {
 		destroy(player);
 		Logger.getInstance().log("Game over.");
 		if (score <= highscore) {
-			gamemode = GAMEMODE_START_SCREEN;
+			gamestate.setState(Gamestate.getStateStartScreen());
 		} else {
 			highscore = score;
 			writeHighscore();
 			Logger.getInstance().log("New highscore is " + highscore + ".");
-			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
+			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}
 	}
 
@@ -447,5 +337,19 @@ public class Game {
 	 */
 	public final Random getRandom() {
 		return random;
+	}
+
+	/**
+	 * @return the gc
+	 */
+	public final GraphicsContext getGc() {
+		return gc;
+	}
+
+	/**
+	 * @return the highscore
+	 */
+	public final long getHighscore() {
+		return highscore;
 	}
 }
