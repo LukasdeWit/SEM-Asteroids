@@ -19,6 +19,7 @@ public class Bullet extends AbstractEntity {
 	 * false if it can hit the player.
 	 */
 	private boolean friendly;
+	private Player player;
 	/**
 	 * Lifetime of a bullet in milliseconds.
 	 */
@@ -110,5 +111,19 @@ public class Bullet extends AbstractEntity {
 				getY() - radius / SIZE,
 				radius * SIZE,
 				radius * SIZE);
+	}
+
+	/**
+	 * @return the player
+	 */
+	public final Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * @param player the player to set
+	 */
+	public final void setPlayer(final Player player) {
+		this.player = player;
 	}
 }

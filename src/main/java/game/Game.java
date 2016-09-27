@@ -31,6 +31,7 @@ public class Game {
 	 * The player of this game.
 	 */
 	private Player player;
+	private Player playerTwo;
 	/**
 	 * The spawner of this game.
 	 */
@@ -145,8 +146,15 @@ public class Game {
 	public final void startGame() {
 		gamestate.start();
 		entities.clear();
-		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
-		entities.add(player);
+		if (gamestate.isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
+			entities.add(player);
+			entities.add(playerTwo);
+		} else {
+			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
+			entities.add(player);
+		} 
 		if (this.score > highscore) {
 			highscore = this.score;
 			writeHighscore();
@@ -190,7 +198,11 @@ public class Game {
 		createList.clear();
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
+		if (gamestate.isCoop()) {
+			Display.livesTwo(playerTwo.getLives(), gc);
+		}
 		Display.lives(player.getLives(), gc);
+		
 	}
 
 	/**
@@ -236,7 +248,17 @@ public class Game {
 	 * Game over function, destroys the player.
 	 */
 	public final void over() {
+		if (player.isAlive()) {
+			destroy(playerTwo);
+			return;
+		} else if (gamestate.isCoop() && playerTwo.isAlive()) {
+			destroy(player);
+			return;
+		}
 		destroy(player);
+		if (gamestate.isCoop()) {
+			destroy(playerTwo);
+		}
 		Logger.getInstance().log("Game over.");
 		if (score <= highscore) {
 			gamestate.setState(Gamestate.getStateStartScreen());
@@ -253,10 +275,13 @@ public class Game {
 	 * @param score - the score to be added.
 	 */
 	public final void addScore(final int score) {
-		if (player.isAlive()) {
+		if (player.isAlive() || (gamestate.isCoop() && playerTwo.isAlive())) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
+				if (gamestate.isCoop()) {
+					playerTwo.gainLife();
+				}
 				Logger.getInstance().log("Player gained an extra life.");
 			}
 			this.score += score;
@@ -265,12 +290,14 @@ public class Game {
 	
 	/**
 	 * Amount of bullets currently in game.
+	 * @param player 
 	 * @return amount of bullets
 	 */
-	public final int bullets() {
+	public final int bullets(final Player player) {
 		int bullets = 0;
 		for (final AbstractEntity entity : entities) {
-			if (entity instanceof Bullet && ((Bullet) entity).isFriendly()) {
+			if (entity instanceof Bullet && ((Bullet) entity).isFriendly() 
+					&& ((Bullet) entity).getPlayer().equals(player)) {
 				bullets++;
 			}
 		}
@@ -332,6 +359,13 @@ public class Game {
 	}
 
 	/**
+	 * @return the playerTwo
+	 */
+	public final Player getPlayerTwo() {
+		return playerTwo;
+	}
+
+	/**
 	 * random getter.
 	 * @return the random
 	 */
@@ -351,5 +385,12 @@ public class Game {
 	 */
 	public final long getHighscore() {
 		return highscore;
+	}
+
+	/**
+	 * @return the gamestate
+	 */
+	public final Gamestate getGamestate() {
+		return gamestate;
 	}
 }

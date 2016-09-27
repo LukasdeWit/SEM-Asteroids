@@ -81,7 +81,7 @@ public class Gamestate {
 	 * @return 
 	 */
 	private void startScreen(final List<String> input) {
-		if (input.contains("SPACE")) {
+		if (input.contains("X")) {
 			mode = MODE_ARCADE;
 			state = STATE_GAME;
 			game.startGame();
@@ -179,5 +179,26 @@ public class Gamestate {
 	 */
 	public static int getStateHighscoreScreen() {
 		return STATE_HIGHSCORE_SCREEN;
+	}
+
+	/**
+	 * @return the modeArcade
+	 */
+	public static int getModeArcade() {
+		return MODE_ARCADE;
+	}
+
+	/**
+	 * @return the modeCoop
+	 */
+	public static int getModeCoop() {
+		return MODE_COOP;
+	}
+	
+	/**
+	 * @return true if coop
+	 */
+	public final boolean isCoop() {
+		return getMode() == getModeCoop();
 	}
 }

@@ -395,11 +395,12 @@ public final class Display {
 	/**
 	 * X coordinate of the "press space" text.
 	 */
-	private static final float PRESS_START_TEXT_X = 122;
+	private static final float PRESS_START_TEXT_X = 100;
 	/**
 	 * Y coordinate of the "press space" text.
 	 */
 	private static final float PRESS_START_TEXT_Y = 250;
+	private static final float PRESS_START_TEXT_COOP_Y = 280;
 	/**
 	 * X coordinate of the "congratulations" text.
 	 */
@@ -432,6 +433,7 @@ public final class Display {
 	 * X coordinate of lives display.
 	 */
 	private static final float LIVES_X = 10;
+	private static final float LIVES_TWO_X = 300;
 	/**
 	 * Y coordinate of lives display.
 	 */
@@ -503,7 +505,9 @@ public final class Display {
 		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
 				"asteroids", gc);
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, 
-				"press space to start", gc);
+				"press x for Arcade Mode", gc);
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_COOP_Y, SMALL_TEXT_SIZE, 
+				"press c for Coop", gc);
 	}
 	
 	/**
@@ -553,6 +557,24 @@ public final class Display {
 		}
 		final String livesString = outputBuffer.toString();
 		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, gc);
+	}
+	/**
+	 * draw lives for coop.
+	 * @param lives - lives of player one
+	 * @param gc - Graphics context
+	 */
+	public static void livesTwo(final int lives, final GraphicsContext gc) {
+		if (lives <= 0) {
+			return;
+		}
+		gc.setStroke(Color.WHITE);
+		gc.setLineWidth(1);
+		final StringBuilder outputBuffer = new StringBuilder(lives);
+		for (int i = 0; i < lives; i++) {
+		   outputBuffer.append('*');
+		}
+		final String livesString = outputBuffer.toString();
+		draw(LIVES_TWO_X, LIVES_Y, LIVES_SIZE, livesString, gc);
 	}
 
 	/**

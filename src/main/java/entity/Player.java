@@ -41,6 +41,7 @@ public class Player extends AbstractEntity {
 	 * true if boost is active, else false.
 	 */
 	private boolean boost;
+	private boolean playerTwo;
 	/**
 	 * Amount of lives at the start of a game.
 	 */
@@ -109,6 +110,8 @@ public class Player extends AbstractEntity {
 	 * Player has a chance of 1 in this number of dying in hyperspace.
 	 */
 	private static final int CHANCE_OF_DYING = 25;
+	private static final float SPAWN_OFFSET = 40;
+	
 	
 
 	/**
@@ -119,13 +122,15 @@ public class Player extends AbstractEntity {
 	 * @param dX velocity of Player along the X-axis.
 	 * @param dY velocity of Player along the Y-axis.
 	 * @param thisGame Game the Player exists in.
+	 * @param playerTwo - true if playertwo
 	 */
 	public Player(final float x, final float y, 
-			final float dX, final float dY, final Game thisGame) {
+			final float dX, final float dY, final Game thisGame, final boolean playerTwo) {
 		super(x, y, dX, dY, thisGame);
 		lives = STARTING_LIVES;
 		setRadius(RADIUS);
 		rotation = 0;
+		this.playerTwo = playerTwo;
 		makeInvincible(INVINCIBILITY_START_TIME);
 	}
 
@@ -156,7 +161,13 @@ public class Player extends AbstractEntity {
 			// we lose one live
 
 			// respawn the player
-			setX(getThisGame().getScreenX() / 2);
+			if (playerTwo) {
+				setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
+			} else if (getThisGame().getGamestate().isCoop()) {
+				setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
+			} else {
+				setX(getThisGame().getScreenX() / 2);
+			}
 			setY(getThisGame().getScreenY() / 2);
 			setDX(0);
 			setDY(0);
@@ -170,6 +181,21 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
+		if (lives == 1) {
+			if (playerTwo) {
+				setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
+			} else if (getThisGame().getGamestate().isCoop()) {
+				setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
+			} else {
+				setX(getThisGame().getScreenX() / 2);
+			}
+			setY(getThisGame().getScreenY() / 2);
+			setDX(0);
+			setDY(0);
+			rotation = 0;
+			makeInvincible(INVINCIBILITY_START_TIME);
+			getThisGame().create(this);
+		}
 	}
 
 	/**
@@ -183,7 +209,11 @@ public class Player extends AbstractEntity {
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
-			keyHandler(input);
+			if (getThisGame().getGamestate().isCoop()) {
+				keyHandlerTwo(input);
+			} else {
+				keyHandler(input);
+			}
 		}
 	}
 
@@ -214,6 +244,56 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("SPACE")) {
 			fire();
+		}
+	}
+	
+	/**
+	 * key handler for coop.
+	 * 
+	 * @param input List containing the keyboard input
+	 */
+	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
+	private void keyHandlerTwo(final List<String> input) {
+		if (playerTwo) {
+			if (input.contains("LEFT") || !(input.contains("RIGHT"))) {
+				turnLeft();
+			}
+	
+			if (input.contains("RIGHT") || !(input.contains("LEFT"))) {
+				turnRight();
+			}
+	
+			if (input.contains("UP")) {
+				accelerate();
+			}
+	
+			if (input.contains("DOWN")) {
+				goHyperspace();
+			}
+	
+			if (input.contains("ENTER")) {
+				fire();
+			}
+		} else {
+			if (input.contains("A") || !(input.contains("D"))) {
+				turnLeft();
+			}
+	
+			if (input.contains("D") || !(input.contains("A"))) {
+				turnRight();
+			}
+	
+			if (input.contains("W")) {
+				accelerate();
+			}
+	
+			if (input.contains("S")) {
+				goHyperspace();
+			}
+	
+			if (input.contains("SPACE")) {
+				fire();
+			}
 		}
 	}
 
@@ -305,11 +385,12 @@ public class Player extends AbstractEntity {
 	 */
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
-				&& getThisGame().bullets() < MAX_BULLETS) {
+				&& getThisGame().bullets(this) < MAX_BULLETS) {
 			final Bullet b = new Bullet(getX(), getY(),
 					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
 					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
 					getThisGame());
+			b.setPlayer(this);
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
 		}
@@ -403,5 +484,12 @@ public class Player extends AbstractEntity {
 
 	public final int getLives() {
 		return lives;
+	}
+
+	/**
+	 * @return the spawnOffset
+	 */
+	public static float getSpawnOffset() {
+		return SPAWN_OFFSET;
 	}
 }
