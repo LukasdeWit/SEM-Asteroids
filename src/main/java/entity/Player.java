@@ -3,9 +3,13 @@ import game.Game;
 import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import abstractpowerup.AbstractPowerup;
 
 /**
  * This class is the player of the game.
@@ -70,7 +74,7 @@ public class Player extends AbstractEntity {
 	 */
 	private static final int HYPERSPACE_TIME = 1000;
 	/**
-	 * Time between shots in milliseconds.
+	 * Base ime between shots in milliseconds.
 	 */
 	private static final long TIME_BETWEEN_SHOTS = 200;
 	/**
@@ -102,14 +106,37 @@ public class Player extends AbstractEntity {
 	 */
 	private static final float MAX_SPEED = 4;
 	/**
-	 * Maximum amount of friendly bullets simultaneously in a game.
+	 * Base maximum amount of friendly bullets simultaneously in a game.
 	 */
 	private static final int MAX_BULLETS = 4;
 	/**
 	 * Player has a chance of 1 in this number of dying in hyperspace.
 	 */
 	private static final int CHANCE_OF_DYING = 25;
-	
+	/**
+	 * List of current powerups.
+	 */
+	private ArrayList<AbstractPowerup> powerups;
+	/**
+	 * The number of bullets the player can actually have fired at once is this number times MAX_BULLETS.
+	 */
+	private int BULLET_NUMBER_MULTIPLIER;
+	/**
+	 * The actual speed with which the player can fire bullets is this number times TIME_BETWEEN_SHOTS.
+	 */
+	private int BULLET_FIRE_RATE_MULTIPLIER;
+	/**
+	 * The number of asteroids/UFOs the player's bullets can pierce.
+	 */
+	private int BULLET_PIERCE_RATE;
+	/**
+	 * The number of shields the player currently has.
+	 */
+	private int SHIELDING;
+	/**
+	 * Whether the player can multishot.
+	 */
+	private boolean multishot;
 
 	/**
 	 * Constructor for the Player class.
@@ -127,6 +154,12 @@ public class Player extends AbstractEntity {
 		setRadius(RADIUS);
 		rotation = 0;
 		makeInvincible(INVINCIBILITY_START_TIME);
+		setPowerups(new ArrayList<AbstractPowerup>());
+		BULLET_NUMBER_MULTIPLIER = 1;
+		BULLET_FIRE_RATE_MULTIPLIER = 1;
+		BULLET_PIERCE_RATE = 1;
+		SHIELDING = 0;
+		multishot = false;
 	}
 
 	/**
@@ -148,20 +181,25 @@ public class Player extends AbstractEntity {
 	 * or is hit by the bullet of an saucer.
 	 */
 	public final void onHit() {
-		lives--;
-		if (lives <= 0) {
-			// we are out of lives, call gameover
-			getThisGame().over();
-		} else {
-			// we lose one live
-
-			// respawn the player
-			setX(getThisGame().getScreenX() / 2);
-			setY(getThisGame().getScreenY() / 2);
-			setDX(0);
-			setDY(0);
-			rotation = 0;
-			makeInvincible(INVINCIBILITY_START_TIME);
+		if(SHIELDING < 1){
+			lives--;
+			if (lives <= 0) {
+				// we are out of lives, call gameover
+				getThisGame().over();
+			} else {
+				// we lose one live
+				
+				// respawn the player
+				setX(getThisGame().getScreenX() / 2);
+				setY(getThisGame().getScreenY() / 2);
+				setDX(0);
+				setDY(0);
+				rotation = 0;
+				makeInvincible(INVINCIBILITY_START_TIME);
+			}
+		}
+		else{
+			SHIELDING--;
 		}
 	}
 
@@ -304,8 +342,8 @@ public class Player extends AbstractEntity {
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
-				&& getThisGame().bullets() < MAX_BULLETS) {
+		if (System.currentTimeMillis() - lastShot > (TIME_BETWEEN_SHOTS*BULLET_FIRE_RATE_MULTIPLIER)
+				&& getThisGame().bullets() < (MAX_BULLETS*BULLET_NUMBER_MULTIPLIER)) {
 			final Bullet b = new Bullet(getX(), getY(),
 					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
 					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
@@ -403,5 +441,17 @@ public class Player extends AbstractEntity {
 
 	public final int getLives() {
 		return lives;
+	}
+
+	public List getPowerups() {
+		return powerups;
+	}
+
+	public void setPowerups(ArrayList powerups) {
+		this.powerups = powerups;
+	}
+	
+	public void givePowerup(AbstractPowerup powerToAdd){
+		this.powerups.add(powerToAdd);
 	}
 }
