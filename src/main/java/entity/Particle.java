@@ -1,5 +1,5 @@
 package entity;
-import java.util.List;
+import java.util.Set;
 
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
@@ -109,10 +109,10 @@ public class Particle extends AbstractEntity {
 
 	/**
 	 * update the location of this particle, called every tick.
-	 * @param input list of current key inputs this tick (not used)
-	 */
+     * @param input list of current key inputs this tick (not used)
+     */
 	@Override
-	public final void update(final List<String> input) {
+	public final void update(final Set<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		wrapAround();

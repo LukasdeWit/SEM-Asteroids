@@ -1,5 +1,5 @@
 package entity;
-import java.util.List;
+import java.util.Set;
 
 import game.Game;
 import javafx.scene.canvas.GraphicsContext;
@@ -58,11 +58,11 @@ public abstract class AbstractEntity {
 
 	/**
 	 * Method to calculate new position of entity.
-	 * 
+	 *
 	 * @param input
 	 *            the keyboard input of the player
 	 */
-	public abstract void update(List<String> input);
+	public abstract void update(Set<String> input);
 
 	/**
 	 * Method that helps show the entity on the screen.

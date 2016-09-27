@@ -1,5 +1,5 @@
 package entity;
-import java.util.List;
+import java.util.Set;
 
 import game.Game;
 import game.Logger;
@@ -51,10 +51,10 @@ public class Bullet extends AbstractEntity {
 
 	/**
 	 * Calculate new position of Bullet.
-	 * @param input - the pressed keys
-	 */
+     * @param input - the pressed keys
+     */
 	@Override
-	public final void update(final List<String> input) {
+	public final void update(final Set<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		wrapAround();

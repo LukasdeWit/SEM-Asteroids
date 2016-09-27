@@ -459,7 +459,8 @@ public final class Display {
 	 */
 	private Display() {
 	      //not called
-	   }
+	}
+
 	/**
 	 * Display the score.
 	 * @param score - score

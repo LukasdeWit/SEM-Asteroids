@@ -4,8 +4,8 @@ import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This class is the player of the game.
@@ -177,7 +177,7 @@ public class Player extends AbstractEntity {
 	 * @param input - the pressed keys
 	 */
 	@Override
-	public final void update(final List<String> input) {
+	public final void update(final Set<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		slowDown();
@@ -189,11 +189,11 @@ public class Player extends AbstractEntity {
 
 	/**
 	 * Method that translates keyboard input into player character movement.
-	 * 
+	 *
 	 * @param input List containing the keyboard input
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
-	private void keyHandler(final List<String> input) {
+	private void keyHandler(final Set<String> input) {
 		if (input.contains("LEFT") || input.contains("A")
 				|| !(input.contains("RIGHT") || input.contains("D"))) {
 			turnLeft();
@@ -371,13 +371,13 @@ public class Player extends AbstractEntity {
 	private void drawBooster(final GraphicsContext gc) {
 
 		final double[] xPoints = {
-				getX() + (SIZE - 1) * Math.cos(rotation + (Math.PI - EIGHTH_PI)),
-				getX() + (SIZE - 1) * Math.cos(rotation + (Math.PI + EIGHTH_PI)),
-				getX() + (SIZE + 2) * Math.cos(rotation + (Math.PI))};
+				getX() + (SIZE - 1) * Math.cos(rotation + Math.PI - EIGHTH_PI),
+				getX() + (SIZE - 1) * Math.cos(rotation + Math.PI + EIGHTH_PI),
+				getX() + (SIZE + 2) * Math.cos(rotation + Math.PI)};
 		final double[] yPoints = {
-				getY() - (SIZE - 1) * Math.sin(rotation + (Math.PI - EIGHTH_PI)),
-				getY() - (SIZE - 1) * Math.sin(rotation + (Math.PI + EIGHTH_PI)),
-				getY() - (SIZE + 2) * Math.sin(rotation + (Math.PI))};
+				getY() - (SIZE - 1) * Math.sin(rotation + Math.PI - EIGHTH_PI),
+				getY() - (SIZE - 1) * Math.sin(rotation + Math.PI + EIGHTH_PI),
+				getY() - (SIZE + 2) * Math.sin(rotation + Math.PI)};
 		gc.strokePolygon(xPoints, yPoints, TRIANGLE_CORNERS);
 		boost = false;
 	}

@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import entity.AbstractEntity;
 import entity.Asteroid;
@@ -198,7 +199,7 @@ public class Game {
 	 * @param input
 	 *            - all keys pressed at the time of update
 	 */
-	public final void update(final List<String> input) {
+	public final void update(final Set<String> input) {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, screenX, screenY);
 		
@@ -225,7 +226,7 @@ public class Game {
 	 * handles the update logic of the pause screen.
 	 * @param input - input of keyboard
 	 */
-	private void updatePauseScreen(final List<String> input) {
+	private void updatePauseScreen(final Set<String> input) {
 		if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
@@ -243,11 +244,11 @@ public class Game {
 
 	/**
 	 * handles the update logic of the start screen.
-	 * 
+	 *
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateStartScreen(final List<String> input) {
+	private void updateStartScreen(final Set<String> input) {
 		if (input.contains("SPACE")) {
 			startGame();
 			gamemode = GAMEMODE_GAME;
@@ -257,11 +258,11 @@ public class Game {
 	
 	/**
 	 * handles the update logic of the game itself.
-	 * 
+	 *
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateGame(final List<String> input) {
+	private void updateGame(final Set<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			Logger.getInstance().log("Game stopped.");
@@ -291,11 +292,11 @@ public class Game {
 	
 	/**
 	 * handles the update logic of the highscore screen.
-	 * 
+	 *
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateHighscoreScreen(final List<String> input) {
+	private void updateHighscoreScreen(final Set<String> input) {
 		if (input.contains("R")) {
 			Logger.getInstance().log("Game stopped.");
 			startGame();
