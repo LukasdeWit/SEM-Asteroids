@@ -7,17 +7,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * This class will log every action.
- * @author Kibo
  *
+ * @author Kibo
  */
+@SuppressWarnings({"PMD.SystemPrintln", "PMD.AvoidPrintStackTrace"})
 public final class Logger {
-	/**
-	 * The log file.
-	 */
-	private final File file;
 	/**
 	 * The file output stream.
 	 */
@@ -30,13 +28,13 @@ public final class Logger {
 	 * the singleton instance.
 	 */
 	private static Logger instance = null;
-	
+
 	/**
 	 * Private constructor of Logger.
 	 */
 	private Logger() {
-		file = new File("log.txt");
-		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS");
+		final File file = new File("log.txt");
+		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS", Locale.ENGLISH);
 		try {
 			fos = new FileOutputStream(file.getAbsoluteFile());
 		} catch (FileNotFoundException e) {
@@ -45,9 +43,10 @@ public final class Logger {
 			System.out.println("unable to write log to file");
 		}
 	}
-	
+
 	/**
 	 * getter for the instance.
+	 *
 	 * @return the logger.
 	 */
 	public static Logger getInstance() {
@@ -56,13 +55,14 @@ public final class Logger {
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * This method logs a message with the current time to a file.
+	 *
 	 * @param message - the message
 	 */
-	public void log(final String message) {		
-		String string = sdf.format(new Date(System.currentTimeMillis())) 
+	public void log(final String message) {
+		final String string = sdf.format(new Date(System.currentTimeMillis()))
 				+ " | " + message + "\n";
 		try {
 			fos.write(string.getBytes(StandardCharsets.UTF_8));
