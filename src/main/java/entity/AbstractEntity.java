@@ -10,32 +10,11 @@ import game.Game;
  *
  */
 public abstract class AbstractEntity {
-	/**
-	 * X coordinate of Entity.
-	 */
 	private float x;
-	/**
-	 * Y coordinate of Entity.
-	 */
 	private float y;
-	/**
-	 * Horizontal speed.
-	 */
 	private float dX;
-	/**
-	 * Vertical speed.
-	 */
 	private float dY;
-	/**
-	 * Radius of Entity, used for collision.
-	 */
 	private float radius;
-	
-
-	/**
-	 * The Game this Entity belongs to.
-	 */
-	private Game thisGame;
 
 	/**
 	 * Constructor for the Entity class.
@@ -44,15 +23,13 @@ public abstract class AbstractEntity {
 	 * @param y location of AbstractEntity along the Y-axis.
 	 * @param dX velocity of AbstractEntity along the X-axis.
 	 * @param dY velocity of AbstractEntity along the Y-axis.
-	 * @param thisGame Game the AbstractEntity exists in.
 	 */
 	public AbstractEntity(final float x, final float y,
-                          final float dX, final float dY, final Game thisGame) {
+                          final float dX, final float dY) {
 		this.setX(x);
 		this.setY(y);
 		this.setDX(dX);
 		this.setDY(dY);
-		this.setThisGame(thisGame);
 	}
 
 	/**
@@ -74,16 +51,16 @@ public abstract class AbstractEntity {
 	 */
 	public final void wrapAround() {
 		if (getX() < 0) {
-			setX(getX() + getThisGame().getScreenX());
+			setX(getX() + Game.getInstance().getScreenX());
 		}
-		if (getX() > getThisGame().getScreenX()) {
-			setX(getX() - getThisGame().getScreenX());
+		if (getX() > Game.getInstance().getScreenX()) {
+			setX(getX() - Game.getInstance().getScreenX());
 		}
 		if (getY() < 0) {
-			setY(getY() + getThisGame().getScreenY());
+			setY(getY() + Game.getInstance().getScreenY());
 		}
-		if (getY() > getThisGame().getScreenY()) {
-			setY(getY() - getThisGame().getScreenY());
+		if (getY() > Game.getInstance().getScreenY()) {
+			setY(getY() - Game.getInstance().getScreenY());
 		}
 	}
 
@@ -181,22 +158,6 @@ public abstract class AbstractEntity {
 	 */
 	public final void setRadius(final float radius) {
 		this.radius = radius;
-	}
-	
-	/**
-	 * thisGame getter.
-	 * @return thisGame
-	 */
-	public final Game getThisGame() {
-		return thisGame;
-	}
-	
-	/**
-	 * thisGame setter.
-	 * @param thisGame - thisGame
-	 */
-	public final void setThisGame(final Game thisGame) {
-		this.thisGame = thisGame;
 	}
 
 	/**

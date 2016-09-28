@@ -12,39 +12,23 @@ import javafx.scene.shape.Circle;
  *
  */
 public class Particle extends AbstractEntity {
-	/**
-	 * The time of birth of this particle in milliseconds.
-	 */
 	private final long birthTime;
-	/**
-	 * The draw size of the particle.
-	 */
+	
 	private static final float SIZE = .5f;
-	/**
-	 * The lifetime of a particle.
-	 */
 	private static final long LIFETIME = 750;
-	/**
-	 * number of particles per explosion.
-	 */
 	private static final int EXPLOSION_PARTICLES = 10;
-	/**
-	 * Speed multiplier of particle.
-	 */
 	private static final float SPEED = .75f;
 	
-
 	/**
 	 * Constructor of a particle.
 	 * @param x - x coordinate
 	 * @param y - y coordinate
 	 * @param dX - horizontal speed
 	 * @param dY - vertical speed
-	 * @param thisGame - the game this particle belongs to
 	 */
 	public Particle(final float x, final float y, 
-			final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+			final float dX, final float dY) {
+		super(x, y, dX, dY);
 		setRadius(1);
 		birthTime = System.currentTimeMillis();
 	}
@@ -73,8 +57,7 @@ public class Particle extends AbstractEntity {
 			final Game thisGame) {
 		return new Particle(x, y,
 				(float) (Math.random() - .5) * SPEED,
-				(float) (Math.random() - .5) * SPEED,
-				thisGame);
+				(float) (Math.random() - .5) * SPEED);
 	}
 
 	/**
@@ -123,7 +106,7 @@ public class Particle extends AbstractEntity {
 		setY(getY() + getDY());
 		wrapAround();
 		if (System.currentTimeMillis() - birthTime > LIFETIME) {
-			getThisGame().destroy(this);
+			Game.getInstance().destroy(this);
 		}
 	}
 }

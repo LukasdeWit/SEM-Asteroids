@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Random;
 
 import game.Game;
+import game.Gamestate;
 import game.Launcher;
 import game.Logger;
 import javafx.scene.Group;
@@ -17,91 +18,30 @@ import javafx.scene.shape.Line;
  *
  */
 public class Player extends AbstractEntity {
-	/**
-	 * Amount of lives.
-	 */
 	private int lives;
-	/**
-	 * Rotation in radians.
-	 */
 	private double rotation;
-	/**
-	 * Time of last shot.
-	 */
 	private long lastShot;
-	/**
-	 * Start time of invincibility.
-	 */
 	private long invincibleStart;
-	/**
-	 * Amount of invincible time in milliseconds.
-	 */
 	private int invincibleMS;
-	/**
-	 * Start time of hyperspace.
-	 */
 	private long hyperspaceStart;
-	/**
-	 * true if boost is active, else false.
-	 */
 	private boolean boost;
-	private boolean playerTwo;
-	/**
-	 * Amount of lives at the start of a game.
-	 */
+	private final boolean playerTwo;
+	
 	private static final int STARTING_LIVES = 3;
-	/**
-	 * Radius of Player.
-	 */
 	private static final float RADIUS = 5;
-	/**
-	 * Invincible time at the start of a game.
-	 */
 	private static final int INVINCIBILITY_START_TIME = 1000;
-	/**
-	 * Rotation in radians per tick.
-	 */
 	private static final double ROTATION_SPEED = .06;
-	/**
-	 * Acceleration in pixels per ticks squared.
-	 */
 	private static final double ACCELERATION = .04;
-	/**
-	 * Deceleration in pixels per ticks squared.
-	 */
 	private static final float DECELERATION = .01f;
-	/**
-	 * Time in milliseconds per hyperspace jump.
-	 */
 	private static final int HYPERSPACE_TIME = 1000;
-	/**
-	 * Time between shots in milliseconds.
-	 */
 	private static final long TIME_BETWEEN_SHOTS = 200;
-	/**
-	 * Speed of bullets relative to player in pixels per tick.
-	 */
 	private static final float BULLET_SPEED = 4;
-	/**
-	 * Time of flicker while respawning.
-	 */
 	private static final int RESPAWN_FLICKER_TIME = 250;
-	/**
-	 * The number of corners of a triangle.
-	 */
-	/**
-	 * Maximum speed of Player in pixels per tick.
-	 */
 	private static final float MAX_SPEED = 4;
-	/**
-	 * Maximum amount of friendly bullets simultaneously in a game.
-	 */
 	private static final int MAX_BULLETS = 4;
-	/**
-	 * Player has a chance of 1 in this number of dying in hyperspace.
-	 */
 	private static final int CHANCE_OF_DYING = 25;
 	private static final float SPAWN_OFFSET = 40;
+	
 	private static final float[] PLAYER_TWO_CIRCLE = {11, 0, 9};
 	private static final float[][] PLAYER_TWO_LINES = {
 			{11, 0, -7,  0},
@@ -116,6 +56,7 @@ public class Player extends AbstractEntity {
 			{-19, 2, -19, -2}
 	};
 	private static final float PLAYER_TWO_SIZE = .5f;
+	
 	private static final float[][] PLAYER_ONE_LINES = {
 			{10, 0, -8, 8},
 			{-8, 8, -8, -8},
@@ -136,12 +77,11 @@ public class Player extends AbstractEntity {
 	 * @param y location of Player along the Y-axis.
 	 * @param dX velocity of Player along the X-axis.
 	 * @param dY velocity of Player along the Y-axis.
-	 * @param thisGame Game the Player exists in.
 	 * @param playerTwo - true if playertwo
 	 */
 	public Player(final float x, final float y, 
-			final float dX, final float dY, final Game thisGame, final boolean playerTwo) {
-		super(x, y, dX, dY, thisGame);
+			final float dX, final float dY, final boolean playerTwo) {
+		super(x, y, dX, dY);
 		lives = STARTING_LIVES;
 		setRadius(RADIUS);
 		rotation = 0;
@@ -171,19 +111,19 @@ public class Player extends AbstractEntity {
 		lives--;
 		if (lives <= 0) {
 			// we are out of lives, call gameover
-			getThisGame().over();
+			Game.getInstance().over();
 		} else {
 			// we lose one live
 
 			// respawn the player
 			if (playerTwo) {
-				setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
-			} else if (getThisGame().getGamestate().isCoop()) {
-				setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
+				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
+			} else if (Gamestate.getInstance().isCoop()) {
+				setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
 			} else {
-				setX(getThisGame().getScreenX() / 2);
+				setX(Game.getInstance().getScreenX() / 2);
 			}
-			setY(getThisGame().getScreenY() / 2);
+			setY(Game.getInstance().getScreenY() / 2);
 			setDX(0);
 			setDY(0);
 			rotation = 0;
@@ -198,18 +138,18 @@ public class Player extends AbstractEntity {
 		lives++;
 		if (lives == 1) {
 			if (playerTwo) {
-				setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
-			} else if (getThisGame().getGamestate().isCoop()) {
-				setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
+				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
+			} else if (Gamestate.getInstance().isCoop()) {
+				setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
 			} else {
-				setX(getThisGame().getScreenX() / 2);
+				setX(Game.getInstance().getScreenX() / 2);
 			}
-			setY(getThisGame().getScreenY() / 2);
+			setY(Game.getInstance().getScreenY() / 2);
 			setDX(0);
 			setDY(0);
 			rotation = 0;
 			makeInvincible(INVINCIBILITY_START_TIME);
-			getThisGame().create(this);
+			Game.getInstance().create(this);
 		}
 	}
 
@@ -224,7 +164,7 @@ public class Player extends AbstractEntity {
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
-			if (getThisGame().getGamestate().isCoop()) {
+			if (Gamestate.getInstance().isCoop()) {
 				keyHandlerTwo(input);
 			} else {
 				keyHandler(input);
@@ -379,8 +319,8 @@ public class Player extends AbstractEntity {
 			Logger.getInstance().log("Player died in hyperspace.");
 		} else {
 		Logger.getInstance().log("Player went into hyperspace.");
-		setX((float) (getThisGame().getScreenX() * Math.random()));
-		setY((float) (getThisGame().getScreenY() * Math.random()));
+		setX((float) (Game.getInstance().getScreenX() * Math.random()));
+		setY((float) (Game.getInstance().getScreenY() * Math.random()));
 		setDX(0);
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
@@ -400,13 +340,12 @@ public class Player extends AbstractEntity {
 	 */
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
-				&& getThisGame().bullets(this) < MAX_BULLETS) {
+				&& Game.getInstance().bullets(this) < MAX_BULLETS) {
 			final Bullet b = new Bullet(getX(), getY(),
 					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
-					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
-					getThisGame());
+					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED));
 			b.setPlayer(this);
-			getThisGame().create(b);
+			Game.getInstance().create(b);
 			lastShot = System.currentTimeMillis();
 		}
 	}
@@ -421,12 +360,12 @@ public class Player extends AbstractEntity {
 			if (invincible() && !hyperspace()) {
 				invincibleStart = System.currentTimeMillis();
 			} else if (!invincible()) {
-				getThisGame().destroy(e2);
+				Game.getInstance().destroy(e2);
 				onHit();
 				Logger.getInstance().log("Player was hit by an asteroid.");
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
-			getThisGame().destroy(e2);
+			Game.getInstance().destroy(e2);
 			onHit();
 			Logger.getInstance().log("Player was hit by a bullet.");
 		}
@@ -513,7 +452,7 @@ public class Player extends AbstractEntity {
 		group.setTranslateX(getX());
 		group.setTranslateY(getY());
 		
-		getThisGame().getRoot().getChildren().add(group);
+		Launcher.getRoot().getChildren().add(group);
 	}
 
 	/**

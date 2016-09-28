@@ -16,7 +16,6 @@ import entity.Asteroid;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -27,71 +26,28 @@ import javafx.scene.shape.Rectangle;
  *
  */
 public final class Game {
-	private final Group root;
-	private final Gamestate gamestate;
-	/**
-	 * The player of this game.
-	 */
 	private Player player;
 	private Player playerTwo;
-	/**
-	 * The spawner of this game.
-	 */
-	private final Spawner spawner;
-	/**
-	 * List of all entities currently in the game.
-	 */
 	private final List<AbstractEntity> entities;
-	/**
-	 * Object of random used to get random numbers.
-	 */
 	private final Random random;
-	/**
-	 * List of all entities to be destroyed at the and of the tick.
-	 */
 	private final List<AbstractEntity> destroyList;
-	/**
-	 * List of all entities to be created at the and of the tick.
-	 */
 	private final List<AbstractEntity> createList;
-	/**
-	 * length of canvas in pixels.
-	 */
 	private final float screenX;
-	/**
-	 * height of canvas in pixels.
-	 */
 	private final float screenY;
-	/**
-	 * current score.
-	 */
 	private long score;
-	/**
-	 * current highscore.
-	 */
 	private long highscore;
-	private static Game instance;
 	
-	/**
-	 * Size of canvas.
-	 */
+	private static final Game INSTANCE = new Game();
 	private static final float CANVAS_SIZE = 500;
-	/**
-	 * Number of points needed to gain a life.
-	 */
 	private static final int LIFE_SCORE = 10000;
 
 	/**
 	 * Constructor for a new game.
-	 * @param root - the root of the group of the canvas
 	 */
-	private Game(final Group root) {
-		this.root = root;
+	private Game() {
 		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
-		gamestate = new Gamestate(this);
-		spawner = new Spawner(this);
 		entities = new ArrayList<>();
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
@@ -104,10 +60,7 @@ public final class Game {
 	 * @return the instance
 	 */
 	public static Game getInstance() {
-		if (instance == null) {
-			instance = new Game(Launcher.getRoot());
-		}
-		return instance;
+		return INSTANCE;
 	}
 	
 	/**
@@ -152,15 +105,15 @@ public final class Game {
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
-		gamestate.start();
+		Gamestate.getInstance().start();
 		entities.clear();
-		if (gamestate.isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
+		if (Gamestate.getInstance().isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, true);
 			entities.add(player);
 			entities.add(playerTwo);
 		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
+			player = new Player(screenX / 2, screenY / 2, 0, 0, false);
 			entities.add(player);
 		} 
 		if (this.score > highscore) {
@@ -168,7 +121,7 @@ public final class Game {
 			writeHighscore();
 		}
 		score = 0;
-		spawner.reset();
+		Spawner.getInstance().reset();
 		Logger.getInstance().log("Game started.");
 	}
 	
@@ -179,14 +132,14 @@ public final class Game {
 	 *            - all keys pressed at the time of update
 	 */
 	public void update(final List<String> input) {
-		root.getChildren().clear();
-		Rectangle r = new Rectangle(0, 0, screenX, screenY);
+		Launcher.getRoot().getChildren().clear();
+		final Rectangle r = new Rectangle(0, 0, screenX, screenY);
 		r.setFill(Color.BLACK);
-		root.getChildren().add(r);
+		Launcher.getRoot().getChildren().add(r);
 		//root.setFill(Color.BLACK);
 		//root.fillRect(0, 0, screenX, screenY);
-		gamestate.update(input);
-		Display.wave(spawner.getWave(), root);
+		Gamestate.getInstance().update(input);
+		Display.wave(Spawner.getInstance().getWave());
 	}	
 	
 	/**
@@ -201,19 +154,19 @@ public final class Game {
 			checkCollision(e);
 			e.draw();
 		}
-		spawner.update();
+		Spawner.getInstance().update();
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		Display.score(score, root);
-		Display.highscore(highscore, root);
-		if (gamestate.isCoop()) {
-			Display.livesTwo(playerTwo.getLives(), root);
+		Display.score(score);
+		Display.highscore(highscore);
+		if (Gamestate.getInstance().isCoop()) {
+			Display.livesTwo(playerTwo.getLives());
 		}
-		Display.lives(player.getLives(), root);
+		Display.lives(player.getLives());
 		
 	}
 
@@ -263,22 +216,22 @@ public final class Game {
 		if (player.isAlive()) {
 			destroy(playerTwo);
 			return;
-		} else if (gamestate.isCoop() && playerTwo.isAlive()) {
+		} else if (Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
 			destroy(player);
 			return;
 		}
 		destroy(player);
-		if (gamestate.isCoop()) {
+		if (Gamestate.getInstance().isCoop()) {
 			destroy(playerTwo);
 		}
 		Logger.getInstance().log("Game over.");
 		if (score <= highscore) {
-			gamestate.setState(Gamestate.getStateStartScreen());
+			Gamestate.getInstance().setState(Gamestate.getStateStartScreen());
 		} else {
 			highscore = score;
 			writeHighscore();
 			Logger.getInstance().log("New highscore is " + highscore + ".");
-			gamestate.setState(Gamestate.getStateHighscoreScreen());
+			Gamestate.getInstance().setState(Gamestate.getStateHighscoreScreen());
 		}
 	}
 
@@ -287,11 +240,11 @@ public final class Game {
 	 * @param score - the score to be added.
 	 */
 	public void addScore(final int score) {
-		if (player.isAlive() || (gamestate.isCoop() && playerTwo.isAlive())) {
+		if (player.isAlive() || Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
-				if (gamestate.isCoop()) {
+				if (Gamestate.getInstance().isCoop()) {
 					playerTwo.gainLife();
 				}
 				Logger.getInstance().log("Player gained an extra life.");
@@ -390,19 +343,5 @@ public final class Game {
 	 */
 	public long getHighscore() {
 		return highscore;
-	}
-
-	/**
-	 * @return the gamestate
-	 */
-	public Gamestate getGamestate() {
-		return gamestate;
-	}
-
-	/**
-	 * @return the root
-	 */
-	public Group getRoot() {
-		return root;
 	}
 }

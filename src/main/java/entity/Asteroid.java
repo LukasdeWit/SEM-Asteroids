@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Random;
 
 import game.Game;
+import game.Launcher;
 import game.Logger;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -12,10 +13,8 @@ import javafx.scene.shape.Line;
  * Class that represents an Asteroid.
  */
 public class Asteroid extends AbstractEntity {
-	/**
-	 * Shape of Asteroid, either 0, 1 or 2.
-	 */
 	private final int shape;
+	
 	private static final float[][][] SHAPES = {
 		{
 			{-2, -4, 0, -2},
@@ -59,37 +58,13 @@ public class Asteroid extends AbstractEntity {
 		}
 	};
 	private static final float BIG_RADIUS = 20;
-	/**
-	 * Radius of medium asteroid in pixels.
-	 */
 	private static final float MEDIUM_RADIUS = 12;
-	/**
-	 * Score of big Asteroid.
-	 */
 	private static final int BIG_SCORE = 20;
-	/**
-	 * Radius of small asteroid in pixels.
-	 */
 	private static final float SMALL_RADIUS = 4;
-	/**
-	 * Score of medium Asteroid.
-	 */
 	private static final int MEDIUM_SCORE = 50;
-	/**
-	 * Score of small Asteroid.
-	 */
 	private static final int SMALL_SCORE = 100;
-	/**
-	 * Size multiplier.
-	 */
 	private static final float SIZE = .25f;
-	/**
-	 * Minimum speed of any asteroid in pixels per tick.
-	 */
 	private static final float MIN_SPEED = .5f;
-	/**
-	 * Number of asteroids after a split.
-	 */
 	private static final int SPLIT = 2;
 	private static final float WIDTH = 4;
 
@@ -100,11 +75,10 @@ public class Asteroid extends AbstractEntity {
 	 * @param y location of Asteroid along the Y-axis.
 	 * @param dX velocity of Asteroid along the X-axis.
 	 * @param dY velocity of Asteroid along the Y-axis.
-	 * @param thisGame Game the Asteroid exists in.
 	 */
 	public Asteroid(final float x, final float y,
-			final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+			final float dX, final float dY) {
+		super(x, y, dX, dY);
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
 		shape = random.nextInt(SHAPES.length);
@@ -127,7 +101,7 @@ public class Asteroid extends AbstractEntity {
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, 
 			final float radius, final Game thisGame) {
-		this(x, y, dX, dY, thisGame);
+		this(x, y, dX, dY);
 		setRadius(radius);
 	}
 
@@ -150,8 +124,8 @@ public class Asteroid extends AbstractEntity {
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Bullet) {
-			getThisGame().destroy(this);
-			getThisGame().destroy(e2);
+			Game.getInstance().destroy(this);
+			Game.getInstance().destroy(e2);
 			Logger.getInstance().log("Asteroid was hit by a bullet.");
 		}
 		//this is already done in Bullet.
@@ -165,24 +139,24 @@ public class Asteroid extends AbstractEntity {
 	public final void onDeath() {
 		if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().create(new Asteroid(getX(), getY(),
+				Game.getInstance().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), 
-						MEDIUM_RADIUS, getThisGame()));
+						MEDIUM_RADIUS, Game.getInstance()));
 			}
-			getThisGame().addScore(BIG_SCORE);
+			Game.getInstance().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().create(new Asteroid(getX(), getY(),
+				Game.getInstance().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), 
-						SMALL_RADIUS, getThisGame()));
+						SMALL_RADIUS, Game.getInstance()));
 			}
-			getThisGame().addScore(MEDIUM_SCORE);
+			Game.getInstance().addScore(MEDIUM_SCORE);
 		} else {
-			getThisGame().addScore(SMALL_SCORE);
+			Game.getInstance().addScore(SMALL_SCORE);
 		}
-		Particle.explosion(getX(), getY(), getThisGame());
+		Particle.explosion(getX(), getY(), Game.getInstance());
 	}
 
 	/**
@@ -202,6 +176,6 @@ public class Asteroid extends AbstractEntity {
 		group.setTranslateX(getX());
 		group.setTranslateY(getY());
 		
-		getThisGame().getRoot().getChildren().add(group);
+		Launcher.getRoot().getChildren().add(group);
 	}
 }
