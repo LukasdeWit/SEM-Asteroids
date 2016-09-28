@@ -288,7 +288,7 @@ public class Saucer extends AbstractEntity {
 			((Player) e2).onHit();
 			getThisGame().destroy(this);
 			Logger.getInstance().log("Player was hit by a saucer.");
-		} else if ((e2 instanceof Bullet && ((Bullet) e2).isFriendly())
+		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()
 				|| e2 instanceof Asteroid) {
 			getThisGame().destroy(e2);
 			getThisGame().destroy(this);
