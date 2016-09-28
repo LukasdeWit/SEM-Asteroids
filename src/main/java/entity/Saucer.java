@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Random;
 
 import game.Game;
+import game.Launcher;
 import game.Logger;
 import game.Spawner;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 /**
  * Class that represents a Saucer.
@@ -28,21 +30,20 @@ public class Saucer extends AbstractEntity {
 	/**
 	 * Time since previous shot in milliseconds.
 	 */
-	private long shotTime;
-	/**
-	 * X coordinates of Saucer shape.
-	 */
-	private static final double[] X_SHAPE_0 =
-		{ 1.25, 2.5, 5, 2.5, -2.5, -5, -2.5, -1.25 };
-	/**
-	 * Y coordinates of Saucer shape.
-	 */
-	private static final double[] Y_SHAPE_0 =
-			{ -3.5, -0.75, 1, 3, 3, 1, -0.75, -3.5 };
-	/**
-	 * The points of horizontal lines of Saucer shape. point 1 to point 6, etc.
-	 */
-	private static final int[][] HOR_LINES = {{1, 6}, {2, 5}};
+	private long shotTime;	
+	
+	private static final double[][] SHAPE = {
+			{1.25, -3.5, 2.5, -0.75},
+			{2.5, -0.75, 5, 1},
+			{5, 1, 2.5, 3},
+			{2.5, 3, -2.5, 3},
+			{-2.5, 3, -5, 1},
+			{-5, 1, -2.5, -0.75},
+			{-2.5, -0.75, -1.25, -3.5},
+			{-1.25, -3.5, 1.25, -3.5},
+			{2.5, -0.75, -2.5, -0.75},
+			{5, 1, -5, 1}
+	};
 	/**
 	 * Radius of small Saucer.
 	 */
@@ -68,10 +69,6 @@ public class Saucer extends AbstractEntity {
 	 */
 	private static final long CHANGE_DIR_TIME = 2000;
 	/**
-	 * Number of lines per shape.
-	 */
-	private static final int SHAPE_LINES = 8;
-	/**
 	 * Height Multiplier.
 	 */
 	private static final float SIZE = .20f;
@@ -96,6 +93,7 @@ public class Saucer extends AbstractEntity {
 	 * Maximum accuracy.
 	 */
 	private static final float MAX_ACCURACY = 10;
+	private static final float WIDTH = 4;
 
 	/**
 	 * Constructor for Saucer class.
@@ -266,20 +264,19 @@ public class Saucer extends AbstractEntity {
 	 * Display UFO on screen.
 	 */
 	@Override
-	public final void draw(final Group root) {
-		/*root.setStroke(Color.WHITE);
-		root.setLineWidth(.5);
-		double[] xShape = new double[SHAPE_LINES];
-		double[] yShape = new double[SHAPE_LINES];
-		for (int i = 0; i < SHAPE_LINES; i++) {
-			xShape[i] = X_SHAPE_0[i] * (getRadius() * SIZE) + getX();
-			yShape[i] = Y_SHAPE_0[i] * (getRadius() * SIZE) + getY();
+	public final void draw() {
+		
+		Group group = new Group();
+		for (double[] f : SHAPE) {
+			Line l = new Line(f[0] * (getRadius() * SIZE), f[1] * (getRadius() * SIZE), 
+					f[2] * (getRadius() * SIZE), f[1 + 2] * (getRadius() * SIZE));
+			l.setStroke(Color.WHITE);
+			l.setStrokeWidth(WIDTH * SIZE);
+			group.getChildren().add(l);
 		}
-		root.strokePolygon(xShape, yShape, SHAPE_LINES);
-		for (int i = 0; i < 2; i++) {
-			root.strokeLine(xShape[HOR_LINES[i][1]], yShape[HOR_LINES[i][1]],
-					xShape[HOR_LINES[i][0]], yShape[HOR_LINES[i][1]]);
-		}*/
+		group.setTranslateX(getX());
+		group.setTranslateY(getY());
+		Launcher.getRoot().getChildren().add(group);
 	}
 
 	/**

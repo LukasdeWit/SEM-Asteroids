@@ -2,8 +2,9 @@ package entity;
 import java.util.List;
 
 import game.Game;
-import javafx.scene.Group;
+import game.Launcher;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 /**
  * This class is a particle used in explosions.
@@ -18,7 +19,7 @@ public class Particle extends AbstractEntity {
 	/**
 	 * The draw size of the particle.
 	 */
-	private static final float SIZE = 1.5f;
+	private static final float SIZE = .5f;
 	/**
 	 * The lifetime of a particle.
 	 */
@@ -78,11 +79,16 @@ public class Particle extends AbstractEntity {
 
 	/**
 	 * draw a particle on the screen.
-	 * @param root graphics context the current graphics context
 	 */
 	@Override
-	public final void draw(final Group root) {
+	public final void draw() {
 		final float radius = getRadius();
+		Circle c = new Circle(0, 0, radius * SIZE);
+		c.setFill(Color.GREY);
+		c.setTranslateX(getX());
+		c.setTranslateY(getY());
+		Launcher.getRoot().getChildren().add(c);
+		
 		/*root.setFill(Color.GREY);
 		root.fillOval(getX() - radius / SIZE, 
 				getY() - radius / SIZE, 

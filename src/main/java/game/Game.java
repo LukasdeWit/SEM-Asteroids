@@ -26,7 +26,7 @@ import javafx.scene.shape.Rectangle;
  * @author Kibo
  *
  */
-public class Game {
+public final class Game {
 	private final Group root;
 	private final Gamestate gamestate;
 	/**
@@ -151,7 +151,7 @@ public class Game {
 	/**
 	 * Starts or restarts the game, with initial entities.
 	 */
-	public final void startGame() {
+	public void startGame() {
 		gamestate.start();
 		entities.clear();
 		if (gamestate.isCoop()) {
@@ -178,7 +178,7 @@ public class Game {
 	 * @param input
 	 *            - all keys pressed at the time of update
 	 */
-	public final void update(final List<String> input) {
+	public void update(final List<String> input) {
 		root.getChildren().clear();
 		Rectangle r = new Rectangle(0, 0, screenX, screenY);
 		r.setFill(Color.BLACK);
@@ -195,11 +195,11 @@ public class Game {
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	public final void updateGame(final List<String> input) {
+	public void updateGame(final List<String> input) {
 		for (final AbstractEntity e : entities) {
 			e.update(input);
 			checkCollision(e);
-			e.draw(root);
+			e.draw();
 		}
 		spawner.update();
 		destroyList.forEach(AbstractEntity::onDeath);
@@ -224,7 +224,7 @@ public class Game {
 	 * @param e1
 	 *            - the entity
 	 */
-	public final void checkCollision(final AbstractEntity e1) {
+	public void checkCollision(final AbstractEntity e1) {
 		entities
 				.stream()
 				.filter(e2 -> !e1.equals(e2)
@@ -241,7 +241,7 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void destroy(final AbstractEntity e) {
+	public void destroy(final AbstractEntity e) {
 		destroyList.add(e);
 	}
 
@@ -252,14 +252,14 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void create(final AbstractEntity e) {
+	public void create(final AbstractEntity e) {
 		createList.add(e);
 	}
 
 	/**
 	 * Game over function, destroys the player.
 	 */
-	public final void over() {
+	public void over() {
 		if (player.isAlive()) {
 			destroy(playerTwo);
 			return;
@@ -286,7 +286,7 @@ public class Game {
 	 * Adds score to this.score.
 	 * @param score - the score to be added.
 	 */
-	public final void addScore(final int score) {
+	public void addScore(final int score) {
 		if (player.isAlive() || (gamestate.isCoop() && playerTwo.isAlive())) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
@@ -305,7 +305,7 @@ public class Game {
 	 * @param player 
 	 * @return amount of bullets
 	 */
-	public final int bullets(final Player player) {
+	public int bullets(final Player player) {
 		int bullets = 0;
 		for (final AbstractEntity entity : entities) {
 			if (entity instanceof Bullet && ((Bullet) entity).isFriendly() 
@@ -320,7 +320,7 @@ public class Game {
 	 * Amount of enemies currently in game.
 	 * @return amount of enemies
 	 */
-	public final int enemies() {
+	public int enemies() {
 		int enemies = 0;
 		for (final AbstractEntity entity : entities) {
 			if (entity instanceof Asteroid || entity instanceof Saucer) {
@@ -342,7 +342,7 @@ public class Game {
 	 * getter for screenX.
 	 * @return - screenX
 	 */
-	public final float getScreenX() {
+	public float getScreenX() {
 		return screenX;
 	}
 
@@ -350,7 +350,7 @@ public class Game {
 	 * getter for screenY.
 	 * @return - screenY
 	 */
-	public final float getScreenY() {
+	public float getScreenY() {
 		return screenY;
 	}
 
@@ -358,7 +358,7 @@ public class Game {
 	 * Score getter.
 	 * @return score
 	 */
-	public final long getScore() {
+	public long getScore() {
 		return score;
 	}
 
@@ -366,14 +366,14 @@ public class Game {
 	 * Player getter.
 	 * @return the player
 	 */
-	public final Player getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 
 	/**
 	 * @return the playerTwo
 	 */
-	public final Player getPlayerTwo() {
+	public Player getPlayerTwo() {
 		return playerTwo;
 	}
 
@@ -381,28 +381,28 @@ public class Game {
 	 * random getter.
 	 * @return the random
 	 */
-	public final Random getRandom() {
+	public Random getRandom() {
 		return random;
 	}
 
 	/**
 	 * @return the highscore
 	 */
-	public final long getHighscore() {
+	public long getHighscore() {
 		return highscore;
 	}
 
 	/**
 	 * @return the gamestate
 	 */
-	public final Gamestate getGamestate() {
+	public Gamestate getGamestate() {
 		return gamestate;
 	}
 
 	/**
 	 * @return the root
 	 */
-	public final Group getRoot() {
+	public Group getRoot() {
 		return root;
 	}
 }

@@ -26,7 +26,7 @@ public class Launcher extends Application {
 	 * Time of one frame.
 	 */
 	private static final double FRAME_TIME = 0.017;
-	private static Group root;
+	private static Group root  = new Group();
 
 	/**
 	 * Main method.
@@ -48,7 +48,6 @@ public class Launcher extends Application {
 		stage.setTitle("ASTEROIDS!");
 
 		// set up the scene
-		root = new Group();
 		final Scene scene = new Scene(root, 500, 500, Color.BLACK);
 		stage.setScene(scene);
 

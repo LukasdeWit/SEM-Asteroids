@@ -2,9 +2,10 @@ package entity;
 import java.util.List;
 
 import game.Game;
+import game.Launcher;
 import game.Logger;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 /**
  * Class that stores the information for a bullet.
@@ -27,7 +28,7 @@ public class Bullet extends AbstractEntity {
 	/**
 	 * Draw size of bullet.
 	 */
-	private static final float SIZE = 1.5f;
+	private static final float SIZE = .5f;
 	/**
 	 * Radius of bullet.
 	 */
@@ -104,13 +105,13 @@ public class Bullet extends AbstractEntity {
 	 * Display bullet on screen.
 	 */
 	@Override
-	public final void draw(final Group root) {
-		/*final float radius = getRadius();
-		root.setFill(Color.WHITE);
-		root.fillOval(getX() - radius / SIZE,
-				getY() - radius / SIZE,
-				radius * SIZE,
-				radius * SIZE);*/
+	public final void draw() {
+		final float radius = getRadius();
+		Circle c = new Circle(0, 0, radius * SIZE);
+		c.setFill(Color.WHITE);
+		c.setTranslateX(getX());
+		c.setTranslateY(getY());
+		Launcher.getRoot().getChildren().add(c);
 	}
 
 	/**

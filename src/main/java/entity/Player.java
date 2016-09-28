@@ -7,6 +7,7 @@ import game.Launcher;
 import game.Logger;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -82,25 +83,12 @@ public class Player extends AbstractEntity {
 	 */
 	private static final float BULLET_SPEED = 4;
 	/**
-	 * A quarter pi.
-	 */
-	private static final double QUARTER_PI = Math.PI / 4;
-	/**
-	 * One eighth pi.
-	 */
-	private static final double EIGHTH_PI = Math.PI / 8;
-	/**
 	 * Time of flicker while respawning.
 	 */
 	private static final int RESPAWN_FLICKER_TIME = 250;
 	/**
 	 * The number of corners of a triangle.
 	 */
-	private static final int TRIANGLE_CORNERS = 3;
-	/**
-	 * Draw size of Player.
-	 */
-	private static final double SIZE = RADIUS * 1.25;
 	/**
 	 * Maximum speed of Player in pixels per tick.
 	 */
@@ -114,19 +102,28 @@ public class Player extends AbstractEntity {
 	 */
 	private static final int CHANCE_OF_DYING = 25;
 	private static final float SPAWN_OFFSET = 40;
-	private static final float[] PLAYER_TWO_CIRCLE = {-11, 0, 9};
+	private static final float[] PLAYER_TWO_CIRCLE = {11, 0, 9};
 	private static final float[][] PLAYER_TWO_LINES = {
-			{-11,  0,  7,  0},
-			{  2,  0,  8,  6},
-			{  2,  0,  8, -6},
-			{  0,  6, 18,  6},
-			{  0, -6, 18, -6}
+			{11, 0, -7,  0},
+			{ -2,  0, -8, -6},
+			{ -2,  0, -8, 6},
+			{  0, -6, -19, -6},
+			{  0, 6, -19, 6}
+	};
+	private static final float[][] PLAYER_TWO_BOOST = {
+			{-9, 2, -9, -2},
+			{-14, 2, -14, -2},
+			{-19, 2, -19, -2}
 	};
 	private static final float PLAYER_TWO_SIZE = .5f;
 	private static final float[][] PLAYER_ONE_LINES = {
 			{10, 0, -8, 8},
 			{-8, 8, -8, -8},
 			{-8, -8, 10, 0}
+	};
+	private static final float[][] PLAYER_ONE_BOOST = {
+			{-14, 0, -8, -6},
+			{-14, 0, -8, 6}
 	};
 	private static final float PLAYER_ONE_SIZE = .5f;
 	
@@ -437,35 +434,49 @@ public class Player extends AbstractEntity {
 
 	/**
 	 * draw the player.
-	 * @param root - Group
 	 */
 	@Override
-	public final void draw(final Group root) {
+	public final void draw() {
+		Paint color = Color.WHITE;
+		if (invincible() && (System.currentTimeMillis() - invincibleStart) 
+				% (RESPAWN_FLICKER_TIME * 2) < RESPAWN_FLICKER_TIME) {
+			color = Color.GREY;
+		}
 		if (playerTwo) {
-			drawTwo(root);
+			drawTwo(color);
 		} else {
-			drawOne(root);
+			drawOne(color);
 		}
 	}
 	
 	/**
 	 * Display Player two on screen.
-	 * @param root - Group
+	 * @param color - the color
 	 */
-	public final void drawTwo(final Group root) {
+	public final void drawTwo(final Paint color) {
 		Group group = new Group();
 		for (float[] f : PLAYER_TWO_LINES) {
 			Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
 					f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
-			l.setStroke(Color.WHITE);
+			l.setStroke(color);
 			l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
 			group.getChildren().add(l);
 		}
 		Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE, 
 				PLAYER_TWO_CIRCLE[1] * PLAYER_TWO_SIZE, PLAYER_TWO_CIRCLE[2] * PLAYER_TWO_SIZE);
-		c.setFill(Color.WHITE);
+		c.setFill(color);
 		group.getChildren().add(c);
-		group.setRotate(Math.toDegrees(-rotation) + 180);
+		if (boost) {
+			for (float[] f : PLAYER_TWO_BOOST) {
+				Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
+						f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
+				l.setStroke(Color.WHITE);
+				l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
+				group.getChildren().add(l);
+			}
+			boost = false;
+		}
+		group.setRotate(Math.toDegrees(-rotation));
 		group.setTranslateX(getX());
 		group.setTranslateY(getY());
 		Launcher.getRoot().getChildren().add(group);
@@ -473,42 +484,36 @@ public class Player extends AbstractEntity {
 	
 	/**
 	 * Display Player one on screen.
-	 * @param root - Group
+	 * @param color - the color
 	 */
-	public final void drawOne(final Group root) {
+	public final void drawOne(final Paint color) {
 		Group group = new Group();
 		for (float[] f : PLAYER_ONE_LINES) {
 			Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
 					f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
-			l.setStroke(Color.WHITE);
+			l.setStroke(color);
 			l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
 			group.getChildren().add(l);
+		}
+		if (boost) {
+			for (float[] f : PLAYER_ONE_BOOST) {
+				Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
+						f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
+				l.setStroke(Color.WHITE);
+				l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
+				group.getChildren().add(l);
+			}
+			Line l = new Line((-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 0, 
+					(-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 1);
+				//so rotation is not wrong
+			group.getChildren().add(l);
+			boost = false;
 		}
 		group.setRotate(Math.toDegrees(-rotation));
 		group.setTranslateX(getX());
 		group.setTranslateY(getY());
 		
 		getThisGame().getRoot().getChildren().add(group);
-		
-		/*if (boost) {
-			final double s4 = Math.sin(rotation + (Math.PI - EIGHTH_PI));
-			final double c4 = Math.cos(rotation + (Math.PI - EIGHTH_PI));
-
-			final double s5 = Math.sin(rotation + (Math.PI + EIGHTH_PI));
-			final double c5 = Math.cos(rotation + (Math.PI + EIGHTH_PI));
-
-			final double s6 = Math.sin(rotation + (Math.PI));
-			final double c6 = Math.cos(rotation + (Math.PI));
-			root.strokePolygon(new double[] { 
-					getX() + (SIZE - 1) * c4, 
-					getX() + (SIZE - 1) * c5, 
-					getX() + (SIZE + 2) * c6 },
-					new double[] { 
-					getY() - (SIZE - 1) * s4, 
-					getY() - (SIZE - 1) * s5, 
-					getY() - (SIZE + 2) * s6 }, TRIANGLE_CORNERS);
-			boost = false;
-		}*/
 	}
 
 	/**

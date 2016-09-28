@@ -2,7 +2,6 @@ package entity;
 import java.util.List;
 
 import game.Game;
-import javafx.scene.Group;
 
 /**
  * This is the superclass of all entities in the game.
@@ -66,10 +65,8 @@ public abstract class AbstractEntity {
 
 	/**
 	 * Method that helps show the entity on the screen.
-	 * 
-	 * @param root graphics context
 	 */
-	public abstract void draw(Group root);
+	public abstract void draw();
 
 	/**
 	 * Function that moves entities to the other side of the screen when they

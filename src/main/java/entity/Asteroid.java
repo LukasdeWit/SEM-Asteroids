@@ -5,6 +5,8 @@ import java.util.Random;
 import game.Game;
 import game.Logger;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 /**
  * Class that represents an Asteroid.
@@ -14,7 +16,7 @@ public class Asteroid extends AbstractEntity {
 	 * Shape of Asteroid, either 0, 1 or 2.
 	 */
 	private final int shape;
-	private static final int[][][] SHAPES = {
+	private static final float[][][] SHAPES = {
 		{
 			{-2, -4, 0, -2},
 			{0, -2, 2, -4},
@@ -24,7 +26,8 @@ public class Asteroid extends AbstractEntity {
 			{4, 2, 1, 4},
 			{1, 4, -2, 4},
 			{-2, 4, -4, 2},
-			{-4, 2, -4, -2}
+			{-4, 2, -4, -2},
+			{-4, -2, -2, -4}
 		},
 		{
 			{-2, -4, 0, -3},
@@ -35,50 +38,27 @@ public class Asteroid extends AbstractEntity {
 			{4, 0, 2, 3},
 			{2, 3, -1, 2},
 			{-1, 2, -2, 3},
-			{}
+			{-2, 3, -4, 1},
+			{-4, 1, -3, 0},
+			{-3, 0, -4, -2},
+			{-4, -2, -2, -4}
 		},
 		{
-			
+			{-2, -4, 1, -4},
+			{1, -4, 4, -2},
+			{4, -2, 4, -1},
+			{4, -1, 2, 0},
+			{2, 0, 4, 2},
+			{4, 2, 2, 4},
+			{2, 4, 1, 3},
+			{1, 3, -2, 4},
+			{-2, 4, -4, 1},
+			{-4, 1, -4, -2},
+			{-4, -2, -1, -2},
+			{-1, -2, -2, -4}
 		}
 	};
-	/**
-	 * X coordinates of shape 0.
-	 */
-	private static final int[] XSHAPE0 =
-		{ -2, 0, 2, 4, 3, 4, 1, 0, -2, -4, -4, -4 };
-	/**
-	 * Y coordinates of shape 0.
-	 */
-	private static final int[] YSHAPE0 = 
-		{ -4, -2, -4, -2, 0, 2, 4, 4, 4, 2, 0, -2 };
-	/**
-	 * X coordinates of shape 1.
-	 */
-	private static final int[] XSHAPE1 = 
-		{ -2, 0, 2, 4, 2, 4, 2, -1, -2, -4, -3, -4 };
-	/**
-	 * Y coordinates of shape 1.
-	 */
-	private static final int[] YSHAPE1 = 
-		{ -4, -3, -4, -2, -1, 0, 3, 2, 3, 1, 0, -2 };
-	/**
-	 * X coordinates of shape 2.
-	 */
-	private static final int[] XSHAPE2 = 
-		{ -2, 1, 4, 4, 2, 4, 2, 1, -2, -4, -4, -1 };
-	/**
-	 * Y coordinates of shape 2.
-	 */
-	private static final int[] YSHAPE2 = 
-		{ -4, -4, -2, -1, 0, 2, 4, 3, 4, 1, -2, -2 };
-	/**
-	 * Radius of big asteroid in pixels.
-	 */
 	private static final float BIG_RADIUS = 20;
-	/**
-	 * Number of shapes.
-	 */
-	//private static final double SHAPES = 3;
 	/**
 	 * Radius of medium asteroid in pixels.
 	 */
@@ -100,10 +80,6 @@ public class Asteroid extends AbstractEntity {
 	 */
 	private static final int SMALL_SCORE = 100;
 	/**
-	 * Number of lines per shape.
-	 */
-	private static final int SHAPE_LINES = 12;
-	/**
 	 * Size multiplier.
 	 */
 	private static final float SIZE = .25f;
@@ -115,6 +91,7 @@ public class Asteroid extends AbstractEntity {
 	 * Number of asteroids after a split.
 	 */
 	private static final int SPLIT = 2;
+	private static final float WIDTH = 4;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -130,7 +107,7 @@ public class Asteroid extends AbstractEntity {
 		super(x, y, dX, dY, thisGame);
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
-		shape = random.nextInt((int) SHAPES);
+		shape = random.nextInt(SHAPES.length);
 		while (speed() < MIN_SPEED) {
 			setDX(getDX() * 2);
 			setDY(getDY() * 2);
@@ -212,29 +189,19 @@ public class Asteroid extends AbstractEntity {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void draw(final Group root) {
+	public final void draw() {
 		
-		
-		root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
-		double[] xShape = new double[SHAPE_LINES];
-		double[] yShape = new double[SHAPE_LINES];
-		if (shape == 0) {
-			for (int i = 0; i < SHAPE_LINES; i++) {
-				xShape[i] = XSHAPE0[i] * (getRadius() * SIZE) + getX();
-				yShape[i] = YSHAPE0[i] * (getRadius() * SIZE) + getY();
-			}
-		} else if (shape == 1) {
-			for (int i = 0; i < SHAPE_LINES; i++) {
-				xShape[i] = XSHAPE1[i] * (getRadius() * SIZE) + getX();
-				yShape[i] = YSHAPE1[i] * (getRadius() * SIZE) + getY();
-			}
-		} else if (shape == 2) {
-			for (int i = 0; i < SHAPE_LINES; i++) {
-				xShape[i] = XSHAPE2[i] * (getRadius() * SIZE) + getX();
-				yShape[i] = YSHAPE2[i] * (getRadius() * SIZE) + getY();
-			}
+		Group group = new Group();
+		for (float[] f : SHAPES[shape]) {
+			Line l = new Line(f[0] * (getRadius() * SIZE), f[1] * (getRadius() * SIZE), 
+					f[2] * (getRadius() * SIZE), f[1 + 2] * (getRadius() * SIZE));
+			l.setStroke(Color.WHITE);
+			l.setStrokeWidth(WIDTH * SIZE);
+			group.getChildren().add(l);
 		}
-		root.strokePolygon(xShape, yShape, SHAPE_LINES);
+		group.setTranslateX(getX());
+		group.setTranslateY(getY());
+		
+		getThisGame().getRoot().getChildren().add(group);
 	}
 }
