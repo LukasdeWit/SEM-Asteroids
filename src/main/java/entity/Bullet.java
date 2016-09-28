@@ -91,7 +91,7 @@ public class Bullet extends AbstractEntity {
 	@Override
 	public final void draw() {
 		final float radius = getRadius();
-		Circle c = new Circle(0, 0, radius * SIZE);
+		final Circle c = new Circle(0, 0, radius * SIZE);
 		c.setFill(Color.WHITE);
 		c.setTranslateX(getX());
 		c.setTranslateY(getY());

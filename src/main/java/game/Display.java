@@ -387,35 +387,48 @@ public final class Display {
 		for (int i = 0; i < charList.length; i++) {
 			final char c = charList[i];
 			if (c == ' ') {
-				drawChar(x + i * X_OFFSET * size, y, size, SPACE);
-			} else {
-				final int cInt = (int) c;
-				if (cInt >= (int) 'a' && cInt <= (int) 'z') {
-					drawChar(x + i * X_OFFSET * size, y, 
-							size, LETTERS[cInt - (int) 'a']);
-				} else if (cInt >= (int) 'A' && cInt <= (int) 'Z') {
-					drawChar(x + i * X_OFFSET * size, y, 
-							size, LETTERS[cInt - (int) 'A']);
-				} else if (cInt >= (int) '0' && cInt <= (int) '9') {
-					drawChar(x + i * X_OFFSET * size, y, 
-							size, NUMBERS[cInt - (int) '0']);
-				} else {
-					drawChar(x + i * X_OFFSET * size, y, size, LIFE);
-				}
+				drawChar(SPACE, x + i * X_OFFSET * size, y, size);
+			} else if (!between(x, y, size, i, 'a', 'z', c) && !between(x, y, size, i, 'A', 'Z', c) 
+					&& !between(x, y, size, i, '0', '9', c)) {
+				drawChar(LIFE, x + i * X_OFFSET * size, y, size);
 			}
 		}
 	}
 	
 	/**
+	 * draws character if in between begin and end character.
+	 * @param x - x
+	 * @param y - y
+	 * @param size - size
+	 * @param offset - offset
+	 * @param beginChar - begin char
+	 * @param endChar - end char
+	 * @param testChar -test char
+	 * @return true if in between
+	 */
+	private static boolean between(final float x, final float y, final float size, final int offset, 
+			final char beginChar, final char endChar, final char testChar) {
+		float[][][] set = NUMBERS;
+		if (testChar > '9') {
+			set = LETTERS;
+		}
+		if (testChar >= beginChar && testChar <= endChar) {
+			drawChar(set[testChar - beginChar], x + offset * X_OFFSET * size, y, size);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Draw a letter, number or life.
+	 * @param figure - the figure you want to draw
 	 * @param x - left x coordinate
 	 * @param y - upper y coordinate
 	 * @param size - the size (1 equals 4 by 6 pixels)
-	 * @param figure - the figure you want to draw
 	 * (any non-letter, -number, -space will be drawn as a life)
 	 */
-	private static void drawChar(final float x, final float y, 
-			final float size, final float[][] figure) {
+	private static void drawChar(final float[][] figure, final float x, final float y, 
+			final float size) {
 		for (final float[] stroke : figure) {
 			final Line l = new Line(
 					stroke[0] * size + x, stroke[1] * size + y, 

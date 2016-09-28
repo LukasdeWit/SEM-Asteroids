@@ -42,7 +42,7 @@ public class Particle extends AbstractEntity {
 	public static void explosion(final float x, final float y, 
 			final Game thisGame) {
 		for (int i = 0; i < EXPLOSION_PARTICLES; i++) {
-			thisGame.create(randomParticle(x, y, thisGame));
+			thisGame.create(randomParticle(x, y));
 		}
 	}
 
@@ -50,11 +50,9 @@ public class Particle extends AbstractEntity {
 	 * This method creates a random particle.
 	 * @param x - x coordinate
 	 * @param y - y coordinate
-	 * @param thisGame - the game this particle is added to
 	 * @return the random particle
 	 */
-	private static Particle randomParticle(final float x, final float y, 
-			final Game thisGame) {
+	private static Particle randomParticle(final float x, final float y) {
 		return new Particle(x, y,
 				(float) (Math.random() - .5) * SPEED,
 				(float) (Math.random() - .5) * SPEED);
@@ -66,7 +64,7 @@ public class Particle extends AbstractEntity {
 	@Override
 	public final void draw() {
 		final float radius = getRadius();
-		Circle c = new Circle(0, 0, radius * SIZE);
+		final Circle c = new Circle(0, 0, radius * SIZE);
 		c.setFill(Color.GREY);
 		c.setTranslateX(getX());
 		c.setTranslateY(getY());

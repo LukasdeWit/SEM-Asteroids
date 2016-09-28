@@ -67,6 +67,8 @@ public class Player extends AbstractEntity {
 			{-14, 0, -8, 6}
 	};
 	private static final float PLAYER_ONE_SIZE = .5f;
+	private static final String LEFT = "LEFT";
+	private static final String RIGHT = "RIGHT";
 	
 	
 
@@ -179,13 +181,13 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandler(final List<String> input) {
-		if (input.contains("LEFT") || input.contains("A")
-				|| !(input.contains("RIGHT") || input.contains("D"))) {
+		if (input.contains(LEFT) || input.contains("A")
+				|| !(input.contains(RIGHT) || input.contains("D"))) {
 			turnLeft();
 		}
 
-		if (input.contains("RIGHT") || input.contains("D")
-				|| !(input.contains("LEFT") || input.contains("A"))) {
+		if (input.contains(RIGHT) || input.contains("D")
+				|| !(input.contains(LEFT) || input.contains("A"))) {
 			turnRight();
 		}
 
@@ -210,11 +212,11 @@ public class Player extends AbstractEntity {
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandlerTwo(final List<String> input) {
 		if (playerTwo) {
-			if (input.contains("LEFT") || !(input.contains("RIGHT"))) {
+			if (input.contains(LEFT) || !(input.contains(RIGHT))) {
 				turnLeft();
 			}
 	
-			if (input.contains("RIGHT") || !(input.contains("LEFT"))) {
+			if (input.contains(RIGHT) || !(input.contains("LEFT"))) {
 				turnRight();
 			}
 	
@@ -392,22 +394,22 @@ public class Player extends AbstractEntity {
 	 * Display Player two on screen.
 	 * @param color - the color
 	 */
-	public final void drawTwo(final Paint color) {
-		Group group = new Group();
-		for (float[] f : PLAYER_TWO_LINES) {
-			Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
+	private void drawTwo(final Paint color) {
+		final Group group = new Group();
+		for (final float[] f : PLAYER_TWO_LINES) {
+			final Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
 					f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
 			l.setStroke(color);
 			l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
 			group.getChildren().add(l);
 		}
-		Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE, 
+		final Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE, 
 				PLAYER_TWO_CIRCLE[1] * PLAYER_TWO_SIZE, PLAYER_TWO_CIRCLE[2] * PLAYER_TWO_SIZE);
 		c.setFill(color);
 		group.getChildren().add(c);
 		if (boost) {
-			for (float[] f : PLAYER_TWO_BOOST) {
-				Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
+			for (final float[] f : PLAYER_TWO_BOOST) {
+				final Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
 						f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
 				l.setStroke(Color.WHITE);
 				l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
@@ -425,24 +427,24 @@ public class Player extends AbstractEntity {
 	 * Display Player one on screen.
 	 * @param color - the color
 	 */
-	public final void drawOne(final Paint color) {
-		Group group = new Group();
-		for (float[] f : PLAYER_ONE_LINES) {
-			Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
+	private void drawOne(final Paint color) {
+		final Group group = new Group();
+		for (final float[] f : PLAYER_ONE_LINES) {
+			final Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
 					f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
 			l.setStroke(color);
 			l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
 			group.getChildren().add(l);
 		}
 		if (boost) {
-			for (float[] f : PLAYER_ONE_BOOST) {
-				Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
+			for (final float[] f : PLAYER_ONE_BOOST) {
+				final Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
 						f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
 				l.setStroke(Color.WHITE);
 				l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
 				group.getChildren().add(l);
 			}
-			Line l = new Line((-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 0, 
+			final Line l = new Line((-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 0, 
 					(-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 1);
 				//so rotation is not wrong
 			group.getChildren().add(l);
@@ -466,7 +468,6 @@ public class Player extends AbstractEntity {
 	/**
 	 * @return lives
 	 */
-
 	public final int getLives() {
 		return lives;
 	}

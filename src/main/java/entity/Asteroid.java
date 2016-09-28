@@ -96,11 +96,10 @@ public class Asteroid extends AbstractEntity {
 	 * @param dX velocity of Asteroid along the X-axis.
 	 * @param dY velocity of Asteroid along the Y-axis.
 	 * @param radius - radius of the new Asteroid.
-	 * @param thisGame Game the Asteroid exists in.
 	 */
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, 
-			final float radius, final Game thisGame) {
+			final float radius) {
 		this(x, y, dX, dY);
 		setRadius(radius);
 	}
@@ -142,7 +141,7 @@ public class Asteroid extends AbstractEntity {
 				Game.getInstance().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), 
-						MEDIUM_RADIUS, Game.getInstance()));
+						MEDIUM_RADIUS));
 			}
 			Game.getInstance().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
@@ -150,7 +149,7 @@ public class Asteroid extends AbstractEntity {
 				Game.getInstance().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), 
-						SMALL_RADIUS, Game.getInstance()));
+						SMALL_RADIUS));
 			}
 			Game.getInstance().addScore(MEDIUM_SCORE);
 		} else {
@@ -164,10 +163,9 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		
-		Group group = new Group();
-		for (float[] f : SHAPES[shape]) {
-			Line l = new Line(f[0] * (getRadius() * SIZE), f[1] * (getRadius() * SIZE), 
+		final Group group = new Group();
+		for (final float[] f : SHAPES[shape]) {
+			final Line l = new Line(f[0] * (getRadius() * SIZE), f[1] * (getRadius() * SIZE), 
 					f[2] * (getRadius() * SIZE), f[1 + 2] * (getRadius() * SIZE));
 			l.setStroke(Color.WHITE);
 			l.setStrokeWidth(WIDTH * SIZE);
@@ -175,7 +173,6 @@ public class Asteroid extends AbstractEntity {
 		}
 		group.setTranslateX(getX());
 		group.setTranslateY(getY());
-		
 		Launcher.getRoot().getChildren().add(group);
 	}
 }
