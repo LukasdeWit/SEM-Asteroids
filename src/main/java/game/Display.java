@@ -264,8 +264,7 @@ public final class Display {
 	private static final float WAVE_X = 10;
 	private static final float WAVE_Y = 470;
 	private static final float WAVE_SIZE = 2;
-	
-	
+		
 	/**
 	 * private constructor for utility class.
 	 */
