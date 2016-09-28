@@ -16,10 +16,6 @@ import java.util.Locale;
  */
 public final class Logger {
 	/**
-	 * The log file.
-	 */
-	private final File file;
-	/**
 	 * The file output stream.
 	 */
 	private FileOutputStream fos;
@@ -35,15 +31,16 @@ public final class Logger {
 	/**
 	 * Private constructor of Logger.
 	 */
+	@SuppressWarnings("PMD.SystemPrintln")
 	private Logger() {
-		file = new File("log.txt");
+		final File file = new File("log.txt");
 		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS", Locale.ENGLISH);
 		try {
 			fos = new FileOutputStream(file.getAbsoluteFile());
 		} catch (FileNotFoundException e) {
 			fos = null;
-			e.printStackTrace(); //NOPMD
-			System.out.println("unable to write log to file"); //NOPMD
+			e.printStackTrace();
+			System.out.println("unable to write log to file");
 		}
 	}
 	
@@ -59,16 +56,17 @@ public final class Logger {
 	 * This method logs a message with the current time to a file.
 	 * @param message - the message
 	 */
+	@SuppressWarnings("PMD.SystemPrintln")
 	public void log(final String message) {		
 		final String string = sdf.format(new Date(System.currentTimeMillis())) 
 				+ " | " + message + "\n";
-		System.out.print(string); //NOPMD
+		System.out.print(string);
 		try {
 			fos.write(string.getBytes(StandardCharsets.UTF_8));
 			fos.flush();
 		} catch (IOException e) {
-			e.printStackTrace(); //NOPMD
-			System.out.println("unable to write log to file"); //NOPMD
+			e.printStackTrace();
+			System.out.println("unable to write log to file");
 		}
 	}
 	
@@ -78,7 +76,7 @@ public final class Logger {
 	 * @param e - the exception
 	 */
 	public void log(final String message, final Exception e) {		
-		e.printStackTrace(); //NOPMD
+		e.printStackTrace();
 		log(message);
 	}
 }
