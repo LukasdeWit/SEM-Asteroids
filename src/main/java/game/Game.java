@@ -70,6 +70,7 @@ public class Game {
 	 * current highscore.
 	 */
 	private long highscore;
+	private static Game instance;
 	
 	/**
 	 * Size of canvas.
@@ -84,7 +85,7 @@ public class Game {
 	 * Constructor for a new game.
 	 * @param root - the root of the group of the canvas
 	 */
-	public Game(final Group root) {
+	private Game(final Group root) {
 		this.root = root;
 		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
@@ -96,6 +97,17 @@ public class Game {
 		createList = new ArrayList<>();
 		random = new Random();
 		highscore = readHighscore();
+	}
+	
+	/**
+	 * Singleton getinstance.
+	 * @return the instance
+	 */
+	public static Game getInstance() {
+		if (instance == null) {
+			instance = new Game(Launcher.getRoot());
+		}
+		return instance;
 	}
 	
 	/**

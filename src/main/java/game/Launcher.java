@@ -10,7 +10,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -27,6 +26,7 @@ public class Launcher extends Application {
 	 * Time of one frame.
 	 */
 	private static final double FRAME_TIME = 0.017;
+	private static Group root;
 
 	/**
 	 * Main method.
@@ -48,7 +48,7 @@ public class Launcher extends Application {
 		stage.setTitle("ASTEROIDS!");
 
 		// set up the scene
-		final Group root = new Group();
+		root = new Group();
 		final Scene scene = new Scene(root, 500, 500, Color.BLACK);
 		stage.setScene(scene);
 
@@ -58,7 +58,7 @@ public class Launcher extends Application {
 		root.getChildren().add(canvas);
 
 		// set up the graphicsContext
-		final GraphicsContext gc = canvas.getGraphicsContext2D();
+		//final GraphicsContext gc = canvas.getGraphicsContext2D();
 
 		// set up the key handler
 		final ArrayList<String> input = new ArrayList<>();
@@ -87,9 +87,6 @@ public class Launcher extends Application {
 			}
 		});
 
-		// Make a new Game
-		final Game thisGame = new Game(root);
-
 		// set up the timing control
 		final Timeline renderLoop = new Timeline();
 		renderLoop.setCycleCount(Timeline.INDEFINITE);
@@ -101,7 +98,7 @@ public class Launcher extends Application {
 			 */
 			@Override
 			public void handle(final ActionEvent e) {
-				thisGame.update(input);
+				Game.getInstance().update(input);
 			}
 		});
 
@@ -111,6 +108,13 @@ public class Launcher extends Application {
 
 		// show game
 		stage.show();
+	}
+
+	/**
+	 * @return the root
+	 */
+	public static Group getRoot() {
+		return root;
 	}
 
 }

@@ -2,6 +2,7 @@ package game;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 /**
  * This class displays all numbers, letters and lives.
@@ -468,14 +469,12 @@ public final class Display {
 	 * @param root - graphics context
 	 */
 	public static void score(final long score, final Group root) {
-		/*root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
 		if (score == 0) {
 			draw(SCORE_X, SCORE_Y, SCORE_SIZE, "        00", root);
 		} else {
 			draw(SCORE_X, SCORE_Y, SCORE_SIZE,
 					String.format("%1$10s", score), root);
-		}*/
+		}
 	}
 	
 	/**
@@ -484,14 +483,12 @@ public final class Display {
 	 * @param root - graphics context
 	 */
 	public static void highscore(final long highscore, final Group root) {
-		/*root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
 		if (highscore == 0) {
 			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE, "        00", root);
 		} else {
 			draw(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_SIZE,
 					String.format("%1$10s", highscore), root);
-		}*/
+		}
 	}
 	
 	/**
@@ -499,14 +496,12 @@ public final class Display {
 	 * @param root - the graphics context to draw to
 	 */
 	public static void startScreen(final Group root) {
-		/*root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
 		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
 				"asteroids", root);
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, 
 				"press x for Arcade Mode", root);
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_COOP_Y, SMALL_TEXT_SIZE, 
-				"press c for Coop", root);*/
+				"press c for Coop", root);
 	}
 	
 	/**
@@ -514,16 +509,13 @@ public final class Display {
 	 * @param root - the graphics context to draw to
 	 * @param highscore - the highscore
 	 */
-	public static void highscoreScreen(final long highscore,
-			final Group root) {
-		/*root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
+	public static void highscoreScreen(final long highscore, final Group root) {
 		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
 				"congratulations", root);
 		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
 				"press r to restart", root);
 		draw(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, SMALL_TEXT_SIZE, 
-				"your new highscore is " + highscore, root);*/
+				"your new highscore is " + highscore, root);
 	}
 	
 	/**
@@ -531,12 +523,10 @@ public final class Display {
 	 * @param root - the graphics context
 	 */
 	public static void pauseScreen(final Group root) {
-		/*root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
 		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
 				"Pauze", root);
 		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
-				"press p to start", root);*/
+				"press p to start", root);
 	}
 	
 	/**
@@ -545,17 +535,15 @@ public final class Display {
 	 * @param root - graphics context
 	 */
 	public static void lives(final int lives, final Group root) {
-		/*if (lives <= 0) {
+		if (lives <= 0) {
 			return;
 		}
-		root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
 		final StringBuilder outputBuffer = new StringBuilder(lives);
 		for (int i = 0; i < lives; i++) {
 		   outputBuffer.append('*');
 		}
 		final String livesString = outputBuffer.toString();
-		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, root);*/
+		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString, root);
 	}
 	/**
 	 * draw lives for coop.
@@ -563,17 +551,15 @@ public final class Display {
 	 * @param root - Graphics context
 	 */
 	public static void livesTwo(final int lives, final Group root) {
-		/*if (lives <= 0) {
+		if (lives <= 0) {
 			return;
 		}
-		root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
 		final StringBuilder outputBuffer = new StringBuilder(lives);
 		for (int i = 0; i < lives; i++) {
 		   outputBuffer.append('*');
 		}
 		final String livesString = outputBuffer.toString();
-		draw(LIVES_TWO_X, LIVES_Y, LIVES_SIZE, livesString, root);*/
+		draw(LIVES_TWO_X, LIVES_Y, LIVES_SIZE, livesString, root);
 	}
 
 	/**
@@ -582,10 +568,8 @@ public final class Display {
 	 * @param root - graphics context
 	 */
 	public static void wave(final int wave, final Group root) {
-		/*root.setStroke(Color.WHITE);
-		root.setLineWidth(1);
 		final String waveString = "Wave " + wave;
-		draw(WAVE_X, WAVE_Y, WAVE_SIZE, waveString, root);*/
+		draw(WAVE_X, WAVE_Y, WAVE_SIZE, waveString, root);
 	}
 	
 	/**
@@ -634,11 +618,14 @@ public final class Display {
 	private static void drawChar(final float x, final float y, 
 			final float size, final float[][] figure, 
 			final Group root) {
-		/*for (final float[] stroke : figure) {
-			root.strokeLine(
+		for (final float[] stroke : figure) {
+			Line l = new Line(
 					stroke[0] * size + x, stroke[1] * size + y, 
 					stroke[2] * size + x, stroke[1 + 2] * size + y);
 				//3 is not a magic number in this case.
-		}*/
+			l.setStroke(Color.WHITE);
+			l.setStrokeWidth(1);
+			Launcher.getRoot().getChildren().add(l);
+		}
 	}
 }

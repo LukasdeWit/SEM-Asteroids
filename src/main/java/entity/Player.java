@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Random;
 
 import game.Game;
+import game.Launcher;
 import game.Logger;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -467,7 +468,7 @@ public class Player extends AbstractEntity {
 		group.setRotate(Math.toDegrees(-rotation) + 180);
 		group.setTranslateX(getX());
 		group.setTranslateY(getY());
-		getThisGame().getRoot().getChildren().add(group);
+		Launcher.getRoot().getChildren().add(group);
 	}
 	
 	/**

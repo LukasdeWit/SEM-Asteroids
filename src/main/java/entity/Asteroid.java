@@ -14,6 +14,33 @@ public class Asteroid extends AbstractEntity {
 	 * Shape of Asteroid, either 0, 1 or 2.
 	 */
 	private final int shape;
+	private static final int[][][] SHAPES = {
+		{
+			{-2, -4, 0, -2},
+			{0, -2, 2, -4},
+			{2, -4, 4, -2},
+			{4, -2, 3, 0},
+			{3, 0, 4, 2},
+			{4, 2, 1, 4},
+			{1, 4, -2, 4},
+			{-2, 4, -4, 2},
+			{-4, 2, -4, -2}
+		},
+		{
+			{-2, -4, 0, -3},
+			{0, -3, 2, -4},
+			{2, -4, 4, -2},
+			{4, -2, 2, -1},
+			{2, -1, 4, 0},
+			{4, 0, 2, 3},
+			{2, 3, -1, 2},
+			{-1, 2, -2, 3},
+			{}
+		},
+		{
+			
+		}
+	};
 	/**
 	 * X coordinates of shape 0.
 	 */
@@ -51,7 +78,7 @@ public class Asteroid extends AbstractEntity {
 	/**
 	 * Number of shapes.
 	 */
-	private static final double SHAPES = 3;
+	//private static final double SHAPES = 3;
 	/**
 	 * Radius of medium asteroid in pixels.
 	 */
@@ -186,7 +213,9 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void draw(final Group root) {
-		/*root.setStroke(Color.WHITE);
+		
+		
+		root.setStroke(Color.WHITE);
 		root.setLineWidth(1);
 		double[] xShape = new double[SHAPE_LINES];
 		double[] yShape = new double[SHAPE_LINES];
@@ -206,6 +235,6 @@ public class Asteroid extends AbstractEntity {
 				yShape[i] = YSHAPE2[i] * (getRadius() * SIZE) + getY();
 			}
 		}
-		root.strokePolygon(xShape, yShape, SHAPE_LINES);*/
+		root.strokePolygon(xShape, yShape, SHAPE_LINES);
 	}
 }
