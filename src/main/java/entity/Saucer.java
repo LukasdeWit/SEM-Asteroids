@@ -6,8 +6,8 @@ import game.Spawner;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Class that represents a Saucer.
@@ -153,7 +153,7 @@ public class Saucer extends AbstractEntity {
 	 * @param input - the pressed keys
 	 */
 	@Override
-	public final void update(final List<String> input) {
+	public final void update(final Set<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		checkEnd();

@@ -459,7 +459,8 @@ public final class Display {
 	 */
 	private Display() {
 	      //not called
-	   }
+	}
+
 	/**
 	 * Display the score.
 	 * @param score - score
@@ -579,24 +580,22 @@ public final class Display {
 	public static void draw(final float x, final float y, 
 			final float size, final String string, final GraphicsContext gc) {
 		final char[] charList = string.toCharArray();
+
 		for (int i = 0; i < charList.length; i++) {
 			final char c = charList[i];
 			if (c == ' ') {
 				drawChar(x + i * X_OFFSET * size, y, size, SPACE, gc);
+			} else if (c >= (int) 'a' && c <= (int) 'z') {
+				drawChar(x + i * X_OFFSET * size, y,
+						size, LETTERS[c - (int) 'a'], gc);
+			} else if (c >= (int) 'A' && c <= (int) 'Z') {
+				drawChar(x + i * X_OFFSET * size, y,
+						size, LETTERS[c - (int) 'A'], gc);
+			} else if (c >= (int) '0' && c <= (int) '9') {
+				drawChar(x + i * X_OFFSET * size, y,
+						size, NUMBERS[c - (int) '0'], gc);
 			} else {
-				final int cInt = (int) c;
-				if (cInt >= (int) 'a' && cInt <= (int) 'z') {
-					drawChar(x + i * X_OFFSET * size, y, 
-							size, LETTERS[cInt - (int) 'a'], gc);
-				} else if (cInt >= (int) 'A' && cInt <= (int) 'Z') {
-					drawChar(x + i * X_OFFSET * size, y, 
-							size, LETTERS[cInt - (int) 'A'], gc);
-				} else if (cInt >= (int) '0' && cInt <= (int) '9') {
-					drawChar(x + i * X_OFFSET * size, y, 
-							size, NUMBERS[cInt - (int) '0'], gc);
-				} else {
-					drawChar(x + i * X_OFFSET * size, y, size, LIFE, gc);
-				}
+				drawChar(x + i * X_OFFSET * size, y, size, LIFE, gc);
 			}
 		}
 	}

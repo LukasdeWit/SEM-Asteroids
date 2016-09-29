@@ -11,9 +11,10 @@ import java.util.Locale;
 
 /**
  * This class will log every action.
- * @author Kibo
  *
+ * @author Kibo
  */
+@SuppressWarnings({"PMD.SystemPrintln", "PMD.AvoidPrintStackTrace"})
 public final class Logger {
 	/**
 	 * The file output stream.
@@ -31,7 +32,6 @@ public final class Logger {
 	/**
 	 * Private constructor of Logger.
 	 */
-	@SuppressWarnings("PMD.SystemPrintln")
 	private Logger() {
 		final File file = new File("log.txt");
 		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS", Locale.ENGLISH);
@@ -43,21 +43,22 @@ public final class Logger {
 			System.out.println("unable to write log to file");
 		}
 	}
-	
+
 	/**
-	 * getter for the INSTANCE.
+	 * getter for the instance.
+	 *
 	 * @return the logger.
 	 */
 	public static Logger getInstance() {
 		return INSTANCE;
 	}
-	
+
 	/**
 	 * This method logs a message with the current time to a file.
+	 *
 	 * @param message - the message
 	 */
-	@SuppressWarnings("PMD.SystemPrintln")
-	public void log(final String message) {		
+	public void log(final String message) {
 		final String string = sdf.format(new Date(System.currentTimeMillis())) 
 				+ " | " + message + "\n";
 		System.out.print(string);

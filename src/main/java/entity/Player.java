@@ -4,8 +4,8 @@ import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This class is the player of the game.
@@ -177,7 +177,7 @@ public class Player extends AbstractEntity {
 	 * @param input - the pressed keys
 	 */
 	@Override
-	public final void update(final List<String> input) {
+	public final void update(final Set<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		slowDown();
@@ -189,11 +189,11 @@ public class Player extends AbstractEntity {
 
 	/**
 	 * Method that translates keyboard input into player character movement.
-	 * 
+	 *
 	 * @param input List containing the keyboard input
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
-	private void keyHandler(final List<String> input) {
+	private void keyHandler(final Set<String> input) {
 		if (input.contains("LEFT") || input.contains("A")
 				|| !(input.contains("RIGHT") || input.contains("D"))) {
 			turnLeft();
@@ -341,15 +341,6 @@ public class Player extends AbstractEntity {
 	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
-		final double s1 = Math.sin(rotation);
-		final double c1 = Math.cos(rotation);
-
-		final double s2 = Math.sin(rotation + (Math.PI - QUARTER_PI));
-		final double c2 = Math.cos(rotation + (Math.PI - QUARTER_PI));
-
-		final double s3 = Math.sin(rotation + (Math.PI + QUARTER_PI));
-		final double c3 = Math.cos(rotation + (Math.PI + QUARTER_PI));
-
 		gc.setStroke(Color.WHITE);
 		if (invincible()
 				&& (System.currentTimeMillis() + invincibleMS) 
@@ -360,33 +351,35 @@ public class Player extends AbstractEntity {
 			gc.setStroke(Color.BLACK);
 		}
 		gc.setLineWidth(1);
-		gc.strokePolygon(
-				new double[] { getX() + SIZE * c1, 
-				getX() + SIZE * c2, 
-				getX() + SIZE * c3 },
-				new double[] { getY() - SIZE * s1, 
-				getY() - SIZE * s2, 
-				getY() - SIZE * s3 }, TRIANGLE_CORNERS);
+		final double[] xPoints = {getX() + SIZE * Math.cos(rotation),
+				getX() + SIZE * Math.cos(rotation + (Math.PI - QUARTER_PI)),
+				getX() + SIZE * Math.cos(rotation + (Math.PI + QUARTER_PI))};
+		final double[] yPoints = {getY() - SIZE * Math.sin(rotation),
+				getY() - SIZE * Math.sin(rotation + (Math.PI - QUARTER_PI)),
+				getY() - SIZE * Math.sin(rotation + (Math.PI + QUARTER_PI))};
+		gc.strokePolygon(xPoints, yPoints, TRIANGLE_CORNERS);
 
 		if (boost) {
-			final double s4 = Math.sin(rotation + (Math.PI - EIGHTH_PI));
-			final double c4 = Math.cos(rotation + (Math.PI - EIGHTH_PI));
-
-			final double s5 = Math.sin(rotation + (Math.PI + EIGHTH_PI));
-			final double c5 = Math.cos(rotation + (Math.PI + EIGHTH_PI));
-
-			final double s6 = Math.sin(rotation + (Math.PI));
-			final double c6 = Math.cos(rotation + (Math.PI));
-			gc.strokePolygon(new double[] { 
-					getX() + (SIZE - 1) * c4, 
-					getX() + (SIZE - 1) * c5, 
-					getX() + (SIZE + 2) * c6 },
-					new double[] { 
-					getY() - (SIZE - 1) * s4, 
-					getY() - (SIZE - 1) * s5, 
-					getY() - (SIZE + 2) * s6 }, TRIANGLE_CORNERS);
-			boost = false;
+			drawBooster(gc);
 		}
+	}
+
+	/**
+	 * draw booster on player.
+	 * @param gc the current GraphicsContext used for drawing
+	 */
+	private void drawBooster(final GraphicsContext gc) {
+
+		final double[] xPoints = {
+				getX() + (SIZE - 1) * Math.cos(rotation + Math.PI - EIGHTH_PI),
+				getX() + (SIZE - 1) * Math.cos(rotation + Math.PI + EIGHTH_PI),
+				getX() + (SIZE + 2) * Math.cos(rotation + Math.PI)};
+		final double[] yPoints = {
+				getY() - (SIZE - 1) * Math.sin(rotation + Math.PI - EIGHTH_PI),
+				getY() - (SIZE - 1) * Math.sin(rotation + Math.PI + EIGHTH_PI),
+				getY() - (SIZE + 2) * Math.sin(rotation + Math.PI)};
+		gc.strokePolygon(xPoints, yPoints, TRIANGLE_CORNERS);
+		boost = false;
 	}
 
 	/**
@@ -400,7 +393,6 @@ public class Player extends AbstractEntity {
 	/**
 	 * @return lives
 	 */
-
 	public final int getLives() {
 		return lives;
 	}

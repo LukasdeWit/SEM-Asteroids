@@ -3,17 +3,16 @@ package game;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * This class is the main launcher of the game.
@@ -43,7 +42,6 @@ public class Launcher extends Application {
 	 */
 	@Override
 	public final void start(final Stage stage) {
-		// set up the title
 		stage.setTitle("ASTEROIDS!");
 
 		// set up the scene
@@ -56,60 +54,29 @@ public class Launcher extends Application {
 				new Canvas(Game.getCanvasSize(), Game.getCanvasSize());
 		root.getChildren().add(canvas);
 
-		// set up the graphicsContext
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
+		final Set<String> input = new HashSet<>();
 
-		// set up the key handler
-		final ArrayList<String> input = new ArrayList<>();
+		scene.setOnKeyPressed(e -> input.add(e.getCode().getName()
+			.toUpperCase(Locale.ENGLISH)));
 
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			/**
-			 * Add key code to input when key is pressed.
-			 */
-			@Override
-			public void handle(final KeyEvent e) {
-				final String code = e.getCode().toString();
+		// remove key code from input when key is released.
+		scene.setOnKeyReleased(e -> input.remove(e.getCode().getName()
+				.toUpperCase(Locale.ENGLISH)));
 
-				if (!input.contains(code)) {
-					input.add(code);
-				}
-			}
-		});
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			/**
-			 * Remove key code from input when key is released.
-			 */
-			@Override
-			public void handle(final KeyEvent e) {
-				final String code = e.getCode().toString();
-				input.remove(code);
-			}
-		});
-
-		// Make a new Game
 		final Game thisGame = new Game(gc);
 
 		// set up the timing control
 		final Timeline renderLoop = new Timeline();
 		renderLoop.setCycleCount(Timeline.INDEFINITE);
 
-		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME),
-				new EventHandler<ActionEvent>() {
-			/**
-			 * Updates game based on keyboard input.
-			 */
-			@Override
-			public void handle(final ActionEvent e) {
-				thisGame.update(input);
-			}
-		});
-
 		// add game to scene
-		renderLoop.getKeyFrames().add(kf);
+		renderLoop.getKeyFrames().add(
+				new KeyFrame(Duration.seconds(FRAME_TIME),
+				event -> thisGame.update(input)));
 		renderLoop.play();
 
-		// show game
-		stage.show();
+		stage.show(); // show game
 	}
 
 }
