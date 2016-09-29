@@ -135,7 +135,7 @@ public class Game {
 		entities.add(player);
 
 		if (this.score > highscoreStore.getHighestScore()) {
-			highscoreStore.addHighScore(score);
+			highscoreStore.addHighScore(score, gamemode);
 		}
 		score = 0;
 		gamemode = GAMEMODE_START_SCREEN;
@@ -298,7 +298,7 @@ public class Game {
 		if (score <= highscoreStore.getHighestScore()) {
 			gamemode = GAMEMODE_START_SCREEN;
 		} else {
-			highscoreStore.addHighScore(score);
+			highscoreStore.addHighScore(score, gamemode);
 			highscoreStore.writeScores();
 			Logger.getInstance().log("New highscore is " + highscoreStore.getHighestScore() + ".");
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
