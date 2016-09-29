@@ -124,11 +124,15 @@ public class Player extends AbstractEntity {
 	/**
 	 * The actual speed with which the player can fire bullets is this number times TIME_BETWEEN_SHOTS.
 	 */
-	private int BULLET_FIRE_RATE_MULTIPLIER;
+	private double BULLET_FIRE_RATE_MULTIPLIER;
 	/**
 	 * The number of asteroids/UFOs the player's bullets can pierce.
 	 */
 	private int BULLET_PIERCE_RATE;
+	/**
+	 * The current size of the player's bullets.
+	 */
+	private int BULLET_SIZE;
 	/**
 	 * The number of shields the player currently has.
 	 */
@@ -220,6 +224,7 @@ public class Player extends AbstractEntity {
 		setY(getY() + getDY());
 		slowDown();
 		wrapAround();
+		handlePowerups();
 		if (!invincible()) {
 			keyHandler(input);
 		}
@@ -347,7 +352,7 @@ public class Player extends AbstractEntity {
 			final Bullet b = new Bullet(getX(), getY(),
 					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
 					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
-					getThisGame());
+					getThisGame(),BULLET_PIERCE_RATE);
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
 		}
@@ -443,15 +448,38 @@ public class Player extends AbstractEntity {
 		return lives;
 	}
 
-	public List getPowerups() {
+	public ArrayList<AbstractPowerup> getPowerups() {
 		return powerups;
 	}
 
-	public void setPowerups(ArrayList powerups) {
+	public void setPowerups(ArrayList<AbstractPowerup> powerups) {
 		this.powerups = powerups;
 	}
 	
 	public void givePowerup(AbstractPowerup powerToAdd){
 		this.powerups.add(powerToAdd);
+	}
+	
+	public void giveShield(){
+		SHIELDING++;
+	}
+	
+	public void handlePowerups(){
+		BULLET_FIRE_RATE_MULTIPLIER = 1;
+		BULLET_NUMBER_MULTIPLIER = 1;
+		BULLET_PIERCE_RATE = 1;
+		BULLET_SIZE = 1;
+		for(AbstractPowerup x : powerups){
+			if(x.powerupOver()){
+				powerups.remove(x);
+				break;
+			}
+			else{
+			BULLET_FIRE_RATE_MULTIPLIER = BULLET_FIRE_RATE_MULTIPLIER*x.getRateMult();
+			BULLET_NUMBER_MULTIPLIER = BULLET_NUMBER_MULTIPLIER*x.getNumbMult();
+			BULLET_PIERCE_RATE =+x.getPierceRateBoost();
+			BULLET_SIZE = BULLET_SIZE*x.getSizeBoost();
+			}
+		}
 	}
 }

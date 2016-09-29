@@ -21,7 +21,7 @@ public class Powerup extends AbstractEntity {
 	/**
 	 * Number of powerup types.
 	 */
-	private final int TYPES = 6;
+	private final int TYPES = 4;
 	/**
 	 * Radius of a Powerup in pixels.
 	 */
@@ -53,12 +53,16 @@ public class Powerup extends AbstractEntity {
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player) {
-			getThisGame().destroy(this);
 			if(type==0){
 				((Player) e2).gainLife();
 			}
 			else{
-				((Player) e2).givePowerup(new AbstractPowerup(type));
+				if(type==1){
+					((Player) e2).giveShield();
+				}
+				else{
+					((Player) e2).givePowerup(new AbstractPowerup(type));
+				}
 			}
 			String poweruptype = "";
 			switch(type){
@@ -77,6 +81,7 @@ public class Powerup extends AbstractEntity {
 				
 			}
 			Logger.getInstance().log("Player collected a" + poweruptype + "powerup.");
+			getThisGame().destroy(this);
 		}
 	}
 
@@ -90,7 +95,13 @@ public class Powerup extends AbstractEntity {
 	 */
 	@Override
 	public final void draw(final GraphicsContext gc) {
-		//unimplemented
+		//simply drawn as a static circle
+		final float radius = getRadius();
+		gc.setFill(Color.WHITE);
+		gc.fillOval(getX() - radius / SIZE,
+				getY() - radius / SIZE,
+				radius * SIZE,
+				radius * SIZE);
 	}
 
 	@Override
