@@ -25,13 +25,14 @@ public final class Logger {
 	 */
 	private final SimpleDateFormat sdf;
 	/**
-	 * the singleton instance.
+	 * the singleton INSTANCE.
 	 */
-	private static Logger instance = null;
-
+	private static final Logger INSTANCE = new Logger();
+	
 	/**
 	 * Private constructor of Logger.
 	 */
+	@SuppressWarnings("PMD.SystemPrintln")
 	private Logger() {
 		final File file = new File("log.txt");
 		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS", Locale.ENGLISH);
@@ -50,10 +51,7 @@ public final class Logger {
 	 * @return the logger.
 	 */
 	public static Logger getInstance() {
-		if (instance == null) {
-			instance = new Logger();
-		}
-		return instance;
+		return INSTANCE;
 	}
 
 	/**
@@ -61,9 +59,11 @@ public final class Logger {
 	 *
 	 * @param message - the message
 	 */
-	public void log(final String message) {
-		final String string = sdf.format(new Date(System.currentTimeMillis()))
+	@SuppressWarnings("PMD.SystemPrintln")
+	public void log(final String message) {		
+		final String string = sdf.format(new Date(System.currentTimeMillis())) 
 				+ " | " + message + "\n";
+		System.out.print(string);
 		try {
 			fos.write(string.getBytes(StandardCharsets.UTF_8));
 			fos.flush();
@@ -71,5 +71,15 @@ public final class Logger {
 			e.printStackTrace();
 			System.out.println("unable to write log to file");
 		}
+	}
+	
+	/**
+	 * This method logs a message and exception.
+	 * @param message - the message
+	 * @param e - the exception
+	 */
+	public void log(final String message, final Exception e) {		
+		e.printStackTrace();
+		log(message);
 	}
 }
