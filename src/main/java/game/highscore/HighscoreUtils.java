@@ -1,21 +1,15 @@
 package game.highscore;
 
+import game.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by douwe on 19-9-16.
  */
 public final class HighscoreUtils {
-    /**
-     * class logger.
-     */
-    private static final Logger LOG =
-            Logger.getLogger(HighscoreUtils.class.getName());
-
     /**
      * the app name to use for creating our config folder.
      */
@@ -51,16 +45,16 @@ public final class HighscoreUtils {
         final File highscore = new File(getAppDirectory() + "highscore.json");
         try {
             if (highscore.getParentFile().mkdirs()) {
-                LOG.log(Level.INFO, "created app config directory over at "
+                Logger.getInstance().log("created app config directory over at "
                         + highscore.getParentFile().getAbsolutePath());
             }
             if (highscore.createNewFile()) {
-                LOG.log(Level.INFO, "created file for storing "
+                Logger.getInstance().log("created file for storing "
                         + "highscores over at"
-                + highscore.getAbsolutePath());
+                        + highscore.getAbsolutePath());
             }
         } catch (IOException e) {
-            LOG.log(Level.ALL, "an I/O error occurred whilst trying to check"
+            Logger.getInstance().log("an I/O error occurred whilst trying to check"
                     + " the highscore file", e);
         }
 
