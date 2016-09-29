@@ -98,8 +98,7 @@ public final class Spawner {
 		Game.getInstance().create(new Powerup(Game.getInstance().getScreenY()
 				* (float) Math.random(),
 				Game.getInstance().getScreenY() 
-				* (float) Math.random(), 
-				Game.getInstance()));
+				* (float) Math.random()));
 	}
 
 	/**

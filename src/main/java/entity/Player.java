@@ -334,8 +334,7 @@ public class Player extends AbstractEntity {
 				&& Game.getInstance().bullets(this) < (MAX_BULLETS * bullets)) {
 			final Bullet b = new Bullet(getX(), getY(),
 					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
-					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
-					Game.getInstance(), piercing);
+					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED), piercing);
 			Game.getInstance().create(b);
 			b.setPlayer(this);
 			lastShot = System.currentTimeMillis();
