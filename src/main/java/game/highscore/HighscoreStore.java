@@ -60,8 +60,7 @@ public class HighscoreStore {
 
             return Lists.newArrayList(result);
         } catch (IOException e) {
-            Logger.getInstance().log("was unable to read the highscores file");
-            e.printStackTrace();
+            Logger.getInstance().log("was unable to read the highscores file", e);
             if (highScores == null) {
                 highScores = Lists.newArrayList();
             }
@@ -129,8 +128,7 @@ public class HighscoreStore {
                     writer);
         } catch (IOException e) {
             Logger.getInstance().log("an error occurred whilst trying to write "
-                    + "the highscore to file");
-            e.printStackTrace();
+                    + "the highscore to file", e);
         }
     }
 
