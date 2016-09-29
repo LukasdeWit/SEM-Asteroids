@@ -2,12 +2,9 @@ package entity;
 import java.util.List;
 import java.util.Random;
 
+import display.DisplayEntity;
 import game.Game;
-import game.Launcher;
 import game.Logger;
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 /**
  * Class that represents an Asteroid.
@@ -15,58 +12,15 @@ import javafx.scene.shape.Line;
 public class Asteroid extends AbstractEntity {
 	private final int shape;
 	
-	private static final float[][][] SHAPES = {
-		{
-			{-2, -4, 0, -2},
-			{0, -2, 2, -4},
-			{2, -4, 4, -2},
-			{4, -2, 3, 0},
-			{3, 0, 4, 2},
-			{4, 2, 1, 4},
-			{1, 4, -2, 4},
-			{-2, 4, -4, 2},
-			{-4, 2, -4, -2},
-			{-4, -2, -2, -4}
-		},
-		{
-			{-2, -4, 0, -3},
-			{0, -3, 2, -4},
-			{2, -4, 4, -2},
-			{4, -2, 2, -1},
-			{2, -1, 4, 0},
-			{4, 0, 2, 3},
-			{2, 3, -1, 2},
-			{-1, 2, -2, 3},
-			{-2, 3, -4, 1},
-			{-4, 1, -3, 0},
-			{-3, 0, -4, -2},
-			{-4, -2, -2, -4}
-		},
-		{
-			{-2, -4, 1, -4},
-			{1, -4, 4, -2},
-			{4, -2, 4, -1},
-			{4, -1, 2, 0},
-			{2, 0, 4, 2},
-			{4, 2, 2, 4},
-			{2, 4, 1, 3},
-			{1, 3, -2, 4},
-			{-2, 4, -4, 1},
-			{-4, 1, -4, -2},
-			{-4, -2, -1, -2},
-			{-1, -2, -2, -4}
-		}
-	};
+	private static final int SHAPES = 3;
 	private static final float BIG_RADIUS = 20;
 	private static final float MEDIUM_RADIUS = 12;
 	private static final int BIG_SCORE = 20;
 	private static final float SMALL_RADIUS = 4;
 	private static final int MEDIUM_SCORE = 50;
 	private static final int SMALL_SCORE = 100;
-	private static final float SIZE = .25f;
 	private static final float MIN_SPEED = .5f;
 	private static final int SPLIT = 2;
-	private static final float WIDTH = 4;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -81,7 +35,7 @@ public class Asteroid extends AbstractEntity {
 		super(x, y, dX, dY);
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
-		shape = random.nextInt(SHAPES.length);
+		shape = random.nextInt(SHAPES);
 		while (speed() < MIN_SPEED) {
 			setDX(getDX() * 2);
 			setDY(getDY() * 2);
@@ -163,16 +117,13 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		final Group group = new Group();
-		for (final float[] f : SHAPES[shape]) {
-			final Line l = new Line(f[0] * (getRadius() * SIZE), f[1] * (getRadius() * SIZE), 
-					f[2] * (getRadius() * SIZE), f[1 + 2] * (getRadius() * SIZE));
-			l.setStroke(Color.WHITE);
-			l.setStrokeWidth(WIDTH * SIZE);
-			group.getChildren().add(l);
-		}
-		group.setTranslateX(getX());
-		group.setTranslateY(getY());
-		Launcher.getRoot().getChildren().add(group);
+		DisplayEntity.asteroid(this);
+	}
+
+	/**
+	 * @return the shape
+	 */
+	public final int getShape() {
+		return shape;
 	}
 }

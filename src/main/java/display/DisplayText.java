@@ -1,5 +1,6 @@
-package game;
+package display;
 
+import game.Launcher;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -8,7 +9,7 @@ import javafx.scene.shape.Line;
  * @author Kibo
  *
  */
-public final class Display {
+public final class DisplayText {
 	private static final float[][] SPACE = {};
 	private static final float[][] A = {
 			{0, 6, 0, 2},
@@ -268,11 +269,12 @@ public final class Display {
 	/**
 	 * private constructor for utility class.
 	 */
-	private Display() {
+	private DisplayText() {
 	      //not called
-	   }
+	}
+	
 	/**
-	 * Display the score.
+	 * DisplayText the score.
 	 * @param score - score
 	 */
 	public static void score(final long score) {
@@ -285,7 +287,7 @@ public final class Display {
 	}
 	
 	/**
-	 * Display the score.
+	 * DisplayText the score.
 	 * @param highscore - highscore
 	 */
 	public static void highscore(final long highscore) {
@@ -333,7 +335,7 @@ public final class Display {
 	}
 	
 	/**
-	 * Display the lives.
+	 * DisplayText the lives.
 	 * @param lives - number of lives
 	 */
 	public static void lives(final int lives) {
@@ -347,6 +349,7 @@ public final class Display {
 		final String livesString = outputBuffer.toString();
 		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString);
 	}
+	
 	/**
 	 * draw lives for coop.
 	 * @param lives - lives of player one
@@ -364,7 +367,7 @@ public final class Display {
 	}
 
 	/**
-	 * Display the wave.
+	 * DisplayText the wave.
 	 * @param wave - the current wave
 	 */
 	public static void wave(final int wave) {

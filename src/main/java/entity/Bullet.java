@@ -1,11 +1,9 @@
 package entity;
 import java.util.List;
 
+import display.DisplayEntity;
 import game.Game;
-import game.Launcher;
 import game.Logger;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 /**
  * Class that stores the information for a bullet.
@@ -16,7 +14,6 @@ public class Bullet extends AbstractEntity {
 	private Player player;
 	
 	private static final long LIFETIME = 2000;
-	private static final float SIZE = .5f;
 	private static final float RADIUS = 2;
 
 	/**
@@ -86,16 +83,11 @@ public class Bullet extends AbstractEntity {
 	}
 
 	/**
-	 * Display bullet on screen.
+	 * DisplayText bullet on screen.
 	 */
 	@Override
 	public final void draw() {
-		final float radius = getRadius();
-		final Circle c = new Circle(0, 0, radius * SIZE);
-		c.setFill(Color.WHITE);
-		c.setTranslateX(getX());
-		c.setTranslateY(getY());
-		Launcher.getRoot().getChildren().add(c);
+		DisplayEntity.bullet(this);
 	}
 
 	/**

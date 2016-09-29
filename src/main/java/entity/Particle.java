@@ -1,10 +1,8 @@
 package entity;
 import java.util.List;
 
+import display.DisplayEntity;
 import game.Game;
-import game.Launcher;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 /**
  * This class is a particle used in explosions.
@@ -14,7 +12,6 @@ import javafx.scene.shape.Circle;
 public class Particle extends AbstractEntity {
 	private final long birthTime;
 	
-	private static final float SIZE = .5f;
 	private static final long LIFETIME = 750;
 	private static final int EXPLOSION_PARTICLES = 10;
 	private static final float SPEED = .75f;
@@ -63,19 +60,7 @@ public class Particle extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		final float radius = getRadius();
-		final Circle c = new Circle(0, 0, radius * SIZE);
-		c.setFill(Color.GREY);
-		c.setTranslateX(getX());
-		c.setTranslateY(getY());
-		Launcher.getRoot().getChildren().add(c);
-		
-		/*root.setFill(Color.GREY);
-		root.fillOval(getX() - radius / SIZE, 
-				getY() - radius / SIZE, 
-				radius * SIZE, 
-				radius * SIZE);*/
-		
+		DisplayEntity.particle(this);
 	}
 
 	/**

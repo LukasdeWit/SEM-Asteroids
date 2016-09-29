@@ -3,13 +3,10 @@ package entity;
 import java.util.List;
 import java.util.Random;
 
+import display.DisplayEntity;
 import game.Game;
-import game.Launcher;
 import game.Logger;
 import game.Spawner;
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 /**
  * Class that represents a Saucer.
@@ -20,20 +17,6 @@ public class Saucer extends AbstractEntity {
 	private long dirChangeTime;
 	private long shotTime;	
 	
-	private static final double[][] SHAPE = {
-			{1.25, -3.5, 2.5, -0.75},
-			{2.5, -0.75, 5, 1},
-			{5, 1, 2.5, 3},
-			{2.5, 3, -2.5, 3},
-			{-2.5, 3, -5, 1},
-			{-5, 1, -2.5, -0.75},
-			{-2.5, -0.75, -1.25, -3.5},
-			{-1.25, -3.5, 1.25, -3.5},
-			{2.5, -0.75, -2.5, -0.75},
-			{5, 1, -5, 1}
-	};
-	
-
 	private static final float SMALL_RADIUS = 5;
 	private static final float BIG_RADIUS = 10;
 	
@@ -41,14 +24,12 @@ public class Saucer extends AbstractEntity {
 	private static final double PATH_ANGLE = Math.PI / 4;
 	private static final float BULLET_SPEED = 4;
 	private static final long CHANGE_DIR_TIME = 2000;
-	private static final float SIZE = .20f;
 	
 	private static final int BIG_SCORE = 200;
 	private static final int SMALL_SCORE = 1000;
 	private static final long SHOT_TIME = 1000;
 	private static final long LESS_SHOT = 50;
 	private static final float MAX_ACCURACY = 10;
-	private static final float WIDTH = 4;
 
 	/**
 	 * Constructor for Saucer class.
@@ -213,21 +194,11 @@ public class Saucer extends AbstractEntity {
 	}
 
 	/**
-	 * Display UFO on screen.
+	 * DisplayText UFO on screen.
 	 */
 	@Override
 	public final void draw() {
-		final Group group = new Group();
-		for (final double[] f : SHAPE) {
-			final Line l = new Line(f[0] * (getRadius() * SIZE), f[1] * (getRadius() * SIZE), 
-					f[2] * (getRadius() * SIZE), f[1 + 2] * (getRadius() * SIZE));
-			l.setStroke(Color.WHITE);
-			l.setStrokeWidth(WIDTH * SIZE);
-			group.getChildren().add(l);
-		}
-		group.setTranslateX(getX());
-		group.setTranslateY(getY());
-		Launcher.getRoot().getChildren().add(group);
+		DisplayEntity.saucer(this);
 	}
 
 	/**

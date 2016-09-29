@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import display.DisplayText;
 import entity.AbstractEntity;
 import entity.Asteroid;
 import entity.Bullet;
@@ -139,7 +140,7 @@ public final class Game {
 		//root.setFill(Color.BLACK);
 		//root.fillRect(0, 0, screenX, screenY);
 		Gamestate.getInstance().update(input);
-		Display.wave(Spawner.getInstance().getWave());
+		DisplayText.wave(Spawner.getInstance().getWave());
 	}	
 	
 	/**
@@ -161,12 +162,12 @@ public final class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		Display.score(score);
-		Display.highscore(highscore);
+		DisplayText.score(score);
+		DisplayText.highscore(highscore);
 		if (Gamestate.getInstance().isCoop()) {
-			Display.livesTwo(playerTwo.getLives());
+			DisplayText.livesTwo(playerTwo.getLives());
 		}
-		Display.lives(player.getLives());
+		DisplayText.lives(player.getLives());
 		
 	}
 

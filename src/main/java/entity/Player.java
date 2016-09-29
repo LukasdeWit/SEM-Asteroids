@@ -2,15 +2,10 @@ package entity;
 import java.util.List;
 import java.util.Random;
 
+import display.DisplayEntity;
 import game.Game;
 import game.Gamestate;
-import game.Launcher;
 import game.Logger;
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 
 /**
  * This class is the player of the game.
@@ -36,37 +31,11 @@ public class Player extends AbstractEntity {
 	private static final int HYPERSPACE_TIME = 1000;
 	private static final long TIME_BETWEEN_SHOTS = 200;
 	private static final float BULLET_SPEED = 4;
-	private static final int RESPAWN_FLICKER_TIME = 250;
 	private static final float MAX_SPEED = 4;
 	private static final int MAX_BULLETS = 4;
 	private static final int CHANCE_OF_DYING = 25;
 	private static final float SPAWN_OFFSET = 40;
 	
-	private static final float[] PLAYER_TWO_CIRCLE = {11, 0, 9};
-	private static final float[][] PLAYER_TWO_LINES = {
-			{11, 0, -7,  0},
-			{ -2,  0, -8, -6},
-			{ -2,  0, -8, 6},
-			{  0, -6, -19, -6},
-			{  0, 6, -19, 6}
-	};
-	private static final float[][] PLAYER_TWO_BOOST = {
-			{-9, 2, -9, -2},
-			{-14, 2, -14, -2},
-			{-19, 2, -19, -2}
-	};
-	private static final float PLAYER_TWO_SIZE = .5f;
-	
-	private static final float[][] PLAYER_ONE_LINES = {
-			{10, 0, -8, 8},
-			{-8, 8, -8, -8},
-			{-8, -8, 10, 0}
-	};
-	private static final float[][] PLAYER_ONE_BOOST = {
-			{-14, 0, -8, -6},
-			{-14, 0, -8, 6}
-	};
-	private static final float PLAYER_ONE_SIZE = .5f;
 	private static final String LEFT = "LEFT";
 	private static final String RIGHT = "RIGHT";
 	
@@ -118,7 +87,7 @@ public class Player extends AbstractEntity {
 			// we lose one live
 
 			// respawn the player
-			if (playerTwo) {
+			if (isPlayerTwo()) {
 				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
 			} else if (Gamestate.getInstance().isCoop()) {
 				setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
@@ -139,7 +108,7 @@ public class Player extends AbstractEntity {
 	public final void gainLife() {
 		lives++;
 		if (lives == 1) {
-			if (playerTwo) {
+			if (isPlayerTwo()) {
 				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
 			} else if (Gamestate.getInstance().isCoop()) {
 				setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
@@ -211,7 +180,7 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandlerTwo(final List<String> input) {
-		if (playerTwo) {
+		if (isPlayerTwo()) {
 			if (input.contains(LEFT) || !(input.contains(RIGHT))) {
 				turnLeft();
 			}
@@ -272,13 +241,13 @@ public class Player extends AbstractEntity {
 	 * Makes player move faster.
 	 */
 	private void accelerate() {
-		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION));
-		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION));
+		setDX((float) (getDX() + Math.cos(getRotation()) * ACCELERATION));
+		setDY((float) (getDY() - Math.sin(getRotation()) * ACCELERATION));
 		if (speed() > MAX_SPEED) {
 			setDX(getDX() * (MAX_SPEED / speed()));
 			setDY(getDY() * (MAX_SPEED / speed()));
 		}
-		boost = true;
+		setBoost(true);
 	}
 
 	/**
@@ -308,7 +277,7 @@ public class Player extends AbstractEntity {
 	 * @return whether or not the player is invincible at this moment.
 	 */
 	public final boolean invincible() {
-		return invincibleStart + invincibleMS > System.currentTimeMillis();
+		return getInvincibleStart() + invincibleMS > System.currentTimeMillis();
 	}
 
 	/**
@@ -344,8 +313,8 @@ public class Player extends AbstractEntity {
 		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
 				&& Game.getInstance().bullets(this) < MAX_BULLETS) {
 			final Bullet b = new Bullet(getX(), getY(),
-					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
-					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED));
+					(float) (getDX() / 2 + Math.cos(getRotation()) * BULLET_SPEED),
+					(float) (getDY() / 2 - Math.sin(getRotation()) * BULLET_SPEED));
 			b.setPlayer(this);
 			Game.getInstance().create(b);
 			lastShot = System.currentTimeMillis();
@@ -378,83 +347,7 @@ public class Player extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		Paint color = Color.WHITE;
-		if (invincible() && (System.currentTimeMillis() - invincibleStart) 
-				% (RESPAWN_FLICKER_TIME * 2) < RESPAWN_FLICKER_TIME) {
-			color = Color.GREY;
-		}
-		if (playerTwo) {
-			drawTwo(color);
-		} else {
-			drawOne(color);
-		}
-	}
-	
-	/**
-	 * Display Player two on screen.
-	 * @param color - the color
-	 */
-	private void drawTwo(final Paint color) {
-		final Group group = new Group();
-		for (final float[] f : PLAYER_TWO_LINES) {
-			final Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
-					f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
-			l.setStroke(color);
-			l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
-			group.getChildren().add(l);
-		}
-		final Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE, 
-				PLAYER_TWO_CIRCLE[1] * PLAYER_TWO_SIZE, PLAYER_TWO_CIRCLE[2] * PLAYER_TWO_SIZE);
-		c.setFill(color);
-		group.getChildren().add(c);
-		if (boost) {
-			for (final float[] f : PLAYER_TWO_BOOST) {
-				final Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE, 
-						f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
-				l.setStroke(Color.WHITE);
-				l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
-				group.getChildren().add(l);
-			}
-			boost = false;
-		}
-		group.setRotate(Math.toDegrees(-rotation));
-		group.setTranslateX(getX());
-		group.setTranslateY(getY());
-		Launcher.getRoot().getChildren().add(group);
-	}
-	
-	/**
-	 * Display Player one on screen.
-	 * @param color - the color
-	 */
-	private void drawOne(final Paint color) {
-		final Group group = new Group();
-		for (final float[] f : PLAYER_ONE_LINES) {
-			final Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
-					f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
-			l.setStroke(color);
-			l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
-			group.getChildren().add(l);
-		}
-		if (boost) {
-			for (final float[] f : PLAYER_ONE_BOOST) {
-				final Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE, 
-						f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
-				l.setStroke(Color.WHITE);
-				l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
-				group.getChildren().add(l);
-			}
-			final Line l = new Line((-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 0, 
-					(-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 1);
-				//so rotation is not wrong
-			group.getChildren().add(l);
-			boost = false;
-		}
-		group.setRotate(Math.toDegrees(-rotation));
-		group.setTranslateX(getX());
-		group.setTranslateY(getY());
-		
-		Launcher.getRoot().getChildren().add(group);
+		DisplayEntity.player(this);
 	}
 
 	/**
@@ -477,5 +370,40 @@ public class Player extends AbstractEntity {
 	 */
 	public static float getSpawnOffset() {
 		return SPAWN_OFFSET;
+	}
+
+	/**
+	 * @return the invincibleStart
+	 */
+	public final long getInvincibleStart() {
+		return invincibleStart;
+	}
+
+	/**
+	 * @return the playerTwo
+	 */
+	public final boolean isPlayerTwo() {
+		return playerTwo;
+	}
+
+	/**
+	 * @return the boost
+	 */
+	public final boolean isBoost() {
+		return boost;
+	}
+
+	/**
+	 * @param boost the boost to set
+	 */
+	public final void setBoost(final boolean boost) {
+		this.boost = boost;
+	}
+
+	/**
+	 * @return the rotation
+	 */
+	public final double getRotation() {
+		return rotation;
 	}
 }

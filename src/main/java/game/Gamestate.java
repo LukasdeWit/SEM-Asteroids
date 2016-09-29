@@ -2,6 +2,8 @@ package game;
 
 import java.util.List;
 
+import display.DisplayText;
+
 /**
  * This class handles the switching of gamestates.
  * @author Kibo
@@ -60,7 +62,7 @@ public final class Gamestate {
 		switch(state) {
 		case STATE_START_SCREEN:
 			startScreen(input);
-			Display.startScreen();
+			DisplayText.startScreen();
 			break;
 		case STATE_GAME:
 			Game.getInstance().updateGame(input);
@@ -68,10 +70,10 @@ public final class Gamestate {
 			break;
 		case STATE_HIGHSCORE_SCREEN:
 			highscoreScreen(input);
-			Display.highscoreScreen(Game.getInstance().getHighscore());
+			DisplayText.highscoreScreen(Game.getInstance().getHighscore());
 			break;
 		case STATE_PAUSE_SCREEN:
-			Display.pauseScreen();
+			DisplayText.pauseScreen();
 			pauseScreen(input);
 			break;
 		default:
