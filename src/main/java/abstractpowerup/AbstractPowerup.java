@@ -9,7 +9,14 @@ import java.util.List;
  */
 public class AbstractPowerup {
 	/**
-	 * The type of the powerup. Can be 0 (additional life, not currently active), 1 (shield, not currently active), 2 (bullet size increase), 3 (piercing bullets), 4 (minigun) or 5 (triple-shot, not implemented yet).
+	 * The type of the powerup.
+	 * Can be
+	 * 0 (additional life, not currently active),
+	 * 1 (shield, not currently active),
+	 * 2 (bullet size increase),
+	 * 3 (piercing bullets),
+	 * 4 (minigun)
+	 * or 5 (triple-shot, not implemented yet).
 	 */
 	private int powerupType;
 	/**
@@ -46,7 +53,8 @@ public class AbstractPowerup {
 	private final int SIZE_BOOST_BIG = 5;
 	
 	/**
-	 * How much of a boost to the max number of bullets it gives. Standard value is 1.
+	 * How much of a boost to the max number of bullets it gives.
+	 * Standard value is 1.
 	 */
 	private int NUMB_BOOST = 1;
 	/**
@@ -54,10 +62,14 @@ public class AbstractPowerup {
 	 */
 	private final int NUMB_BOOST_MINIGUN = 3;
 	
-	public AbstractPowerup(int type){
+	/**
+	 * Constructor for the AbstractPowerup class
+	 * @param type the type of powerup it is.
+	 */
+	public AbstractPowerup(final int type) {
 		powerupType = type;
 		startTime = System.currentTimeMillis();
-		switch(type){
+		switch(type) {
 			case 2:SIZE_BOOST = SIZE_BOOST_BIG;
 			break;
 			case 3:PIERCE_RATE_BOOST = PIERCE_RATE_BOOST_PIERCING;
@@ -65,34 +77,43 @@ public class AbstractPowerup {
 			case 4:FIRE_RATE_BOOST = FIRE_RATE_BOOST_MINIGUN;
 			NUMB_BOOST = NUMB_BOOST_MINIGUN;
 			break;
+			default:
 		}
 	}
 	
-	public boolean powerupOver(){
-		return(powerupDuration<(System.currentTimeMillis()-startTime));
+	/**
+	 * Checks whether the powerup has expired or not.
+	 */
+	public final boolean powerupOver() {
+		return (powerupDuration < (System.currentTimeMillis() - startTime));
 	}
 	
-	public double getRateMult() {
+	/**
+	 * Getter for the fire rate boost of the powerup.
+	 */
+	public final double getRateMult() {
 		return FIRE_RATE_BOOST;
 	}
-	public int getNumbMult() {
+	
+	/**
+	 * Getter for the number of bullets boost of the powerup.
+	 */
+	public final int getNumbMult() {
 		return NUMB_BOOST;
 	}
-
-	public int getPierceRateBoost() {
+	
+	/**
+	 * Getter for the pierce boost of the powerup.
+	 */
+	public final int getPierceRateBoost() {
 		return PIERCE_RATE_BOOST;
 	}
 
-	public void setPierceRateBoost(int PIERCE_BOOST) {
-		PIERCE_RATE_BOOST = PIERCE_BOOST;
-	}
-
-	public int getSizeBoost() {
+	/**
+	 * Getter for the size boost of the powerup.
+	 */
+	public final int getSizeBoost() {
 		return SIZE_BOOST;
-	}
-
-	public void setSizeBoost(int SIZE) {
-		SIZE_BOOST = SIZE;
 	}
 
 }

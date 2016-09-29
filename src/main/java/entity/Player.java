@@ -3,8 +3,6 @@ import game.Game;
 import game.Logger;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -118,11 +116,13 @@ public class Player extends AbstractEntity {
 	 */
 	private ArrayList<AbstractPowerup> powerups;
 	/**
-	 * The number of bullets the player can actually have fired at once is this number times MAX_BULLETS.
+	 * The number of bullets the player can actually
+	 * have fired at once is this number times MAX_BULLETS.
 	 */
 	private int BULLET_NUMBER_MULTIPLIER;
 	/**
-	 * The actual speed with which the player can fire bullets is this number times TIME_BETWEEN_SHOTS.
+	 * The actual speed with which the player can fire
+	 * bullets is this number times TIME_BETWEEN_SHOTS.
 	 */
 	private double BULLET_FIRE_RATE_MULTIPLIER;
 	/**
@@ -158,7 +158,7 @@ public class Player extends AbstractEntity {
 		setRadius(RADIUS);
 		rotation = 0;
 		makeInvincible(INVINCIBILITY_START_TIME);
-		setPowerups(new ArrayList<AbstractPowerup>());
+		powerups = new ArrayList<AbstractPowerup>();
 		BULLET_NUMBER_MULTIPLIER = 1;
 		BULLET_FIRE_RATE_MULTIPLIER = 1;
 		BULLET_PIERCE_RATE = 1;
@@ -185,7 +185,7 @@ public class Player extends AbstractEntity {
 	 * or is hit by the bullet of an saucer.
 	 */
 	public final void onHit() {
-		if(SHIELDING < 1){
+		if (SHIELDING < 1) {
 			lives--;
 			if (lives <= 0) {
 				// we are out of lives, call gameover
@@ -201,8 +201,7 @@ public class Player extends AbstractEntity {
 				rotation = 0;
 				makeInvincible(INVINCIBILITY_START_TIME);
 			}
-		}
-		else{
+		} else {
 			SHIELDING--;
 		}
 	}
@@ -347,12 +346,13 @@ public class Player extends AbstractEntity {
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot > (TIME_BETWEEN_SHOTS*BULLET_FIRE_RATE_MULTIPLIER)
-				&& getThisGame().bullets() < (MAX_BULLETS*BULLET_NUMBER_MULTIPLIER)) {
+		if (System.currentTimeMillis() - lastShot >
+		(TIME_BETWEEN_SHOTS * BULLET_FIRE_RATE_MULTIPLIER) &&
+		getThisGame().bullets() < (MAX_BULLETS * BULLET_NUMBER_MULTIPLIER)) {
 			final Bullet b = new Bullet(getX(), getY(),
 					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
 					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
-					getThisGame(),BULLET_PIERCE_RATE);
+					getThisGame(), BULLET_PIERCE_RATE);
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
 		}
@@ -448,37 +448,47 @@ public class Player extends AbstractEntity {
 		return lives;
 	}
 
-	public ArrayList<AbstractPowerup> getPowerups() {
+	/**
+	 * @return powerups the list of powerups
+	 */
+	public final ArrayList<AbstractPowerup> getPowerups() {
 		return powerups;
 	}
-
-	public void setPowerups(ArrayList<AbstractPowerup> powerups) {
-		this.powerups = powerups;
-	}
 	
-	public void givePowerup(AbstractPowerup powerToAdd){
+	/**
+	 * Gives a powerup to the player.
+	 * @param powerToAdd the power given to the player.
+	 */
+	public final void givePowerup(final AbstractPowerup powerToAdd) {
 		this.powerups.add(powerToAdd);
 	}
 	
-	public void giveShield(){
+	/**
+	 * Gives the player one unit of shield.
+	 */
+	public final void giveShield() {
 		SHIELDING++;
 	}
 	
-	public void handlePowerups(){
+	/**
+	 * Is used to process powerups.
+	 */
+	public final void handlePowerups() {
 		BULLET_FIRE_RATE_MULTIPLIER = 1;
 		BULLET_NUMBER_MULTIPLIER = 1;
 		BULLET_PIERCE_RATE = 1;
 		BULLET_SIZE = 1;
-		for(AbstractPowerup x : powerups){
-			if(x.powerupOver()){
+		for (AbstractPowerup x : powerups) {
+			if (x.powerupOver()) {
 				powerups.remove(x);
 				break;
-			}
-			else{
-			BULLET_FIRE_RATE_MULTIPLIER = BULLET_FIRE_RATE_MULTIPLIER*x.getRateMult();
-			BULLET_NUMBER_MULTIPLIER = BULLET_NUMBER_MULTIPLIER*x.getNumbMult();
-			BULLET_PIERCE_RATE =+x.getPierceRateBoost();
-			BULLET_SIZE = BULLET_SIZE*x.getSizeBoost();
+			} else {
+				BULLET_FIRE_RATE_MULTIPLIER = BULLET_FIRE_RATE_MULTIPLIER
+				* x.getRateMult();
+				BULLET_NUMBER_MULTIPLIER = BULLET_NUMBER_MULTIPLIER
+				* x.getNumbMult();
+				BULLET_PIERCE_RATE =+ x.getPierceRateBoost();
+				BULLET_SIZE = BULLET_SIZE * x.getSizeBoost();
 			}
 		}
 	}

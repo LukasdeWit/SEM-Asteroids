@@ -128,7 +128,7 @@ public class Spawner {
 	 */
 	private void spawnPowerup() {
 		thisGame.create(new Powerup(thisGame.getScreenY()
-				*(float) Math.random(),
+				* (float) Math.random(),
 				thisGame.getScreenY() 
 				* (float) Math.random(), 
 				thisGame));
