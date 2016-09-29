@@ -85,11 +85,12 @@ public class HighscoreStore {
 
     /**
      * adds a <strong>nonnull</strong> highscore to the store.
-     * @param score the score we want to add as a highscore
+     * @param score the score we want to add as a highscore.
+     * @param gamemode the current gamemode
      */
-    public final void addHighScore(final long score) {
+    public final void addHighScore(final long score, final int gamemode) {
         highScores.add(new HighScore(System.getProperty("user.name"),
-                score, nextId()));
+                score, nextId(), gamemode));
 
         Collections.sort(highScores);
     }

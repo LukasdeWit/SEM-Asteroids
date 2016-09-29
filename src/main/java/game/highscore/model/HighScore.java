@@ -16,17 +16,22 @@ public class HighScore implements Comparable<HighScore> {
      * the id of the highscore entry.
      */
     private final int id;
-
+    /**
+     * the gametype this highscore was achieved on.
+     */
+    private final int gamemode;
     /**
      * basic constructor.
      * @param userName username of the person who set this highscore
      * @param score the score set in this highscore
      * @param id the id related to this highscore
+     * @param gamemode the gamemode this score was achieved on
      */
-    public HighScore(final String userName, final long score, final int id) {
+    public HighScore(final String userName, final long score, final int id, int gamemode) {
         this.userName = userName;
         this.score = score;
         this.id = id;
+        this.gamemode = gamemode;
     }
 
     /**
@@ -51,6 +56,14 @@ public class HighScore implements Comparable<HighScore> {
      */
     public final int getId() {
         return id;
+    }
+
+    /**
+     * get the gametype this highscore was achieved on.
+     * @return the gametype
+     */
+    public int getGamemode() {
+        return gamemode;
     }
 
     @Override
