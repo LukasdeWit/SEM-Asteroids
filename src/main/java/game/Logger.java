@@ -32,7 +32,6 @@ public final class Logger {
 	/**
 	 * Private constructor of Logger.
 	 */
-	@SuppressWarnings("PMD.SystemPrintln")
 	private Logger() {
 		final File file = new File("log.txt");
 		sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss.SSS", Locale.ENGLISH);
@@ -59,8 +58,7 @@ public final class Logger {
 	 *
 	 * @param message - the message
 	 */
-	@SuppressWarnings("PMD.SystemPrintln")
-	public void log(final String message) {		
+	public void log(final String message) {
 		final String string = sdf.format(new Date(System.currentTimeMillis())) 
 				+ " | " + message + "\n";
 		System.out.print(string);
