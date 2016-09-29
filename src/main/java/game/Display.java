@@ -1,10 +1,7 @@
 package game;
 
-import game.highscore.model.HighScore;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
-import java.util.List;
 
 /**
  * This class displays all numbers, letters and lives.
@@ -527,20 +524,6 @@ public final class Display {
 				"your new highscore is " + highscore, gc);
 	}
 
-	public static void highscoreScreen(final List<HighScore> highScores,
-									   final GraphicsContext gc){
-		gc.setStroke(Color.WHITE);
-		gc.setLineWidth(1);
-
-		final int TEMP_HEIGH = (int) HIGHSCORE_SIZE;
-		final int TEMP_PADDING_TOP = (int) HIGHSCORE_SIZE;
-		final float numEntries = Game.getCanvasSize() - TEMP_PADDING_TOP * 2 / TEMP_HEIGH;
-
-		for (int i = 0; i < numEntries; i++) {
-			// TODO: 22-9-16 do drawing of the things
-		}
-	}
-	
 	/**
 	 * draw the pauze screen.
 	 * @param gc - the graphics context
