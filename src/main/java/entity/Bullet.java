@@ -1,35 +1,19 @@
 package entity;
 import java.util.List;
 
+import display.DisplayEntity;
 import game.Game;
 import game.Logger;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /**
  * Class that stores the information for a bullet.
  */
 public class Bullet extends AbstractEntity {
-	/**
-	 * Time of creation.
-	 */
 	private final long birthTime;
-	/**
-	 * true if this bullet is shot by the player, 
-	 * false if it can hit the player.
-	 */
 	private boolean friendly;
-	/**
-	 * Lifetime of a bullet in milliseconds.
-	 */
+	private Player player;
+	
 	private static final long LIFETIME = 2000;
-	/**
-	 * Draw size of bullet.
-	 */
-	private static final float SIZE = 1.5f;
-	/**
-	 * Radius of bullet.
-	 */
 	private static final float RADIUS = 2;
 
 	/**
@@ -39,11 +23,10 @@ public class Bullet extends AbstractEntity {
 	 * @param y position of bullet along the y-axis
 	 * @param dX velocity of bullet along the x-axis
 	 * @param dY velocity of bullet along the y-axis
-	 * @param thisGame game the bullet exists in
 	 */
 	public Bullet(final float x, final float y, 
-			final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+			final float dX, final float dY) {
+		super(x, y, dX, dY);
 		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
@@ -59,7 +42,7 @@ public class Bullet extends AbstractEntity {
 		setY(getY() + getDY());
 		wrapAround();
 		if (System.currentTimeMillis() - birthTime > LIFETIME) {
-			getThisGame().destroy(this);
+			Game.getInstance().destroy(this);
 		}
 	}
 
@@ -85,8 +68,8 @@ public class Bullet extends AbstractEntity {
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
-			getThisGame().destroy(this);
-			getThisGame().destroy(e2);
+			Game.getInstance().destroy(this);
+			Game.getInstance().destroy(e2);
 			Logger.getInstance().log("Asteroid was hit by a bullet.");
 		}
 	}
@@ -100,15 +83,24 @@ public class Bullet extends AbstractEntity {
 	}
 
 	/**
-	 * Display bullet on screen.
+	 * DisplayText bullet on screen.
 	 */
 	@Override
-	public final void draw(final GraphicsContext gc) {
-		final float radius = getRadius();
-		gc.setFill(Color.WHITE);
-		gc.fillOval(getX() - radius / SIZE,
-				getY() - radius / SIZE,
-				radius * SIZE,
-				radius * SIZE);
+	public final void draw() {
+		DisplayEntity.bullet(this);
+	}
+
+	/**
+	 * @return the player
+	 */
+	public final Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * @param player the player to set
+	 */
+	public final void setPlayer(final Player player) {
+		this.player = player;
 	}
 }

@@ -45,6 +45,7 @@
         <!-- we don't require contributes to be 'politically correct' -->
         <exclude name="CommentContent"/>
         <exclude name="CommentSize"/>
+        <exclude name="CommentRequired"/>
     </rule>
 
     <rule ref="rulesets/java/optimizations.xml">
