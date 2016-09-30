@@ -48,6 +48,7 @@ public class Player extends AbstractEntity {
 	
 	private static final String LEFT = "LEFT";
 	private static final String RIGHT = "RIGHT";
+	private static final double TRIPLE_SHOT_ANGLE = .1;
 	
 	/**
 	 * Constructor for the Player class.
@@ -331,14 +332,26 @@ public class Player extends AbstractEntity {
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot >	fireRate 
 				&& Game.getInstance().bullets(this) < maxBullets) {
-			final Bullet b = new Bullet(getX(), getY(),
-					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
-					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED), piercing);
-			Game.getInstance().create(b);
-			b.setPlayer(this);
-			b.setRadius(bulletSize);
+			fireBullet(rotation);
+			if (tripleShot) {
+				fireBullet(rotation - TRIPLE_SHOT_ANGLE);
+				fireBullet(rotation + TRIPLE_SHOT_ANGLE);
+			}
 			lastShot = System.currentTimeMillis();
 		}
+	}
+	
+	/**
+	 * fire a bullet in a direction.
+	 * @param direction - the direction
+	 */
+	private void fireBullet(final double direction) {
+		final Bullet b = new Bullet(getX(), getY(),
+				(float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
+				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing);
+		Game.getInstance().create(b);
+		b.setPlayer(this);
+		b.setRadius(bulletSize);
 	}
 
 	/**
@@ -428,13 +441,6 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return the tripleShot
-	 */
-	public final boolean isMultishot() {
-		return tripleShot;
-	}
-
-	/**
 	 * @return the shielding
 	 */
 	public final int getShielding() {
@@ -495,5 +501,19 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainShield() {
 		shielding++;		
+	}
+
+	/**
+	 * @param maxBullets the maxBullets to set
+	 */
+	public final void setMaxBullets(final int maxBullets) {
+		this.maxBullets = maxBullets;
+	}
+
+	/**
+	 * @return the maxBullets
+	 */
+	public static int getMaxBullets() {
+		return MAX_BULLETS;
 	}
 }

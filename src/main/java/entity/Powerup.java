@@ -44,6 +44,8 @@ public class Powerup extends AbstractEntity {
 	private static final float NEW_BULLET_SIZE = 6;
 	private static final int NEW_PIERCING_LEVEL = 3;
 	private static final long NEW_FIRE_RATE = 50;
+	private static final int TRIPLE_SHOT_BULLETS = Player.getMaxBullets() * 3;
+	private static final int MINIGUN_BULLETS = Player.getMaxBullets() * 4;
 
 	/**
 	 * Constructor for the Powerup class.
@@ -55,7 +57,7 @@ public class Powerup extends AbstractEntity {
 		super(x, y, 0, 0);
 		final Random random = new Random();
 		setRadius(RADIUS);
-		type = 2; //random.nextInt(TYPES);
+		type = 3; //random.nextInt(TYPES);
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
 	}
@@ -94,12 +96,14 @@ public class Powerup extends AbstractEntity {
 				break;
 			case TRIPLE_SHOT:
 				p.setTripleShot(true);
+				p.setMaxBullets(TRIPLE_SHOT_BULLETS);
 				break;
 			case PIERCING:
 				p.setPiercing(NEW_PIERCING_LEVEL);
 				break;
 			case MINIGUN:
 				p.setFireRate(NEW_FIRE_RATE);
+				p.setMaxBullets(MINIGUN_BULLETS);
 				break;
 			default:
 				Game.getInstance().destroy(this);
@@ -140,12 +144,14 @@ public class Powerup extends AbstractEntity {
 				break;
 			case TRIPLE_SHOT:
 				player.setTripleShot(false);
+				player.setMaxBullets(Player.getMaxBullets());
 				break;
 			case PIERCING:
 				player.setPiercing(1);
 				break;
 			case MINIGUN:
 				player.setFireRate(Player.getFireRate());
+				player.setMaxBullets(Player.getMaxBullets());
 				break;
 			default:
 				break;
@@ -156,7 +162,7 @@ public class Powerup extends AbstractEntity {
 	/**
 	 * @return the player
 	 */
-	public Player getPlayer() {
+	public final Player getPlayer() {
 		return player;
 	}
 }
