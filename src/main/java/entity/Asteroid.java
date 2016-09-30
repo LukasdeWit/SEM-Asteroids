@@ -10,7 +10,7 @@ import game.Logger;
  * Class that represents an Asteroid.
  */
 public class Asteroid extends AbstractEntity {
-	private final int shape;
+	private int shape;
 	
 	private static final int SHAPES = 3;
 	private static final float BIG_RADIUS = 20;
@@ -128,9 +128,23 @@ public class Asteroid extends AbstractEntity {
 	}
 
 	/**
+	 * @param shape the shape to set
+	 */
+	public void setShape(int shape) {
+		this.shape = shape;
+	}
+
+	/**
 	 * @return the mediumRadius
 	 */
 	public static float getMediumRadius() {
 		return MEDIUM_RADIUS;
+	}
+
+	/**
+	 * @return the smallRadius
+	 */
+	public static float getSmallRadius() {
+		return SMALL_RADIUS;
 	}
 }

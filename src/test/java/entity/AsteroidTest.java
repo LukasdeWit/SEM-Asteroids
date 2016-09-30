@@ -13,7 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import display.DisplayEntity;
 import game.Game;
+import game.Launcher;
+import javafx.scene.Group;
 
 
 /**
@@ -102,7 +105,23 @@ public class AsteroidTest {
 	public final void testOnDeath2() {
 		ceres.setRadius(Asteroid.getMediumRadius());
 		ceres.onDeath();
-		//final Asteroid a = (Asteroid)(Game.getInstance().getCreateList().get(0));
-		//assertEquals(a.getRadius(), Asteroid.getMediumRadius(), 0);
+		final Asteroid a = (Asteroid)(Game.getInstance().getCreateList().get(0));
+		assertEquals(a.getRadius(), Asteroid.getSmallRadius(), 0);
+	}
+	
+	@Test
+	public final void testOnDeath3() {
+		ceres.setRadius(Asteroid.getSmallRadius());
+		ceres.onDeath();
+		assertEquals(Game.getInstance().getCreateList().size(), Particle.getExplosionParticles());
+	}
+
+	@Test
+	public final void testDraw() {
+		ceres.setShape(0);
+		ceres.draw();
+		final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
+		final int strakesInShape = DisplayEntity.getAsteroidShapes()[0].length;
+		assertEquals(strokesInGroup, strakesInShape);
 	}
 }
