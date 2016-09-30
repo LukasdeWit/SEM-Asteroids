@@ -126,4 +126,11 @@ public class Asteroid extends AbstractEntity {
 	public final int getShape() {
 		return shape;
 	}
+
+	/**
+	 * @return the mediumRadius
+	 */
+	public static float getMediumRadius() {
+		return MEDIUM_RADIUS;
+	}
 }

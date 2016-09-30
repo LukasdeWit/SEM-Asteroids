@@ -32,6 +32,8 @@ public class AsteroidTest {
 
 	@Before
 	public final void setUp() {
+		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
+		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
 		ceres = new Asteroid(X_START, Y_START, DX_START, DY_START);
 	}
 
@@ -87,5 +89,20 @@ public class AsteroidTest {
 		ceres.collide(e2);
 		assertTrue(Game.getInstance().getDestroyList().contains(ceres));
 		assertTrue(Game.getInstance().getDestroyList().contains(e2));
+	}
+	
+	@Test
+	public final void testOnDeath() {
+		ceres.onDeath();
+		final Asteroid a = (Asteroid)(Game.getInstance().getCreateList().get(0));
+		assertEquals(a.getRadius(), Asteroid.getMediumRadius(), 0);
+	}
+	
+	@Test
+	public final void testOnDeath2() {
+		ceres.setRadius(Asteroid.getMediumRadius());
+		ceres.onDeath();
+		//final Asteroid a = (Asteroid)(Game.getInstance().getCreateList().get(0));
+		//assertEquals(a.getRadius(), Asteroid.getMediumRadius(), 0);
 	}
 }
