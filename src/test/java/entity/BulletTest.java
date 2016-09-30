@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import game.Game;
+
 /**
  * Tests for Bullet.
  * @author Kibo
@@ -23,17 +25,21 @@ public class BulletTest {
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
 	/**
-	 * Test Asteroid.
+	 * Test bullet.
 	 */
 	private Bullet bill;
 	/**
-	 * Mocked Game.
+	 * Test bullet #2.
 	 */
-	//private Game mockGame;
+	private Bullet ball;
 
 	@Before
 	public void setUp() throws Exception {
 		bill = new Bullet(X_START, Y_START, DX_START, DY_START);
+		//Used for testing methods involving the piercing attribute.
+		ball = new Bullet(X_START,Y_START, DX_START, DY_START, 3);
+		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
+		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
 	}
 
 	/**
@@ -67,7 +73,7 @@ public class BulletTest {
 		List<String> input = new ArrayList<String>(0);
 		bill.setBirthTime(0);
 		bill.update(input);
-		//verify(mockGame).destroy(bill);
+        assertTrue(Game.getInstance().getDestroyList().contains(bill));
 	}
 	
 	/**
@@ -86,8 +92,13 @@ public class BulletTest {
 	public final void testCollide() {
 		Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START);
 		bill.collide(e2);
-		//verify(mockGame, times(2)).destroy(Mockito.any(AbstractEntity.class));
-	}
+        assertTrue(Game.getInstance().getDestroyList().contains(bill));
+        assertTrue(Game.getInstance().getDestroyList().contains(e2));
+        Asteroid e3 = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		ball.collide(e3);
+        assertFalse(Game.getInstance().getDestroyList().contains(ball));
+        assertTrue(Game.getInstance().getDestroyList().contains(e3));
+     }
 	
 	/**
 	 * Test collide.
@@ -96,8 +107,9 @@ public class BulletTest {
 	public final void testCollide2() {
 		Player e2 = new Player(X_START, Y_START, 0, 0, false);
 		bill.collide(e2);
-		//verify(mockGame, never()).destroy(Mockito.any(AbstractEntity.class));
-	}
+        assertFalse(Game.getInstance().getDestroyList().contains(bill));
+        assertFalse(Game.getInstance().getDestroyList().contains(e2));
+        }
 
 	/**
 	 * Test onDeath.
@@ -105,7 +117,7 @@ public class BulletTest {
 	@Test
 	public final void testOnDeath() {
 		bill.onDeath();
-		//verify(mockGame, never()).destroy(Mockito.any(AbstractEntity.class));
-	}
+        assertFalse(Game.getInstance().getDestroyList().contains(bill));
+        }
 
 }
