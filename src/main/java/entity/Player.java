@@ -43,6 +43,7 @@ public class Player extends AbstractEntity {
 	private int shielding;
 	private boolean tripleShot;
 	private float bulletSize;
+	private int changeOfDying;
 	
 	private static final float SPAWN_OFFSET = 40;
 	
@@ -73,6 +74,7 @@ public class Player extends AbstractEntity {
 		shielding = 0;
 		bulletSize = BULLET_SIZE;
 		tripleShot = false;
+		changeOfDying = CHANCE_OF_DYING;
 	}
 
 	/**
@@ -170,13 +172,11 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandler(final List<String> input) {
-		if (input.contains(LEFT) || input.contains("A")
-				|| !(input.contains(RIGHT) || input.contains("D"))) {
+		if (input.contains(LEFT) || input.contains("A")) {
 			turnLeft();
 		}
 
-		if (input.contains(RIGHT) || input.contains("D")
-				|| !(input.contains(LEFT) || input.contains("A"))) {
+		if (input.contains(RIGHT) || input.contains("D")) {
 			turnRight();
 		}
 
@@ -201,11 +201,11 @@ public class Player extends AbstractEntity {
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandlerTwo(final List<String> input) {
 		if (isPlayerTwo()) {
-			if (input.contains(LEFT) || !(input.contains(RIGHT))) {
+			if (input.contains(LEFT)) {
 				turnLeft();
 			}
 	
-			if (input.contains(RIGHT) || !(input.contains("LEFT"))) {
+			if (input.contains(RIGHT)) {
 				turnRight();
 			}
 	
@@ -221,11 +221,11 @@ public class Player extends AbstractEntity {
 				fire();
 			}
 		} else {
-			if (input.contains("A") || !(input.contains("D"))) {
+			if (input.contains("A")) {
 				turnLeft();
 			}
 	
-			if (input.contains("D") || !(input.contains("A"))) {
+			if (input.contains("D")) {
 				turnRight();
 			}
 	
@@ -305,7 +305,7 @@ public class Player extends AbstractEntity {
 	 */
 	private void goHyperspace() {
 		final Random random = new Random();
-		if (random.nextInt(CHANCE_OF_DYING) == 0) {
+		if (random.nextInt(changeOfDying) == 0) {
 			onHit();
 			Logger.getInstance().log("Player died in hyperspace.");
 		} else {
@@ -317,13 +317,6 @@ public class Player extends AbstractEntity {
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
 		}
-	}
-
-	/**
-	 * @return whether or not the player is in hyperspace at this moment.
-	 */
-	private boolean hyperspace() {
-		return hyperspaceStart + invincibleMS > System.currentTimeMillis();
 	}
 
 	/**
@@ -376,6 +369,13 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
+	 * @return whether or not the player is in hyperspace at this moment.
+	 */
+	private boolean hyperspace() {
+		return hyperspaceStart + invincibleMS > System.currentTimeMillis();
+	}
+
+	/**
 	 * draw the player.
 	 */
 	@Override
@@ -420,6 +420,13 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
+	 * @param invincibleStart the invincibleStart to set
+	 */
+	public final void setInvincibleStart(final long invincibleStart) {
+		this.invincibleStart = invincibleStart;
+	}
+
+	/**
 	 * @return the playerTwo
 	 */
 	public final boolean isPlayerTwo() {
@@ -445,6 +452,13 @@ public class Player extends AbstractEntity {
 	 */
 	public final double getRotation() {
 		return rotation;
+	}
+
+	/**
+	 * @return the rotationSpeed
+	 */
+	public static double getRotationSpeed() {
+		return ROTATION_SPEED;
 	}
 
 	/**
@@ -522,5 +536,40 @@ public class Player extends AbstractEntity {
 	 */
 	public static int getMaxBullets() {
 		return MAX_BULLETS;
+	}
+
+	/**
+	 * @return the hyperspaceStart
+	 */
+	public final long getHyperspaceStart() {
+		return hyperspaceStart;
+	}
+
+	/**
+	 * @param hyperspaceStart the hyperspaceStart to set
+	 */
+	public final void setHyperspaceStart(final long hyperspaceStart) {
+		this.hyperspaceStart = hyperspaceStart;
+	}
+
+	/**
+	 * @return the lastShot
+	 */
+	public final long getLastShot() {
+		return lastShot;
+	}
+
+	/**
+	 * @return the maxSpeed
+	 */
+	public static float getMaxSpeed() {
+		return MAX_SPEED;
+	}
+
+	/**
+	 * @param changeOfDying the changeOfDying to set
+	 */
+	public final void setChangeOfDying(final int changeOfDying) {
+		this.changeOfDying = changeOfDying;
 	}
 }
