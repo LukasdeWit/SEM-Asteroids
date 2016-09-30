@@ -1,12 +1,14 @@
 package entity;
 
+import game.Audio;
+import game.Game;
+import game.Logger;
+
 import java.util.List;
 import java.util.Random;
 
 import display.DisplayEntity;
-import game.Game;
 import game.Gamestate;
-import game.Logger;
 
 /**
  * This class is the player of the game.
@@ -93,8 +95,10 @@ public class Player extends AbstractEntity {
 	 * this happens when (for example) the player collides with an asteroid
 	 * or is hit by the bullet of an saucer.
 	 */
-	public final void onHit() {
+	public final void onHit() {		
 		if (shielding < 1) {
+			// boost sound will normally not stop if player dies mid-flight
+			Audio.getInstance().stop(Audio.BOOST);
 			lives--;
 			if (lives <= 0) {
 				// we are out of lives, call gameover
@@ -127,6 +131,7 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
+		Audio.getInstance().play(Audio.LIFEUP);
 		if (lives == 1) {
 			if (isPlayerTwo()) {
 				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
@@ -182,6 +187,9 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
+			Audio.getInstance().play(Audio.BOOST);
+		} else {
+			Audio.getInstance().stop(Audio.BOOST);
 		}
 
 		if (input.contains("DOWN") || input.contains("S")) {
@@ -316,6 +324,7 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
+		Audio.getInstance().play(Audio.TELEPORT);
 		}
 	}
 
@@ -338,6 +347,8 @@ public class Player extends AbstractEntity {
 				fireBullet(rotation + TRIPLE_SHOT_ANGLE);
 			}
 			lastShot = System.currentTimeMillis();
+			
+			Audio.getInstance().play(Audio.SHOOTING);
 		}
 	}
 	

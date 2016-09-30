@@ -1,10 +1,13 @@
 package entity;
+
+import game.Audio;
+import game.Game;
+import game.Logger;
+
 import java.util.List;
 import java.util.Random;
 
 import display.DisplayEntity;
-import game.Game;
-import game.Logger;
 
 /**
  * Class that represents an Asteroid.
@@ -97,6 +100,7 @@ public class Asteroid extends AbstractEntity {
 						(float) (getDY() + Math.random() - .5), 
 						MEDIUM_RADIUS));
 			}
+			Audio.getInstance().play(Audio.LARGEEXPLOSION);
 			Game.getInstance().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
@@ -105,8 +109,10 @@ public class Asteroid extends AbstractEntity {
 						(float) (getDY() + Math.random() - .5), 
 						SMALL_RADIUS));
 			}
+			Audio.getInstance().play(Audio.MEDIUMEXPLOSION);
 			Game.getInstance().addScore(MEDIUM_SCORE);
 		} else {
+			Audio.getInstance().play(Audio.SMALLEXPLOSION);
 			Game.getInstance().addScore(SMALL_SCORE);
 		}
 		Particle.explosion(getX(), getY(), Game.getInstance());

@@ -162,6 +162,7 @@ public final class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
+		Audio.getInstance().backgroundTrack(enemies());
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
 		if (Gamestate.getInstance().isCoop()) {
@@ -234,6 +235,7 @@ public final class Game {
 			Logger.getInstance().log("New highscore is " + highscore + ".");
 			Gamestate.getInstance().setState(Gamestate.getStateHighscoreScreen());
 		}
+		Audio.getInstance().mute();
 	}
 
 	/**
