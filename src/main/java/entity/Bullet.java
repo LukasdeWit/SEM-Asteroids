@@ -12,6 +12,7 @@ public class Bullet extends AbstractEntity {
 	private final long birthTime;
 	private boolean friendly;
 	private Player player;
+	private int piercing = 1;
 	
 	private static final long LIFETIME = 2000;
 	private static final float RADIUS = 2;
@@ -30,6 +31,25 @@ public class Bullet extends AbstractEntity {
 		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
+	}
+	
+	/**
+	 * Constructor for the bullet class.
+	 *
+	 * @param x position of bullet along the x-axis
+	 * @param y position of bullet along the y-axis
+	 * @param dX velocity of bullet along the x-axis
+	 * @param dY velocity of bullet along the y-axis
+	 * @param pierce - the number of asteroids this
+	 * bullet should be capable of piercing
+	 */
+	public Bullet(final float x, final float y, 
+			final float dX, final float dY, final int pierce) {
+		super(x, y, dX, dY);
+		setRadius(RADIUS);
+		birthTime = System.currentTimeMillis();
+		friendly = true;
+		piercing = pierce;
 	}
 
 	/**
@@ -68,7 +88,11 @@ public class Bullet extends AbstractEntity {
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
+			if (piercing < 2) {
 			Game.getInstance().destroy(this);
+			} else {
+				piercing--;
+			}
 			Game.getInstance().destroy(e2);
 			Logger.getInstance().log("Asteroid was hit by a bullet.");
 		}
