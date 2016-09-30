@@ -34,6 +34,7 @@ public class AsteroidTest {
 	public final void setUp() {
 		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
 		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
+		Launcher.getRoot().getChildren().clear();
 		asteroid = new Asteroid(X_START, Y_START, DX_START, DY_START);
 	}
 

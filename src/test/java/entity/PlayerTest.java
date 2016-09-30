@@ -29,6 +29,7 @@ public class PlayerTest {
 		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
 		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
 		Gamestate.getInstance().setMode(Gamestate.getModeArcade());
+		Launcher.getRoot().getChildren().clear();
 		player = new Player(X_START, Y_START, DX_START, DY_START, false);
 	}
 	
