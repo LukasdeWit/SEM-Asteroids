@@ -35,10 +35,6 @@ public class Game {
 	 */
 	private final Spawner spawner;
 	/**
-	 * Handles audio for game.
-	 */
-	private final Audio audio;
-	/**
 	 * List of all entities currently in the game.
 	 */
 	private final List<AbstractEntity> entities;
@@ -137,7 +133,6 @@ public class Game {
 		createList = new ArrayList<>();
 		random = new Random();
 		highscore = readHighscore();
-		audio = new Audio();
 	}
 	
 	/**
@@ -292,7 +287,7 @@ public class Game {
 		Display.score(score, gc);
 		Display.highscore(highscore, gc);
 		Display.lives(player.getLives(), gc);
-		audio.backgroundTrack(enemies());
+		Audio.getInstance().backgroundTrack(enemies());
 	}
 	
 	/**
@@ -362,7 +357,7 @@ public class Game {
 			Logger.getInstance().log("New highscore is " + highscore + ".");
 			gamemode = GAMEMODE_HIGHSCORE_SCREEN;
 		}
-		audio.mute();
+		Audio.getInstance().mute();
 	}
 
 	/**
@@ -454,13 +449,5 @@ public class Game {
 	 */
 	public final Random getRandom() {
 		return random;
-	}
-	
-	/**
-	 * Audio getter.
-	 * @return the audio
-	 */
-	public final Audio getAudio() {
-		return audio;
 	}
 }

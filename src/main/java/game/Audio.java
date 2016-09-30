@@ -13,7 +13,7 @@ import javafx.scene.media.AudioClip;
  * @author Esmee
  *
  */
-public class Audio {
+public final class Audio {
 	/**
 	 * Path for the location of the audiofiles.
 	 */
@@ -66,13 +66,18 @@ public class Audio {
 	 * Volume of rocket boost.
 	 */
 	private static final double BOOSTVOLUME = 35;
+	
+	private static Audio audio = new Audio();
 
 	
+	public static Audio getInstance() {
+		return audio;
+	}
 
 	/**
 	 * Constructor for audio class.
 	 */
-	public Audio() {
+	private Audio() {
 		tracks = new ArrayList<AudioClip>();
 		bgtrack = new BackgroundAudio(PATH);
 		
@@ -139,6 +144,17 @@ public class Audio {
 		if (!track.isPlaying()) {
 			track.play();
 		}
+	}
+	
+	/**
+	 * Get a track by title and play it (if it's fine that the track is playing multiple times).
+	 * 
+	 * @param tracknumber
+	 *            number of track to be played
+	 */
+	public final void playMultiple(final int tracknumber) {
+		final AudioClip track = get(tracknumber);
+		track.play();
 	}
 	
 	/**

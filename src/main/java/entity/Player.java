@@ -149,8 +149,8 @@ public class Player extends AbstractEntity {
 	 * or is hit by the bullet of an saucer.
 	 */
 	public final void onHit() {
-		// boost sound will not stop if player dies mid-flight
-		getThisGame().getAudio().stop(Audio.BOOST);
+		// boost sound will normally not stop if player dies mid-flight
+		Audio.getInstance().stop(Audio.BOOST);
 		
 		lives--;
 		if (lives <= 0) {
@@ -174,7 +174,7 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
-		getThisGame().getAudio().play(Audio.LIFEUP);
+		Audio.getInstance().play(Audio.LIFEUP);
 	}
 
 	/**
@@ -211,9 +211,9 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
-			getThisGame().getAudio().play(Audio.BOOST);
+			Audio.getInstance().play(Audio.BOOST);
 		} else {
-			getThisGame().getAudio().stop(Audio.BOOST);
+			Audio.getInstance().stop(Audio.BOOST);
 		}
 
 		if (input.contains("DOWN") || input.contains("S")) {
@@ -298,7 +298,7 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
-		getThisGame().getAudio().play(Audio.TELEPORT);
+		Audio.getInstance().play(Audio.TELEPORT);
 		}
 	}
 
@@ -322,7 +322,7 @@ public class Player extends AbstractEntity {
 			getThisGame().create(b);
 			lastShot = System.currentTimeMillis();
 			
-			getThisGame().getAudio().play(Audio.SHOOTING);
+			Audio.getInstance().play(Audio.SHOOTING);
 		}
 	}
 
