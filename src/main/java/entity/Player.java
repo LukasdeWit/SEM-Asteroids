@@ -399,6 +399,13 @@ public class Player extends AbstractEntity {
 	}
 	
 	/**
+	 * @param lives the lives to set
+	 */
+	public final void setLives(final int lives) {
+		this.lives = lives;
+	}
+
+	/**
 	 * @return the spawnOffset
 	 */
 	public static float getSpawnOffset() {

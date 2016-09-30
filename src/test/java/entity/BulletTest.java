@@ -2,9 +2,6 @@ package entity;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +9,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import game.Game;
@@ -101,7 +97,8 @@ public class BulletTest {
         Asteroid e3 = new Asteroid(X_START, Y_START, DX_START, DY_START);
 		ball.collide(e3);
         assertFalse(Game.getInstance().getDestroyList().contains(ball));
-        assertTrue(Game.getInstance().getDestroyList().contains(e3));	}
+        assertTrue(Game.getInstance().getDestroyList().contains(e3));
+     }
 	
 	/**
 	 * Test collide.

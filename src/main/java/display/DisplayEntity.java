@@ -287,4 +287,11 @@ public final class DisplayEntity {
 	public static float getPowerupSize() {
 		return POWERUP_SIZE;
 	}
+
+	/**
+	 * @return the asteroidShapes
+	 */
+	public static float[][][] getAsteroidShapes() {
+		return (float[][][]) ASTEROID_SHAPES.clone();
+	}
 }

@@ -214,6 +214,9 @@ public final class Game {
 	 * Game over function, destroys the player.
 	 */
 	public void over() {
+		if (player == null) {
+			return;
+		}
 		if (player.isAlive()) {
 			destroy(playerTwo);
 			return;
@@ -241,6 +244,9 @@ public final class Game {
 	 * @param score - the score to be added.
 	 */
 	public void addScore(final int score) {
+		if (player == null) {
+			return;
+		}
 		if (player.isAlive() || Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
@@ -352,27 +358,25 @@ public final class Game {
 	public List<AbstractEntity> getDestroyList() {
 		return destroyList;
 	}
-	
 
-    /**
-     * @param destroyList the destroyList to set
-     */
-    public void setDestroyList(List<AbstractEntity> destroyList) {
-        this.destroyList = destroyList;
-    }
+	/**
+	 * @param destroyList the destroyList to set
+	 */
+	public void setDestroyList(final List<AbstractEntity> destroyList) {
+		this.destroyList = destroyList;
+	}
 
-    /**
-     * @return the createList
-     */
-    public List<AbstractEntity> getCreateList() {
-        return createList;
-    }
+	/**
+	 * @return the createList
+	 */
+	public List<AbstractEntity> getCreateList() {
+		return createList;
+	}
 
-    /**
-     * @param createList the createList to set
-     */
-    public void setCreateList(List<AbstractEntity> createList) {
-        this.createList = createList;
-    }
-
+	/**
+	 * @param createList the createList to set
+	 */
+	public void setCreateList(final List<AbstractEntity> createList) {
+		this.createList = createList;
+	}
 }

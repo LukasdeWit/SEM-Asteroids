@@ -131,7 +131,7 @@ public class Bullet extends AbstractEntity {
 	/**
 	 * @param birthTime the birthTime to set
 	 */
-	public void setBirthTime(final long birthTime) {
+	public final void setBirthTime(final long birthTime) {
 		this.birthTime = birthTime;
 	}
 }
