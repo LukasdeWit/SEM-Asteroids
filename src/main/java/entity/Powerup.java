@@ -57,7 +57,7 @@ public class Powerup extends AbstractEntity {
 		super(x, y, 0, 0);
 		final Random random = new Random();
 		setRadius(RADIUS);
-		type = 3; //random.nextInt(TYPES);
+		type = random.nextInt(TYPES);
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
 	}
