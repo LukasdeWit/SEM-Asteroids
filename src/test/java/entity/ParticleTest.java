@@ -1,6 +1,7 @@
 package entity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import display.DisplayEntity;
 import game.Game;
-import game.Launcher;
-import javafx.scene.Group;
 
 public class ParticleTest {
 	private static final float X_START = 1;
@@ -19,66 +17,66 @@ public class ParticleTest {
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
 
-	private Particle quintessence;
+	private Particle particle;
 
 
 	@Before
 	public void setUp() throws Exception {
-		quintessence = new Particle(X_START, Y_START, DX_START, DY_START);
+		particle = new Particle(X_START, Y_START, DX_START, DY_START);
 		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
 		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
 	}
 	
 	@Test
 	public void testConstructor() {
-		assertFalse(quintessence == null);
-		assertTrue(quintessence.getX() == X_START);
-		assertTrue(quintessence.getY() == Y_START);
-		assertTrue(quintessence.getDX() == DX_START);
-		assertTrue(quintessence.getDY() == DY_START);
+		assertFalse(particle == null);
+		assertTrue(particle.getX() == X_START);
+		assertTrue(particle.getY() == Y_START);
+		assertTrue(particle.getDX() == DX_START);
+		assertTrue(particle.getDY() == DY_START);
 	}
 
 	@Test
 	public void testUpdate() {
 		List<String> input = new ArrayList<String>(0);
-		quintessence.update(input);
-		assertTrue(quintessence.getX() == X_START + DX_START);
-		assertTrue(quintessence.getY() == Y_START + DY_START);
+		particle.update(input);
+		assertTrue(particle.getX() == X_START + DX_START);
+		assertTrue(particle.getY() == Y_START + DY_START);
 	}
 	@Test
 	public void testUpdate2() {
 		List<String> input = new ArrayList<String>(0);
-		quintessence.update(input);
-		assertTrue(quintessence.getX() == X_START + DX_START);
-		assertTrue(quintessence.getY() == Y_START + DY_START);
+		particle.update(input);
+		assertTrue(particle.getX() == X_START + DX_START);
+		assertTrue(particle.getY() == Y_START + DY_START);
 	}
 
 	@Test
 	public void testCollide() {
         Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START);
-		quintessence.collide(e2);
-        assertFalse(Game.getInstance().getDestroyList().contains(quintessence));
+		particle.collide(e2);
+        assertFalse(Game.getInstance().getDestroyList().contains(particle));
         assertFalse(Game.getInstance().getDestroyList().contains(e2));
 	}
 
 	@Test
 	public void testOnDeath() {
-		quintessence.onDeath();
-        assertFalse(Game.getInstance().getDestroyList().contains(quintessence));
+		particle.onDeath();
+        assertFalse(Game.getInstance().getDestroyList().contains(particle));
 	}
 	
 	
 	//@Test
 	//public void testDraw() {
-	//	quintessence.draw();
+	//	particle.draw();
 	//	final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
-	//	final int strakesInShape = DisplayEntity.particle(quintessence);
+	//	final int strakesInShape = DisplayEntity.particle(particle);
 	//	assertEquals(strokesInGroup, strakesInShape);
 	//}
 
 	@Test
 	public void testExplosion() {
-		quintessence.explosion(X_START, Y_START, Game.getInstance());
+		Particle.explosion(X_START, Y_START, Game.getInstance());
 		ArrayList<AbstractEntity> creation = (ArrayList<AbstractEntity>) Game.getInstance().getCreateList();
 		boolean containsparticles = false;
 		for(AbstractEntity x : creation){
