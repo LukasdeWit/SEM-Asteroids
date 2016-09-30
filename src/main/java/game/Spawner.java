@@ -8,93 +8,67 @@ import entity.Saucer;
  * @author Kibo
  *
  */
-public class Spawner {
-	/**
-	 * The Game this spawner belongs to.
-	 */
-	private final Game thisGame;
-	/**
-	 * Start time of saucer timer in ms.
-	 */
+public final class Spawner {
 	private long startSaucerTime;
-	/**
-	 * start time of rest in ms.
-	 */
 	private long startRest;
-	/**
-	 * The spawn level of the game.
-	 */
-	private int level;
-	/**
-	 * Time between saucers in ms.
-	 */
+	private int wave;
+	
 	private static final long SAUCER_TIME = 20000;
-	/**
-	 * Rest time in ms.
-	 */
 	private static final long REST = 4000;
-	/**
-	 * Number of starting asteroids.
-	 */
 	private static final int STARTING_ASTEROIDS = 4;
-	/**
-	 * The maximum number of extra (other than starting) asteroids.
-	 */
 	private static final int MAX_EXTRA = 7;
-	/**
-	 * Step per difficulty level of score.
-	 */
 	private static final long DIFFICULTY_STEP = 10000;
-	/**
-	 * Max difficulty score.
-	 */
 	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
-	/**
-	 * Speed multiplier of initial Asteroids.
-	 */
 	private static final float ASTEROID_SPEED = 1;
 	/**
 	 * The amount of points needed to spawn an additional asteroid in survival.
 	 */
 	private static final long SURVIVAL_POINTS_PER_ASTEROID = 10000;
+	private static final Spawner INSTANCE = new Spawner();
 	
 	
 	/**
 	 * Constructor of Spawner.
-	 * @param game - the game this spawner belongs to
 	 */
-	public Spawner(final Game game) {
-		thisGame = game;
+	private Spawner() {
 		startSaucerTime = System.currentTimeMillis();
 		startRest = 0;
-		level = 0;
+		wave = 0;
+	}
+	
+	/**
+	 * getInstance of singleton.
+	 * @return the gamestate
+	 */
+	public static Spawner getInstance() {
+		return INSTANCE;
 	}
 
 	/**
 	 * This method is called every tick of an arcade game.
 	 */
-	public final void updateArcade() {
+	public void updateArcade() {
 		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
 			spawnSaucer();
 			Logger.getInstance().log("Saucer was spawned");
 			startSaucerTime = System.currentTimeMillis();
 		}
-		if (thisGame.enemies() != 0) {
+		if (Game.getInstance().enemies() != 0) {
 			startRest = System.currentTimeMillis();
 		}
 		if (startRest == 0) {
-			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS);
 			startRest = System.currentTimeMillis();
-			level++;
+			wave++;
 		} else if (System.currentTimeMillis() - startRest > REST) {
-			int extra = level * 2;
+			int extra = wave * 2;
 			if (extra > MAX_EXTRA) {
 				extra = MAX_EXTRA;
 			}
-			Logger.getInstance().log("Wave: " + (level + 1) + ".");
+			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS + extra);
-			level++;
+			wave++;
 			startRest = System.currentTimeMillis();
 		}
 	}
@@ -102,17 +76,17 @@ public class Spawner {
 	/**
 	 * This method is called every tick of a survival game.
 	 */
-	public final void updateSurvival() {
+	public void updateSurvival() {
 		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
 			spawnSaucer();
 			startSaucerTime = System.currentTimeMillis();
 		}
-		if (thisGame.enemies() != 0) {
+		if (Game.getInstance().enemies() != 0) {
 			startRest = System.currentTimeMillis();
 		}
-		final int extra = (int) (thisGame.getScore() 
+		final int extra = (int) (Game.getInstance().getScore() 
 				/ SURVIVAL_POINTS_PER_ASTEROID);
-		final int enemies = thisGame.convertedBigEnemies();
+		final int enemies = Game.getInstance().convertedBigEnemies();
 		spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
 	}
 	
@@ -120,13 +94,13 @@ public class Spawner {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	private void spawnSaucer() {
-		final Saucer newSaucer = new Saucer(thisGame.getRandom().nextInt(1)
-				* 2 * thisGame.getScreenX(), (float) Math.random()
-				* thisGame.getScreenY(), 0, 0, thisGame);
+		final Saucer newSaucer = new Saucer(Game.getInstance().getRandom().nextInt(1)
+				* 2 * Game.getInstance().getScreenX(), (float) Math.random()
+				* Game.getInstance().getScreenY(), 0, 0);
 		if (Math.random() < smallSaucerRatio()) {
 			newSaucer.setRadius(Saucer.getSmallRadius());
 		}
-		thisGame.create(newSaucer);
+		Game.getInstance().create(newSaucer);
 	}
 
 	/**
@@ -134,10 +108,10 @@ public class Spawner {
 	 * @return the ratio
 	 */
 	private double smallSaucerRatio() {
-		if (thisGame.getScore() < DIFFICULTY_STEP) {
+		if (Game.getInstance().getScore() < DIFFICULTY_STEP) {
 			return .5;
-		} else if (thisGame.getScore() < MAX_DIFFICULTY_SCORE) {
-			return .5 + ((thisGame.getScore() / (double) DIFFICULTY_STEP)
+		} else if (Game.getInstance().getScore() < MAX_DIFFICULTY_SCORE) {
+			return .5 + ((Game.getInstance().getScore() / (double) DIFFICULTY_STEP)
 					* .5 / (double) (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
 		} else {
 			return 1;
@@ -153,10 +127,10 @@ public class Spawner {
 	 */
 	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
-			thisGame.create(new Asteroid(0, thisGame.getScreenY() 
+			Game.getInstance().create(new Asteroid(0, Game.getInstance().getScreenY() 
 					* (float) Math.random(), 
 					(float) (Math.random() - .5) * ASTEROID_SPEED, 
-					(float) (Math.random() - .5) * ASTEROID_SPEED, thisGame));
+					(float) (Math.random() - .5) * ASTEROID_SPEED));
 		}
 		Logger.getInstance().log(times + " asteroids were spawned.");
 	}
@@ -164,8 +138,8 @@ public class Spawner {
 	/**
 	 * reset.
 	 */
-	public final void reset() {
-		level = 0;
+	public void reset() {
+		wave = 0;
 		startSaucerTime = System.currentTimeMillis();
 		startRest = 0;
 	}
@@ -176,5 +150,13 @@ public class Spawner {
 	 */
 	public static long getDifficultyStep() {
 		return DIFFICULTY_STEP;
+	}
+
+	/**
+	 * getter for wave.
+	 * @return the wave
+	 */
+	public int getWave() {
+		return wave;
 	}
 }

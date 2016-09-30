@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import display.DisplayText;
 import entity.AbstractEntity;
 import entity.Asteroid;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * This class defines everything within the game.
@@ -25,47 +26,15 @@ import javafx.scene.paint.Color;
  * @author Kibo
  *
  */
-public class Game {
-	/**
-	 * The player of this game.
-	 */
+public final class Game {
 	private Player player;
-	/**
-	 * The spawner of this game.
-	 */
-	private final Spawner spawner;
-	/**
-	 * List of all entities currently in the game.
-	 */
+	private Player playerTwo;
 	private final List<AbstractEntity> entities;
-	/**
-	 * Object of random used to get random numbers.
-	 */
 	private final Random random;
-	/**
-	 * List of all entities to be destroyed at the and of the tick.
-	 */
 	private final List<AbstractEntity> destroyList;
-	/**
-	 * List of all entities to be created at the and of the tick.
-	 */
 	private final List<AbstractEntity> createList;
-	/**
-	 * length of canvas in pixels.
-	 */
 	private final float screenX;
-	/**
-	 * height of canvas in pixels.
-	 */
 	private final float screenY;
-	/**
-	 * the GraphicsContext, needed to draw things.
-	 */
-	private final GraphicsContext gc;
-	/**
-	 * the start time of the current game.
-	 */
-	private long restartTime;
 	/**
 	 * current score for arcade mode.
 	 */
@@ -82,69 +51,14 @@ public class Game {
 	 * current highscore for survival mode.
 	 */
 	private long survivalHighscore;
-	/**
-	 * current gamemode.
-	 */
-	private int gamemode;
-	/**
-	 * the time at which the game was paused.
-	 */
-	private long pauseTime;
-	/**
-	 * The gamemode the game was in before the game was paused.
-	 */
-	private int prePauseGamemode;
+	
+	private static final Game INSTANCE = new Game();
+	private static final float CANVAS_SIZE = 500;
 	
 	/**
-	 * Size of canvas.
+	 * amount of points needed to gain an extra life.
 	 */
-	private static final float CANVAS_SIZE = 500;
-	/**
-	 * Minimal restart time.
-	 */
-	private static final long MINIMAL_RESTART_TIME = 300;
-	/**
-	 * Number of points needed to gain a life.
-	 */
-	private static final int LIFE_SCORE = 10000;
-	////////////////////////////////////////
-	//                                    //
-	//    here is where gamemodes start   //
-	//                                    //
-	////////////////////////////////////////
-	/**
-	 * the startscreen gamemode.
-	 */
-	private static final int GAMEMODE_START_SCREEN = 0;
-	/**
-	 * the "arcade" gamemode.
-	 */
-	private static final int GAMEMODE_ARCADE = 1;
-	/**
-	 * the arcade highscore screen.
-	 */
-	private static final int GAMEMODE_ARCADE_HIGHSCORE_SCREEN = 2;
-	/**
-	 * the survival highscore screen.
-	 */
-	private static final int GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN = 3;
-	/**
-	 * the pause screen.
-	 */
-	private static final int GAMEMODE_PAUSE_SCREEN = 4;
-	/**
-	 * the "survival" gamemode.
-	 */
-	private static final int GAMEMODE_SURVIVAL = 5;
-	////////////////////////////////////////
-	//                                    //
-	//    here is where gamemodes end     //
-	//                                    //
-	////////////////////////////////////////
-	/**
-	 * Minimal pause time.
-	 */
-	private static final long MINIMAL_PAUSE_TIME = 300;
+	private static final long POINTS_PER_LIFE = 10000;
 	/**
 	 * Size of a big asteroid in survival.
 	 */
@@ -152,21 +66,24 @@ public class Game {
 
 	/**
 	 * Constructor for a new game.
-	 * 
-	 * @param gc
-	 *            - the GraphicsContext of the canvas
 	 */
-	public Game(final GraphicsContext gc) {
-		this.gc = gc;
+	private Game() {
 		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
-		spawner = new Spawner(this);
 		entities = new ArrayList<>();
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		random = new Random();
 		readHighscores();
+	}
+	
+	/**
+	 * Singleton getinstance.
+	 * @return the instance
+	 */
+	public static Game getInstance() {
+		return INSTANCE;
 	}
 	
 	/**
@@ -215,12 +132,9 @@ public class Game {
 	/**
 	 * Starts or restarts the game, with initial entities.
 	 */
-	public final void startGame() {
-		restartTime = System.currentTimeMillis();
-		pauseTime = restartTime;
+	public void startGame() {
+		Gamestate.getInstance().start();
 		entities.clear();
-		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
-		entities.add(player);
 		if (this.arcadeScore > arcadeHighscore) {
 			arcadeHighscore = this.arcadeScore;
 		}
@@ -229,78 +143,36 @@ public class Game {
 		}
 		writeHighscores();
 		arcadeScore = 0;
-		gamemode = GAMEMODE_START_SCREEN;
-		spawner.reset();
+		survivalScore = 0;
+		if (Gamestate.getInstance().isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, true);
+			entities.add(player);
+			entities.add(playerTwo);
+		} else {
+			player = new Player(screenX / 2, screenY / 2, 0, 0, false);
+			entities.add(player);
+		}
+		Spawner.getInstance().reset();
 		Logger.getInstance().log("Game started.");
 	}
 	
 	/**
-	 * update runs every game tick and updates all necessary entities.
-	 * 
-	 * @param input
-	 *            - all keys pressed at the time of update
-	 */
-	public final void update(final List<String> input) {
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, screenX, screenY);
-		
-		switch(gamemode) {
-		case GAMEMODE_START_SCREEN:
-			updateStartScreen(input);
-			break;
-		case GAMEMODE_ARCADE:
-		case GAMEMODE_SURVIVAL:
-			updateGame(input);
-			break;
-		case GAMEMODE_ARCADE_HIGHSCORE_SCREEN:
-		case GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN:
-			updateHighscoreScreen(input);
-			break;
-		case GAMEMODE_PAUSE_SCREEN:
-			updatePauseScreen(input);
-			break;
-		default:
-			gamemode = GAMEMODE_START_SCREEN;
-		}
-	}
-	
-	/**
-	 * handles the update logic of the pause screen.
-	 * @param input - input of keyboard
-	 */
-	private void updatePauseScreen(final List<String> input) {
-		if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game unpaused.");
-			gamemode = prePauseGamemode;
-		} else if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			startGame();
-			gamemode = prePauseGamemode;
-		}
-		Display.pauseScreen(gc);
-	}
-	
-
-	/**
-	 * handles the update logic of the start screen.
+	 * updates the gamestate machine.
 	 * 
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateStartScreen(final List<String> input) {
-		if (input.contains("A")) {
-			startGame();
-			gamemode = GAMEMODE_ARCADE;
-		}
-		if (input.contains("S")) {
-			startGame();
-			gamemode = GAMEMODE_SURVIVAL;
-		}
-		Display.startScreen(gc);
-	}
+	public void update(final List<String> input) {
+		Launcher.getRoot().getChildren().clear();
+		final Rectangle r = new Rectangle(0, 0, screenX, screenY);
+		r.setFill(Color.BLACK);
+		Launcher.getRoot().getChildren().add(r);
+		//root.setFill(Color.BLACK);
+		//root.fillRect(0, 0, screenX, screenY);
+		Gamestate.getInstance().update(input);
+		DisplayText.wave(Spawner.getInstance().getWave());
+	}	
 	
 	/**
 	 * handles the update logic of the game itself.
@@ -308,34 +180,18 @@ public class Game {
 	 * @param input
 	 * 			  - all keys pressed at the time of update
 	 */
-	private void updateGame(final List<String> input) {
-		if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			gamemode = GAMEMODE_START_SCREEN;
-		} else if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game paused.");
-			prePauseGamemode = gamemode;
-			gamemode = GAMEMODE_PAUSE_SCREEN;
-		}
+	public void updateGame(final List<String> input) {
 		for (final AbstractEntity e : entities) {
 			e.update(input);
 			checkCollision(e);
-			e.draw(gc);
+			e.draw();
 		}
 		
-		switch (gamemode) {
-		case GAMEMODE_ARCADE:
-			spawner.updateArcade();
-			break;
-		case GAMEMODE_SURVIVAL:
-			spawner.updateSurvival();
-			break;
-		default:
-			gamemode = GAMEMODE_START_SCREEN;
-		} 
+		if (Gamestate.getInstance().isArcade()) {
+			Spawner.getInstance().updateArcade();
+		} else {
+			Spawner.getInstance().updateSurvival();
+		}
 		
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
@@ -343,43 +199,17 @@ public class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		switch (gamemode) {
-		case GAMEMODE_ARCADE:
-			Display.score(arcadeScore, gc);
-			Display.highscore(arcadeHighscore, gc);
-			break;
-		case GAMEMODE_SURVIVAL:
-			Display.score(survivalScore, gc);
-			Display.highscore(survivalHighscore, gc);
-			break;
-		default:
-			gamemode = GAMEMODE_START_SCREEN;
-		}
-		Display.lives(player.getLives(), gc);
-	}
 	
-	/**
-	 * handles the update logic of the highscore screen.
-	 * 
-	 * @param input
-	 * 			  - all keys pressed at the time of update
-	 */
-	private void updateHighscoreScreen(final List<String> input) {
-		if (input.contains("R")) {
-			Logger.getInstance().log("Game stopped.");
-			startGame();
+		if (Gamestate.getInstance().isArcade()) {
+			DisplayText.score(arcadeScore);
+		} else {
+			DisplayText.score(survivalScore);
 		}
-		switch (gamemode) {
-		case GAMEMODE_ARCADE_HIGHSCORE_SCREEN:
-			Display.highscoreScreen(arcadeHighscore, gc);
-			break;
-		case GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN:
-			Display.highscoreScreen(survivalHighscore, gc);
-			break;
-		default:
-			gamemode = GAMEMODE_START_SCREEN;
+		if (Gamestate.getInstance().isCoop()) {
+			DisplayText.livesTwo(playerTwo.getLives());
 		}
-	}
+		DisplayText.lives(player.getLives());
+	}	
 
 	/**
 	 * checks all collisions of an entity, if there is a hit then collide of the
@@ -388,7 +218,7 @@ public class Game {
 	 * @param e1
 	 *            - the entity
 	 */
-	public final void checkCollision(final AbstractEntity e1) {
+	public void checkCollision(final AbstractEntity e1) {
 		entities
 				.stream()
 				.filter(e2 -> !e1.equals(e2)
@@ -405,7 +235,7 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void destroy(final AbstractEntity e) {
+	public void destroy(final AbstractEntity e) {
 		destroyList.add(e);
 	}
 
@@ -416,45 +246,43 @@ public class Game {
 	 * @param e
 	 *            - the Entity
 	 */
-	public final void create(final AbstractEntity e) {
+	public void create(final AbstractEntity e) {
 		createList.add(e);
 	}
 
 	/**
 	 * Game over function, destroys the player.
 	 */
-	public final void over() {
+	public void over() {
+		if (player.isAlive()) {
+			destroy(playerTwo);
+			return;
+		} else if (Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
+			destroy(player);
+			return;
+		}
 		destroy(player);
 
 		long score;
 		long highscore;
 		
-		switch (gamemode) {
-		case GAMEMODE_ARCADE:
+		if (Gamestate.getInstance().isArcade()) {
 			score = arcadeScore;
 			highscore = arcadeHighscore;
-			break;
-		case GAMEMODE_SURVIVAL:
+		} else {
 			score = survivalScore;
 			highscore = survivalHighscore;
-			break;
-		default:
-			score = 0;
-			highscore = 1;
 		}
 		
+		if (Gamestate.getInstance().isCoop()) {
+			destroy(playerTwo);
+		}
 		Logger.getInstance().log("Game over.");
 		if (score <= highscore) {
-			gamemode = GAMEMODE_START_SCREEN;
+			Gamestate.getInstance().setState(Gamestate.getStateStartScreen());
 		} else {
-			highscore = score;
-			writeHighscores();
-			if (gamemode == GAMEMODE_ARCADE) {
-				gamemode = GAMEMODE_ARCADE_HIGHSCORE_SCREEN;
-			} else if (gamemode == GAMEMODE_SURVIVAL) {
-				gamemode = GAMEMODE_SURVIVAL_HIGHSCORE_SCREEN;
-			}
 			Logger.getInstance().log("New highscore is " + highscore + ".");
+			Gamestate.getInstance().setState(Gamestate.getStateHighscoreScreen());
 		}
 	}
 
@@ -462,37 +290,36 @@ public class Game {
 	 * Adds score to this.score.
 	 * @param score - the score to be added.
 	 */
-	public final void addScore(final int score) {
-		int currentScore = 0;
-		if (gamemode == GAMEMODE_ARCADE) {
-			currentScore = (int) arcadeScore;
-		} else if (gamemode == GAMEMODE_SURVIVAL) {
-			currentScore = (int) survivalScore;
-		}
-		if (player.isAlive()) {
-			if (currentScore % LIFE_SCORE + score >= LIFE_SCORE) {
+	public void addScore(final int score) {
+		long currentScore = getScore();
+		if (player.isAlive() || Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
 			Logger.getInstance().log("Player gained " + score + " points.");
-			
+			if (currentScore / POINTS_PER_LIFE < (currentScore + score) / POINTS_PER_LIFE) {
 				player.gainLife();
+				if (Gamestate.getInstance().isCoop()) {
+					playerTwo.gainLife();
+				}
 				Logger.getInstance().log("Player gained an extra life.");
 			}
 			currentScore += score;
 		}
-		if (gamemode == GAMEMODE_ARCADE) {
+		if (Gamestate.getInstance().isArcade()) {
 			arcadeScore = currentScore;
-		} else if (gamemode == GAMEMODE_SURVIVAL) {
+		} else {
 			survivalScore = currentScore;
 		}
 	}
 	
 	/**
 	 * Amount of bullets currently in game.
+	 * @param player 
 	 * @return amount of bullets
 	 */
-	public final int bullets() {
+	public int bullets(final Player player) {
 		int bullets = 0;
 		for (final AbstractEntity entity : entities) {
-			if (entity instanceof Bullet && ((Bullet) entity).isFriendly()) {
+			if (entity instanceof Bullet && ((Bullet) entity).isFriendly() 
+					&& ((Bullet) entity).getPlayer().equals(player)) {
 				bullets++;
 			}
 		}
@@ -503,7 +330,7 @@ public class Game {
 	 * Amount of enemies currently in game.
 	 * @return amount of enemies
 	 */
-	public final int enemies() {
+	public int enemies() {
 		int enemies = 0;
 		for (final AbstractEntity entity : entities) {
 			if (entity instanceof Asteroid || entity instanceof Saucer) {
@@ -518,7 +345,7 @@ public class Game {
 	 * big asteroid, and 2 small asteroids count as 1 medium asteroid.
 	 * @return amount of converted big enemies
 	 */
-	public final int convertedBigEnemies() {
+	public int convertedBigEnemies() {
 		int enemies = 0;
 		for (final AbstractEntity entity : entities) {
 			if (entity instanceof Asteroid) {
@@ -543,7 +370,7 @@ public class Game {
 	 * getter for screenX.
 	 * @return - screenX
 	 */
-	public final float getScreenX() {
+	public float getScreenX() {
 		return screenX;
 	}
 
@@ -551,7 +378,7 @@ public class Game {
 	 * getter for screenY.
 	 * @return - screenY
 	 */
-	public final float getScreenY() {
+	public float getScreenY() {
 		return screenY;
 	}
 
@@ -559,28 +386,48 @@ public class Game {
 	 * Score getter.
 	 * @return score
 	 */
-	public final long getScore() {
-		if (gamemode == GAMEMODE_ARCADE) {
+	public long getScore() {
+		if (Gamestate.getInstance().isArcade()) {
 			return arcadeScore;
-		} else if (gamemode == GAMEMODE_SURVIVAL) {
-			return survivalScore;
+		} else {
+			return survivalHighscore;
 		}
-		return 0;
 	}
 
 	/**
 	 * Player getter.
 	 * @return the player
 	 */
-	public final Player getPlayer() {
+	public Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * @return the playerTwo
+	 */
+	public Player getPlayerTwo() {
+		return playerTwo;
 	}
 
 	/**
 	 * random getter.
 	 * @return the random
 	 */
-	public final Random getRandom() {
+	public Random getRandom() {
 		return random;
+	}
+
+	/**
+	 * @return the arcade highscore
+	 */
+	public long getArcadeHighscore() {
+		return arcadeHighscore;
+	}
+	
+	/**
+	 * @return the survival highscore
+	 */
+	public long getSurvivalHighscore() {
+		return survivalHighscore;
 	}
 }
