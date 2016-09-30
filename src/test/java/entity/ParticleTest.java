@@ -8,7 +8,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import display.DisplayEntity;
 import game.Game;
+import game.Launcher;
+import javafx.scene.Group;
 
 public class ParticleTest {
 	private static final float X_START = 1;
@@ -52,22 +55,38 @@ public class ParticleTest {
 
 	@Test
 	public void testCollide() {
-		fail("Not yet implemented");
+        Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		quintessence.collide(e2);
+        assertFalse(Game.getInstance().getDestroyList().contains(quintessence));
+        assertFalse(Game.getInstance().getDestroyList().contains(e2));
 	}
 
 	@Test
 	public void testOnDeath() {
-		fail("Not yet implemented");
+		quintessence.onDeath();
+        assertFalse(Game.getInstance().getDestroyList().contains(quintessence));
 	}
-
-	@Test
-	public void testParticle() {
-		fail("Not yet implemented");
-	}
+	
+	
+	//@Test
+	//public void testDraw() {
+	//	quintessence.draw();
+	//	final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
+	//	final int strakesInShape = DisplayEntity.particle(quintessence);
+	//	assertEquals(strokesInGroup, strakesInShape);
+	//}
 
 	@Test
 	public void testExplosion() {
-		fail("Not yet implemented");
+		quintessence.explosion(X_START, Y_START, Game.getInstance());
+		ArrayList<AbstractEntity> creation = (ArrayList<AbstractEntity>) Game.getInstance().getCreateList();
+		boolean containsparticles = false;
+		for(AbstractEntity x : creation){
+			if(x instanceof Particle){
+				containsparticles = true;
+			}
+		}
+		assertTrue(containsparticles);
 	}
 
 }
