@@ -294,4 +294,11 @@ public final class DisplayEntity {
 	public static float[][][] getAsteroidShapes() {
 		return (float[][][]) ASTEROID_SHAPES.clone();
 	}
+
+	/**
+	 * @return the playerOneLines
+	 */
+	public static float[][] getPlayerOneLines() {
+		return (float[][]) PLAYER_ONE_LINES.clone();
+	}
 }
