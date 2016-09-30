@@ -345,4 +345,11 @@ public final class Game {
 	public long getHighscore() {
 		return highscore;
 	}
+
+	/**
+	 * @return the destroyList
+	 */
+	public List<AbstractEntity> getDestroyList() {
+		return destroyList;
+	}
 }

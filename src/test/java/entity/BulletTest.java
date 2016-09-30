@@ -2,7 +2,6 @@ package entity;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -40,8 +39,7 @@ public class BulletTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mockGame = mock(Game.class);
-		bill = new Bullet(X_START, Y_START, DX_START, DY_START, mockGame);
+		bill = new Bullet(X_START, Y_START, DX_START, DY_START);
 	}
 
 	/**
@@ -54,7 +52,6 @@ public class BulletTest {
 		assertTrue(bill.getY() == Y_START);
 		assertTrue(bill.getDX() == DX_START);
 		assertTrue(bill.getDY() == DY_START);
-		assertTrue(bill.getThisGame() == mockGame);
 	}
 
 	/**
@@ -93,7 +90,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide() {
-		Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START ,mockGame);
+		Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START);
 		bill.collide(e2);
 		verify(mockGame, times(2)).destroy(Mockito.any(AbstractEntity.class));
 	}
@@ -103,7 +100,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide2() {
-		Player e2 = new Player(X_START, Y_START, 0, 0, mockGame);
+		Player e2 = new Player(X_START, Y_START, 0, 0, false);
 		bill.collide(e2);
 		verify(mockGame, never()).destroy(Mockito.any(AbstractEntity.class));
 	}

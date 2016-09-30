@@ -40,7 +40,7 @@ public class SaucerTest {
 	public void setUp() throws Exception {
 		mockGame = mock(Game.class);
 		doReturn(500f).when(mockGame).getScreenX();
-		disc = new Saucer(X_START, Y_START, DX_START, DY_START, mockGame);
+		disc = new Saucer(X_START, Y_START, DX_START, DY_START);
 	}
 
 	/**
@@ -52,7 +52,6 @@ public class SaucerTest {
 		assertFalse(disc == null);
 		assertTrue(disc.getX() == X_START);
 		assertTrue(disc.getY() == Y_START);
-		assertTrue(disc.getThisGame() == mockGame);
 	}
 
 	/**
@@ -60,11 +59,10 @@ public class SaucerTest {
 	 */
 	@Test
 	public final void testConstructor2() {
-		disc = new Saucer(X_START+400, Y_START, DX_START, DY_START, mockGame);
+		disc = new Saucer(X_START+400, Y_START, DX_START, DY_START);
 		assertFalse(disc == null);
 		assertTrue(disc.getX() == X_START+400);
 		assertTrue(disc.getY() == Y_START);
-		assertTrue(disc.getThisGame() == mockGame);
 	}
 
 	//WTF gaat hier fout?
@@ -86,7 +84,7 @@ public class SaucerTest {
 	 */
 	@Test
 	public final void testCollide() {
-		Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START ,mockGame);
+		Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START);
 		disc.collide(e2);
 		verify(mockGame, times(2)).destroy(Mockito.any(AbstractEntity.class));
 	}
@@ -96,7 +94,7 @@ public class SaucerTest {
 	 */
 	@Test
 	public final void testCollide2() {
-		Player e2 = new Player(X_START, Y_START, 0, 0, mockGame);
+		Player e2 = new Player(X_START, Y_START, 0, 0, false);
 		disc.collide(e2);
 		verify(mockGame, never()).destroy(Mockito.any(AbstractEntity.class));
 	}
