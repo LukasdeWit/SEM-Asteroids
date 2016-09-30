@@ -271,11 +271,20 @@ public final class DisplayEntity {
 	 * @param p - the powerup
 	 */
 	public static void powerup(final Powerup p) {
+		
+		
 		final float radius = p.getRadius();
 		final Circle c = new Circle(0, 0, radius * POWERUP_SIZE);
 		c.setFill(Color.WHITE);
 		c.setTranslateX(p.getX());
 		c.setTranslateY(p.getY());
 		Launcher.getRoot().getChildren().add(c);
+	}
+
+	/**
+	 * @return the powerupSize
+	 */
+	public static float getPowerupSize() {
+		return POWERUP_SIZE;
 	}
 }

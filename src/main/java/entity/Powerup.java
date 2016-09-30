@@ -2,8 +2,8 @@ package entity;
 import java.util.List;
 import java.util.Random;
 
-import abstractpowerup.AbstractPowerup;
 import display.DisplayEntity;
+import display.DisplayText;
 import game.Game;
 import game.Logger;
 
@@ -13,14 +13,37 @@ import game.Logger;
  */
 public class Powerup extends AbstractEntity {
 	private final int type;
-	private static final int TYPES = 4;
+	
+	private final long startTime;
+	private long pickupTime;
+
+	private Player player;
+
+	private static final long PERISH_TIME = 10000;
+	private static final int POWERUP_DURATION = 5000;
+	
+	private static final int TYPES = 6;
 	private static final float RADIUS = 12;
+	
 	private static final int EXTRA_LIFE = 0;
 	private static final int SHIELD = 1;
 	private static final int BULLET_SIZE = 2;
 	private static final int TRIPLE_SHOT = 3;
 	private static final int PIERCING = 4;
 	private static final int MINIGUN = 5;
+	
+	private static final String[] TYPE_STRING = {
+			"an extra life", 
+			"a shield", 
+			"a bullet size increase", 
+			"a tripleshot", 
+			"a piercing bullet", 
+			"a minigun"
+	};
+
+	private static final float NEW_BULLET_SIZE = 6;
+	private static final int NEW_PIERCING_LEVEL = 3;
+	private static final long NEW_FIRE_RATE = 50;
 
 	/**
 	 * Constructor for the Powerup class.
@@ -32,7 +55,9 @@ public class Powerup extends AbstractEntity {
 		super(x, y, 0, 0);
 		final Random random = new Random();
 		setRadius(RADIUS);
-		type = random.nextInt((int) TYPES);
+		type = 2; //random.nextInt(TYPES);
+		startTime = System.currentTimeMillis();
+		pickupTime = 0;
 	}
 
 	/**
@@ -42,55 +67,96 @@ public class Powerup extends AbstractEntity {
 	 */
 	@Override
 	public final void collide(final AbstractEntity e2) {
-		if (e2 instanceof Player) {
-			if (type == 0) {
-				((Player) e2).gainLife();
-			} else {
-				if (type == 1) {
-					((Player) e2).giveShield();
-				} else {
-					((Player) e2).givePowerup(new AbstractPowerup(type));
-				}
-			}
-			String poweruptype = "";
-			switch(type) {
-				case EXTRA_LIFE: poweruptype = "extra life"; 
-				break;
-				case SHIELD: poweruptype = "shield";
-				break;
-				case BULLET_SIZE: poweruptype = "bullet size increase";
-				break;
-				case TRIPLE_SHOT: poweruptype = "tripleshot";
-				break;
-				case PIERCING: poweruptype = "piercing bullet";
-				break;
-				case MINIGUN: poweruptype = "minigun";
-				break;
-			default:
-				break;
-				
-			}
-			Logger.getInstance().log("Player collected a" +	poweruptype + "powerup.");
-			Game.getInstance().destroy(this);
+		if (e2 instanceof Player && pickupTime == 0) {
+			pickup((Player) e2);
+			Logger.getInstance().log("Player collected " + TYPE_STRING[type] + " powerup.");
 		}
 	}
 
+	/**
+	 * activate on pickup of player.
+	 * @param p - the player
+	 */
+	private void pickup(final Player p) {
+		player = p;
+		pickupTime = System.currentTimeMillis();
+		switch(type) {
+			case EXTRA_LIFE: 
+				p.gainLife(); 
+				Game.getInstance().destroy(this);
+				break;
+			case SHIELD: 
+				p.gainShield();
+				Game.getInstance().destroy(this);
+				break;
+			case BULLET_SIZE: 
+				p.setBulletSize(NEW_BULLET_SIZE);
+				break;
+			case TRIPLE_SHOT:
+				p.setTripleShot(true);
+				break;
+			case PIERCING:
+				p.setPiercing(NEW_PIERCING_LEVEL);
+				break;
+			case MINIGUN:
+				p.setFireRate(NEW_FIRE_RATE);
+				break;
+			default:
+				Game.getInstance().destroy(this);
+				break;
+		}
+	}
+	
 	@Override
 	public final void onDeath() {
 		//no-op
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public final void draw() {
-		DisplayEntity.powerup(this);
+		if (pickupTime == 0) {
+			DisplayEntity.powerup(this);
+		} else {
+			DisplayText.powerup(this);
+		}
 	}
 
 	@Override
-	public void update(final List<String> input) {
-		//no-op
-		
+	public final void update(final List<String> input) {
+		if (pickupTime == 0 && PERISH_TIME < (System.currentTimeMillis() - startTime)) {
+			Game.getInstance().destroy(this);
+ 		} else if (pickupTime != 0 && POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
+			runOut();
+		}
+	}
+	
+	/**
+	 * Run out.
+	 */
+	private void runOut() {
+		switch(type) {
+			case BULLET_SIZE: 
+				player.setBulletSize(Player.getBulletSize());
+				break;
+			case TRIPLE_SHOT:
+				player.setTripleShot(false);
+				break;
+			case PIERCING:
+				player.setPiercing(1);
+				break;
+			case MINIGUN:
+				player.setFireRate(Player.getFireRate());
+				break;
+			default:
+				break;
+		}
+		Game.getInstance().destroy(this);
+	}
+
+	/**
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
 	}
 }

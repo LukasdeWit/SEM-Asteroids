@@ -1,10 +1,8 @@
 package entity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import abstractpowerup.AbstractPowerup;
 import display.DisplayEntity;
 import game.Game;
 import game.Gamestate;
@@ -32,18 +30,19 @@ public class Player extends AbstractEntity {
 	private static final double ACCELERATION = .04;
 	private static final float DECELERATION = .01f;
 	private static final int HYPERSPACE_TIME = 1000;
-	private static final long TIME_BETWEEN_SHOTS = 200;
+	private static final long FIRE_RATE = 200;
 	private static final float BULLET_SPEED = 4;
 	private static final float MAX_SPEED = 4;
 	private static final int MAX_BULLETS = 4;
 	private static final int CHANCE_OF_DYING = 25;
+	private static final float BULLET_SIZE = 2;
 	
-	private final List<AbstractPowerup> powerups;
-	private int bullets;
+	private int maxBullets;
 	private double fireRate;
 	private int piercing;
 	private int shielding;
-	private final boolean multishot;
+	private boolean tripleShot;
+	private float bulletSize;
 	
 	private static final float SPAWN_OFFSET = 40;
 	
@@ -67,12 +66,12 @@ public class Player extends AbstractEntity {
 		rotation = 0;
 		this.playerTwo = playerTwo;
 		makeInvincible(INVINCIBILITY_START_TIME);
-		powerups = new ArrayList<AbstractPowerup>();
-		bullets = 1;
-		fireRate = 1;
+		maxBullets = MAX_BULLETS;
+		fireRate = FIRE_RATE;
 		piercing = 1;
 		shielding = 0;
-		multishot = false;
+		bulletSize = BULLET_SIZE;
+		tripleShot = false;
 	}
 
 	/**
@@ -118,6 +117,7 @@ public class Player extends AbstractEntity {
 			} 
 		} else {
 			shielding--;
+			makeInvincible(INVINCIBILITY_START_TIME);
 		}
 	}
 
@@ -153,7 +153,6 @@ public class Player extends AbstractEntity {
 		setY(getY() + getDY());
 		slowDown();
 		wrapAround();
-		handlePowerups();
 		if (!invincible()) {
 			if (Gamestate.getInstance().isCoop()) {
 				keyHandlerTwo(input);
@@ -330,13 +329,14 @@ public class Player extends AbstractEntity {
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot >	(TIME_BETWEEN_SHOTS * fireRate) 
-				&& Game.getInstance().bullets(this) < (MAX_BULLETS * bullets)) {
+		if (System.currentTimeMillis() - lastShot >	fireRate 
+				&& Game.getInstance().bullets(this) < maxBullets) {
 			final Bullet b = new Bullet(getX(), getY(),
 					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
 					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED), piercing);
 			Game.getInstance().create(b);
 			b.setPlayer(this);
+			b.setRadius(bulletSize);
 			lastShot = System.currentTimeMillis();
 		}
 	}
@@ -384,51 +384,6 @@ public class Player extends AbstractEntity {
 	public final int getLives() {
 		return lives;
 	}
-
-	/**
-	 * @return powerups the list of powerups
-	 */
-	public final List<AbstractPowerup> getPowerups() {
-		return powerups;
-	}
-	
-	/**
-	 * Gives a powerup to the player.
-	 * @param powerToAdd the power given to the player.
-	 */
-	public final void givePowerup(final AbstractPowerup powerToAdd) {
-		this.powerups.add(powerToAdd);
-	}
-	
-	/**
-	 * Gives the player one unit of shield.
-	 */
-	public final void giveShield() {
-		shielding++;
-	}
-	
-	/**
-	 * Is used to process powerups.
-	 */
-	public final void handlePowerups() {
-		fireRate = 1;
-		bullets = 1;
-		piercing = 1;
-		float bulletSize = 1;
-		for (final AbstractPowerup x : powerups) {
-			if (x.powerupOver()) {
-				powerups.remove(x);
-				break;
-			} else {
-				fireRate = fireRate
-				* x.getRateMult();
-				bullets = bullets
-				* x.getNumbMult();
-				piercing += x.getPierceRateBoost();
-				bulletSize = bulletSize * x.getSizeBoost();
-			}
-		}
-	}
 	
 	/**
 	 * @return the spawnOffset
@@ -473,9 +428,72 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return the multishot
+	 * @return the tripleShot
 	 */
 	public final boolean isMultishot() {
-		return multishot;
+		return tripleShot;
+	}
+
+	/**
+	 * @return the shielding
+	 */
+	public final int getShielding() {
+		return shielding;
+	}
+
+	/**
+	 * @param shielding the shielding to set
+	 */
+	public final void setShielding(final int shielding) {
+		this.shielding = shielding;
+	}
+
+	/**
+	 * @param bulletSize the bulletSize to set
+	 */
+	public final void setBulletSize(final float bulletSize) {
+		this.bulletSize = bulletSize;
+	}
+
+	/**
+	 * @param tripleShot the tripleShot to set
+	 */
+	public final void setTripleShot(final boolean tripleShot) {
+		this.tripleShot = tripleShot;
+	}
+
+	/**
+	 * @param piercing the piercing to set
+	 */
+	public final void setPiercing(final int piercing) {
+		this.piercing = piercing;
+	}
+
+	/**
+	 * @param fireRate the fireRate to set
+	 */
+	public final void setFireRate(final double fireRate) {
+		this.fireRate = fireRate;
+	}
+
+	/**
+	 * @return the bulletSize
+	 */
+	public static float getBulletSize() {
+		return BULLET_SIZE;
+	}
+
+	/**
+	 * @return the fireRate
+	 */
+	public static long getFireRate() {
+		return FIRE_RATE;
+	}
+
+	/**
+	 * gain a shield level.
+	 */
+	public final void gainShield() {
+		shielding++;		
 	}
 }
