@@ -31,8 +31,8 @@ public final class Game {
 	private Player playerTwo;
 	private final List<AbstractEntity> entities;
 	private final Random random;
-	private final List<AbstractEntity> destroyList;
-	private final List<AbstractEntity> createList;
+	private List<AbstractEntity> destroyList;
+	private List<AbstractEntity> createList;
 	private final float screenX;
 	private final float screenY;
 	private long score;
@@ -352,4 +352,27 @@ public final class Game {
 	public List<AbstractEntity> getDestroyList() {
 		return destroyList;
 	}
+	
+
+    /**
+     * @param destroyList the destroyList to set
+     */
+    public void setDestroyList(List<AbstractEntity> destroyList) {
+        this.destroyList = destroyList;
+    }
+
+    /**
+     * @return the createList
+     */
+    public List<AbstractEntity> getCreateList() {
+        return createList;
+    }
+
+    /**
+     * @param createList the createList to set
+     */
+    public void setCreateList(List<AbstractEntity> createList) {
+        this.createList = createList;
+    }
+
 }
