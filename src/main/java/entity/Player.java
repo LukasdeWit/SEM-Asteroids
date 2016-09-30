@@ -1,11 +1,12 @@
 package entity;
-import game.Game;
-import game.Logger;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.util.List;
 import java.util.Random;
+
+import display.DisplayEntity;
+import game.Game;
+import game.Gamestate;
+import game.Logger;
 
 /**
  * This class is the player of the game.
@@ -13,104 +14,42 @@ import java.util.Random;
  *
  */
 public class Player extends AbstractEntity {
-	/**
-	 * Amount of lives.
-	 */
 	private int lives;
-	/**
-	 * Rotation in radians.
-	 */
 	private double rotation;
-	/**
-	 * Time of last shot.
-	 */
 	private long lastShot;
-	/**
-	 * Start time of invincibility.
-	 */
 	private long invincibleStart;
-	/**
-	 * Amount of invincible time in milliseconds.
-	 */
 	private int invincibleMS;
-	/**
-	 * Start time of hyperspace.
-	 */
 	private long hyperspaceStart;
-	/**
-	 * true if boost is active, else false.
-	 */
 	private boolean boost;
-	/**
-	 * Amount of lives at the start of a game.
-	 */
-	private static final int STARTING_LIVES = 3;
-	/**
-	 * Radius of Player.
-	 */
-	private static final float RADIUS = 5;
-	/**
-	 * Invincible time at the start of a game.
-	 */
-	private static final int INVINCIBILITY_START_TIME = 1000;
-	/**
-	 * Rotation in radians per tick.
-	 */
-	private static final double ROTATION_SPEED = .06;
-	/**
-	 * Acceleration in pixels per ticks squared.
-	 */
-	private static final double ACCELERATION = .04;
-	/**
-	 * Deceleration in pixels per ticks squared.
-	 */
-	private static final float DECELERATION = .01f;
-	/**
-	 * Time in milliseconds per hyperspace jump.
-	 */
-	private static final int HYPERSPACE_TIME = 1000;
-	/**
-	 * Time between shots in milliseconds.
-	 */
-	private static final long TIME_BETWEEN_SHOTS = 200;
-	/**
-	 * Speed of bullets relative to player in pixels per tick.
-	 */
-	private static final float BULLET_SPEED = 4;
-	/**
-	 * A quarter pi.
-	 */
-	private static final double QUARTER_PI = Math.PI / 4;
-	/**
-	 * One eighth pi.
-	 */
-	private static final double EIGHTH_PI = Math.PI / 8;
-	/**
-	 * Time of flicker while respawning.
-	 */
-	private static final int RESPAWN_FLICKER_TIME = 250;
-	/**
-	 * The number of corners of a triangle.
-	 */
-	private static final int TRIANGLE_CORNERS = 3;
-	/**
-	 * Draw size of Player.
-	 */
-	private static final double SIZE = RADIUS * 1.25;
-	/**
-	 * Maximum speed of Player in pixels per tick.
-	 */
-	private static final float MAX_SPEED = 4;
-	/**
-	 * Maximum amount of friendly bullets simultaneously in a game.
-	 */
-	private static final int MAX_BULLETS = 4;
-	/**
-	 * Player has a chance of 1 in this number of dying in hyperspace.
-	 */
-	private static final int CHANCE_OF_DYING = 25;
+	private final boolean playerTwo;
 	
-
+	private static final int STARTING_LIVES = 3;
+	private static final float RADIUS = 5;
+	private static final int INVINCIBILITY_START_TIME = 1000;
+	private static final double ROTATION_SPEED = .06;
+	private static final double ACCELERATION = .04;
+	private static final float DECELERATION = .01f;
+	private static final int HYPERSPACE_TIME = 1000;
+	private static final long FIRE_RATE = 200;
+	private static final float BULLET_SPEED = 4;
+	private static final float MAX_SPEED = 4;
+	private static final int MAX_BULLETS = 4;
+	private static final int CHANCE_OF_DYING = 25;
+	private static final float BULLET_SIZE = 2;
+	
+	private int maxBullets;
+	private double fireRate;
+	private int piercing;
+	private int shielding;
+	private boolean tripleShot;
+	private float bulletSize;
+	
+	private static final float SPAWN_OFFSET = 40;
+	
+	private static final String LEFT = "LEFT";
+	private static final String RIGHT = "RIGHT";
+	private static final double TRIPLE_SHOT_ANGLE = .1;
+	
 	/**
 	 * Constructor for the Player class.
 	 * 
@@ -118,15 +57,22 @@ public class Player extends AbstractEntity {
 	 * @param y location of Player along the Y-axis.
 	 * @param dX velocity of Player along the X-axis.
 	 * @param dY velocity of Player along the Y-axis.
-	 * @param thisGame Game the Player exists in.
+	 * @param playerTwo - true if playertwo
 	 */
 	public Player(final float x, final float y, 
-			final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+			final float dX, final float dY, final boolean playerTwo) {
+		super(x, y, dX, dY);
 		lives = STARTING_LIVES;
 		setRadius(RADIUS);
 		rotation = 0;
+		this.playerTwo = playerTwo;
 		makeInvincible(INVINCIBILITY_START_TIME);
+		maxBullets = MAX_BULLETS;
+		fireRate = FIRE_RATE;
+		piercing = 1;
+		shielding = 0;
+		bulletSize = BULLET_SIZE;
+		tripleShot = false;
 	}
 
 	/**
@@ -148,19 +94,30 @@ public class Player extends AbstractEntity {
 	 * or is hit by the bullet of an saucer.
 	 */
 	public final void onHit() {
-		lives--;
-		if (lives <= 0) {
-			// we are out of lives, call gameover
-			getThisGame().over();
+		if (shielding < 1) {
+			lives--;
+			if (lives <= 0) {
+				// we are out of lives, call gameover
+				Game.getInstance().over();
+			} else {
+				// we lose one live
+	
+				// respawn the player
+				if (isPlayerTwo()) {
+					setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
+				} else if (Gamestate.getInstance().isCoop()) {
+					setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
+				} else {
+					setX(Game.getInstance().getScreenX() / 2);
+				}
+				setY(Game.getInstance().getScreenY() / 2);
+				setDX(0);
+				setDY(0);
+				rotation = 0;
+				makeInvincible(INVINCIBILITY_START_TIME);
+			} 
 		} else {
-			// we lose one live
-
-			// respawn the player
-			setX(getThisGame().getScreenX() / 2);
-			setY(getThisGame().getScreenY() / 2);
-			setDX(0);
-			setDY(0);
-			rotation = 0;
+			shielding--;
 			makeInvincible(INVINCIBILITY_START_TIME);
 		}
 	}
@@ -170,6 +127,21 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
+		if (lives == 1) {
+			if (isPlayerTwo()) {
+				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
+			} else if (Gamestate.getInstance().isCoop()) {
+				setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
+			} else {
+				setX(Game.getInstance().getScreenX() / 2);
+			}
+			setY(Game.getInstance().getScreenY() / 2);
+			setDX(0);
+			setDY(0);
+			rotation = 0;
+			makeInvincible(INVINCIBILITY_START_TIME);
+			Game.getInstance().create(this);
+		}
 	}
 
 	/**
@@ -183,7 +155,11 @@ public class Player extends AbstractEntity {
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
-			keyHandler(input);
+			if (Gamestate.getInstance().isCoop()) {
+				keyHandlerTwo(input);
+			} else {
+				keyHandler(input);
+			}
 		}
 	}
 
@@ -194,13 +170,13 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandler(final List<String> input) {
-		if (input.contains("LEFT") || input.contains("A")
-				|| !(input.contains("RIGHT") || input.contains("D"))) {
+		if (input.contains(LEFT) || input.contains("A")
+				|| !(input.contains(RIGHT) || input.contains("D"))) {
 			turnLeft();
 		}
 
-		if (input.contains("RIGHT") || input.contains("D")
-				|| !(input.contains("LEFT") || input.contains("A"))) {
+		if (input.contains(RIGHT) || input.contains("D")
+				|| !(input.contains(LEFT) || input.contains("A"))) {
 			turnRight();
 		}
 
@@ -214,6 +190,56 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("SPACE")) {
 			fire();
+		}
+	}
+	
+	/**
+	 * key handler for coop.
+	 * 
+	 * @param input List containing the keyboard input
+	 */
+	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
+	private void keyHandlerTwo(final List<String> input) {
+		if (isPlayerTwo()) {
+			if (input.contains(LEFT) || !(input.contains(RIGHT))) {
+				turnLeft();
+			}
+	
+			if (input.contains(RIGHT) || !(input.contains("LEFT"))) {
+				turnRight();
+			}
+	
+			if (input.contains("UP")) {
+				accelerate();
+			}
+	
+			if (input.contains("DOWN")) {
+				goHyperspace();
+			}
+	
+			if (input.contains("ENTER")) {
+				fire();
+			}
+		} else {
+			if (input.contains("A") || !(input.contains("D"))) {
+				turnLeft();
+			}
+	
+			if (input.contains("D") || !(input.contains("A"))) {
+				turnRight();
+			}
+	
+			if (input.contains("W")) {
+				accelerate();
+			}
+	
+			if (input.contains("S")) {
+				goHyperspace();
+			}
+	
+			if (input.contains("SPACE")) {
+				fire();
+			}
 		}
 	}
 
@@ -235,13 +261,13 @@ public class Player extends AbstractEntity {
 	 * Makes player move faster.
 	 */
 	private void accelerate() {
-		setDX((float) (getDX() + Math.cos(rotation) * ACCELERATION));
-		setDY((float) (getDY() - Math.sin(rotation) * ACCELERATION));
+		setDX((float) (getDX() + Math.cos(getRotation()) * ACCELERATION));
+		setDY((float) (getDY() - Math.sin(getRotation()) * ACCELERATION));
 		if (speed() > MAX_SPEED) {
 			setDX(getDX() * (MAX_SPEED / speed()));
 			setDY(getDY() * (MAX_SPEED / speed()));
 		}
-		boost = true;
+		setBoost(true);
 	}
 
 	/**
@@ -271,7 +297,7 @@ public class Player extends AbstractEntity {
 	 * @return whether or not the player is invincible at this moment.
 	 */
 	public final boolean invincible() {
-		return invincibleStart + invincibleMS > System.currentTimeMillis();
+		return getInvincibleStart() + invincibleMS > System.currentTimeMillis();
 	}
 
 	/**
@@ -284,8 +310,8 @@ public class Player extends AbstractEntity {
 			Logger.getInstance().log("Player died in hyperspace.");
 		} else {
 		Logger.getInstance().log("Player went into hyperspace.");
-		setX((float) (getThisGame().getScreenX() * Math.random()));
-		setY((float) (getThisGame().getScreenY() * Math.random()));
+		setX((float) (Game.getInstance().getScreenX() * Math.random()));
+		setY((float) (Game.getInstance().getScreenY() * Math.random()));
 		setDX(0);
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
@@ -304,15 +330,28 @@ public class Player extends AbstractEntity {
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
-				&& getThisGame().bullets() < MAX_BULLETS) {
-			final Bullet b = new Bullet(getX(), getY(),
-					(float) (getDX() / 2 + Math.cos(rotation) * BULLET_SPEED),
-					(float) (getDY() / 2 - Math.sin(rotation) * BULLET_SPEED),
-					getThisGame());
-			getThisGame().create(b);
+		if (System.currentTimeMillis() - lastShot >	fireRate 
+				&& Game.getInstance().bullets(this) < maxBullets) {
+			fireBullet(rotation);
+			if (tripleShot) {
+				fireBullet(rotation - TRIPLE_SHOT_ANGLE);
+				fireBullet(rotation + TRIPLE_SHOT_ANGLE);
+			}
 			lastShot = System.currentTimeMillis();
 		}
+	}
+	
+	/**
+	 * fire a bullet in a direction.
+	 * @param direction - the direction
+	 */
+	private void fireBullet(final double direction) {
+		final Bullet b = new Bullet(getX(), getY(),
+				(float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
+				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing);
+		Game.getInstance().create(b);
+		b.setPlayer(this);
+		b.setRadius(bulletSize);
 	}
 
 	/**
@@ -325,68 +364,23 @@ public class Player extends AbstractEntity {
 			if (invincible() && !hyperspace()) {
 				invincibleStart = System.currentTimeMillis();
 			} else if (!invincible()) {
-				getThisGame().destroy(e2);
+				Game.getInstance().destroy(e2);
 				onHit();
 				Logger.getInstance().log("Player was hit by an asteroid.");
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
-			getThisGame().destroy(e2);
+			Game.getInstance().destroy(e2);
 			onHit();
 			Logger.getInstance().log("Player was hit by a bullet.");
 		}
 	}
 
 	/**
-	 * Display Player on screen.
+	 * draw the player.
 	 */
 	@Override
-	public final void draw(final GraphicsContext gc) {
-		final double s1 = Math.sin(rotation);
-		final double c1 = Math.cos(rotation);
-
-		final double s2 = Math.sin(rotation + (Math.PI - QUARTER_PI));
-		final double c2 = Math.cos(rotation + (Math.PI - QUARTER_PI));
-
-		final double s3 = Math.sin(rotation + (Math.PI + QUARTER_PI));
-		final double c3 = Math.cos(rotation + (Math.PI + QUARTER_PI));
-
-		gc.setStroke(Color.WHITE);
-		if (invincible()
-				&& (System.currentTimeMillis() + invincibleMS) 
-				% RESPAWN_FLICKER_TIME * 2 < RESPAWN_FLICKER_TIME) {
-			gc.setStroke(Color.GREY);
-		}
-		if (hyperspace()) {
-			gc.setStroke(Color.BLACK);
-		}
-		gc.setLineWidth(1);
-		gc.strokePolygon(
-				new double[] { getX() + SIZE * c1, 
-				getX() + SIZE * c2, 
-				getX() + SIZE * c3 },
-				new double[] { getY() - SIZE * s1, 
-				getY() - SIZE * s2, 
-				getY() - SIZE * s3 }, TRIANGLE_CORNERS);
-
-		if (boost) {
-			final double s4 = Math.sin(rotation + (Math.PI - EIGHTH_PI));
-			final double c4 = Math.cos(rotation + (Math.PI - EIGHTH_PI));
-
-			final double s5 = Math.sin(rotation + (Math.PI + EIGHTH_PI));
-			final double c5 = Math.cos(rotation + (Math.PI + EIGHTH_PI));
-
-			final double s6 = Math.sin(rotation + (Math.PI));
-			final double c6 = Math.cos(rotation + (Math.PI));
-			gc.strokePolygon(new double[] { 
-					getX() + (SIZE - 1) * c4, 
-					getX() + (SIZE - 1) * c5, 
-					getX() + (SIZE + 2) * c6 },
-					new double[] { 
-					getY() - (SIZE - 1) * s4, 
-					getY() - (SIZE - 1) * s5, 
-					getY() - (SIZE + 2) * s6 }, TRIANGLE_CORNERS);
-			boost = false;
-		}
+	public final void draw() {
+		DisplayEntity.player(this);
 	}
 
 	/**
@@ -400,8 +394,126 @@ public class Player extends AbstractEntity {
 	/**
 	 * @return lives
 	 */
-
 	public final int getLives() {
 		return lives;
+	}
+	
+	/**
+	 * @return the spawnOffset
+	 */
+	public static float getSpawnOffset() {
+		return SPAWN_OFFSET;
+	}
+
+	/**
+	 * @return the invincibleStart
+	 */
+	public final long getInvincibleStart() {
+		return invincibleStart;
+	}
+
+	/**
+	 * @return the playerTwo
+	 */
+	public final boolean isPlayerTwo() {
+		return playerTwo;
+	}
+
+	/**
+	 * @return the boost
+	 */
+	public final boolean isBoost() {
+		return boost;
+	}
+
+	/**
+	 * @param boost the boost to set
+	 */
+	public final void setBoost(final boolean boost) {
+		this.boost = boost;
+	}
+
+	/**
+	 * @return the rotation
+	 */
+	public final double getRotation() {
+		return rotation;
+	}
+
+	/**
+	 * @return the shielding
+	 */
+	public final int getShielding() {
+		return shielding;
+	}
+
+	/**
+	 * @param shielding the shielding to set
+	 */
+	public final void setShielding(final int shielding) {
+		this.shielding = shielding;
+	}
+
+	/**
+	 * @param bulletSize the bulletSize to set
+	 */
+	public final void setBulletSize(final float bulletSize) {
+		this.bulletSize = bulletSize;
+	}
+
+	/**
+	 * @param tripleShot the tripleShot to set
+	 */
+	public final void setTripleShot(final boolean tripleShot) {
+		this.tripleShot = tripleShot;
+	}
+
+	/**
+	 * @param piercing the piercing to set
+	 */
+	public final void setPiercing(final int piercing) {
+		this.piercing = piercing;
+	}
+
+	/**
+	 * @param fireRate the fireRate to set
+	 */
+	public final void setFireRate(final double fireRate) {
+		this.fireRate = fireRate;
+	}
+
+	/**
+	 * @return the bulletSize
+	 */
+	public static float getBulletSize() {
+		return BULLET_SIZE;
+	}
+
+	/**
+	 * @return the fireRate
+	 */
+	public static long getFireRate() {
+		return FIRE_RATE;
+	}
+
+	/**
+	 * gain a shield level.
+	 */
+	public final void gainShield() {
+		shielding++;		
+	}
+
+	/**
+	 * @param maxBullets the maxBullets to set
+	 */
+	public final void setMaxBullets(final int maxBullets) {
+		this.maxBullets = maxBullets;
+	}
+
+	/**
+	 * @return the maxBullets
+	 */
+	public static int getMaxBullets() {
+		return MAX_BULLETS;
 	}
 }
