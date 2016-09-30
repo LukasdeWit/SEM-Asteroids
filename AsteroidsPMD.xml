@@ -15,7 +15,6 @@
     <rule ref="rulesets/java/finalizers.xml"/>
     <rule ref="rulesets/java/imports.xml"/>
     <rule ref="rulesets/java/junit.xml"/>
-    <rule ref="rulesets/java/logging-java.xml"/>
     <rule ref="rulesets/java/migrating.xml"/>
     <rule ref="rulesets/java/strictexception.xml"/>
     <rule ref="rulesets/java/typeresolution.xml"/>
@@ -28,6 +27,10 @@
         <exclude name="ShortVariable"/>
         <exclude name="LongVariable"/>
         <exclude name="ShortMethodName"/>
+    </rule>
+    
+    <rule ref="rulesets/java/logging-java.xml">
+    	<exclude name="AvoidPrintStackTrace"/>
     </rule>
 
     <rule ref="rulesets/java/design.xml">
@@ -42,6 +45,7 @@
         <!-- we don't require contributes to be 'politically correct' -->
         <exclude name="CommentContent"/>
         <exclude name="CommentSize"/>
+        <exclude name="CommentRequired"/>
     </rule>
 
     <rule ref="rulesets/java/optimizations.xml">
