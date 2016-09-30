@@ -130,7 +130,7 @@ public class Asteroid extends AbstractEntity {
 	/**
 	 * @param shape the shape to set
 	 */
-	public void setShape(int shape) {
+	public final void setShape(final int shape) {
 		this.shape = shape;
 	}
 

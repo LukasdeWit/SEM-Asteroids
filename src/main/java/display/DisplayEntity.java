@@ -292,6 +292,6 @@ public final class DisplayEntity {
 	 * @return the asteroidShapes
 	 */
 	public static float[][][] getAsteroidShapes() {
-		return ASTEROID_SHAPES;
+		return (float[][][]) ASTEROID_SHAPES.clone();
 	}
 }

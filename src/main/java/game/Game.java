@@ -362,7 +362,7 @@ public final class Game {
 	/**
 	 * @param destroyList the destroyList to set
 	 */
-	public void setDestroyList(List<AbstractEntity> destroyList) {
+	public void setDestroyList(final List<AbstractEntity> destroyList) {
 		this.destroyList = destroyList;
 	}
 
@@ -376,7 +376,7 @@ public final class Game {
 	/**
 	 * @param createList the createList to set
 	 */
-	public void setCreateList(List<AbstractEntity> createList) {
+	public void setCreateList(final List<AbstractEntity> createList) {
 		this.createList = createList;
 	}
 }
