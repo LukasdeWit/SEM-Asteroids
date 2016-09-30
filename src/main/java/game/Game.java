@@ -214,6 +214,9 @@ public final class Game {
 	 * Game over function, destroys the player.
 	 */
 	public void over() {
+		if (player == null) {
+			return;
+		}
 		if (player.isAlive()) {
 			destroy(playerTwo);
 			return;
