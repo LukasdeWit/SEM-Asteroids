@@ -12,9 +12,9 @@ import game.Logger;
  * @author Dario
  */
 public class Powerup extends AbstractEntity {
-	private final int type;
+	private int type;
 	
-	private final long startTime;
+	private long startTime;
 	private long pickupTime;
 
 	private Player player;
@@ -30,7 +30,8 @@ public class Powerup extends AbstractEntity {
 	private static final int BULLET_SIZE = 2;
 	private static final int TRIPLE_SHOT = 3;
 	private static final int PIERCING = 4;
-	private static final int MINIGUN = 5;
+	//default
+	//private static final int MINIGUN = 5;
 	
 	private static final String[] TYPE_STRING = {
 			"an extra life", 
@@ -101,12 +102,9 @@ public class Powerup extends AbstractEntity {
 			case PIERCING:
 				p.setPiercing(NEW_PIERCING_LEVEL);
 				break;
-			case MINIGUN:
+			default:
 				p.setFireRate(NEW_FIRE_RATE);
 				p.setMaxBullets(MINIGUN_BULLETS);
-				break;
-			default:
-				Game.getInstance().destroy(this);
 				break;
 		}
 	}
@@ -127,9 +125,11 @@ public class Powerup extends AbstractEntity {
 
 	@Override
 	public final void update(final List<String> input) {
-		if (pickupTime == 0 && PERISH_TIME < (System.currentTimeMillis() - startTime)) {
-			Game.getInstance().destroy(this);
- 		} else if (pickupTime != 0 && POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
+		if (pickupTime == 0) {
+			if (PERISH_TIME < (System.currentTimeMillis() - startTime)) {
+				Game.getInstance().destroy(this);
+	 		} 
+		} else if (POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
 			runOut();
 		}
 	}
@@ -138,6 +138,11 @@ public class Powerup extends AbstractEntity {
 	 * Run out.
 	 */
 	private void runOut() {
+		if (player == null) {
+			Logger.getInstance().log("ERROR | No player was linked to this powerup for runOut().");
+			Game.getInstance().destroy(this);
+			return;
+		}
 		switch(type) {
 			case BULLET_SIZE: 
 				player.setBulletSize(Player.getBulletSize());
@@ -149,11 +154,9 @@ public class Powerup extends AbstractEntity {
 			case PIERCING:
 				player.setPiercing(1);
 				break;
-			case MINIGUN:
+			default:
 				player.setFireRate(Player.getFireRate());
 				player.setMaxBullets(Player.getMaxBullets());
-				break;
-			default:
 				break;
 		}
 		Game.getInstance().destroy(this);
@@ -164,5 +167,54 @@ public class Powerup extends AbstractEntity {
 	 */
 	public final Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * @param player the player to set
+	 */
+	public final void setPlayer(final Player player) {
+		this.player = player;
+	}
+
+	/**
+	 * @param pickupTime the pickupTime to set
+	 */
+	public final void setPickupTime(final long pickupTime) {
+		this.pickupTime = pickupTime;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public final void setType(final int type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the newBulletSize
+	 */
+	public static final float getNewBulletSize() {
+		return NEW_BULLET_SIZE;
+	}
+
+	/**
+	 * @return the newPiercingLevel
+	 */
+	public static final int getNewPiercingLevel() {
+		return NEW_PIERCING_LEVEL;
+	}
+
+	/**
+	 * @return the newFireRate
+	 */
+	public static final long getNewFireRate() {
+		return NEW_FIRE_RATE;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public final void setStartTime(final long startTime) {
+		this.startTime = startTime;
 	}
 }

@@ -10,7 +10,7 @@ import game.Game;
  *
  */
 public class Particle extends AbstractEntity {
-	private final long birthTime;
+	private long birthTime;
 	
 	private static final long LIFETIME = 750;
 	private static final int EXPLOSION_PARTICLES = 10;
@@ -98,5 +98,12 @@ public class Particle extends AbstractEntity {
 	 */
 	public static int getExplosionParticles() {
 		return EXPLOSION_PARTICLES;
+	}
+
+	/**
+	 * @param birthTime the birthTime to set
+	 */
+	public final void setBirthTime(final long birthTime) {
+		this.birthTime = birthTime;
 	}
 }
