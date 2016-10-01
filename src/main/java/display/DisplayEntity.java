@@ -301,4 +301,11 @@ public final class DisplayEntity {
 	public static float[][] getPlayerOneLines() {
 		return (float[][]) PLAYER_ONE_LINES.clone();
 	}
+
+	/**
+	 * @return the saucerShape
+	 */
+	public static double[][] getSaucerShape() {
+		return (double[][]) SAUCER_SHAPE.clone();
+	}
 }

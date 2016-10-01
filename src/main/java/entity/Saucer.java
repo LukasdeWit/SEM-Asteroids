@@ -105,18 +105,18 @@ public class Saucer extends AbstractEntity {
 		if (Game.getInstance().getPlayer().invincible()) {
 			shotTime = System.currentTimeMillis();
 		} else {
-			if (Float.compare(BIG_RADIUS, getRadius()) == 0
-                    && System.currentTimeMillis() - shotTime > SHOT_TIME) {
-                final float shotDir = (float) (Math.random() * 2 * Math.PI);
-
-                final Bullet newBullet = new Bullet(getX(), getY(),
-                        (float) Math.cos(shotDir) * BULLET_SPEED,
-                        (float) Math.sin(shotDir) * BULLET_SPEED);
-                newBullet.setFriendly(false);
-                Game.getInstance().create(newBullet);
-                shotTime = System.currentTimeMillis();
-            } else if (
-            		System.currentTimeMillis() - shotTime > smallShotTime()) {
+			if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
+				if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
+	                final float shotDir = (float) (Math.random() * 2 * Math.PI);
+	
+	                final Bullet newBullet = new Bullet(getX(), getY(),
+	                        (float) Math.cos(shotDir) * BULLET_SPEED,
+	                        (float) Math.sin(shotDir) * BULLET_SPEED);
+	                newBullet.setFriendly(false);
+	                Game.getInstance().create(newBullet);
+	                shotTime = System.currentTimeMillis();
+				}
+            } else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
                 final float shotDir = smallShotDir();
 
                 final Bullet newBullet = new Bullet(getX(), getY(),
@@ -227,7 +227,7 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		int points = BIG_SCORE;
-		if (Float.compare(BIG_RADIUS, getRadius()) >= 0) {
+		if (getRadius() == SMALL_RADIUS) {
 			points = SMALL_SCORE;
 		}
 		Game.getInstance().addScore(points);
@@ -243,9 +243,37 @@ public class Saucer extends AbstractEntity {
 	}
 
 	/**
+	 * @return the bigRadius
+	 */
+	public static final float getBigRadius() {
+		return BIG_RADIUS;
+	}
+
+	/**
 	 * @return the toRight
 	 */
 	public final int getToRight() {
 		return toRight;
+	}
+
+	/**
+	 * @return the shotTime
+	 */
+	public final long getShotTime() {
+		return shotTime;
+	}
+
+	/**
+	 * @param shotTime the shotTime to set
+	 */
+	public final void setShotTime(final long shotTime) {
+		this.shotTime = shotTime;
+	}
+
+	/**
+	 * @param dirChangeTime the dirChangeTime to set
+	 */
+	public final void setDirChangeTime(final long dirChangeTime) {
+		this.dirChangeTime = dirChangeTime;
 	}
 }

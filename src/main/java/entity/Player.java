@@ -481,12 +481,26 @@ public class Player extends AbstractEntity {
 	public final void setBulletSize(final float bulletSize) {
 		this.bulletSize = bulletSize;
 	}
-
+	
+	/**
+	 * @return bulletSize
+	 */
+	public final float getCurrentBulletSize() {
+		return bulletSize;
+	}
+	
 	/**
 	 * @param tripleShot the tripleShot to set
 	 */
 	public final void setTripleShot(final boolean tripleShot) {
 		this.tripleShot = tripleShot;
+	}
+
+	/**
+	 * @return the tripleShot
+	 */
+	public final boolean isTripleShot() {
+		return tripleShot;
 	}
 
 	/**
@@ -497,10 +511,24 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
+	 * @return the piercing
+	 */
+	public final int getPiercing() {
+		return piercing;
+	}
+
+	/**
 	 * @param fireRate the fireRate to set
 	 */
 	public final void setFireRate(final double fireRate) {
 		this.fireRate = fireRate;
+	}
+	
+	/**
+	 * @return fireRate
+	 */
+	public final double getCurrentFireRate() {
+		return fireRate;
 	}
 
 	/**
