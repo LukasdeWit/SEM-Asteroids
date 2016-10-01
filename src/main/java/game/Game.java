@@ -65,6 +65,30 @@ public final class Game {
 	}
 	
 	/**
+	 * Starts or restarts the game, with initial entities.
+	 */
+	public void startGame() {
+		Gamestate.getInstance().start();
+		entities.clear();
+		if (Gamestate.getInstance().isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, true);
+			entities.add(player);
+			entities.add(playerTwo);
+		} else {
+			player = new Player(screenX / 2, screenY / 2, 0, 0, false);
+			entities.add(player);
+		} 
+		if (this.score > highscore) {
+			highscore = this.score;
+			writeHighscore();
+		}
+		score = 0;
+		Spawner.getInstance().reset();
+		Logger.getInstance().log("Game started.");
+	}
+	
+	/**
 	 * reads the highscore from file in resources folder.
 	 * @return the highscore
 	 */
@@ -100,30 +124,6 @@ public final class Game {
 			e.printStackTrace();
 			Logger.getInstance().log("unable to write highscore to file");
 		}
-	}
-	
-	/**
-	 * Starts or restarts the game, with initial entities.
-	 */
-	public void startGame() {
-		Gamestate.getInstance().start();
-		entities.clear();
-		if (Gamestate.getInstance().isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, true);
-			entities.add(player);
-			entities.add(playerTwo);
-		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, false);
-			entities.add(player);
-		} 
-		if (this.score > highscore) {
-			highscore = this.score;
-			writeHighscore();
-		}
-		score = 0;
-		Spawner.getInstance().reset();
-		Logger.getInstance().log("Game started.");
 	}
 	
 	/**
@@ -364,6 +364,13 @@ public final class Game {
 	 */
 	public long getHighscore() {
 		return highscore;
+	}
+
+	/**
+	 * @param highscore the highscore to set
+	 */
+	public void setHighscore(final long highscore) {
+		this.highscore = highscore;
 	}
 
 	/**
