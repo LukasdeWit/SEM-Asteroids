@@ -9,7 +9,7 @@ import game.Logger;
  * Class that stores the information for a bullet.
  */
 public class Bullet extends AbstractEntity {
-	private final long birthTime;
+	private long birthTime;
 	private boolean friendly;
 	private Player player;
 	private int piercing = 1;
@@ -126,5 +126,12 @@ public class Bullet extends AbstractEntity {
 	 */
 	public final void setPlayer(final Player player) {
 		this.player = player;
+	}
+
+	/**
+	 * @param birthTime the birthTime to set
+	 */
+	public final void setBirthTime(final long birthTime) {
+		this.birthTime = birthTime;
 	}
 }

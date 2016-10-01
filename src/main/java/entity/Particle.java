@@ -92,4 +92,11 @@ public class Particle extends AbstractEntity {
 			Game.getInstance().destroy(this);
 		}
 	}
+
+	/**
+	 * @return the explosionParticles
+	 */
+	public static int getExplosionParticles() {
+		return EXPLOSION_PARTICLES;
+	}
 }

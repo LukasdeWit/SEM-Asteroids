@@ -99,6 +99,9 @@ public class Saucer extends AbstractEntity {
 	 * Makes the Saucer shoot.
 	 */
 	private void shoot() {
+		if (Game.getInstance().getPlayer() == null) {
+			return;
+		}
 		if (Game.getInstance().getPlayer().invincible()) {
 			shotTime = System.currentTimeMillis();
 		} else {
@@ -237,5 +240,12 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static float getSmallRadius() {
 		return SMALL_RADIUS;
+	}
+
+	/**
+	 * @return the toRight
+	 */
+	public final int getToRight() {
+		return toRight;
 	}
 }
