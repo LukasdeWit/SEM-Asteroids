@@ -78,7 +78,10 @@ public class SaucerTest {
 		Game.getInstance().setPlayer(p);
 		saucer.setShotTime(0);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		assertEquals(1, Game.getInstance().getCreateList().size(), 0);
+		final AbstractEntity b = Game.getInstance().getCreateList().get(0);
+		assertTrue(b instanceof Bullet);
+		assertFalse(((Bullet) b).isFriendly());
 	}
 	
 	@Test
@@ -87,7 +90,7 @@ public class SaucerTest {
 		p.setInvincibleStart(0);
 		Game.getInstance().setPlayer(p);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		assertEquals(0, Game.getInstance().getCreateList().size(), 0);
 	}
 	
 	@Test
@@ -98,7 +101,10 @@ public class SaucerTest {
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.setShotTime(0);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		assertEquals(1, Game.getInstance().getCreateList().size(), 0);
+		final AbstractEntity b = Game.getInstance().getCreateList().get(0);
+		assertTrue(b instanceof Bullet);
+		assertFalse(((Bullet) b).isFriendly());
 	}
 	
 	@Test
@@ -108,7 +114,7 @@ public class SaucerTest {
 		Game.getInstance().setPlayer(p);
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		assertEquals(0, Game.getInstance().getCreateList().size(), 0);
 	}
 	
 	@Test
@@ -120,7 +126,9 @@ public class SaucerTest {
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.setShotTime(0);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		final Bullet b = (Bullet) Game.getInstance().getCreateList().get(0);
+		assertEquals(4, b.getDX(), 0.1);
+		assertEquals(0, b.getDY(), 0.1);
 	}
 	
 	@Test
@@ -132,28 +140,30 @@ public class SaucerTest {
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.setShotTime(0);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		final Bullet b = (Bullet) Game.getInstance().getCreateList().get(0);
+		assertEquals(4, b.getDX(), 4);
+		assertEquals(0, b.getDY(), 4);
 	}
 	
 	@Test
 	public final void testCheckEnd1(){
 		saucer.setX(Game.getCanvasSize() + 10);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		assertTrue(Game.getInstance().getDestroyList().contains(saucer));
 	}
 	
 	@Test
 	public final void testCheckEnd2(){
 		saucer.setX(-10);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		assertTrue(Game.getInstance().getDestroyList().contains(saucer));
 	}
 	
 	@Test
 	public final void testChangeDirection(){
 		saucer.setDirChangeTime(0);
 		saucer.update(null);
-		//assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+		assertEquals(System.currentTimeMillis(), saucer.getDirChangeTime(), 0);
 	}
 	
 	@Test
@@ -169,21 +179,21 @@ public class SaucerTest {
 		final Player p = new Player(X_START, Y_START, DX_START, DY_START, false);
 		p.setInvincibleStart(0);
 		saucer.collide(p);
-		//test
+		assertTrue(Game.getInstance().getDestroyList().contains(saucer));
 	}
 	
 	@Test
 	public final void testCollide2(){
 		final Player p = new Player(X_START, Y_START, DX_START, DY_START, false);
 		saucer.collide(p);
-		//test
+		assertFalse(Game.getInstance().getDestroyList().contains(saucer));
 	}
 	
 	@Test
 	public final void testCollide3(){
 		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START);
 		saucer.collide(b);
-		//test
+		assertEquals(2, Game.getInstance().getDestroyList().size(), 0);
 	}
 	
 	@Test
@@ -191,26 +201,26 @@ public class SaucerTest {
 		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START);
 		b.setFriendly(false);
 		saucer.collide(b);
-		//test
+		assertFalse(Game.getInstance().getDestroyList().contains(saucer));
 	}
 	
 	@Test
 	public final void testCollide5(){
 		final Asteroid a = new Asteroid(X_START, Y_START, DX_START, DY_START);
 		saucer.collide(a);
-		//test
+		assertEquals(2, Game.getInstance().getDestroyList().size(), 0);
 	}
 	
 	@Test
 	public final void testOnDeath(){
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.onDeath();
-		//test
+		assertEquals(Saucer.getSmallScore(), Game.getInstance().getScore(), 0);
 	}
 	
 	@Test
 	public final void testOnDeath2(){
 		saucer.onDeath();
-		//test
+		assertEquals(Saucer.getBigScore(), Game.getInstance().getScore(), 0);
 	}
 }

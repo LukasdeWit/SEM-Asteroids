@@ -142,18 +142,14 @@ public class Saucer extends AbstractEntity {
 			accuracy = MAX_ACCURACY;
 		}
 			//0 is completely random, 10 is perfect.
-		final float randomRange = (float) (Math.PI
-				* ((MAX_ACCURACY - accuracy) / MAX_ACCURACY) * Math.random());
+		final float randomRange = (float) (Math.PI * ((MAX_ACCURACY - accuracy) / MAX_ACCURACY) * Math.random());
 			//The angle of error.
 		float straightDir;
 		if (playerX > getX()) {
-			straightDir =
-					(float) Math.atan((playerY - getY()) / (playerX - getX()));
+			straightDir = (float) Math.atan((playerY - getY()) / (playerX - getX()));
 		} else {
-			straightDir = (float) (Math.PI
-					+ Math.atan((playerY - getY()) / (playerX - getX())));
+			straightDir = (float) (Math.PI + Math.atan((playerY - getY()) / (playerX - getX())));
 		}
-		//straightDir = (float) -(Math.PI / 2); //debug.
 			//Straight direction from saucer to player in radians.
 		final float errorRight = (float) (random.nextInt(2) * 2 - 1);
 			//-1 is error left, 1 is error right.
@@ -275,5 +271,26 @@ public class Saucer extends AbstractEntity {
 	 */
 	public final void setDirChangeTime(final long dirChangeTime) {
 		this.dirChangeTime = dirChangeTime;
+	}
+
+	/**
+	 * @return the dirChangeTime
+	 */
+	public final long getDirChangeTime() {
+		return dirChangeTime;
+	}
+
+	/**
+	 * @return the smallScore
+	 */
+	public static final int getSmallScore() {
+		return SMALL_SCORE;
+	}
+
+	/**
+	 * @return the bigScore
+	 */
+	public static final int getBigScore() {
+		return BIG_SCORE;
 	}
 }

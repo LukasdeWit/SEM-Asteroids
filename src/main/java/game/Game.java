@@ -29,7 +29,7 @@ import javafx.scene.shape.Rectangle;
 public final class Game {
 	private Player player;
 	private Player playerTwo;
-	private final List<AbstractEntity> entities;
+	private List<AbstractEntity> entities;
 	private final Random random;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
@@ -95,9 +95,8 @@ public final class Game {
 	private long readHighscore() {
 		long currentHighscore = 0;
 		final String filePath = "src/main/resources/highscore.txt";
-		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(filePath),
-						StandardCharsets.UTF_8))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(
+				new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 			String sCurrentLine;
 			while ((sCurrentLine = br.readLine()) != null) {
 				currentHighscore = Long.parseLong(sCurrentLine);
@@ -137,8 +136,6 @@ public final class Game {
 		final Rectangle r = new Rectangle(0, 0, screenX, screenY);
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
-		//root.setFill(Color.BLACK);
-		//root.fillRect(0, 0, screenX, screenY);
 		Gamestate.getInstance().update(input);
 		DisplayText.wave(Spawner.getInstance().getWave());
 	}	
@@ -165,7 +162,13 @@ public final class Game {
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
 		if (Gamestate.getInstance().isCoop()) {
+			if (playerTwo == null) {
+				return;
+			}
 			DisplayText.livesTwo(playerTwo.getLives());
+		}
+		if (player == null) {
+			return;
 		}
 		DisplayText.lives(player.getLives());
 		
@@ -245,6 +248,7 @@ public final class Game {
 	 */
 	public void addScore(final int score) {
 		if (player == null) {
+			this.score += score;
 			return;
 		}
 		if (player.isAlive() || Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
@@ -352,6 +356,13 @@ public final class Game {
 	}
 
 	/**
+	 * @param playerTwo the playerTwo to set
+	 */
+	public void setPlayerTwo(final Player playerTwo) {
+		this.playerTwo = playerTwo;
+	}
+
+	/**
 	 * random getter.
 	 * @return the random
 	 */
@@ -399,5 +410,19 @@ public final class Game {
 	 */
 	public void setCreateList(final List<AbstractEntity> createList) {
 		this.createList = createList;
+	}
+
+	/**
+	 * @param entities the entities to set
+	 */
+	public void setEntities(final List<AbstractEntity> entities) {
+		this.entities = entities;
+	}
+
+	/**
+	 * @return the entities
+	 */
+	public List<AbstractEntity> getEntities() {
+		return entities;
 	}
 }
