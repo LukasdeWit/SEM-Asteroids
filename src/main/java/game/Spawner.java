@@ -139,6 +139,7 @@ public final class Spawner {
 	public void reset() {
 		wave = 0;
 		startSaucerTime = System.currentTimeMillis();
+		startPowerupTime = System.currentTimeMillis();
 		startRest = 0;
 	}
 
@@ -156,5 +157,33 @@ public final class Spawner {
 	 */
 	public int getWave() {
 		return wave;
+	}
+
+	/**
+	 * @param wave the wave to set
+	 */
+	public void setWave(final int wave) {
+		this.wave = wave;
+	}
+
+	/**
+	 * @param startSaucerTime the startSaucerTime to set
+	 */
+	public void setStartSaucerTime(final long startSaucerTime) {
+		this.startSaucerTime = startSaucerTime;
+	}
+
+	/**
+	 * @param startPowerupTime the startPowerupTime to set
+	 */
+	public void setStartPowerupTime(final long startPowerupTime) {
+		this.startPowerupTime = startPowerupTime;
+	}
+
+	/**
+	 * @param startRest the startRest to set
+	 */
+	public void setStartRest(final long startRest) {
+		this.startRest = startRest;
 	}
 }
