@@ -29,7 +29,7 @@ public class Launcher extends Application {
 	private static Group root  = new Group();
 
 	// Make a new Game
-	final Game thisGame = new Game();
+	private final Game thisGame = new Game();
 
 	/**
 	 * Main method.

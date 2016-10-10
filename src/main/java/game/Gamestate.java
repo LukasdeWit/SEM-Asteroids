@@ -30,6 +30,7 @@ public final class Gamestate {
 	
 	/**
 	 * constructor.
+	 * @param thisGame this game
 	 */
 	public Gamestate(final Game thisGame) {
 		this.thisGame = thisGame;
@@ -49,7 +50,6 @@ public final class Gamestate {
 	/**
 	 * update the gamemodes.
 	 * @param input - input
-	 * @return 
 	 */
 	public void update(final List<String> input) {
 		switch(state) {

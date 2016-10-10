@@ -24,6 +24,7 @@ public class Bullet extends AbstractEntity {
 	 * @param y position of bullet along the y-axis
 	 * @param dX velocity of bullet along the x-axis
 	 * @param dY velocity of bullet along the y-axis
+	 * @param thisGame Game the bulelt exists in.
 	 */
 	public Bullet(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
@@ -41,6 +42,7 @@ public class Bullet extends AbstractEntity {
 	 * @param dX velocity of bullet along the x-axis
 	 * @param dY velocity of bullet along the y-axis
 	 * @param pierce - the number of asteroids this
+	 * @param thisGame Game the bullet exists in.
 	 * bullet should be capable of piercing
 	 */
 	public Bullet(final float x, final float y, 

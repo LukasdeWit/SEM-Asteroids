@@ -22,6 +22,7 @@ public class Particle extends AbstractEntity {
 	 * @param y - y coordinate
 	 * @param dX - horizontal speed
 	 * @param dY - vertical speed
+	 * @param thisGame the game this particle belongs to
 	 */
 	public Particle(final float x, final float y, 
 			final float dX, final float dY, final Game thisGame) {
@@ -47,6 +48,7 @@ public class Particle extends AbstractEntity {
 	 * This method creates a random particle.
 	 * @param x - x coordinate
 	 * @param y - y coordinate
+	 * @param thisGame the game this particle belongs to
 	 * @return the random particle
 	 */
 	private static Particle randomParticle(final float x, final float y, final Game thisGame) {

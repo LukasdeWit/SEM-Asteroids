@@ -52,6 +52,7 @@ public class Powerup extends AbstractEntity {
 	 * 
 	 * @param x location of Powerup along the X-axis.
 	 * @param y location of Powerup along the Y-axis.
+	 * @param thisGame the game this particle belongs to
 	 */
 	public Powerup(final float x, final float y, final Game thisGame) {
 		super(x, y, 0, 0, thisGame);

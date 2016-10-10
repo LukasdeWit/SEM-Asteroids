@@ -38,6 +38,7 @@ public class Saucer extends AbstractEntity {
 	 * @param y position of Saucer along the Y-axis
 	 * @param dX velocity of Saucer along the X-axis
 	 * @param dY velocity of Saucer along the Y-axis
+	 * @param thisGame the game this particle belongs to
 	 */
 	public Saucer(final float x, final float y,
 			final float dX, final float dY, final Game thisGame) {

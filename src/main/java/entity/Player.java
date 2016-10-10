@@ -57,7 +57,8 @@ public class Player extends AbstractEntity {
 	 * @param y location of Player along the Y-axis.
 	 * @param dX velocity of Player along the X-axis.
 	 * @param dY velocity of Player along the Y-axis.
-	 * @param playerTwo - true if playertwo
+	 * @param playerTwo true if playertwo
+	 * @param thisGame the game this particle belongs to
 	 */
 	public Player(final float x, final float y,
 			final float dX, final float dY, final Game thisGame, final boolean playerTwo) {

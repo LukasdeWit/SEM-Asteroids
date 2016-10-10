@@ -29,6 +29,7 @@ public class Asteroid extends AbstractEntity {
 	 * @param y location of Asteroid along the Y-axis.
 	 * @param dX velocity of Asteroid along the X-axis.
 	 * @param dY velocity of Asteroid along the Y-axis.
+	 * @param thisGame Game the AbstractEntity exists in.
 	 */
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, final Game thisGame) {
@@ -50,6 +51,7 @@ public class Asteroid extends AbstractEntity {
 	 * @param dX velocity of Asteroid along the X-axis.
 	 * @param dY velocity of Asteroid along the Y-axis.
 	 * @param radius - radius of the new Asteroid.
+	 * @param thisGame Game the asteroid exists in.
 	 */
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, 

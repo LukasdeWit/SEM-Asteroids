@@ -30,6 +30,7 @@ public final class Spawner {
 	
 	/**
 	 * Constructor of Spawner.
+	 * @param game the game this particle belongs to
 	 */
 	public Spawner(final Game game) {
 		thisGame = game;
