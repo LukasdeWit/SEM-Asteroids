@@ -1,7 +1,7 @@
 package entity;
-import java.util.List;
-
 import game.Game;
+
+import java.util.List;
 
 /**
  * This is the superclass of all entities in the game.
@@ -15,6 +15,10 @@ public abstract class AbstractEntity {
 	private float dX;
 	private float dY;
 	private float radius;
+	/**
+	 * The Game this Entity belongs to.
+	 */
+	private Game thisGame;
 
 	/**
 	 * Constructor for the Entity class.
@@ -25,11 +29,12 @@ public abstract class AbstractEntity {
 	 * @param dY velocity of AbstractEntity along the Y-axis.
 	 */
 	public AbstractEntity(final float x, final float y,
-                          final float dX, final float dY) {
+                          final float dX, final float dY, final Game thisGame) {
 		this.setX(x);
 		this.setY(y);
 		this.setDX(dX);
 		this.setDY(dY);
+		this.setThisGame(thisGame);
 	}
 
 	/**
@@ -51,17 +56,33 @@ public abstract class AbstractEntity {
 	 */
 	public final void wrapAround() {
 		if (getX() < 0) {
-			setX(getX() + Game.getInstance().getScreenX());
+			setX(getX() + getThisGame().getScreenX());
 		}
-		if (getX() > Game.getInstance().getScreenX()) {
-			setX(getX() - Game.getInstance().getScreenX());
+		if (getX() > getThisGame().getScreenX()) {
+			setX(getX() - getThisGame().getScreenX());
 		}
 		if (getY() < 0) {
-			setY(getY() + Game.getInstance().getScreenY());
+			setY(getY() + getThisGame().getScreenY());
 		}
-		if (getY() > Game.getInstance().getScreenY()) {
-			setY(getY() - Game.getInstance().getScreenY());
+		if (getY() > getThisGame().getScreenY()) {
+			setY(getY() - getThisGame().getScreenY());
 		}
+	}
+
+	/**
+	 * thisGame getter.
+	 * @return thisGame
+	 */
+	public final Game getThisGame() {
+		return thisGame;
+	}
+
+	/**
+	 * thisGame setter.
+	 * @param thisGame - thisGame
+	 */
+	public final void setThisGame(final Game thisGame) {
+		this.thisGame = thisGame;
 	}
 
 	/**

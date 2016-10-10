@@ -1,12 +1,11 @@
 package entity;
 
-import java.util.List;
-import java.util.Random;
-
 import display.DisplayEntity;
 import game.Game;
-import game.Gamestate;
 import game.Logger;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is the player of the game.
@@ -60,9 +59,9 @@ public class Player extends AbstractEntity {
 	 * @param dY velocity of Player along the Y-axis.
 	 * @param playerTwo - true if playertwo
 	 */
-	public Player(final float x, final float y, 
-			final float dX, final float dY, final boolean playerTwo) {
-		super(x, y, dX, dY);
+	public Player(final float x, final float y,
+			final float dX, final float dY, final Game thisGame, final boolean playerTwo) {
+		super(x, y, dX, dY, thisGame);
 		lives = STARTING_LIVES;
 		setRadius(RADIUS);
 		rotation = 0;
@@ -100,19 +99,19 @@ public class Player extends AbstractEntity {
 			lives--;
 			if (lives <= 0) {
 				// we are out of lives, call gameover
-				Game.getInstance().over();
+				getThisGame().over();
 			} else {
 				// we lose one live
 	
 				// respawn the player
 				if (isPlayerTwo()) {
-					setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
-				} else if (Gamestate.getInstance().isCoop()) {
-					setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
+					setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
+				} else if (getThisGame().getGamestate().isCoop()) {
+					setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
 				} else {
-					setX(Game.getInstance().getScreenX() / 2);
+					setX(getThisGame().getScreenX() / 2);
 				}
-				setY(Game.getInstance().getScreenY() / 2);
+				setY(getThisGame().getScreenY() / 2);
 				setDX(0);
 				setDY(0);
 				rotation = 0;
@@ -131,18 +130,18 @@ public class Player extends AbstractEntity {
 		lives++;
 		if (lives == 1) {
 			if (isPlayerTwo()) {
-				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
-			} else if (Gamestate.getInstance().isCoop()) {
-				setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
+				setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
+			} else if (getThisGame().getGamestate().isCoop()) {
+				setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
 			} else {
-				setX(Game.getInstance().getScreenX() / 2);
+				setX(getThisGame().getScreenX() / 2);
 			}
-			setY(Game.getInstance().getScreenY() / 2);
+			setY(getThisGame().getScreenY() / 2);
 			setDX(0);
 			setDY(0);
 			rotation = 0;
 			makeInvincible(INVINCIBILITY_START_TIME);
-			Game.getInstance().create(this);
+			getThisGame().create(this);
 		}
 	}
 
@@ -157,7 +156,7 @@ public class Player extends AbstractEntity {
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
-			if (Gamestate.getInstance().isCoop()) {
+			if (getThisGame().getGamestate().isCoop()) {
 				keyHandlerTwo(input);
 			} else {
 				keyHandler(input);
@@ -310,8 +309,8 @@ public class Player extends AbstractEntity {
 			Logger.getInstance().log("Player died in hyperspace.");
 		} else {
 		Logger.getInstance().log("Player went into hyperspace.");
-		setX((float) (Game.getInstance().getScreenX() * Math.random()));
-		setY((float) (Game.getInstance().getScreenY() * Math.random()));
+		setX((float) (getThisGame().getScreenX() * Math.random()));
+		setY((float) (getThisGame().getScreenY() * Math.random()));
 		setDX(0);
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
@@ -324,7 +323,7 @@ public class Player extends AbstractEntity {
 	 */
 	private void fire() {
 		if (System.currentTimeMillis() - lastShot >	fireRate 
-				&& Game.getInstance().bullets(this) < maxBullets) {
+				&& getThisGame().bullets(this) < maxBullets) {
 			fireBullet(rotation);
 			if (tripleShot) {
 				fireBullet(rotation - TRIPLE_SHOT_ANGLE);
@@ -341,8 +340,8 @@ public class Player extends AbstractEntity {
 	private void fireBullet(final double direction) {
 		final Bullet b = new Bullet(getX(), getY(),
 				(float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
-				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing);
-		Game.getInstance().create(b);
+				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing, getThisGame());
+		getThisGame().create(b);
 		b.setPlayer(this);
 		b.setRadius(bulletSize);
 	}
@@ -357,12 +356,12 @@ public class Player extends AbstractEntity {
 			if (invincible() && !hyperspace()) {
 				invincibleStart = System.currentTimeMillis();
 			} else if (!invincible()) {
-				Game.getInstance().destroy(e2);
+				getThisGame().destroy(e2);
 				onHit();
 				Logger.getInstance().log("Player was hit by an asteroid.");
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
-			Game.getInstance().destroy(e2);
+			getThisGame().destroy(e2);
 			onHit();
 			Logger.getInstance().log("Player was hit by a bullet.");
 		}

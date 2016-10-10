@@ -1,8 +1,8 @@
 package game;
 
-import java.util.List;
-
 import display.DisplayText;
+
+import java.util.List;
 
 /**
  * This class handles the switching of gamestates.
@@ -14,6 +14,7 @@ public final class Gamestate {
 	private int mode;
 	private long pauseTime;
 	private long restartTime;
+	private final Game thisGame;
 	
 	private static final int STATE_START_SCREEN = 0;
 	private static final int STATE_GAME = 1;
@@ -26,22 +27,14 @@ public final class Gamestate {
 	
 	private static final long MINIMAL_PAUSE_TIME = 300;
 	private static final long MINIMAL_RESTART_TIME = 300;
-	private static final Gamestate INSTANCE = new Gamestate();
 	
 	/**
 	 * constructor.
 	 */
-	private Gamestate() {
+	public Gamestate(final Game thisGame) {
+		this.thisGame = thisGame;
 		this.mode = MODE_NONE;
 		state = STATE_START_SCREEN;
-	}
-	
-	/**
-	 * getInstance of singleton.
-	 * @return the gamestate
-	 */
-	public static Gamestate getInstance() {
-		return INSTANCE;
 	}
 	
 	/**
@@ -65,12 +58,12 @@ public final class Gamestate {
 			DisplayText.startScreen();
 			break;
 		case STATE_GAME:
-			Game.getInstance().updateGame(input);
+			thisGame.updateGame(input);
 			game(input);
 			break;
 		case STATE_HIGHSCORE_SCREEN:
 			highscoreScreen(input);
-			DisplayText.highscoreScreen(Game.getInstance().getHighscore());
+			DisplayText.highscoreScreen(thisGame.getHighscore());
 			break;
 		case STATE_PAUSE_SCREEN:
 			DisplayText.pauseScreen();
@@ -92,11 +85,11 @@ public final class Gamestate {
 		if (input.contains("X")) {
 			mode = MODE_ARCADE;
 			state = STATE_GAME;
-			Game.getInstance().startGame();
+			thisGame.startGame();
 		} else if (input.contains("C")) {
 			mode = MODE_COOP;
 			state = STATE_GAME;
-			Game.getInstance().startGame();
+			thisGame.startGame();
 		}
 	}
 
@@ -125,7 +118,7 @@ public final class Gamestate {
 	private void highscoreScreen(final List<String> input) {
 		if (input.contains("R")) {
 			Logger.getInstance().log("Game stopped.");
-			Game.getInstance().startGame();
+			thisGame.startGame();
 		}
 	}
 
@@ -142,7 +135,7 @@ public final class Gamestate {
 		} else if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			Logger.getInstance().log("Game stopped.");
-			Game.getInstance().startGame();
+			thisGame.startGame();
 			state = STATE_GAME;
 		}
 	}

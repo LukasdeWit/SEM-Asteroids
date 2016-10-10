@@ -1,10 +1,10 @@
 package entity;
-import java.util.List;
-import java.util.Random;
-
 import display.DisplayEntity;
 import game.Game;
 import game.Logger;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents an Asteroid.
@@ -31,8 +31,8 @@ public class Asteroid extends AbstractEntity {
 	 * @param dY velocity of Asteroid along the Y-axis.
 	 */
 	public Asteroid(final float x, final float y,
-			final float dX, final float dY) {
-		super(x, y, dX, dY);
+			final float dX, final float dY, final Game thisGame) {
+		super(x, y, dX, dY, thisGame);
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
 		shape = random.nextInt(SHAPES);
@@ -53,8 +53,8 @@ public class Asteroid extends AbstractEntity {
 	 */
 	public Asteroid(final float x, final float y,
 			final float dX, final float dY, 
-			final float radius) {
-		this(x, y, dX, dY);
+			final float radius, final Game thisGame) {
+		this(x, y, dX, dY, thisGame);
 		setRadius(radius);
 	}
 
@@ -77,8 +77,8 @@ public class Asteroid extends AbstractEntity {
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Bullet) {
-			Game.getInstance().destroy(this);
-			Game.getInstance().destroy(e2);
+			getThisGame().destroy(this);
+			getThisGame().destroy(e2);
 			Logger.getInstance().log("Asteroid was hit by a bullet.");
 		}
 		//this is already done in Bullet.
@@ -92,24 +92,24 @@ public class Asteroid extends AbstractEntity {
 	public final void onDeath() {
 		if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
-				Game.getInstance().create(new Asteroid(getX(), getY(),
+				getThisGame().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), 
-						MEDIUM_RADIUS));
+						MEDIUM_RADIUS, getThisGame()));
 			}
-			Game.getInstance().addScore(BIG_SCORE);
+			getThisGame().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
-				Game.getInstance().create(new Asteroid(getX(), getY(),
+				getThisGame().create(new Asteroid(getX(), getY(),
 						(float) (getDX() + Math.random() - .5),
-						(float) (getDY() + Math.random() - .5), 
-						SMALL_RADIUS));
+						(float) (getDY() + Math.random() - .5),
+						SMALL_RADIUS, getThisGame()));
 			}
-			Game.getInstance().addScore(MEDIUM_SCORE);
+			getThisGame().addScore(MEDIUM_SCORE);
 		} else {
-			Game.getInstance().addScore(SMALL_SCORE);
+			getThisGame().addScore(SMALL_SCORE);
 		}
-		Particle.explosion(getX(), getY(), Game.getInstance());
+		Particle.explosion(getX(), getY(), getThisGame());
 	}
 
 	/**

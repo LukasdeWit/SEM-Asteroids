@@ -1,14 +1,14 @@
 package entity;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
+import game.Game;
+import game.Launcher;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.Game;
-import game.Launcher;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 /**
  * Tests for Saucer.
@@ -20,15 +20,17 @@ public class SaucerTest {
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
-	
+
+	private Game thisGame;
 	private Saucer saucer;
 
 	@Before
 	public final void setUp() {
-		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
-		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
+		thisGame = new Game();
+		thisGame.setCreateList(new ArrayList<>());
+		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		saucer = new Saucer(X_START, Y_START, DX_START, DY_START);
+		saucer = new Saucer(X_START, Y_START, DX_START, DY_START, thisGame);
 	}
 	
 	@Test
@@ -40,7 +42,7 @@ public class SaucerTest {
 
 	@Test
 	public final void testConstructor2(){
-		final Saucer saucer2 = new Saucer(Game.getCanvasSize() - 1, Game.getCanvasSize() - 1, 0, 0);
+		final Saucer saucer2 = new Saucer(Game.getCanvasSize() - 1, Game.getCanvasSize() - 1, 0, 0, thisGame);
 		assertEquals(Game.getCanvasSize() - 1, saucer2.getX(), 0);
 		assertEquals(1, saucer2.getToRight());
 	}

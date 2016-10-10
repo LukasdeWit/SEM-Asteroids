@@ -1,8 +1,8 @@
 package entity;
-import java.util.List;
-
 import display.DisplayEntity;
 import game.Game;
+
+import java.util.List;
 
 /**
  * This class is a particle used in explosions.
@@ -24,8 +24,8 @@ public class Particle extends AbstractEntity {
 	 * @param dY - vertical speed
 	 */
 	public Particle(final float x, final float y, 
-			final float dX, final float dY) {
-		super(x, y, dX, dY);
+			final float dX, final float dY, final Game thisGame) {
+		super(x, y, dX, dY, thisGame);
 		setRadius(1);
 		birthTime = System.currentTimeMillis();
 	}
@@ -39,7 +39,7 @@ public class Particle extends AbstractEntity {
 	public static void explosion(final float x, final float y, 
 			final Game thisGame) {
 		for (int i = 0; i < EXPLOSION_PARTICLES; i++) {
-			thisGame.create(randomParticle(x, y));
+			thisGame.create(randomParticle(x, y, thisGame));
 		}
 	}
 
@@ -49,10 +49,10 @@ public class Particle extends AbstractEntity {
 	 * @param y - y coordinate
 	 * @return the random particle
 	 */
-	private static Particle randomParticle(final float x, final float y) {
+	private static Particle randomParticle(final float x, final float y, final Game thisGame) {
 		return new Particle(x, y,
 				(float) (Math.random() - .5) * SPEED,
-				(float) (Math.random() - .5) * SPEED);
+				(float) (Math.random() - .5) * SPEED, thisGame);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class Particle extends AbstractEntity {
 		setY(getY() + getDY());
 		wrapAround();
 		if (System.currentTimeMillis() - birthTime > LIFETIME) {
-			Game.getInstance().destroy(this);
+			getThisGame().destroy(this);
 		}
 	}
 

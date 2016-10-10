@@ -1,9 +1,9 @@
 package entity;
-import java.util.List;
-
 import display.DisplayEntity;
 import game.Game;
 import game.Logger;
+
+import java.util.List;
 
 /**
  * Class that stores the information for a bullet.
@@ -26,8 +26,8 @@ public class Bullet extends AbstractEntity {
 	 * @param dY velocity of bullet along the y-axis
 	 */
 	public Bullet(final float x, final float y, 
-			final float dX, final float dY) {
-		super(x, y, dX, dY);
+			final float dX, final float dY, final Game thisGame) {
+		super(x, y, dX, dY, thisGame);
 		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
@@ -44,8 +44,8 @@ public class Bullet extends AbstractEntity {
 	 * bullet should be capable of piercing
 	 */
 	public Bullet(final float x, final float y, 
-			final float dX, final float dY, final int pierce) {
-		super(x, y, dX, dY);
+			final float dX, final float dY, final int pierce, final Game thisGame) {
+		super(x, y, dX, dY, thisGame);
 		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
@@ -62,7 +62,7 @@ public class Bullet extends AbstractEntity {
 		setY(getY() + getDY());
 		wrapAround();
 		if (System.currentTimeMillis() - birthTime > LIFETIME) {
-			Game.getInstance().destroy(this);
+			getThisGame().destroy(this);
 		}
 	}
 
@@ -89,11 +89,11 @@ public class Bullet extends AbstractEntity {
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
 			if (piercing < 2) {
-			Game.getInstance().destroy(this);
+			getThisGame().destroy(this);
 			} else {
 				piercing--;
 			}
-			Game.getInstance().destroy(e2);
+			getThisGame().destroy(e2);
 			Logger.getInstance().log("Asteroid was hit by a bullet.");
 		}
 	}
