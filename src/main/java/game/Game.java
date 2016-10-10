@@ -134,7 +134,8 @@ public class Game {
 		player = new Player(screenX / 2, screenY / 2, 0, 0, this);
 		entities.add(player);
 
-		if (this.score > highscoreStore.getHighestScore()) {
+		if (this.score > highscoreStore.getHighestScore()
+				&& highscoreStore.getHighScores().get(0).getGamemode() == this.gamemode) {
 			highscoreStore.addHighScore(score, gamemode);
 		}
 		score = 0;

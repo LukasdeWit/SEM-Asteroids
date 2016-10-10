@@ -25,7 +25,7 @@ public final class HighscoreUtils {
      * @return the directory path.
      */
     public static String getAppDirectory() {
-        String os = System.getProperty("os.name").toUpperCase(Locale.ENGLISH);
+        final String os = System.getProperty("os.name").toUpperCase(Locale.ENGLISH);
         if (os.contains("WIN")) {
             return System.getenv("APPDATA") + "/local/" + APP_NAME + '/';
         } else if (os.contains("MAC")) {
@@ -54,8 +54,7 @@ public final class HighscoreUtils {
                         + highscore.getAbsolutePath());
             }
         } catch (IOException e) {
-            Logger.getInstance().log("an I/O error occurred whilst trying to check"
-                    + " the highscore file", e);
+            Logger.getInstance().log("an I/O error occurred whilst trying to check the highscore file", e);
         }
 
         return highscore;
