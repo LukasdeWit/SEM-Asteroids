@@ -31,8 +31,8 @@ public final class Game {
 	private Player playerTwo;
 	private final List<AbstractEntity> entities;
 	private final Random random;
-	private final List<AbstractEntity> destroyList;
-	private final List<AbstractEntity> createList;
+	private List<AbstractEntity> destroyList;
+	private List<AbstractEntity> createList;
 	private final float screenX;
 	private final float screenY;
 	/**
@@ -254,6 +254,9 @@ public final class Game {
 	 * Game over function, destroys the player.
 	 */
 	public void over() {
+		if (player == null) {
+			return;
+		}
 		if (player.isAlive()) {
 			destroy(playerTwo);
 			return;
@@ -292,6 +295,9 @@ public final class Game {
 	 */
 	public void addScore(final int score) {
 		long currentScore = getScore();
+		if (player == null) {
+			return;
+		}
 		if (player.isAlive() || Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (currentScore / POINTS_PER_LIFE < (currentScore + score) / POINTS_PER_LIFE) {
@@ -429,5 +435,33 @@ public final class Game {
 	 */
 	public long getSurvivalHighscore() {
 		return survivalHighscore;
+	}
+
+	/**
+	 * @return the destroyList
+	 */
+	public List<AbstractEntity> getDestroyList() {
+		return destroyList;
+	}
+
+	/**
+	 * @param destroyList the destroyList to set
+	 */
+	public void setDestroyList(final List<AbstractEntity> destroyList) {
+		this.destroyList = destroyList;
+	}
+
+	/**
+	 * @return the createList
+	 */
+	public List<AbstractEntity> getCreateList() {
+		return createList;
+	}
+
+	/**
+	 * @param createList the createList to set
+	 */
+	public void setCreateList(final List<AbstractEntity> createList) {
+		this.createList = createList;
 	}
 }

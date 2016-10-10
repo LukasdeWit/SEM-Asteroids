@@ -1,4 +1,5 @@
 package entity;
+
 import java.util.List;
 import java.util.Random;
 
@@ -29,18 +30,27 @@ public class Player extends AbstractEntity {
 	private static final double ACCELERATION = .04;
 	private static final float DECELERATION = .01f;
 	private static final int HYPERSPACE_TIME = 1000;
-	private static final long TIME_BETWEEN_SHOTS = 200;
+	private static final long FIRE_RATE = 200;
 	private static final float BULLET_SPEED = 4;
 	private static final float MAX_SPEED = 4;
 	private static final int MAX_BULLETS = 4;
 	private static final int CHANCE_OF_DYING = 25;
+	private static final float BULLET_SIZE = 2;
+	
+	private int maxBullets;
+	private double fireRate;
+	private int piercing;
+	private int shielding;
+	private boolean tripleShot;
+	private float bulletSize;
+	private int changeOfDying;
+	
 	private static final float SPAWN_OFFSET = 40;
 	
 	private static final String LEFT = "LEFT";
 	private static final String RIGHT = "RIGHT";
+	private static final double TRIPLE_SHOT_ANGLE = .1;
 	
-	
-
 	/**
 	 * Constructor for the Player class.
 	 * 
@@ -58,6 +68,13 @@ public class Player extends AbstractEntity {
 		rotation = 0;
 		this.playerTwo = playerTwo;
 		makeInvincible(INVINCIBILITY_START_TIME);
+		maxBullets = MAX_BULLETS;
+		fireRate = FIRE_RATE;
+		piercing = 1;
+		shielding = 0;
+		bulletSize = BULLET_SIZE;
+		tripleShot = false;
+		changeOfDying = CHANCE_OF_DYING;
 	}
 
 	/**
@@ -79,25 +96,30 @@ public class Player extends AbstractEntity {
 	 * or is hit by the bullet of an saucer.
 	 */
 	public final void onHit() {
-		lives--;
-		if (lives <= 0) {
-			// we are out of lives, call gameover
-			Game.getInstance().over();
-		} else {
-			// we lose one live
-
-			// respawn the player
-			if (isPlayerTwo()) {
-				setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
-			} else if (Gamestate.getInstance().isCoop()) {
-				setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
+		if (shielding < 1) {
+			lives--;
+			if (lives <= 0) {
+				// we are out of lives, call gameover
+				Game.getInstance().over();
 			} else {
-				setX(Game.getInstance().getScreenX() / 2);
-			}
-			setY(Game.getInstance().getScreenY() / 2);
-			setDX(0);
-			setDY(0);
-			rotation = 0;
+				// we lose one live
+	
+				// respawn the player
+				if (isPlayerTwo()) {
+					setX(Game.getInstance().getScreenX() / 2 + SPAWN_OFFSET);
+				} else if (Gamestate.getInstance().isCoop()) {
+					setX(Game.getInstance().getScreenX() / 2 - SPAWN_OFFSET);
+				} else {
+					setX(Game.getInstance().getScreenX() / 2);
+				}
+				setY(Game.getInstance().getScreenY() / 2);
+				setDX(0);
+				setDY(0);
+				rotation = 0;
+				makeInvincible(INVINCIBILITY_START_TIME);
+			} 
+		} else {
+			shielding--;
 			makeInvincible(INVINCIBILITY_START_TIME);
 		}
 	}
@@ -150,13 +172,11 @@ public class Player extends AbstractEntity {
 	 */
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandler(final List<String> input) {
-		if (input.contains(LEFT) || input.contains("A")
-				|| !(input.contains(RIGHT) || input.contains("D"))) {
+		if (input.contains(LEFT) || input.contains("A")) {
 			turnLeft();
 		}
 
-		if (input.contains(RIGHT) || input.contains("D")
-				|| !(input.contains(LEFT) || input.contains("A"))) {
+		if (input.contains(RIGHT) || input.contains("D")) {
 			turnRight();
 		}
 
@@ -181,11 +201,11 @@ public class Player extends AbstractEntity {
 	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandlerTwo(final List<String> input) {
 		if (isPlayerTwo()) {
-			if (input.contains(LEFT) || !(input.contains(RIGHT))) {
+			if (input.contains(LEFT)) {
 				turnLeft();
 			}
 	
-			if (input.contains(RIGHT) || !(input.contains("LEFT"))) {
+			if (input.contains(RIGHT)) {
 				turnRight();
 			}
 	
@@ -201,11 +221,11 @@ public class Player extends AbstractEntity {
 				fire();
 			}
 		} else {
-			if (input.contains("A") || !(input.contains("D"))) {
+			if (input.contains("A")) {
 				turnLeft();
 			}
 	
-			if (input.contains("D") || !(input.contains("A"))) {
+			if (input.contains("D")) {
 				turnRight();
 			}
 	
@@ -285,7 +305,7 @@ public class Player extends AbstractEntity {
 	 */
 	private void goHyperspace() {
 		final Random random = new Random();
-		if (random.nextInt(CHANCE_OF_DYING) == 0) {
+		if (random.nextInt(changeOfDying) == 0) {
 			onHit();
 			Logger.getInstance().log("Player died in hyperspace.");
 		} else {
@@ -300,25 +320,31 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return whether or not the player is in hyperspace at this moment.
-	 */
-	private boolean hyperspace() {
-		return hyperspaceStart + invincibleMS > System.currentTimeMillis();
-	}
-
-	/**
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot > TIME_BETWEEN_SHOTS
-				&& Game.getInstance().bullets(this) < MAX_BULLETS) {
-			final Bullet b = new Bullet(getX(), getY(),
-					(float) (getDX() / 2 + Math.cos(getRotation()) * BULLET_SPEED),
-					(float) (getDY() / 2 - Math.sin(getRotation()) * BULLET_SPEED));
-			b.setPlayer(this);
-			Game.getInstance().create(b);
+		if (System.currentTimeMillis() - lastShot >	fireRate 
+				&& Game.getInstance().bullets(this) < maxBullets) {
+			fireBullet(rotation);
+			if (tripleShot) {
+				fireBullet(rotation - TRIPLE_SHOT_ANGLE);
+				fireBullet(rotation + TRIPLE_SHOT_ANGLE);
+			}
 			lastShot = System.currentTimeMillis();
 		}
+	}
+	
+	/**
+	 * fire a bullet in a direction.
+	 * @param direction - the direction
+	 */
+	private void fireBullet(final double direction) {
+		final Bullet b = new Bullet(getX(), getY(),
+				(float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
+				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing);
+		Game.getInstance().create(b);
+		b.setPlayer(this);
+		b.setRadius(bulletSize);
 	}
 
 	/**
@@ -343,6 +369,13 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
+	 * @return whether or not the player is in hyperspace at this moment.
+	 */
+	private boolean hyperspace() {
+		return hyperspaceStart + invincibleMS > System.currentTimeMillis();
+	}
+
+	/**
 	 * draw the player.
 	 */
 	@Override
@@ -364,6 +397,13 @@ public class Player extends AbstractEntity {
 	public final int getLives() {
 		return lives;
 	}
+	
+	/**
+	 * @param lives the lives to set
+	 */
+	public final void setLives(final int lives) {
+		this.lives = lives;
+	}
 
 	/**
 	 * @return the spawnOffset
@@ -377,6 +417,13 @@ public class Player extends AbstractEntity {
 	 */
 	public final long getInvincibleStart() {
 		return invincibleStart;
+	}
+
+	/**
+	 * @param invincibleStart the invincibleStart to set
+	 */
+	public final void setInvincibleStart(final long invincibleStart) {
+		this.invincibleStart = invincibleStart;
 	}
 
 	/**
@@ -405,5 +452,124 @@ public class Player extends AbstractEntity {
 	 */
 	public final double getRotation() {
 		return rotation;
+	}
+
+	/**
+	 * @return the rotationSpeed
+	 */
+	public static double getRotationSpeed() {
+		return ROTATION_SPEED;
+	}
+
+	/**
+	 * @return the shielding
+	 */
+	public final int getShielding() {
+		return shielding;
+	}
+
+	/**
+	 * @param shielding the shielding to set
+	 */
+	public final void setShielding(final int shielding) {
+		this.shielding = shielding;
+	}
+
+	/**
+	 * @param bulletSize the bulletSize to set
+	 */
+	public final void setBulletSize(final float bulletSize) {
+		this.bulletSize = bulletSize;
+	}
+
+	/**
+	 * @param tripleShot the tripleShot to set
+	 */
+	public final void setTripleShot(final boolean tripleShot) {
+		this.tripleShot = tripleShot;
+	}
+
+	/**
+	 * @param piercing the piercing to set
+	 */
+	public final void setPiercing(final int piercing) {
+		this.piercing = piercing;
+	}
+
+	/**
+	 * @param fireRate the fireRate to set
+	 */
+	public final void setFireRate(final double fireRate) {
+		this.fireRate = fireRate;
+	}
+
+	/**
+	 * @return the bulletSize
+	 */
+	public static float getBulletSize() {
+		return BULLET_SIZE;
+	}
+
+	/**
+	 * @return the fireRate
+	 */
+	public static long getFireRate() {
+		return FIRE_RATE;
+	}
+
+	/**
+	 * gain a shield level.
+	 */
+	public final void gainShield() {
+		shielding++;		
+	}
+
+	/**
+	 * @param maxBullets the maxBullets to set
+	 */
+	public final void setMaxBullets(final int maxBullets) {
+		this.maxBullets = maxBullets;
+	}
+
+	/**
+	 * @return the maxBullets
+	 */
+	public static int getMaxBullets() {
+		return MAX_BULLETS;
+	}
+
+	/**
+	 * @return the hyperspaceStart
+	 */
+	public final long getHyperspaceStart() {
+		return hyperspaceStart;
+	}
+
+	/**
+	 * @param hyperspaceStart the hyperspaceStart to set
+	 */
+	public final void setHyperspaceStart(final long hyperspaceStart) {
+		this.hyperspaceStart = hyperspaceStart;
+	}
+
+	/**
+	 * @return the lastShot
+	 */
+	public final long getLastShot() {
+		return lastShot;
+	}
+
+	/**
+	 * @return the maxSpeed
+	 */
+	public static float getMaxSpeed() {
+		return MAX_SPEED;
+	}
+
+	/**
+	 * @param changeOfDying the changeOfDying to set
+	 */
+	public final void setChangeOfDying(final int changeOfDying) {
+		this.changeOfDying = changeOfDying;
 	}
 }

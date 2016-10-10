@@ -1,6 +1,7 @@
 package game;
 
 import entity.Asteroid;
+import entity.Powerup;
 import entity.Saucer;
 
 /**
@@ -10,10 +11,12 @@ import entity.Saucer;
  */
 public final class Spawner {
 	private long startSaucerTime;
+	private long startPowerupTime;
 	private long startRest;
 	private int wave;
 	
 	private static final long SAUCER_TIME = 20000;
+	private static final long POWERUP_TIME = 10000;
 	private static final long REST = 4000;
 	private static final int STARTING_ASTEROIDS = 4;
 	private static final int MAX_EXTRA = 7;
@@ -32,6 +35,7 @@ public final class Spawner {
 	 */
 	private Spawner() {
 		startSaucerTime = System.currentTimeMillis();
+		startPowerupTime = System.currentTimeMillis();
 		startRest = 0;
 		wave = 0;
 	}
@@ -52,6 +56,11 @@ public final class Spawner {
 			spawnSaucer();
 			Logger.getInstance().log("Saucer was spawned");
 			startSaucerTime = System.currentTimeMillis();
+		}
+		if (System.currentTimeMillis() - startPowerupTime > POWERUP_TIME) {
+			spawnPowerup();
+			Logger.getInstance().log("Powerup was spawned");
+			startPowerupTime = System.currentTimeMillis();
 		}
 		if (Game.getInstance().enemies() != 0) {
 			startRest = System.currentTimeMillis();
@@ -101,6 +110,16 @@ public final class Spawner {
 			newSaucer.setRadius(Saucer.getSmallRadius());
 		}
 		Game.getInstance().create(newSaucer);
+	}
+	
+	/**
+	 * adds a Powerup with random X and Y and type.
+	 */
+	private void spawnPowerup() {
+		Game.getInstance().create(new Powerup(Game.getInstance().getScreenY()
+				* (float) Math.random(),
+				Game.getInstance().getScreenY() 
+				* (float) Math.random()));
 	}
 
 	/**

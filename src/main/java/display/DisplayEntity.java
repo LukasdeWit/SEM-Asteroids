@@ -4,6 +4,7 @@ import entity.Asteroid;
 import entity.Bullet;
 import entity.Particle;
 import entity.Player;
+import entity.Powerup;
 import entity.Saucer;
 import game.Launcher;
 import javafx.scene.Group;
@@ -65,6 +66,7 @@ public final class DisplayEntity {
 	
 	private static final float BULLET_SIZE = .5f;
 	private static final float PARTICLE_SIZE = .5f;
+	private static final float POWERUP_SIZE = .5f;
 	
 	private static final int PLAYER_RESPAWN_FLICKER_TIME = 250;
 	private static final float[] PLAYER_TWO_CIRCLE = {11, 0, 9};
@@ -262,5 +264,41 @@ public final class DisplayEntity {
 		group.setTranslateX(s.getX());
 		group.setTranslateY(s.getY());
 		Launcher.getRoot().getChildren().add(group);
+	}
+	
+	/**
+	 * draw powerup.
+	 * @param p - the powerup
+	 */
+	public static void powerup(final Powerup p) {
+		
+		
+		final float radius = p.getRadius();
+		final Circle c = new Circle(0, 0, radius * POWERUP_SIZE);
+		c.setFill(Color.WHITE);
+		c.setTranslateX(p.getX());
+		c.setTranslateY(p.getY());
+		Launcher.getRoot().getChildren().add(c);
+	}
+
+	/**
+	 * @return the powerupSize
+	 */
+	public static float getPowerupSize() {
+		return POWERUP_SIZE;
+	}
+
+	/**
+	 * @return the asteroidShapes
+	 */
+	public static float[][][] getAsteroidShapes() {
+		return (float[][][]) ASTEROID_SHAPES.clone();
+	}
+
+	/**
+	 * @return the playerOneLines
+	 */
+	public static float[][] getPlayerOneLines() {
+		return (float[][]) PLAYER_ONE_LINES.clone();
 	}
 }
