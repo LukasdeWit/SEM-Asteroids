@@ -46,7 +46,7 @@ public class HighscoreStore {
         try (InputStreamReader reader = new InputStreamReader(
                 new FileInputStream(HighscoreUtils.getHighScoreFile()),
                 StandardCharsets.UTF_8)) {
-            Gson gson = new GsonBuilder().create();
+            final Gson gson = new GsonBuilder().create();
             HighScore[] array = gson.fromJson(reader, HighScore[].class);
 
             reader.close();
@@ -55,7 +55,7 @@ public class HighscoreStore {
                 array = new HighScore[0];
             }
 
-            List<HighScore> result = Arrays.asList(array);
+            final List<HighScore> result = Arrays.asList(array);
             Collections.sort(result);
 
             return Lists.newArrayList(result);
@@ -100,7 +100,7 @@ public class HighscoreStore {
      * @return the id
      */
     private int nextId() {
-        Optional<Integer> result = highScores
+        final Optional<Integer> result = highScores
                 .stream()
                 .map(HighScore::getId)
                 // reverse sort to get the biggest id at the start

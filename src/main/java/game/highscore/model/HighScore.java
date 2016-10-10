@@ -27,7 +27,7 @@ public class HighScore implements Comparable<HighScore> {
      * @param id the id related to this highscore
      * @param gamemode the gamemode this score was achieved on
      */
-    public HighScore(final String userName, final long score, final int id, int gamemode) {
+    public HighScore(final String userName, final long score, final int id, final int gamemode) {
         this.userName = userName;
         this.score = score;
         this.id = id;
@@ -62,10 +62,13 @@ public class HighScore implements Comparable<HighScore> {
      * get the gametype this highscore was achieved on.
      * @return the gametype
      */
-    public int getGamemode() {
+    public final int getGamemode() {
         return gamemode;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final boolean equals(final Object o) {
         if (this == o) {
@@ -75,7 +78,7 @@ public class HighScore implements Comparable<HighScore> {
             return false;
         }
 
-        HighScore highScore = (HighScore) o;
+        final HighScore highScore = (HighScore) o;
 
         if (getScore() != highScore.getScore()) {
             return false;
@@ -83,29 +86,39 @@ public class HighScore implements Comparable<HighScore> {
         if (getId() != highScore.getId()) {
             return false;
         }
-        if (getUserName() != null) {
-            return getUserName().equals(highScore.getUserName());
-        } else {
-            return highScore.getUserName() == null;
+        if (getGamemode() != highScore.getGamemode()) {
+            return false;
         }
 
+        if (getUserName() == null) {
+            return highScore.getUserName() == null;
+        } else {
+            return getUserName().equals(highScore.getUserName());
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final int hashCode() {
         int result;
-        if (getUserName() != null) {
-            result = getUserName().hashCode();
-        } else {
+        if (getUserName() == null) {
             result = 0;
+        } else {
+            result = getUserName().hashCode();
         }
+
         final int prime = 31;
-        final int i = 32;
-        result = prime * result + (int) (getScore() ^ (getScore() >>> i));
+        result = prime * result + (int) (getScore() ^ (getScore() >>> prime + 1));
         result = prime * result + getId();
+        result = prime * result + getGamemode();
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final String toString() {
         return "HighScore{"
@@ -115,6 +128,9 @@ public class HighScore implements Comparable<HighScore> {
                 + '}';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final int compareTo(final HighScore o) {
         return Long.compare(o.getScore(), getScore());
