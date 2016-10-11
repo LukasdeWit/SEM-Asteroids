@@ -146,7 +146,10 @@ public final class Game {
 		createList.clear();
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
-		DisplayHud.lives(player.getLives(), getGamestate().isCoop());
+		DisplayHud.lives(player.getLives(), player.isPlayerTwo());
+		if (getGamestate().isCoop()) {
+			DisplayHud.lives(playerTwo.getLives(), playerTwo.isPlayerTwo());
+		}
 	}
 
 	/**

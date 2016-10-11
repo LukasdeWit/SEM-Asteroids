@@ -180,8 +180,8 @@ public final class DisplayEntity {
 	 */
 	public static void player(final Player p) {
 		Paint color = Color.WHITE;
-		if (p.invincible() && (System.currentTimeMillis() - p.getInvincibleStart())
-				% (PLAYER_RESPAWN_FLICKER_TIME * 2) < PLAYER_RESPAWN_FLICKER_TIME) {
+		if (p.invincible() && (System.currentTimeMillis() - p.getInvincibleStart()) % (PLAYER_RESPAWN_FLICKER_TIME * 2)
+				< PLAYER_RESPAWN_FLICKER_TIME) {
 			color = Color.GREY;
 		}
 
