@@ -15,9 +15,8 @@ import java.util.Random;
 
 /**
  * This class defines everything within the game.
- * 
- * @author Kibo
  *
+ * @author Kibo
  */
 public final class Game {
 	private Player player;
@@ -51,17 +50,17 @@ public final class Game {
 		highscore = readHighscore();
 		gamestate = new Gamestate(this);
 	}
-	
+
 	/**
 	 * reads the highscore from file in resources folder.
+	 *
 	 * @return the highscore
 	 */
 	private long readHighscore() {
 		long currentHighscore = 0;
 		final String filePath = "src/main/resources/highscore.txt";
-		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(filePath),
-						StandardCharsets.UTF_8))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),
+				StandardCharsets.UTF_8))) {
 			String sCurrentLine;
 			while ((sCurrentLine = br.readLine()) != null) {
 				currentHighscore = Long.parseLong(sCurrentLine);
@@ -78,8 +77,7 @@ public final class Game {
 	private void writeHighscore() {
 		final String content = String.valueOf(highscore);
 		final File file = new File("src/main/resources/highscore.txt");
-		try (FileOutputStream fos =
-					 new FileOutputStream(file.getAbsoluteFile())) {
+		try (FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile())) {
 			fos.write(content.getBytes(StandardCharsets.UTF_8));
 			fos.flush();
 			fos.close();
@@ -87,13 +85,14 @@ public final class Game {
 			Logger.getInstance().log("unable to write highscore to file", e);
 		}
 	}
-	
+
 	/**
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
 		gamestate.start();
 		entities.clear();
+		spawner.reset();
 		if (gamestate.isCoop()) {
 			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
 			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
@@ -102,7 +101,7 @@ public final class Game {
 		} else {
 			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
 			entities.add(player);
-		} 
+		}
 		if (this.score > highscore) {
 			highscore = this.score;
 			writeHighscore();
@@ -111,36 +110,33 @@ public final class Game {
 
 		Logger.getInstance().log("Game started.");
 	}
-	
+
 	/**
 	 * update runs every game tick and updates all necessary entities.
-	 * 
-	 * @param input
-	 *            - all keys pressed at the time of update
+	 *
+	 * @param input - all keys pressed at the time of update
 	 */
 	public void update(final List<String> input) {
 		Launcher.getRoot().getChildren().clear();
 		final Rectangle r = new Rectangle(0, 0, screenX, screenY);
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
-		//root.setFill(Color.BLACK);
-		//root.fillRect(0, 0, screenX, screenY);
 		gamestate.update(input);
 		DisplayText.wave(spawner.getWave());
-	}	
-	
+	}
+
 	/**
 	 * handles the update logic of the game itself.
-	 * 
-	 * @param input
-	 * 			  - all keys pressed at the time of update
+	 *
+	 * @param input - all keys pressed at the time of update
 	 */
 	public void updateGame(final List<String> input) {
-		for (final AbstractEntity e : entities) {
+		entities.forEach(e -> {
 			e.update(input);
 			checkCollision(e);
 			e.draw();
-		}
+		});
+
 		spawner.update();
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
@@ -156,26 +152,23 @@ public final class Game {
 	/**
 	 * checks all collisions of an entity, if there is a hit then collide of the
 	 * entity class will be run.
-	 * 
-	 * @param e1
-	 *            - the entity
+	 *
+	 * @param e1 - the entity
 	 */
 	public void checkCollision(final AbstractEntity e1) {
-		entities
-				.stream()
+		entities.stream()
 				.filter(e2 -> !e1.equals(e2)
 						&& AbstractEntity.collision(e1, e2)
 						&& !destroyList.contains(e1)
 						&& !destroyList.contains(e2))
 				.forEach(e1::collide);
 	}
-	
+
 	/**
 	 * adds an Entity to the destroy list and will be destroyed at the and of
 	 * the current tick.
-	 * 
-	 * @param e
-	 *            - the Entity
+	 *
+	 * @param e - the Entity
 	 */
 	public void destroy(final AbstractEntity e) {
 		destroyList.add(e);
@@ -184,9 +177,8 @@ public final class Game {
 	/**
 	 * adds an Entity to the createList, and will be added to the game at the
 	 * and of the current tick.
-	 * 
-	 * @param e
-	 *            - the Entity
+	 *
+	 * @param e - the Entity
 	 */
 	public void create(final AbstractEntity e) {
 		createList.add(e);
@@ -223,6 +215,7 @@ public final class Game {
 
 	/**
 	 * Adds score to this.score.
+	 *
 	 * @param score - the score to be added.
 	 */
 	public void addScore(final int score) {
@@ -241,16 +234,17 @@ public final class Game {
 			this.score += score;
 		}
 	}
-	
+
 	/**
-	 * Amount of bullets currently in game.
-	 * @param player 
+	 * Amount of bullets currently in game for a specific player.
+	 *
+	 * @param player the player whose bullets to count
 	 * @return amount of bullets
 	 */
 	public int bullets(final Player player) {
 		int bullets = 0;
 		for (final AbstractEntity entity : entities) {
-			if (entity instanceof Bullet && ((Bullet) entity).isFriendly() 
+			if (entity instanceof Bullet && ((Bullet) entity).isFriendly()
 					&& ((Bullet) entity).getPlayer().equals(player)) {
 				bullets++;
 			}
@@ -260,6 +254,7 @@ public final class Game {
 
 	/**
 	 * Amount of enemies currently in game.
+	 *
 	 * @return amount of enemies
 	 */
 	public int enemies() {
@@ -274,6 +269,7 @@ public final class Game {
 
 	/**
 	 * CanvasSize getter.
+	 *
 	 * @return canvas size
 	 */
 	public static float getCanvasSize() {
@@ -282,6 +278,7 @@ public final class Game {
 
 	/**
 	 * getter for screenX.
+	 *
 	 * @return - screenX
 	 */
 	public float getScreenX() {
@@ -290,6 +287,7 @@ public final class Game {
 
 	/**
 	 * getter for screenY.
+	 *
 	 * @return - screenY
 	 */
 	public float getScreenY() {
@@ -298,6 +296,7 @@ public final class Game {
 
 	/**
 	 * Score getter.
+	 *
 	 * @return score
 	 */
 	public long getScore() {
@@ -306,6 +305,7 @@ public final class Game {
 
 	/**
 	 * Player getter.
+	 *
 	 * @return the player
 	 */
 	public Player getPlayer() {
@@ -321,6 +321,7 @@ public final class Game {
 
 	/**
 	 * random getter.
+	 *
 	 * @return the random
 	 */
 	public Random getRandom() {
@@ -361,6 +362,7 @@ public final class Game {
 	public void setCreateList(final List<AbstractEntity> createList) {
 		this.createList = createList;
 	}
+
 	/**
 	 * @return the gamestate
 	 */

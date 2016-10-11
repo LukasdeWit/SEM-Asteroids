@@ -6,8 +6,8 @@ import java.util.List;
 
 /**
  * This class handles the switching of gamestates.
- * @author Kibo
  *
+ * @author Kibo
  */
 public final class Gamestate {
 	private int state;
@@ -15,21 +15,22 @@ public final class Gamestate {
 	private long pauseTime;
 	private long restartTime;
 	private final Game thisGame;
-	
+
 	private static final int STATE_START_SCREEN = 0;
 	private static final int STATE_GAME = 1;
 	private static final int STATE_HIGHSCORE_SCREEN = 2;
 	private static final int STATE_PAUSE_SCREEN = 3;
-	
+
 	private static final int MODE_NONE = 0;
 	private static final int MODE_ARCADE = 1;
 	private static final int MODE_COOP = 2;
-	
+
 	private static final long MINIMAL_PAUSE_TIME = 300;
 	private static final long MINIMAL_RESTART_TIME = 300;
-	
+
 	/**
 	 * constructor.
+	 *
 	 * @param thisGame this game
 	 */
 	public Gamestate(final Game thisGame) {
@@ -37,49 +38,51 @@ public final class Gamestate {
 		this.mode = MODE_NONE;
 		state = STATE_START_SCREEN;
 	}
-	
+
 	/**
 	 * start game.
 	 */
 	public void start() {
 		restartTime = System.currentTimeMillis();
 		pauseTime = restartTime;
-		
+
 	}
-	
+
 	/**
 	 * update the gamemodes.
-	 * @param input - input
+	 *
+	 * @param input input
 	 */
 	public void update(final List<String> input) {
-		switch(state) {
-		case STATE_START_SCREEN:
-			startScreen(input);
-			DisplayText.startScreen();
-			break;
-		case STATE_GAME:
-			thisGame.updateGame(input);
-			game(input);
-			break;
-		case STATE_HIGHSCORE_SCREEN:
-			highscoreScreen(input);
-			DisplayText.highscoreScreen(thisGame.getHighscore());
-			break;
-		case STATE_PAUSE_SCREEN:
-			DisplayText.pauseScreen();
-			pauseScreen(input);
-			break;
-		default:
-			mode = MODE_NONE;
-			state = STATE_START_SCREEN;
-			Logger.getInstance().log("ERROR | Gamestate not correct.");
+		switch (state) {
+			case STATE_START_SCREEN:
+				startScreen(input);
+				DisplayText.startScreen();
+				break;
+			case STATE_GAME:
+				thisGame.updateGame(input);
+				game(input);
+				break;
+			case STATE_HIGHSCORE_SCREEN:
+				highscoreScreen(input);
+				DisplayText.highscoreScreen(thisGame.getHighscore());
+				break;
+			case STATE_PAUSE_SCREEN:
+				DisplayText.pauseScreen();
+				pauseScreen(input);
+				break;
+			default:
+				mode = MODE_NONE;
+				state = STATE_START_SCREEN;
+				Logger.getInstance().log("ERROR | Gamestate not correct.");
 		}
 	}
 
 	/**
 	 * update the gamemode startScreen.
-	 * @param input - input
-	 * @return 
+	 *
+	 * @param input input
+	 * @return
 	 */
 	private void startScreen(final List<String> input) {
 		if (input.contains("X")) {
@@ -95,15 +98,16 @@ public final class Gamestate {
 
 	/**
 	 * update the game gamemode.
-	 * @param input - the input
+	 *
+	 * @param input the input
 	 */
 	private void game(final List<String> input) {
-		if (input.contains("R") && System.currentTimeMillis() 
+		if (input.contains("R") && System.currentTimeMillis()
 				- restartTime > MINIMAL_RESTART_TIME) {
 			Logger.getInstance().log("Game stopped.");
 			mode = MODE_NONE;
 			state = STATE_START_SCREEN;
-		} else if (input.contains("P") && System.currentTimeMillis() 
+		} else if (input.contains("P") && System.currentTimeMillis()
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
 			Logger.getInstance().log("Game paused.");
@@ -113,7 +117,8 @@ public final class Gamestate {
 
 	/**
 	 * update the highscore gamemode.
-	 * @param input - the input
+	 *
+	 * @param input  the input
 	 */
 	private void highscoreScreen(final List<String> input) {
 		if (input.contains("R")) {
@@ -124,15 +129,16 @@ public final class Gamestate {
 
 	/**
 	 * update the pause screen gamemode.
-	 * @param input - the input
+	 *
+	 * @param input  the input
 	 */
 	private void pauseScreen(final List<String> input) {
-		if (input.contains("P") && System.currentTimeMillis() 
+		if (input.contains("P") && System.currentTimeMillis()
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
 			Logger.getInstance().log("Game unpaused.");
 			state = STATE_GAME;
-		} else if (input.contains("R") && System.currentTimeMillis() 
+		} else if (input.contains("R") && System.currentTimeMillis()
 				- restartTime > MINIMAL_RESTART_TIME) {
 			Logger.getInstance().log("Game stopped.");
 			thisGame.startGame();
@@ -195,7 +201,7 @@ public final class Gamestate {
 	public static int getModeCoop() {
 		return MODE_COOP;
 	}
-	
+
 	/**
 	 * @return true if coop
 	 */

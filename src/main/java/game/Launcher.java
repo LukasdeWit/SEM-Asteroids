@@ -17,24 +17,23 @@ import java.util.List;
 
 /**
  * This class is the main launcher of the game.
- * 
- * @author Lukas
  *
+ * @author Lukas
  */
 public class Launcher extends Application {
 	/**
 	 * Time of one frame.
 	 */
 	private static final double FRAME_TIME = 0.017;
-	private static Group root  = new Group();
+	private static Group root = new Group();
 
 	// Make a new Game
 	private final Game thisGame = new Game();
 
 	/**
 	 * Main method.
-	 * 
-	 * @param args - standard
+	 *
+	 * @param args standard
 	 */
 	public static void main(final String... args) {
 		launch(args);
@@ -42,8 +41,8 @@ public class Launcher extends Application {
 
 	/**
 	 * starts the window and boots the game.
-	 * 
-	 * @param stage - the stage for the scenes
+	 *
+	 * @param stage the stage for the scenes
 	 */
 	@Override
 	public final void start(final Stage stage) {
@@ -58,24 +57,25 @@ public class Launcher extends Application {
 		renderLoop.setCycleCount(Timeline.INDEFINITE);
 		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME),
 				new EventHandler<ActionEvent>() {
-			/**
-			 * Updates game based on keyboard input.
-			 */
-			@Override
-			public void handle(final ActionEvent e) {
-				thisGame.update(input);
-			}
-		});
+					/**
+					 * Updates game based on keyboard input.
+					 */
+					@Override
+					public void handle(final ActionEvent e) {
+						thisGame.update(input);
+					}
+				});
 		// add game to scene
 		renderLoop.getKeyFrames().add(kf);
 		renderLoop.play();
 		// show game
 		stage.show();
 	}
-	
+
 	/**
 	 * get the input.
-	 * @param scene - the scene
+	 *
+	 * @param scene the scene
 	 * @return the input
 	 */
 	private List<String> getInput(final Scene scene) {
