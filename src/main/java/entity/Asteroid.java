@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class Asteroid extends AbstractEntity {
 	private int shape;
-	
+
 	private static final int SHAPES = 3;
 	private static final float BIG_RADIUS = 20;
 	private static final float MEDIUM_RADIUS = 12;
@@ -24,15 +24,14 @@ public class Asteroid extends AbstractEntity {
 
 	/**
 	 * Constructor for the Asteroid class.
-	 * 
-	 * @param x location of Asteroid along the X-axis.
-	 * @param y location of Asteroid along the Y-axis.
-	 * @param dX velocity of Asteroid along the X-axis.
-	 * @param dY velocity of Asteroid along the Y-axis.
+	 *
+	 * @param x        location of Asteroid along the X-axis.
+	 * @param y        location of Asteroid along the Y-axis.
+	 * @param dX       velocity of Asteroid along the X-axis.
+	 * @param dY       velocity of Asteroid along the Y-axis.
 	 * @param thisGame Game the AbstractEntity exists in.
 	 */
-	public Asteroid(final float x, final float y,
-			final float dX, final float dY, final Game thisGame) {
+	public Asteroid(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
@@ -42,27 +41,27 @@ public class Asteroid extends AbstractEntity {
 			setDY(getDY() * 2);
 		}
 	}
-	
+
 	/**
 	 * Constructor for the Asteroid class, with radius.
-	 * 
-	 * @param x location of Asteroid along the X-axis.
-	 * @param y location of Asteroid along the Y-axis.
-	 * @param dX velocity of Asteroid along the X-axis.
-	 * @param dY velocity of Asteroid along the Y-axis.
-	 * @param radius - radius of the new Asteroid.
+	 *
+	 * @param x        location of Asteroid along the X-axis.
+	 * @param y        location of Asteroid along the Y-axis.
+	 * @param dX       velocity of Asteroid along the X-axis.
+	 * @param dY       velocity of Asteroid along the Y-axis.
+	 * @param radius   radius of the new Asteroid.
 	 * @param thisGame Game the asteroid exists in.
 	 */
-	public Asteroid(final float x, final float y,
-			final float dX, final float dY, 
-			final float radius, final Game thisGame) {
+	public Asteroid(final float x, final float y, final float dX, final float dY, final float radius,
+					final Game thisGame) {
 		this(x, y, dX, dY, thisGame);
 		setRadius(radius);
 	}
 
 	/**
 	 * Calculate new position of Asteroid.
-	 * @param input - the pressed keys
+	 *
+	 * @param input the pressed keys
 	 */
 	@Override
 	public final void update(final List<String> input) {
@@ -87,25 +86,21 @@ public class Asteroid extends AbstractEntity {
 	}
 
 	/**
-	 * on death split asteroid into 2 small ones, 
+	 * on death split asteroid into 2 small ones,
 	 * or if it's too small destroy it.
 	 */
 	@Override
 	public final void onDeath() {
 		if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().create(new Asteroid(getX(), getY(),
-						(float) (getDX() + Math.random() - .5),
-						(float) (getDY() + Math.random() - .5), 
-						MEDIUM_RADIUS, getThisGame()));
+				getThisGame().create(new Asteroid(getX(), getY(), (float) (getDX() + Math.random() - .5),
+						(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS, getThisGame()));
 			}
 			getThisGame().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
-				getThisGame().create(new Asteroid(getX(), getY(),
-						(float) (getDX() + Math.random() - .5),
-						(float) (getDY() + Math.random() - .5),
-						SMALL_RADIUS, getThisGame()));
+				getThisGame().create(new Asteroid(getX(), getY(), (float) (getDX() + Math.random() - .5),
+						(float) (getDY() + Math.random() - .5), SMALL_RADIUS, getThisGame()));
 			}
 			getThisGame().addScore(MEDIUM_SCORE);
 		} else {

@@ -9,11 +9,12 @@ import java.util.Random;
 
 /**
  * Class that represents a Powerup.
+ *
  * @author Dario
  */
 public class Powerup extends AbstractEntity {
 	private final int type;
-	
+
 	private final long startTime;
 	private long pickupTime;
 
@@ -21,23 +22,23 @@ public class Powerup extends AbstractEntity {
 
 	private static final long PERISH_TIME = 10000;
 	private static final int POWERUP_DURATION = 5000;
-	
+
 	private static final int TYPES = 6;
 	private static final float RADIUS = 12;
-	
+
 	private static final int EXTRA_LIFE = 0;
 	private static final int SHIELD = 1;
 	private static final int BULLET_SIZE = 2;
 	private static final int TRIPLE_SHOT = 3;
 	private static final int PIERCING = 4;
 	private static final int MINIGUN = 5;
-	
+
 	private static final String[] TYPE_STRING = {
-			"an extra life", 
-			"a shield", 
-			"a bullet size increase", 
-			"a tripleshot", 
-			"a piercing bullet", 
+			"an extra life",
+			"a shield",
+			"a bullet size increase",
+			"a tripleshot",
+			"a piercing bullet",
 			"a minigun"
 	};
 
@@ -49,9 +50,9 @@ public class Powerup extends AbstractEntity {
 
 	/**
 	 * Constructor for the Powerup class.
-	 * 
-	 * @param x location of Powerup along the X-axis.
-	 * @param y location of Powerup along the Y-axis.
+	 *
+	 * @param x        location of Powerup along the X-axis.
+	 * @param y        location of Powerup along the Y-axis.
 	 * @param thisGame the game this particle belongs to
 	 */
 	public Powerup(final float x, final float y, final Game thisGame) {
@@ -72,27 +73,28 @@ public class Powerup extends AbstractEntity {
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && pickupTime == 0) {
 			pickup((Player) e2);
-			Logger.getInstance().log("Player collected " + TYPE_STRING[type] + " powerup.");
-		}
+            Logger.getInstance().log(String.format("Player collected %s powerup.", TYPE_STRING[type]));
+        }
 	}
 
 	/**
 	 * activate on pickup of player.
-	 * @param p - the player
+	 *
+	 * @param p the player
 	 */
 	private void pickup(final Player p) {
 		player = p;
 		pickupTime = System.currentTimeMillis();
-		switch(type) {
-			case EXTRA_LIFE: 
-				p.gainLife(); 
+		switch (type) {
+			case EXTRA_LIFE:
+				p.gainLife();
 				getThisGame().destroy(this);
 				break;
-			case SHIELD: 
+			case SHIELD:
 				p.gainShield();
 				getThisGame().destroy(this);
 				break;
-			case BULLET_SIZE: 
+			case BULLET_SIZE:
 				p.setBulletSize(NEW_BULLET_SIZE);
 				break;
 			case TRIPLE_SHOT:
@@ -111,7 +113,7 @@ public class Powerup extends AbstractEntity {
 				break;
 		}
 	}
-	
+
 	@Override
 	public final void onDeath() {
 		//no-op
@@ -130,17 +132,17 @@ public class Powerup extends AbstractEntity {
 	public final void update(final List<String> input) {
 		if (pickupTime == 0 && PERISH_TIME < (System.currentTimeMillis() - startTime)) {
 			getThisGame().destroy(this);
- 		} else if (pickupTime != 0 && POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
+		} else if (pickupTime != 0 && POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
 			runOut();
 		}
 	}
-	
+
 	/**
 	 * Run out.
 	 */
 	private void runOut() {
-		switch(type) {
-			case BULLET_SIZE: 
+		switch (type) {
+			case BULLET_SIZE:
 				player.setBulletSize(Player.getBulletSize());
 				break;
 			case TRIPLE_SHOT:
