@@ -78,14 +78,13 @@ public class ParticleTest {
 	@Test
 	public void testExplosion() {
 		Particle.explosion(X_START, Y_START, thisGame);
-		ArrayList<AbstractEntity> creation = (ArrayList<AbstractEntity>) thisGame.getCreateList();
-		boolean containsparticles = false;
-		for(AbstractEntity x : creation){
-			if(x instanceof Particle){
-				containsparticles = true;
-			}
+		List<AbstractEntity> creation = thisGame.getCreateList();
+		boolean containsParticles = false;
+
+		if (creation.stream().filter(e -> e instanceof Particle).count() != 0) {
+			containsParticles = true;
 		}
-		assertTrue(containsparticles);
+		assertTrue(containsParticles);
 	}
 
 }

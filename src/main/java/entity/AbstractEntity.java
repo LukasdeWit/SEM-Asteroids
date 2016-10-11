@@ -28,8 +28,7 @@ public abstract class AbstractEntity {
 	 * @param dY       velocity of AbstractEntity along the Y-axis.
 	 * @param thisGame Game the AbstractEntity exists in.
 	 */
-	public AbstractEntity(final float x, final float y,
-						  final float dX, final float dY, final Game thisGame) {
+	public AbstractEntity(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		this.setX(x);
 		this.setY(y);
 		this.setDX(dX);

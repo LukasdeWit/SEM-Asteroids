@@ -242,14 +242,12 @@ public final class Game {
 	 * @return amount of bullets
 	 */
 	public int bullets(final Player player) {
-		int bullets = 0;
-		for (final AbstractEntity entity : entities) {
-			if (entity instanceof Bullet && ((Bullet) entity).isFriendly()
-					&& ((Bullet) entity).getPlayer().equals(player)) {
-				bullets++;
-			}
-		}
-		return bullets;
+		return Math.toIntExact(entities.stream()
+				.filter(e -> e instanceof Bullet)
+				.map(e -> (Bullet) e)
+				.filter(Bullet::isFriendly)
+				.filter(bullet -> bullet.getPlayer().equals(player))
+				.count());
 	}
 
 	/**
@@ -258,13 +256,9 @@ public final class Game {
 	 * @return amount of enemies
 	 */
 	public int enemies() {
-		int enemies = 0;
-		for (final AbstractEntity entity : entities) {
-			if (entity instanceof Asteroid || entity instanceof Saucer) {
-				enemies++;
-			}
-		}
-		return enemies;
+		return Math.toIntExact(entities.stream()
+				.filter(e -> e instanceof Asteroid || e instanceof Saucer)
+				.count());
 	}
 
 	/**
