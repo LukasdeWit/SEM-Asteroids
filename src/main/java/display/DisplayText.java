@@ -1,12 +1,8 @@
 package display;
 
-import entity.Powerup;
-import game.Game;
 import game.Launcher;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 
 /**
  * This class displays all numbers, letters and lives.
@@ -261,21 +257,11 @@ public final class DisplayText {
 	private static final float NEW_HIGHSCORE_TEXT_Y = 250;
 	
 	private static final int X_OFFSET = 6;
-	private static final float LIVES_X = 10;
-	private static final float LIVES_TWO_X = 300;
-	private static final float LIVES_Y = 40;
-	private static final float LIVES_SIZE = 2;
-	
+
 	private static final float WAVE_X = 10;
 	private static final float WAVE_Y = 470;
 	private static final float WAVE_SIZE = 2;
-	
-	private static final double POWERUP_SIZE = 20;
-	private static final double POWERUP_SLOT_SIZE = POWERUP_SIZE + 5;
-	private static final double POWERUP_SLOT_ONE_X = 10;
-	private static final double POWERUP_SLOT_Y = 60;
-	private static final double POWERUP_SLOT_TWO_X = Game.getCanvasSize() - 10 - POWERUP_SLOT_SIZE;
-		
+
 	/**
 	 * private constructor for utility class.
 	 */
@@ -308,132 +294,87 @@ public final class DisplayText {
 					String.format("%1$10s", highscore));
 		}
 	}
-	
+
 	/**
 	 * draw the start screen.
 	 */
 	public static void startScreen() {
-		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
+		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE,
 				"asteroids");
-		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, 
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE,
 				"press x for Arcade Mode");
-		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_COOP_Y, SMALL_TEXT_SIZE, 
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_COOP_Y, SMALL_TEXT_SIZE,
 				"press c for Coop");
 	}
-	
+
 	/**
 	 * draw the highscore screen.
+	 *
 	 * @param highscore - the highscore
 	 */
 	public static void highscoreScreen(final long highscore) {
-		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
+		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE,
 				"congratulations");
-		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
+		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE,
 				"press r to restart");
-		draw(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, SMALL_TEXT_SIZE, 
+		draw(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, SMALL_TEXT_SIZE,
 				"your new highscore is " + highscore);
 	}
-	
+
 	/**
 	 * draw the pauze screen.
 	 */
 	public static void pauseScreen() {
-		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE, 
+		draw(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, BIG_TEXT_SIZE,
 				"Pauze");
-		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE, 
+		draw(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, SMALL_TEXT_SIZE,
 				"press p to start");
-	}
-	
-	/**
-	 * DisplayText the lives.
-	 * @param lives - number of lives
-	 */
-	public static void lives(final int lives) {
-		
-		final Rectangle r = new Rectangle(POWERUP_SLOT_SIZE, POWERUP_SLOT_SIZE, Color.TRANSPARENT);
-		r.setStroke(Color.WHITE);
-		r.setTranslateX(POWERUP_SLOT_ONE_X);
-		r.setTranslateY(POWERUP_SLOT_Y);
-		Launcher.getRoot().getChildren().add(r);
-		
-		if (lives <= 0) {
-			return;
-		}
-		final StringBuilder outputBuffer = new StringBuilder(lives);
-		for (int i = 0; i < lives; i++) {
-		   outputBuffer.append('*');
-		}
-		final String livesString = outputBuffer.toString();
-		draw(LIVES_X, LIVES_Y, LIVES_SIZE, livesString);
-	}
-	
-	/**
-	 * draw lives for coop.
-	 * @param lives - lives of player one
-	 */
-	public static void livesTwo(final int lives) {
-		
-		final Rectangle r = new Rectangle(POWERUP_SLOT_SIZE, POWERUP_SLOT_SIZE, Color.TRANSPARENT);
-		r.setStroke(Color.WHITE);
-		r.setTranslateX(POWERUP_SLOT_TWO_X);
-		r.setTranslateY(POWERUP_SLOT_Y);
-		Launcher.getRoot().getChildren().add(r);
-		
-		if (lives <= 0) {
-			return;
-		}
-		final StringBuilder outputBuffer = new StringBuilder(lives);
-		for (int i = 0; i < lives; i++) {
-		   outputBuffer.append('*');
-		}
-		final String livesString = outputBuffer.toString();
-		draw(LIVES_TWO_X, LIVES_Y, LIVES_SIZE, livesString);
 	}
 
 	/**
 	 * DisplayText the wave.
+	 *
 	 * @param wave - the current wave
 	 */
 	public static void wave(final int wave) {
-		final String waveString = "Wave " + wave;
-		draw(WAVE_X, WAVE_Y, WAVE_SIZE, waveString);
+		draw(WAVE_X, WAVE_Y, WAVE_SIZE, "Wave " + wave);
 	}
-	
+
 	/**
 	 * Draw a letter, number or life.
-	 * @param x - left x coordinate
-	 * @param y - upper y coordinate
-	 * @param size - the size (1 equals 4 by 6 pixels)
-	 * @param string - the string you want to draw 
-	 * (any non-letter, -number, -space will be drawn as a life)
+	 *
+	 * @param x      left x coordinate
+	 * @param y      upper y coordinate
+	 * @param size   the size (1 equals 4 by 6 pixels)
+	 * @param string the string you want to draw (any non-letter, -number, -space will be drawn as a life)
 	 */
-	public static void draw(final float x, final float y, 
-			final float size, final String string) {
+	public static void draw(final float x, final float y, final float size, final String string) {
 		final char[] charList = string.toCharArray();
 		for (int i = 0; i < charList.length; i++) {
 			final char c = charList[i];
 			if (c == ' ') {
 				drawChar(SPACE, x + i * X_OFFSET * size, y, size);
-			} else if (!between(x, y, size, i, 'a', 'z', c) && !between(x, y, size, i, 'A', 'Z', c) 
+			} else if (!between(x, y, size, i, 'a', 'z', c) && !between(x, y, size, i, 'A', 'Z', c)
 					&& !between(x, y, size, i, '0', '9', c)) {
 				drawChar(LIFE, x + i * X_OFFSET * size, y, size);
 			}
 		}
 	}
-	
+
 	/**
 	 * draws character if in between begin and end character.
-	 * @param x - x
-	 * @param y - y
-	 * @param size - size
-	 * @param offset - offset
-	 * @param beginChar - begin char
-	 * @param endChar - end char
-	 * @param testChar -test char
+	 *
+	 * @param x         x
+	 * @param y         y
+	 * @param size      size
+	 * @param offset    offset
+	 * @param beginChar begin char
+	 * @param endChar   end char
+	 * @param testChar  test char
 	 * @return true if in between
 	 */
-	private static boolean between(final float x, final float y, final float size, final int offset, 
-			final char beginChar, final char endChar, final char testChar) {
+	private static boolean between(final float x, final float y, final float size, final int offset,
+								   final char beginChar, final char endChar, final char testChar) {
 		float[][][] set = NUMBERS;
 		if (testChar > '9') {
 			set = LETTERS;
@@ -444,42 +385,26 @@ public final class DisplayText {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Draw a letter, number or life.
-	 * @param figure - the figure you want to draw
-	 * @param x - left x coordinate
-	 * @param y - upper y coordinate
-	 * @param size - the size (1 equals 4 by 6 pixels)
-	 * (any non-letter, -number, -space will be drawn as a life)
+	 * any non-letter, -number, -space will be drawn as a life
+	 *
+	 * @param figure the figure you want to draw
+	 * @param x      left x coordinate
+	 * @param y      upper y coordinate
+	 * @param size   the size (1 equals 4 by 6 pixels)
 	 */
-	private static void drawChar(final float[][] figure, final float x, final float y, 
-			final float size) {
+	private static void drawChar(final float[][] figure, final float x, final float y, final float size) {
 		for (final float[] stroke : figure) {
 			final Line l = new Line(
-					stroke[0] * size + x, stroke[1] * size + y, 
+					stroke[0] * size + x, stroke[1] * size + y,
 					stroke[2] * size + x, stroke[1 + 2] * size + y);
-				//3 is not a magic number in this case.
+			//3 is not a magic number in this case.
 			l.setStroke(Color.WHITE);
 			l.setStrokeWidth(1);
 			Launcher.getRoot().getChildren().add(l);
 		}
 	}
-	
-	/**
-	 * draw powerup in box.
-	 * @param p - the powerup
-	 */
 
-	public static void powerup(final Powerup p) {
-		final Circle c = new Circle(POWERUP_SLOT_SIZE / 2, POWERUP_SLOT_SIZE / 2, POWERUP_SIZE / 2);
-		c.setFill(Color.WHITE);
-		if (p.getPlayer().isPlayerTwo()) {
-			c.setTranslateX(POWERUP_SLOT_TWO_X);
-		} else {
-			c.setTranslateX(POWERUP_SLOT_ONE_X);
-		}
-		c.setTranslateY(POWERUP_SLOT_Y);
-		Launcher.getRoot().getChildren().add(c);
-	}
 }

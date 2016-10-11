@@ -1,25 +1,17 @@
 package game;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import display.DisplayHud;
+import display.DisplayText;
+import entity.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import display.DisplayText;
-import entity.AbstractEntity;
-import entity.Asteroid;
-import entity.Bullet;
-import entity.Player;
-import entity.Saucer;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 /**
  * This class defines everything within the game.
@@ -158,11 +150,7 @@ public final class Game {
 		createList.clear();
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
-		if (gamestate.isCoop()) {
-			DisplayText.livesTwo(playerTwo.getLives());
-		}
-		DisplayText.lives(player.getLives());
-		
+		DisplayHud.lives(player.getLives(), getGamestate().isCoop());
 	}
 
 	/**

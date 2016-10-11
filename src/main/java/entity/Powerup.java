@@ -1,6 +1,6 @@
 package entity;
 import display.DisplayEntity;
-import display.DisplayText;
+import display.DisplayHud;
 import game.Game;
 import game.Logger;
 
@@ -122,7 +122,7 @@ public class Powerup extends AbstractEntity {
 		if (pickupTime == 0) {
 			DisplayEntity.powerup(this);
 		} else {
-			DisplayText.powerup(this);
+			DisplayHud.powerup(this);
 		}
 	}
 
