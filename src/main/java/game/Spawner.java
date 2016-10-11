@@ -14,7 +14,11 @@ public final class Spawner {
 	private long startPowerupTime;
 	private long startRest;
 	private int wave;
-	
+	/**
+	 * The Game this spawner belongs to.
+	 */
+	private final Game thisGame;
+
 	private static final long SAUCER_TIME = 20000;
 	private static final long POWERUP_TIME = 10000;
 	private static final long REST = 4000;
@@ -23,25 +27,17 @@ public final class Spawner {
 	private static final long DIFFICULTY_STEP = 10000;
 	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
 	private static final float ASTEROID_SPEED = 1;
-	private static final Spawner INSTANCE = new Spawner();
-	
 	
 	/**
 	 * Constructor of Spawner.
+	 * @param game the game this particle belongs to
 	 */
-	private Spawner() {
+	public Spawner(final Game game) {
+		thisGame = game;
 		startSaucerTime = System.currentTimeMillis();
 		startPowerupTime = System.currentTimeMillis();
 		startRest = 0;
 		wave = 0;
-	}
-	
-	/**
-	 * getInstance of singleton.
-	 * @return the gamestate
-	 */
-	public static Spawner getInstance() {
-		return INSTANCE;
 	}
 
 	/**
@@ -58,7 +54,7 @@ public final class Spawner {
 			Logger.getInstance().log("Powerup was spawned");
 			startPowerupTime = System.currentTimeMillis();
 		}
-		if (Game.getInstance().enemies() != 0) {
+		if (thisGame.enemies() != 0) {
 			startRest = System.currentTimeMillis();
 		}
 		if (startRest == 0) {
@@ -82,23 +78,23 @@ public final class Spawner {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	private void spawnSaucer() {
-		final Saucer newSaucer = new Saucer(Game.getInstance().getRandom().nextInt(1)
-				* 2 * Game.getInstance().getScreenX(), (float) Math.random()
-				* Game.getInstance().getScreenY(), 0, 0);
+		final Saucer newSaucer = new Saucer(thisGame.getRandom().nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
+				* thisGame.getScreenY(), 0, 0, thisGame);
 		if (Math.random() < smallSaucerRatio()) {
 			newSaucer.setRadius(Saucer.getSmallRadius());
 		}
-		Game.getInstance().create(newSaucer);
+		thisGame.create(newSaucer);
 	}
 	
 	/**
 	 * adds a Powerup with random X and Y and type.
 	 */
 	private void spawnPowerup() {
-		Game.getInstance().create(new Powerup(Game.getInstance().getScreenY()
+		thisGame.create(new Powerup(thisGame.getScreenY()
 				* (float) Math.random(),
-				Game.getInstance().getScreenY() 
-				* (float) Math.random()));
+				thisGame.getScreenY()
+				* (float) Math.random(), thisGame));
 	}
 
 	/**
@@ -106,10 +102,10 @@ public final class Spawner {
 	 * @return the ratio
 	 */
 	private double smallSaucerRatio() {
-		if (Game.getInstance().getScore() < DIFFICULTY_STEP) {
+		if (thisGame.getScore() < DIFFICULTY_STEP) {
 			return .5;
-		} else if (Game.getInstance().getScore() < MAX_DIFFICULTY_SCORE) {
-			return .5 + ((Game.getInstance().getScore() / (double) DIFFICULTY_STEP)
+		} else if (thisGame.getScore() < MAX_DIFFICULTY_SCORE) {
+			return .5 + ((thisGame.getScore() / (double) DIFFICULTY_STEP)
 					* .5 / (double) (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
 		} else {
 			return 1;
@@ -125,10 +121,10 @@ public final class Spawner {
 	 */
 	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
-			Game.getInstance().create(new Asteroid(0, Game.getInstance().getScreenY() 
-					* (float) Math.random(), 
-					(float) (Math.random() - .5) * ASTEROID_SPEED, 
-					(float) (Math.random() - .5) * ASTEROID_SPEED));
+			thisGame.create(new Asteroid(0, thisGame.getScreenY()
+					* (float) Math.random(),
+					(float) (Math.random() - .5) * ASTEROID_SPEED,
+					(float) (Math.random() - .5) * ASTEROID_SPEED, thisGame));
 		}
 		Logger.getInstance().log(times + " asteroids were spawned.");
 	}

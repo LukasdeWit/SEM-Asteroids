@@ -1,15 +1,14 @@
 package entity;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import game.Game;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import game.Game;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ParticleTest {
 	private static final float X_START = 1;
@@ -17,14 +16,16 @@ public class ParticleTest {
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
 
+	private Game thisGame;
 	private Particle particle;
 
 
 	@Before
 	public void setUp() throws Exception {
-		particle = new Particle(X_START, Y_START, DX_START, DY_START);
-		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
-		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
+		thisGame = new Game();
+		particle = new Particle(X_START, Y_START, DX_START, DY_START, thisGame);
+		thisGame.setCreateList(new ArrayList<>());
+		thisGame.setDestroyList(new ArrayList<>());
 	}
 	
 	@Test
@@ -53,16 +54,16 @@ public class ParticleTest {
 
 	@Test
 	public void testCollide() {
-        Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START);
+        Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		particle.collide(e2);
-        assertFalse(Game.getInstance().getDestroyList().contains(particle));
-        assertFalse(Game.getInstance().getDestroyList().contains(e2));
+        assertFalse(thisGame.getDestroyList().contains(particle));
+        assertFalse(thisGame.getDestroyList().contains(e2));
 	}
 
 	@Test
 	public void testOnDeath() {
 		particle.onDeath();
-        assertFalse(Game.getInstance().getDestroyList().contains(particle));
+        assertFalse(thisGame.getDestroyList().contains(particle));
 	}
 	
 	
@@ -76,8 +77,8 @@ public class ParticleTest {
 
 	@Test
 	public void testExplosion() {
-		Particle.explosion(X_START, Y_START, Game.getInstance());
-		ArrayList<AbstractEntity> creation = (ArrayList<AbstractEntity>) Game.getInstance().getCreateList();
+		Particle.explosion(X_START, Y_START, thisGame);
+		ArrayList<AbstractEntity> creation = (ArrayList<AbstractEntity>) thisGame.getCreateList();
 		boolean containsparticles = false;
 		for(AbstractEntity x : creation){
 			if(x instanceof Particle){
