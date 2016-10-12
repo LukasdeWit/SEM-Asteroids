@@ -1,11 +1,11 @@
 package entity;
-import java.util.List;
-import java.util.Random;
-
 import display.DisplayEntity;
 import display.DisplayText;
 import game.Game;
 import game.Logger;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents a Powerup.
@@ -53,9 +53,10 @@ public class Powerup extends AbstractEntity {
 	 * 
 	 * @param x location of Powerup along the X-axis.
 	 * @param y location of Powerup along the Y-axis.
+	 * @param thisGame the game this particle belongs to
 	 */
-	public Powerup(final float x, final float y) {
-		super(x, y, 0, 0);
+	public Powerup(final float x, final float y, final Game thisGame) {
+		super(x, y, 0, 0, thisGame);
 		final Random random = new Random();
 		setRadius(RADIUS);
 		type = random.nextInt(TYPES);
@@ -86,11 +87,11 @@ public class Powerup extends AbstractEntity {
 		switch(type) {
 			case EXTRA_LIFE: 
 				p.gainLife(); 
-				Game.getInstance().destroy(this);
+				getThisGame().destroy(this);
 				break;
 			case SHIELD: 
 				p.gainShield();
-				Game.getInstance().destroy(this);
+				getThisGame().destroy(this);
 				break;
 			case BULLET_SIZE: 
 				p.setBulletSize(NEW_BULLET_SIZE);
@@ -127,7 +128,7 @@ public class Powerup extends AbstractEntity {
 	public final void update(final List<String> input) {
 		if (pickupTime == 0) {
 			if (PERISH_TIME < (System.currentTimeMillis() - startTime)) {
-				Game.getInstance().destroy(this);
+				getThisGame().destroy(this);
 	 		} 
 		} else if (POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
 			runOut();
@@ -140,7 +141,7 @@ public class Powerup extends AbstractEntity {
 	private void runOut() {
 		if (player == null) {
 			Logger.getInstance().log("ERROR | No player was linked to this powerup for runOut().");
-			Game.getInstance().destroy(this);
+			getThisGame().destroy(this);
 			return;
 		}
 		switch(type) {
@@ -159,7 +160,7 @@ public class Powerup extends AbstractEntity {
 				player.setMaxBullets(Player.getMaxBullets());
 				break;
 		}
-		Game.getInstance().destroy(this);
+		getThisGame().destroy(this);
 	}
 
 	/**

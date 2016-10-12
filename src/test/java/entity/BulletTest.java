@@ -29,6 +29,7 @@ public class BulletTest {
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
+	private Game thisGame;
 	/**
 	 * Test bullet.
 	 */
@@ -40,11 +41,12 @@ public class BulletTest {
 
 	@Before
 	public void setUp() throws Exception {
-		bullet = new Bullet(X_START, Y_START, DX_START, DY_START);
+		thisGame = new Game();
+		bullet = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
 		//Used for testing methods involving the piercing attribute.
-		ball = new Bullet(X_START,Y_START, DX_START, DY_START, 3);
-		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
-		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
+		ball = new Bullet(X_START,Y_START, DX_START, DY_START, 3, thisGame);
+		thisGame.setCreateList(new ArrayList<>());
+		thisGame.setDestroyList(new ArrayList<>());
 	}
 
 	/**
@@ -85,7 +87,7 @@ public class BulletTest {
 		final List<String> input = new ArrayList<String>(0);
 		bullet.setBirthTime(0);
 		bullet.update(input);
-        assertTrue(Game.getInstance().getDestroyList().contains(bullet));
+        assertTrue(thisGame.getDestroyList().contains(bullet));
 	}
 	
 	/**
@@ -102,10 +104,10 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide1() {
-		final Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		final Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		bullet.collide(e2);
-		assertTrue(Game.getInstance().getDestroyList().contains(bullet));
-		assertTrue(Game.getInstance().getDestroyList().contains(e2));
+		assertTrue(thisGame.getDestroyList().contains(bullet));
+		assertTrue(thisGame.getDestroyList().contains(e2));
      }
 	
 	/**
@@ -113,10 +115,10 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide2() {
-		final Asteroid e3 = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		final Asteroid e3 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		ball.collide(e3);
-		assertFalse(Game.getInstance().getDestroyList().contains(ball));
-		assertTrue(Game.getInstance().getDestroyList().contains(e3));
+		assertFalse(thisGame.getDestroyList().contains(ball));
+		assertTrue(thisGame.getDestroyList().contains(e3));
      }
 	
 	/**
@@ -124,10 +126,10 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide3() {
-		final Player e2 = new Player(X_START, Y_START, 0, 0, false);
+		final Player e2 = new Player(X_START, Y_START, 0, 0, thisGame, false);
 		bullet.collide(e2);
-		assertFalse(Game.getInstance().getDestroyList().contains(bullet));
-        assertFalse(Game.getInstance().getDestroyList().contains(e2));
+		assertFalse(thisGame.getDestroyList().contains(bullet));
+        assertFalse(thisGame.getDestroyList().contains(e2));
         }
 
 	/**
@@ -136,7 +138,7 @@ public class BulletTest {
 	@Test
 	public final void testOnDeath() {
 		bullet.onDeath();
-        assertFalse(Game.getInstance().getDestroyList().contains(bullet));
+        assertFalse(thisGame.getDestroyList().contains(bullet));
     }
 	
 	@Test
@@ -149,7 +151,7 @@ public class BulletTest {
 	
 	@Test
 	public void testPlayer() {
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, false);
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
 		bullet.setPlayer(p);
 		assertEquals(DX_START,bullet.getPlayer().getDX(),0);
 	}

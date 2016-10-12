@@ -1,21 +1,18 @@
 package entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import display.DisplayEntity;
 import game.Game;
 import game.Gamestate;
 import game.Launcher;
 import javafx.scene.Group;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class PlayerTest {
 	private static final float X_START = 1;
@@ -24,14 +21,16 @@ public class PlayerTest {
 	private static final float DY_START = 4;
 	private static final String SPACE = "SPACE";
 	private Player player;
+	private Game thisGame;
 
 	@Before
 	public final void setUp() {
-		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
-		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
-		Gamestate.getInstance().setMode(Gamestate.getModeArcade());
+		thisGame = new Game();
+		thisGame.setCreateList(new ArrayList<>());
+		thisGame.setDestroyList(new ArrayList<>());
+		thisGame.getGamestate().setMode(Gamestate.getModeArcade());
 		Launcher.getRoot().getChildren().clear();
-		player = new Player(X_START, Y_START, DX_START, DY_START, false);
+		player = new Player(X_START, Y_START, DX_START, DY_START, thisGame,  false);
 	}
 	
 	@Test
@@ -51,7 +50,7 @@ public class PlayerTest {
 	@Test
 	public void testOnDeath() {
 		player.onDeath();
-		assertTrue(Game.getInstance().getDestroyList().isEmpty());
+		assertTrue(thisGame.getDestroyList().isEmpty());
 	}
 
 	@Test
@@ -77,16 +76,16 @@ public class PlayerTest {
 
 	@Test
 	public void testOnHit4() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, true);
+		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		player2.onHit();
-		assertEquals(Game.getInstance().getScreenX() / 2 + Player.getSpawnOffset(), player2.getX(), 0);
+		assertEquals(thisGame.getScreenX() / 2 + Player.getSpawnOffset(), player2.getX(), 0);
 	}
 
 	@Test
 	public void testOnHit5() {
-		Gamestate.getInstance().setMode(Gamestate.getModeCoop());
+		thisGame.getGamestate().setMode(Gamestate.getModeCoop());
 		player.onHit();
-		assertEquals(Game.getInstance().getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
+		assertEquals(thisGame.getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
 	}
 	
 	@Test
@@ -100,25 +99,25 @@ public class PlayerTest {
 		player.setLives(0);
 		player.gainLife();
 		assertEquals(1,player.getLives(),0);
-		assertEquals(Game.getInstance().getScreenX() / 2, player.getX(), 0);
+		assertEquals(thisGame.getScreenX() / 2, player.getX(), 0);
 	}
 	
 	@Test
 	public void testGainLife3() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, true);
+		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		player2.setLives(0);
 		player2.gainLife();
 		assertEquals(1,player2.getLives(),0);
-		assertEquals(Game.getInstance().getScreenX() / 2 + Player.getSpawnOffset(), player2.getX(), 0);
+		assertEquals(thisGame.getScreenX() / 2 + Player.getSpawnOffset(), player2.getX(), 0);
 	}
 	
 	@Test
 	public void testGainLife4() {
-		Gamestate.getInstance().setMode(Gamestate.getModeCoop());
+		thisGame.getGamestate().setMode(Gamestate.getModeCoop());
 		player.setLives(0);
 		player.gainLife();
 		assertEquals(1,player.getLives(),0);
-		assertEquals(Game.getInstance().getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
+		assertEquals(thisGame.getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
 	}
 	
 	@Test
@@ -196,7 +195,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testKeyHandlerTwo1() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, true);
+		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"LEFT"};
 		update(player2, input, true);
 		assertEquals(Player.getRotationSpeed(),player2.getRotation(),0);
@@ -204,7 +203,7 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo2() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, true);
+		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"RIGHT"};
 		update(player2, input, true);
 		assertEquals(-Player.getRotationSpeed(),player2.getRotation(),0);
@@ -226,7 +225,7 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo5() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, true);
+		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"UP"};
 		update(player2, input, true);
 		assertTrue(player2.isBoost());
@@ -241,7 +240,7 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo7() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, true);
+		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"DOWN"};
 		update(player2, input, true);
 		assertTrue(System.currentTimeMillis() == player2.getHyperspaceStart() || player2.getLives() == 2);
@@ -263,7 +262,7 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo10() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, true);
+		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"ENTER"};
 		update(player2, input, true);
 		assertEquals(System.currentTimeMillis(), player2.getLastShot(), 1);
@@ -291,7 +290,7 @@ public class PlayerTest {
 		final String[] input = {SPACE};
 		player.setTripleShot(true);
 		update(player, input, false);
-		assertEquals(3, Game.getInstance().getCreateList().size(), 0);
+		assertEquals(3, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
@@ -299,7 +298,7 @@ public class PlayerTest {
 		final String[] input = {SPACE};
 		update(player, input, false);
 		update(player, input, false);
-		assertEquals(1, Game.getInstance().getCreateList().size(), 0);
+		assertEquals(1, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
@@ -307,28 +306,28 @@ public class PlayerTest {
 		final String[] input = {SPACE};
 		player.setMaxBullets(0);
 		update(player, input, false);
-		assertEquals(0, Game.getInstance().getCreateList().size(), 0);
+		assertEquals(0, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
 	public void testCollide() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		player.setInvincibleStart(0);
 		player.collide(ae);
-		assertEquals(1, Game.getInstance().getDestroyList().size(), 0);
+		assertEquals(1, thisGame.getDestroyList().size(), 0);
 		assertEquals(2, player.getLives(), 0);
 	}
 	
 	@Test
 	public void testCollide2() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		player.collide(ae);
 		assertEquals(System.currentTimeMillis(), player.getInvincibleStart(), 2);
 	}
 	
 	@Test
 	public void testCollide3() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		player.setHyperspaceStart(System.currentTimeMillis());
 		player.collide(ae);
 		assertEquals(System.currentTimeMillis(), player.getInvincibleStart(), 2);
@@ -336,7 +335,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide4() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		player.setInvincibleStart(0);
 		player.collide(ae);
 		assertEquals(System.currentTimeMillis(), player.getInvincibleStart(), 2);
@@ -344,7 +343,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide5() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		player.setHyperspaceStart(System.currentTimeMillis());
 		player.setInvincibleStart(0);
 		player.collide(ae);
@@ -353,14 +352,14 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide6() {
-		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START);
+		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
 		player.collide(ae);
 		assertEquals(3, player.getLives(), 0);
 	}
 	
 	@Test
 	public void testCollide7() {
-		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START);
+		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
 		((Bullet) ae).setFriendly(false);
 		player.collide(ae);
 		assertEquals(2, player.getLives(), 0);
@@ -368,7 +367,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide8() {
-		final AbstractEntity ae = new Player(X_START, Y_START, DX_START, DY_START, false);
+		final AbstractEntity ae = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
 		player.collide(ae);
 		assertEquals(3, player.getLives(), 0);
 	}
@@ -402,12 +401,10 @@ public class PlayerTest {
 	}
 	
 	private void update(final Player player, final String[] in, final boolean coop){
-		final List<String> input = new ArrayList<String>();	
-		for (final String string : in) {
-			input.add(string);
-		}
+		final List<String> input = new ArrayList<>();
+		Collections.addAll(input, in);
 		if (coop) {
-			Gamestate.getInstance().setMode(Gamestate.getModeCoop());
+			thisGame.getGamestate().setMode(Gamestate.getModeCoop());
 		}
 		player.setInvincibleStart(0);
 		player.update(input);

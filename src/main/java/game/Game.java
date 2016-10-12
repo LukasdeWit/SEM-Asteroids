@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import display.DisplayText;
@@ -19,6 +20,7 @@ import entity.Player;
 import entity.Saucer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import net.bytebuddy.utility.privilege.GetSystemPropertyAction;
 
 /**
  * This class defines everything within the game.
@@ -37,46 +39,41 @@ public final class Game {
 	private final float screenY;
 	private long score;
 	private long highscore;
-	
-	private static final Game INSTANCE = new Game();
+	private final Spawner spawner;
+	private final Gamestate gamestate;
+
 	private static final float CANVAS_SIZE = 500;
 	private static final int LIFE_SCORE = 10000;
 
 	/**
 	 * Constructor for a new game.
 	 */
-	private Game() {
+	public Game() {
 		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
 		entities = new ArrayList<>();
+		spawner = new Spawner(this);
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		random = new Random();
 		highscore = readHighscore();
-	}
-	
-	/**
-	 * Singleton getinstance.
-	 * @return the instance
-	 */
-	public static Game getInstance() {
-		return INSTANCE;
+		gamestate = new Gamestate(this);
 	}
 	
 	/**
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
-		Gamestate.getInstance().start();
+		gamestate.start();
 		entities.clear();
-		if (Gamestate.getInstance().isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, true);
+		if (gamestate.isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
 			entities.add(player);
 			entities.add(playerTwo);
 		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, false);
+			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
 			entities.add(player);
 		} 
 		if (this.score > highscore) {
@@ -84,7 +81,7 @@ public final class Game {
 			writeHighscore();
 		}
 		score = 0;
-		Spawner.getInstance().reset();
+		spawner.reset();
 		Logger.getInstance().log("Game started.");
 	}
 	
@@ -102,8 +99,7 @@ public final class Game {
 				currentHighscore = Long.parseLong(sCurrentLine);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-			Logger.getInstance().log("unable to read highscore from file");
+			Logger.getInstance().log("unable to read highscore from file", e);
 		}
 		return currentHighscore;
 	}
@@ -120,8 +116,7 @@ public final class Game {
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			Logger.getInstance().log("unable to write highscore to file");
+			Logger.getInstance().log("unable to write highscore to file", e);
 		}
 	}
 	
@@ -136,8 +131,8 @@ public final class Game {
 		final Rectangle r = new Rectangle(0, 0, screenX, screenY);
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
-		Gamestate.getInstance().update(input);
-		DisplayText.wave(Spawner.getInstance().getWave());
+		gamestate.update(input);
+		DisplayText.wave(spawner.getWave());
 	}	
 	
 	/**
@@ -152,7 +147,7 @@ public final class Game {
 			checkCollision(e);
 			e.draw();
 		}
-		Spawner.getInstance().update();
+		spawner.update();
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
@@ -161,7 +156,7 @@ public final class Game {
 		createList.clear();
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
-		if (Gamestate.getInstance().isCoop()) {
+		if (gamestate.isCoop()) {
 			if (playerTwo == null) {
 				return;
 			}
@@ -223,22 +218,22 @@ public final class Game {
 		if (player.isAlive()) {
 			destroy(playerTwo);
 			return;
-		} else if (Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
+		} else if (gamestate.isCoop() && playerTwo.isAlive()) {
 			destroy(player);
 			return;
 		}
 		destroy(player);
-		if (Gamestate.getInstance().isCoop()) {
+		if (gamestate.isCoop()) {
 			destroy(playerTwo);
 		}
 		Logger.getInstance().log("Game over.");
 		if (score <= highscore) {
-			Gamestate.getInstance().setState(Gamestate.getStateStartScreen());
+			gamestate.setState(Gamestate.getStateStartScreen());
 		} else {
 			highscore = score;
 			writeHighscore();
 			Logger.getInstance().log("New highscore is " + highscore + ".");
-			Gamestate.getInstance().setState(Gamestate.getStateHighscoreScreen());
+			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}
 	}
 
@@ -251,11 +246,11 @@ public final class Game {
 			this.score += score;
 			return;
 		}
-		if (player.isAlive() || Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
+		if (player.isAlive() || gamestate.isCoop() && playerTwo.isAlive()) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 				player.gainLife();
-				if (Gamestate.getInstance().isCoop()) {
+				if (gamestate.isCoop()) {
 					playerTwo.gainLife();
 				}
 				Logger.getInstance().log("Player gained an extra life.");
@@ -351,8 +346,8 @@ public final class Game {
 	/**
 	 * @return the playerTwo
 	 */
-	public Player getPlayerTwo() {
-		return playerTwo;
+	public Optional<Player> getPlayerTwo() {
+		return Optional.of(playerTwo);
 	}
 
 	/**
@@ -424,5 +419,12 @@ public final class Game {
 	 */
 	public List<AbstractEntity> getEntities() {
 		return entities;
+	}	
+	
+	/**
+	 * @return the gamestate
+	 */
+	public Gamestate getGamestate() {
+		return gamestate;
 	}
 }
