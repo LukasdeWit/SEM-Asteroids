@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import display.DisplayText;
@@ -51,8 +52,9 @@ public final class Game {
 	 * current highscore for survival mode.
 	 */
 	private long survivalHighscore;
-	
-	private static final Game INSTANCE = new Game();
+	private final Spawner spawner;
+	private final Gamestate gamestate = new Gamestate(this);
+
 	private static final float CANVAS_SIZE = 500;
 	
 	/**
@@ -67,23 +69,16 @@ public final class Game {
 	/**
 	 * Constructor for a new game.
 	 */
-	private Game() {
+	public Game() {
 		Logger.getInstance().log("Game constructed.");
 		screenX = CANVAS_SIZE;
 		screenY = CANVAS_SIZE;
 		entities = new ArrayList<>();
+		spawner = new Spawner(this);
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		random = new Random();
 		readHighscores();
-	}
-	
-	/**
-	 * Singleton getinstance.
-	 * @return the instance
-	 */
-	public static Game getInstance() {
-		return INSTANCE;
 	}
 	
 	/**
@@ -102,8 +97,7 @@ public final class Game {
 				index++;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-			Logger.getInstance().log("unable to read highscore from file");
+			Logger.getInstance().log("unable to read highscore from file", e);
 		}
 		arcadeHighscore = highscores[0];
 		survivalHighscore = highscores[1];
@@ -124,8 +118,7 @@ public final class Game {
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-			Logger.getInstance().log("unable to write highscore to file");
+			Logger.getInstance().log("unable to write highscore to file", e);
 		}
 	}
 	
@@ -133,7 +126,7 @@ public final class Game {
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
-		Gamestate.getInstance().start();
+		gamestate.start();
 		entities.clear();
 		if (this.arcadeScore > arcadeHighscore) {
 			arcadeHighscore = this.arcadeScore;
@@ -144,16 +137,18 @@ public final class Game {
 		writeHighscores();
 		arcadeScore = 0;
 		survivalScore = 0;
-		if (Gamestate.getInstance().isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, true);
+		
+		if (gamestate.isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
 			entities.add(player);
 			entities.add(playerTwo);
 		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, false);
+			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
 			entities.add(player);
 		}
-		Spawner.getInstance().reset();
+		spawner.reset();
+
 		Logger.getInstance().log("Game started.");
 	}
 	
@@ -170,8 +165,8 @@ public final class Game {
 		Launcher.getRoot().getChildren().add(r);
 		//root.setFill(Color.BLACK);
 		//root.fillRect(0, 0, screenX, screenY);
-		Gamestate.getInstance().update(input);
-		DisplayText.wave(Spawner.getInstance().getWave());
+		gamestate.update(input);
+		DisplayText.wave(spawner.getWave());
 	}	
 	
 	/**
@@ -187,10 +182,10 @@ public final class Game {
 			e.draw();
 		}
 		
-		if (Gamestate.getInstance().isArcade()) {
-			Spawner.getInstance().updateArcade();
+		if (gamestate.isArcade()) {
+			spawner.updateArcade();
 		} else {
-			Spawner.getInstance().updateSurvival();
+			spawner.updateSurvival();
 		}
 		
 		destroyList.forEach(AbstractEntity::onDeath);
@@ -200,12 +195,14 @@ public final class Game {
 		destroyList.clear();
 		createList.clear();
 	
-		if (Gamestate.getInstance().isArcade()) {
+		if (gamestate.isArcade()) {
 			DisplayText.score(arcadeScore);
+			DisplayText.highscore(arcadeHighscore);
 		} else {
 			DisplayText.score(survivalScore);
+			DisplayText.highscore(survivalHighscore);
 		}
-		if (Gamestate.getInstance().isCoop()) {
+		if (gamestate.isCoop()) {
 			DisplayText.livesTwo(playerTwo.getLives());
 		}
 		DisplayText.lives(player.getLives());
@@ -260,7 +257,7 @@ public final class Game {
 		if (player.isAlive()) {
 			destroy(playerTwo);
 			return;
-		} else if (Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
+		} else if (gamestate.isCoop() && playerTwo.isAlive()) {
 			destroy(player);
 			return;
 		}
@@ -269,23 +266,22 @@ public final class Game {
 		long score;
 		long highscore;
 		
-		if (Gamestate.getInstance().isArcade()) {
+		if (gamestate.isArcade()) {
 			score = arcadeScore;
 			highscore = arcadeHighscore;
 		} else {
 			score = survivalScore;
 			highscore = survivalHighscore;
 		}
-		
-		if (Gamestate.getInstance().isCoop()) {
+		if (gamestate.isCoop()) {
 			destroy(playerTwo);
 		}
 		Logger.getInstance().log("Game over.");
 		if (score <= highscore) {
-			Gamestate.getInstance().setState(Gamestate.getStateStartScreen());
+			gamestate.setState(Gamestate.getStateStartScreen());
 		} else {
 			Logger.getInstance().log("New highscore is " + highscore + ".");
-			Gamestate.getInstance().setState(Gamestate.getStateHighscoreScreen());
+			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}
 	}
 
@@ -298,18 +294,18 @@ public final class Game {
 		if (player == null) {
 			return;
 		}
-		if (player.isAlive() || Gamestate.getInstance().isCoop() && playerTwo.isAlive()) {
+		if (player.isAlive() || gamestate.isCoop() && playerTwo.isAlive()) {
 			Logger.getInstance().log("Player gained " + score + " points.");
 			if (currentScore / POINTS_PER_LIFE < (currentScore + score) / POINTS_PER_LIFE) {
 				player.gainLife();
-				if (Gamestate.getInstance().isCoop()) {
+				if (gamestate.isCoop()) {
 					playerTwo.gainLife();
 				}
 				Logger.getInstance().log("Player gained an extra life.");
 			}
 			currentScore += score;
 		}
-		if (Gamestate.getInstance().isArcade()) {
+		if (gamestate.isArcade()) {
 			arcadeScore = currentScore;
 		} else {
 			survivalScore = currentScore;
@@ -393,7 +389,7 @@ public final class Game {
 	 * @return score
 	 */
 	public long getScore() {
-		if (Gamestate.getInstance().isArcade()) {
+		if (gamestate.isArcade()) {
 			return arcadeScore;
 		} else {
 			return survivalHighscore;
@@ -411,8 +407,8 @@ public final class Game {
 	/**
 	 * @return the playerTwo
 	 */
-	public Player getPlayerTwo() {
-		return playerTwo;
+	public Optional<Player> getPlayerTwo() {
+		return Optional.of(playerTwo);
 	}
 
 	/**
@@ -463,5 +459,11 @@ public final class Game {
 	 */
 	public void setCreateList(final List<AbstractEntity> createList) {
 		this.createList = createList;
+	}
+	/**
+	 * @return the gamestate
+	 */
+	public Gamestate getGamestate() {
+		return gamestate;
 	}
 }
