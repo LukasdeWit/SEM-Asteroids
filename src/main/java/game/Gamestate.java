@@ -72,7 +72,7 @@ public final class Gamestate {
 			highscoreScreen(input);
 			DisplayText.highscoreScreen(Game.getInstance().getHighscore());
 			break;
-		default:
+		default: //pause screen
 			DisplayText.pauseScreen();
 			pauseScreen(input);
 			break;

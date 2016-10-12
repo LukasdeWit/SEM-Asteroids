@@ -102,7 +102,7 @@ public class Powerup extends AbstractEntity {
 			case PIERCING:
 				p.setPiercing(NEW_PIERCING_LEVEL);
 				break;
-			default:
+			default: //minigun
 				p.setFireRate(NEW_FIRE_RATE);
 				p.setMaxBullets(MINIGUN_BULLETS);
 				break;
@@ -154,7 +154,7 @@ public class Powerup extends AbstractEntity {
 			case PIERCING:
 				player.setPiercing(1);
 				break;
-			default:
+			default: //minigun
 				player.setFireRate(Player.getFireRate());
 				player.setMaxBullets(Player.getMaxBullets());
 				break;
