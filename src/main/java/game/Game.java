@@ -254,15 +254,16 @@ public final class Game {
 			if (LOG_SCORE) {
 				Logger.getInstance().log(score + " points gained.");
 			}
-			extraLife();
+			extraLife(score);
 			this.score += score;
 		}
 	}
 	
 	/**
 	 * handles the gaining of extra lives.
+	 * @param score - the score that will be added
 	 */
-	private void extraLife() {
+	private void extraLife(final int score) {
 		if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
 			player.gainLife();
 			if (gamestate.isCoop()) {
