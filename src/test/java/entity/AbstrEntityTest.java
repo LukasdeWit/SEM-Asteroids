@@ -24,14 +24,16 @@ public class AbstrEntityTest {
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
 	
+	private Game thisGame;
 	private AbstractEntity e;
 
 	@Before
 	public final void setUp() {
-		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
-		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
+		thisGame = new Game();
+		thisGame.setCreateList(new ArrayList<AbstractEntity>());
+		thisGame.setDestroyList(new ArrayList<AbstractEntity>());
 		Launcher.getRoot().getChildren().clear();
-		e = new Asteroid(X_START, Y_START, DX_START, DY_START);
+		e = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 	}
 	
 	@Test
@@ -52,19 +54,19 @@ public class AbstrEntityTest {
 	public final void testDistance(){
 		e.setX(3);
 		e.setY(4);
-		final Asteroid e2 = new Asteroid(0, 0, 0, 0);
+		final Asteroid e2 = new Asteroid(0, 0, 0, 0, thisGame);
 		assertEquals(5, AbstractEntity.distance(e, e2), 0);
 	}
 	
 	@Test
 	public final void testCollision1(){
-		final Asteroid e2 = new Asteroid(0, 0, 0, 0);
+		final Asteroid e2 = new Asteroid(0, 0, 0, 0, thisGame);
 		assertTrue(AbstractEntity.collision(e, e2));
 	}
 	
 	@Test
 	public final void testCollision2(){
-		final Asteroid e2 = new Asteroid(50, 0, 0, 0);
+		final Asteroid e2 = new Asteroid(50, 0, 0, 0, thisGame);
 		assertFalse(AbstractEntity.collision(e, e2));
 	}
 }

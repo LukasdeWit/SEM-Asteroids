@@ -19,24 +19,25 @@ import entity.AbstractEntity;
  */
 public class GamestateTest {
 
-	private final Game game = Game.getInstance();
-	private final Gamestate gamestate = Gamestate.getInstance();
+	private Game thisGame;
+	private final Gamestate gamestate = thisGame.getGamestate();
 	private final List<String> input = new ArrayList<String>();
 
 	@Before
 	public final void setUp() {
+		thisGame = new Game();
 		gamestate.setPauseTime(0);
 		gamestate.setRestartTime(0);
 		gamestate.setMode(Gamestate.getModeArcade());
 		gamestate.setState(Gamestate.getStateStartScreen());
-		game.setScore(0);
-		game.setHighscore(0);
-		game.setEntities(new ArrayList<AbstractEntity>());
+		thisGame.setScore(0);
+		thisGame.setHighscore(0);
+		thisGame.setEntities(new ArrayList<AbstractEntity>());
 		Launcher.getRoot().getChildren().clear();
-		game.setDestroyList(new ArrayList<AbstractEntity>());
-		game.setCreateList(new ArrayList<AbstractEntity>());
-		game.setPlayer(null);
-		game.setPlayerTwo(null);
+		thisGame.setDestroyList(new ArrayList<AbstractEntity>());
+		thisGame.setCreateList(new ArrayList<AbstractEntity>());
+		thisGame.setPlayer(null);
+		thisGame.setPlayerTwo(null);
 	}
 	
 	@Test

@@ -20,7 +20,6 @@ import entity.Player;
 import entity.Saucer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import net.bytebuddy.utility.privilege.GetSystemPropertyAction;
 
 /**
  * This class defines everything within the game.
@@ -426,5 +425,12 @@ public final class Game {
 	 */
 	public Gamestate getGamestate() {
 		return gamestate;
+	}
+
+	/**
+	 * @return the spawner
+	 */
+	public Spawner getSpawner() {
+		return spawner;
 	}
 }

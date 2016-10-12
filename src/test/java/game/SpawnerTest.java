@@ -17,12 +17,13 @@ import entity.Saucer;
  */
 public class SpawnerTest {
 
-	private final Game game = Game.getInstance();
-	private final Spawner spawner = Spawner.getInstance();
+	private Game thisGame;
+	private final Spawner spawner = thisGame.getSpawner();
 
 	@Before
 	public final void setUp() {
-		game.setCreateList(new ArrayList<>());
+		thisGame = new Game();
+		thisGame.setCreateList(new ArrayList<>());
 		spawner.setWave(0);
 		spawner.setStartPowerupTime(0);
 		spawner.setStartSaucerTime(0);
@@ -32,7 +33,7 @@ public class SpawnerTest {
 	@Test
 	public final void testUpdate1() {
 		spawner.update();
-		assertEquals(6, game.getCreateList().size(), 0);
+		assertEquals(6, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
@@ -40,7 +41,7 @@ public class SpawnerTest {
 		spawner.setStartRest(1);
 		spawner.setWave(8);
 		spawner.update();
-		assertEquals(13, game.getCreateList().size(), 0);
+		assertEquals(13, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
@@ -48,25 +49,25 @@ public class SpawnerTest {
 		spawner.setStartRest(1);
 		spawner.setWave(2);
 		spawner.update();
-		assertEquals(10, game.getCreateList().size(), 0);
+		assertEquals(10, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
 	public final void testSpawnSaucer(){
 		spawner.setStartPowerupTime(System.currentTimeMillis());
 		spawner.setStartRest(System.currentTimeMillis());
-		game.setScore(1000000);
+		thisGame.setScore(1000000);
 		spawner.update();
-		assertEquals(Saucer.getSmallRadius(), ((Saucer) game.getCreateList().get(0)).getRadius(), 0);
+		assertEquals(Saucer.getSmallRadius(), ((Saucer) thisGame.getCreateList().get(0)).getRadius(), 0);
 	}
 	
 	@Test
 	public final void testSmallSaucerRatio(){
 		spawner.setStartPowerupTime(System.currentTimeMillis());
 		spawner.setStartRest(System.currentTimeMillis());
-		game.setScore(50000);
+		thisGame.setScore(50000);
 		spawner.update();
-		assertEquals(Saucer.getSmallRadius(), ((Saucer) game.getCreateList().get(0)).getRadius(), 5);
+		assertEquals(Saucer.getSmallRadius(), ((Saucer) thisGame.getCreateList().get(0)).getRadius(), 5);
 	}
 	
 	@Test

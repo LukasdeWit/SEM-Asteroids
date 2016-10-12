@@ -24,15 +24,17 @@ import javafx.scene.shape.Circle;
 public class PowerupTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
-	
+
+	private Game thisGame;
 	private Powerup powerup;
 
 	@Before
 	public final void setUp() {
-		Game.getInstance().setCreateList(new ArrayList<AbstractEntity>());
-		Game.getInstance().setDestroyList(new ArrayList<AbstractEntity>());
+		thisGame = new Game();
+		thisGame.setCreateList(new ArrayList<AbstractEntity>());
+		thisGame.setDestroyList(new ArrayList<AbstractEntity>());
 		Launcher.getRoot().getChildren().clear();
-		powerup = new Powerup(X_START, Y_START);
+		powerup = new Powerup(X_START, Y_START, thisGame);
 		powerup.setType(0);
 	}
 	
@@ -45,14 +47,14 @@ public class PowerupTest {
 	
 	@Test
 	public final void testCollide1(){
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.collide(p);
 		assertEquals(p, powerup.getPlayer());
 	}
 	
 	@Test
 	public final void testCollide2(){
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.setPickupTime(1);
 		powerup.collide(p);
 		assertEquals(null, powerup.getPlayer());
@@ -60,7 +62,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testCollide3(){
-		final Powerup p = new Powerup(X_START, Y_START);
+		final Powerup p = new Powerup(X_START, Y_START, thisGame);
 		powerup.setPickupTime(1);
 		powerup.collide(p);
 		assertEquals(null, powerup.getPlayer());
@@ -68,15 +70,15 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup1(){
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.setType(1);
 		powerup.collide(p);
-		assertTrue(Game.getInstance().getDestroyList().contains(powerup));
+		assertTrue(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
 	public final void testPickup2(){
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.setType(2);
 		powerup.collide(p);
 		assertEquals(Powerup.getNewBulletSize(), p.getCurrentBulletSize(), 0);
@@ -84,7 +86,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup3(){
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.setType(3);
 		powerup.collide(p);
 		assertTrue(p.isTripleShot());
@@ -92,7 +94,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup4(){
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.setType(4);
 		powerup.collide(p);
 		assertEquals(Powerup.getNewPiercingLevel(), p.getPiercing(), 0);
@@ -100,7 +102,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup5(){
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.setType(5);
 		powerup.collide(p);
 		assertEquals(Powerup.getNewFireRate(), p.getCurrentFireRate(), 0);
@@ -109,7 +111,7 @@ public class PowerupTest {
 	@Test
 	public final void onDeath(){
 		powerup.onDeath();
-		assertFalse(Game.getInstance().getDestroyList().contains(powerup));
+		assertFalse(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
@@ -131,32 +133,32 @@ public class PowerupTest {
 	public void testUpdate1() {
 		powerup.setStartTime(0);
 		powerup.update(null);
-		assertTrue(Game.getInstance().getDestroyList().contains(powerup));
+		assertTrue(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
 	public void testUpdate2() {
 		powerup.update(null);
-		assertFalse(Game.getInstance().getDestroyList().contains(powerup));
+		assertFalse(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
 	public void testUpdate3() {
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertTrue(Game.getInstance().getDestroyList().contains(powerup));
+		assertTrue(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
 	public void testUpdate4() {
 		powerup.setPickupTime(System.currentTimeMillis());
 		powerup.update(null);
-		assertFalse(Game.getInstance().getDestroyList().contains(powerup));
+		assertFalse(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
 	public void testRunOut1() {
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		p.setBulletSize(0);
 		powerup.setPlayer(p);
 		powerup.setType(2);
@@ -167,7 +169,7 @@ public class PowerupTest {
 	
 	@Test
 	public void testRunOut2() {
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		p.setTripleShot(true);
 		powerup.setPlayer(p);
 		powerup.setType(3);
@@ -178,7 +180,7 @@ public class PowerupTest {
 	
 	@Test
 	public void testRunOut3() {
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		p.setPiercing(5);
 		powerup.setPlayer(p);
 		powerup.setType(4);
@@ -189,7 +191,7 @@ public class PowerupTest {
 	
 	@Test
 	public void testRunOut4() {
-		final Player p = new Player(X_START, Y_START, 3, 4, false);
+		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		p.setFireRate(0);
 		powerup.setPlayer(p);
 		powerup.setType(5);
