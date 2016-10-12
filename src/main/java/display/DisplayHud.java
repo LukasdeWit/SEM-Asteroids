@@ -5,7 +5,7 @@ import game.Game;
 import game.Launcher;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -21,13 +21,12 @@ public final class DisplayHud {
     private static final double POWERUP_SLOT_ONE_X = 10;
     private static final double POWERUP_SLOT_Y = 60;
     private static final double POWERUP_SLOT_TWO_X = Game.getCanvasSize() - 10 - POWERUP_SLOT_SIZE;
-
-    private static final float[][] LIFE = {
-            {0, 6, 2, 0},
-            {2, 0, 4, 6},
-            {4, 6, 3, 5},
-            {3, 5, 1, 5},
-            {1, 5, 0, 6},
+    private static final double[] LIVES = new double[]{
+            0, 6,
+            2, 0,
+            4, 6,
+            3, 5,
+            1, 5
     };
 
     /**
@@ -81,18 +80,24 @@ public final class DisplayHud {
         Launcher.getRoot().getChildren().add(c);
     }
 
+    /**
+     * draw the lives of a player.
+     * @param x horizontal position
+     * @param y vertical position
+     * @param lives the number of lives to draw
+     */
     private static void drawLives(final float x, final float y, final int lives) {
+        final int width = 6;
+
         for (int i = 0; i < lives; i++) {
-            for (final float[] stroke : LIFE) {
-                final Line l = new Line(
-                        stroke[0] * LIVES_SIZE + x + i * 6 * LIVES_SIZE, stroke[1] * LIVES_SIZE + y,
-                        stroke[2] * LIVES_SIZE + x + i * 6 * LIVES_SIZE, stroke[1 + 2] * LIVES_SIZE + y);
-                //3 is not a magic number in this case.
-                l.setStroke(Color.WHITE);
-                l.setStrokeWidth(1);
-                Launcher.getRoot().getChildren().add(l);
-            }
+            final int index = i;
+            final double[] points = DisplayUtils.translate(t -> t * LIVES_SIZE + x + index * width * LIVES_SIZE,
+                    t -> t * LIVES_SIZE + y, LIVES);
+            final Polygon shape = new Polygon(points);
+
+            shape.setFill(Color.WHITE);
+            shape.setStrokeWidth(1);
+            Launcher.getRoot().getChildren().add(shape);
         }
     }
-
 }

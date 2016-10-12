@@ -6,7 +6,9 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+
+import java.util.function.DoubleFunction;
 
 /**
  * This class displays all entities.
@@ -14,46 +16,46 @@ import javafx.scene.shape.Line;
  * @author Kibo
  */
 public final class DisplayEntity {
-	private static final float[][][] ASTEROID_SHAPES = {
+	private static final double[][] ASTEROID_SHAPES = {
 			{
-					{-2, -4, 0, -2},
-					{0, -2, 2, -4},
-					{2, -4, 4, -2},
-					{4, -2, 3, 0},
-					{3, 0, 4, 2},
-					{4, 2, 1, 4},
-					{1, 4, -2, 4},
-					{-2, 4, -4, 2},
-					{-4, 2, -4, -2},
-					{-4, -2, -2, -4}
+					-2, -4,
+					0, -2,
+					2, -4,
+					4, -2,
+					3, 0,
+					4, 2,
+					1, 4,
+					-2, 4,
+					-4, 2,
+					-4, -2
 			},
 			{
-					{-2, -4, 0, -3},
-					{0, -3, 2, -4},
-					{2, -4, 4, -2},
-					{4, -2, 2, -1},
-					{2, -1, 4, 0},
-					{4, 0, 2, 3},
-					{2, 3, -1, 2},
-					{-1, 2, -2, 3},
-					{-2, 3, -4, 1},
-					{-4, 1, -3, 0},
-					{-3, 0, -4, -2},
-					{-4, -2, -2, -4}
+					-2, -4,
+					0, -3,
+					2, -4,
+					4, -2,
+					2, -1,
+					4, 0,
+					2, 3,
+					-1, 2,
+					-2, 3,
+					-4, 1,
+					-3, 0,
+					-4, -2
 			},
 			{
-					{-2, -4, 1, -4},
-					{1, -4, 4, -2},
-					{4, -2, 4, -1},
-					{4, -1, 2, 0},
-					{2, 0, 4, 2},
-					{4, 2, 2, 4},
-					{2, 4, 1, 3},
-					{1, 3, -2, 4},
-					{-2, 4, -4, 1},
-					{-4, 1, -4, -2},
-					{-4, -2, -1, -2},
-					{-1, -2, -2, -4}
+					-2, -4,
+					1, -4,
+					4, -2,
+					4, -1,
+					2, 0,
+					4, 2,
+					2, 4,
+					1, 3,
+					-2, 4,
+					-4, 1,
+					-4, -2,
+					-1, -2,
 			}
 	};
 	private static final float ASTEROID_SIZE = .25f;
@@ -65,43 +67,69 @@ public final class DisplayEntity {
 
 	private static final int PLAYER_RESPAWN_FLICKER_TIME = 250;
 	private static final float[] PLAYER_TWO_CIRCLE = {11, 0, 9};
-	private static final float[][] PLAYER_TWO_LINES = {
-			{11, 0, -7, 0},
-			{-2, 0, -8, -6},
-			{-2, 0, -8, 6},
-			{0, -6, -19, -6},
-			{0, 6, -19, 6}
+	private static final double[][] PLAYER_TWO_LINES = {
+			{
+					11, 0,
+					-7, 0
+			},
+			{
+					-2, 0,
+					-8, -6
+			},
+			{
+					-2, 0,
+					-8, 6
+			},
+			{
+					0, -6,
+					-19, -6
+			},
+			{
+					0, 6,
+					-19, 6
+			}
 	};
-	private static final float[][] PLAYER_TWO_BOOST = {
+	private static final double[][] PLAYER_TWO_BOOST = {
 			{-9, 2, -9, -2},
 			{-14, 2, -14, -2},
 			{-19, 2, -19, -2}
 	};
 	private static final float PLAYER_TWO_SIZE = .5f;
 
-	private static final float[][] PLAYER_ONE_LINES = {
-			{10, 0, -8, 8},
-			{-8, 8, -8, -8},
-			{-8, -8, 10, 0}
+	private static final double[] PLAYER_ONE_LINES = {
+			10, 0,
+			-8, 8,
+			-8, -8,
 	};
-	private static final float[][] PLAYER_ONE_BOOST = {
-			{-14, 0, -8, -6},
-			{-14, 0, -8, 6}
+	private static final double[] PLAYER_ONE_BOOST = {
+			-14, 0,
+			-8, -6,
+			-14, 0,
+			-8, 6
 	};
 	private static final float PLAYER_ONE_SIZE = .5f;
 
 	private static final double[][] SAUCER_SHAPE = {
-			{1.25, -3.5, 2.5, -0.75},
-			{2.5, -0.75, 5, 1},
-			{5, 1, 2.5, 3},
-			{2.5, 3, -2.5, 3},
-			{-2.5, 3, -5, 1},
-			{-5, 1, -2.5, -0.75},
-			{-2.5, -0.75, -1.25, -3.5},
-			{-1.25, -3.5, 1.25, -3.5},
-			{2.5, -0.75, -2.5, -0.75},
-			{5, 1, -5, 1}
+			{
+					1.25, -3.5,
+					2.5, -0.75,
+					5, 1,
+					2.5, 3,
+					-2.5, 3,
+					-5, 1,
+					-2.5, -0.75,
+					-1.25, -3.5,
+					1.25, -3.5},
+			{
+					2.5, -0.75,
+					-2.5, -0.75
+			},
+			{
+					5, 1,
+					-5, 1
+			}
 	};
+
 	private static final float SAUCER_SIZE = .20f;
 	private static final float SAUCER_WIDTH = 4;
 
@@ -118,17 +146,15 @@ public final class DisplayEntity {
 	 * @param a - the asteroid
 	 */
 	public static void asteroid(final Asteroid a) {
-		final Group group = new Group();
-		for (final float[] f : ASTEROID_SHAPES[a.getShape()]) {
-			final Line l = new Line(f[0] * (a.getRadius() * ASTEROID_SIZE), f[1] * (a.getRadius() * ASTEROID_SIZE),
-					f[2] * (a.getRadius() * ASTEROID_SIZE), f[1 + 2] * (a.getRadius() * ASTEROID_SIZE));
-			l.setStroke(Color.WHITE);
-			l.setStrokeWidth(ASTEROID_WIDTH * ASTEROID_SIZE);
-			group.getChildren().add(l);
-		}
-		group.setTranslateX(a.getX());
-		group.setTranslateY(a.getY());
-		Launcher.getRoot().getChildren().add(group);
+		final Polygon polygon = new Polygon(DisplayUtils.translate(
+				d -> d * (a.getRadius() * ASTEROID_SIZE), d -> d * (a.getRadius() * ASTEROID_SIZE),
+				ASTEROID_SHAPES[a.getShape()]));
+
+		polygon.setStroke(Color.WHITE);
+		polygon.setStrokeWidth(ASTEROID_WIDTH * ASTEROID_SIZE);
+		polygon.setTranslateX(a.getX());
+		polygon.setTranslateY(a.getY());
+		Launcher.getRoot().getChildren().add(polygon);
 	}
 
 	/**
@@ -206,22 +232,23 @@ public final class DisplayEntity {
 	 * @param group scene group to add nodes to
 	 */
 	private static void playerTwo(final Player p, final Paint color, final Group group) {
-		for (final float[] f : PLAYER_TWO_LINES) {
-			final Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE,
-					f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
-			l.setStroke(color);
-			l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
-			group.getChildren().add(l);
+		final DoubleFunction<Double> function = d -> d * PLAYER_ONE_SIZE;
+
+		for (final double[] f : PLAYER_TWO_LINES) {
+			final Polygon polygon = new Polygon(DisplayUtils.translate(function, function, f));
+			polygon.setStroke(color);
+			polygon.setStrokeWidth(2 * PLAYER_TWO_SIZE);
+			group.getChildren().add(polygon);
 		}
 
 		if (p.isBoost()) {
-			for (final float[] f : PLAYER_TWO_BOOST) {
-				final Line l = new Line(f[0] * PLAYER_TWO_SIZE, f[1] * PLAYER_TWO_SIZE,
-						f[2] * PLAYER_TWO_SIZE, f[1 + 2] * PLAYER_TWO_SIZE);
-				l.setStroke(Color.WHITE);
-				l.setStrokeWidth(2 * PLAYER_TWO_SIZE);
-				group.getChildren().add(l);
+			for (double[] shape : PLAYER_TWO_BOOST) {
+				final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, shape));
+				boostModel.setStroke(Color.WHITE);
+				boostModel.setStrokeWidth(2 * PLAYER_TWO_SIZE);
+				group.getChildren().add(boostModel);
 			}
+
 			final Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE,
 					PLAYER_TWO_CIRCLE[1] * PLAYER_TWO_SIZE, PLAYER_TWO_CIRCLE[2] * PLAYER_TWO_SIZE);
 			c.setFill(color);
@@ -238,24 +265,18 @@ public final class DisplayEntity {
 	 * @param group scene group to add nodes to
 	 */
 	private static void playerOne(final Player p, final Paint color, final Group group) {
-		for (final float[] f : PLAYER_ONE_LINES) {
-			final Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE,
-					f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
-			l.setStroke(color);
-			l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
-			group.getChildren().add(l);
-		}
+		final DoubleFunction<Double> function = d -> d * PLAYER_ONE_SIZE;
+		final Polygon playerModel = new Polygon(DisplayUtils.translate(function, function, PLAYER_ONE_LINES));
+		playerModel.setStroke(color);
+		playerModel.setStrokeWidth(2 * PLAYER_ONE_SIZE);
+		group.getChildren().add(playerModel);
+
 		if (p.isBoost()) {
-			for (final float[] f : PLAYER_ONE_BOOST) {
-				final Line l = new Line(f[0] * PLAYER_ONE_SIZE, f[1] * PLAYER_ONE_SIZE,
-						f[2] * PLAYER_ONE_SIZE, f[1 + 2] * PLAYER_ONE_SIZE);
-				l.setStroke(Color.WHITE);
-				l.setStrokeWidth(2 * PLAYER_ONE_SIZE);
-				group.getChildren().add(l);
-			}
-			//so rotation is not wrong
-			group.getChildren().add(new Line((-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 0,
-					(-PLAYER_ONE_BOOST[0][0] + 2) * PLAYER_ONE_SIZE, 1));
+			final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, PLAYER_ONE_BOOST));
+			boostModel.setStroke(Color.WHITE);
+			boostModel.setStrokeWidth(2 * PLAYER_ONE_SIZE);
+			group.getChildren().add(boostModel);
+
 			p.setBoost(false);
 		}
 	}
@@ -267,13 +288,14 @@ public final class DisplayEntity {
 	 */
 	public static void saucer(final Saucer s) {
 		final Group group = new Group();
-		for (final double[] f : SAUCER_SHAPE) {
-			final Line l = new Line(f[0] * (s.getRadius() * SAUCER_SIZE), f[1] * (s.getRadius() * SAUCER_SIZE),
-					f[2] * (s.getRadius() * SAUCER_SIZE), f[1 + 2] * (s.getRadius() * SAUCER_SIZE));
-			l.setStroke(Color.WHITE);
-			l.setStrokeWidth(SAUCER_WIDTH * SAUCER_SIZE);
-			group.getChildren().add(l);
+		for (double[] shape : SAUCER_SHAPE) {
+			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (s.getRadius() * SAUCER_SIZE),
+					p -> p * (s.getRadius() * SAUCER_SIZE), shape));
+			polygon.setStroke(Color.WHITE);
+			polygon.setStrokeWidth(SAUCER_WIDTH * SAUCER_SIZE);
+			group.getChildren().add(polygon);
 		}
+
 		group.setTranslateX(s.getX());
 		group.setTranslateY(s.getY());
 		Launcher.getRoot().getChildren().add(group);
@@ -282,14 +304,14 @@ public final class DisplayEntity {
 	/**
 	 * @return the asteroidShapes
 	 */
-	public static float[][][] getAsteroidShapes() {
+	public static double[][] getAsteroidShapes() {
 		return ASTEROID_SHAPES.clone();
 	}
 
 	/**
 	 * @return the playerOneLines
 	 */
-	public static float[][] getPlayerOneLines() {
+	public static double[] getPlayerOneLines() {
 		return PLAYER_ONE_LINES.clone();
 	}
 }

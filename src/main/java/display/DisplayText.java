@@ -101,7 +101,7 @@ public final class DisplayText {
 	 * @param highscore - the highscore
 	 */
 	public static void highscoreScreen(final long highscore) {
-		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT , "congratulations");
+		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "congratulations");
 		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press r to restart");
 		drawText(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, "your new highscore is " + highscore);
 	}
