@@ -23,7 +23,9 @@ public final class Gamestate {
 	
 	private static final int MODE_NONE = 0;
 	private static final int MODE_ARCADE = 1;
-	private static final int MODE_COOP = 2;
+	private static final int MODE_ARCADE_COOP = 2;
+	private static final int MODE_SURVIVAL = 3;
+	private static final int MODE_SURVIVAL_COOP = 4;
 	
 	private static final long MINIMAL_PAUSE_TIME = 300;
 	private static final long MINIMAL_RESTART_TIME = 300;
@@ -63,7 +65,11 @@ public final class Gamestate {
 			break;
 		case STATE_HIGHSCORE_SCREEN:
 			highscoreScreen(input);
-			DisplayText.highscoreScreen(thisGame.getHighscore());
+			if (isArcade()) {
+				DisplayText.highscoreScreen(thisGame.getArcadeHighscore());
+			} else {
+				DisplayText.highscoreScreen(thisGame.getSurvivalHighscore());
+			}
 			break;
 		case STATE_PAUSE_SCREEN:
 			DisplayText.pauseScreen();
@@ -82,12 +88,20 @@ public final class Gamestate {
 	 * @return 
 	 */
 	private void startScreen(final List<String> input) {
-		if (input.contains("X")) {
+		if (input.contains("A")) {
 			mode = MODE_ARCADE;
 			state = STATE_GAME;
 			thisGame.startGame();
+		} else if (input.contains("Z")) {
+			mode = MODE_ARCADE_COOP;
+			state = STATE_GAME;
+			thisGame.startGame();
+		} else if (input.contains("D")) {
+			mode = MODE_SURVIVAL;
+			state = STATE_GAME;
+			thisGame.startGame();
 		} else if (input.contains("C")) {
-			mode = MODE_COOP;
+			mode = MODE_SURVIVAL_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
 		}
@@ -190,16 +204,44 @@ public final class Gamestate {
 	}
 
 	/**
-	 * @return the modeCoop
+	 * @return the modeArcadeCoop
 	 */
-	public static int getModeCoop() {
-		return MODE_COOP;
+	public static int getModeArcadeCoop() {
+		return MODE_ARCADE_COOP;
+	}
+	
+	/**
+	 * @return the modeSurvival
+	 */
+	public static int getModeSurvival() {
+		return MODE_SURVIVAL;
+	}
+	
+	/**
+	 * @return the modeSurvivalCoop
+	 */
+	public static int getModeSurvivalCoop() {
+		return MODE_SURVIVAL_COOP;
 	}
 	
 	/**
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
-		return getMode() == getModeCoop();
+		return getMode() == getModeArcadeCoop() || getMode() == getModeSurvivalCoop();
+	}
+	
+	/**
+	 * @return true if arcade
+	 */
+	public boolean isArcade() {
+		return getMode() == getModeArcade() || getMode() == getModeArcadeCoop();
+	}
+	
+	/**
+	 * @return true if survival
+	 */
+	public boolean isSurvival() {
+		return getMode() == getModeSurvival() || getMode() == getModeSurvivalCoop();
 	}
 }

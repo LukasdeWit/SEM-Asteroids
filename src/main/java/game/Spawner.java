@@ -27,6 +27,10 @@ public final class Spawner {
 	private static final long DIFFICULTY_STEP = 10000;
 	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
 	private static final float ASTEROID_SPEED = 1;
+	/**
+	 * The amount of points needed to spawn an additional asteroid in survival.
+	 */
+	private static final long SURVIVAL_POINTS_PER_ASTEROID = 10000;
 	
 	/**
 	 * Constructor of Spawner.
@@ -41,9 +45,9 @@ public final class Spawner {
 	}
 
 	/**
-	 * This method is called every tick.
+	 * This method is called every tick of an arcade game.
 	 */
-	public void update() {
+	public void updateArcade() {
 		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
 			spawnSaucer();
 			Logger.getInstance().log("Saucer was spawned");
@@ -72,6 +76,23 @@ public final class Spawner {
 			wave++;
 			startRest = System.currentTimeMillis();
 		}
+	}
+	
+	/**
+	 * This method is called every tick of a survival game.
+	 */
+	public void updateSurvival() {
+		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
+			spawnSaucer();
+			startSaucerTime = System.currentTimeMillis();
+		}
+		if (thisGame.enemies() != 0) {
+			startRest = System.currentTimeMillis();
+		}
+		final int extra = (int) (thisGame.getScore() 
+				/ SURVIVAL_POINTS_PER_ASTEROID);
+		final int enemies = thisGame.convertedBigEnemies();
+		spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
 	}
 	
 	/**

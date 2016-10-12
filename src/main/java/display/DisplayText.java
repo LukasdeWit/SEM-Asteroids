@@ -251,8 +251,10 @@ public final class DisplayText {
 	private static final float ASTEROIDS_TEXT_X = 140;
 	private static final float ASTEROIDS_TEXT_Y = 100;
 	private static final float PRESS_START_TEXT_X = 100;
-	private static final float PRESS_START_TEXT_Y = 250;
-	private static final float PRESS_START_TEXT_COOP_Y = 280;
+	private static final float START_ARCADE_TEXT_Y = 220;
+	private static final float START_ARCADE_COOP_TEXT_Y = 250;
+	private static final float START_SURVIVAL_TEXT_Y = 280;
+	private static final float START_SURVIVAL_COOP_TEXT_Y = 310;
 	private static final float CONGRATULATIONS_TEXT_X = 80;
 	private static final float CONGRATULATIONS_TEXT_Y = 100;
 	private static final float PRESS_R_TEXT_X = 80;
@@ -315,10 +317,14 @@ public final class DisplayText {
 	public static void startScreen() {
 		draw(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, BIG_TEXT_SIZE, 
 				"asteroids");
-		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_Y, SMALL_TEXT_SIZE, 
-				"press x for Arcade Mode");
-		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_COOP_Y, SMALL_TEXT_SIZE, 
-				"press c for Coop");
+		draw(PRESS_START_TEXT_X, START_ARCADE_TEXT_Y, SMALL_TEXT_SIZE, 
+				"press a to start arcade");
+		draw(PRESS_START_TEXT_X, START_SURVIVAL_TEXT_Y,
+				SMALL_TEXT_SIZE, "press d to start survival");
+		draw(PRESS_START_TEXT_X, START_ARCADE_COOP_TEXT_Y, 
+				SMALL_TEXT_SIZE, "press z to start Arcade coop");
+		draw(PRESS_START_TEXT_X, START_SURVIVAL_COOP_TEXT_Y, 
+				SMALL_TEXT_SIZE, "press c to start survival Coop");
 	}
 	
 	/**
