@@ -17,12 +17,11 @@ import entity.Saucer;
  */
 public class SpawnerTest {
 
-	private Game thisGame;
+	private final Game thisGame = new Game();
 	private final Spawner spawner = thisGame.getSpawner();
 
 	@Before
 	public final void setUp() {
-		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
 		spawner.setWave(0);
 		spawner.setStartPowerupTime(0);

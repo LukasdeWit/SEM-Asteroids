@@ -1,7 +1,6 @@
 package game;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -26,13 +25,12 @@ import javafx.scene.shape.Rectangle;
  */
 public class GameTest {
 
-	private Game thisGame;
+	private final Game thisGame = new Game();
 	private final Gamestate gamestate = thisGame.getGamestate();
 	private final List<String> noInput = new ArrayList<String>();
 
 	@Before
 	public final void setUp() {
-		thisGame = new Game();
 		gamestate.setMode(Gamestate.getModeArcade());
 		thisGame.setScore(0);
 		thisGame.setHighscore(0);
@@ -322,7 +320,6 @@ public class GameTest {
 	
 	@Test
 	public final void testGetters(){
-		assertNull(thisGame.getPlayerTwo());
 		assertTrue(thisGame.getRandom() instanceof Random);
 	}
 }

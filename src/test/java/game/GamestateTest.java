@@ -19,13 +19,12 @@ import entity.AbstractEntity;
  */
 public class GamestateTest {
 
-	private Game thisGame;
+	private final Game thisGame = new Game();
 	private final Gamestate gamestate = thisGame.getGamestate();
 	private final List<String> input = new ArrayList<String>();
 
 	@Before
 	public final void setUp() {
-		thisGame = new Game();
 		gamestate.setPauseTime(0);
 		gamestate.setRestartTime(0);
 		gamestate.setMode(Gamestate.getModeArcade());
