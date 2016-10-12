@@ -3,7 +3,7 @@ package entity;
 import display.DisplayEntity;
 import game.Game;
 import game.Launcher;
-import javafx.scene.Group;
+import javafx.scene.shape.Polygon;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -116,7 +116,7 @@ public class AsteroidTest {
 	public final void testDraw() {
 		asteroid.setShape(0);
 		asteroid.draw();
-		final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
+		final int strokesInGroup = ((Polygon)Launcher.getRoot().getChildren().get(0)).getPoints().size();
 		final int strakesInShape = DisplayEntity.getAsteroidShapes()[0].length;
 		assertEquals(strokesInGroup, strakesInShape);
 	}
