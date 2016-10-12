@@ -73,7 +73,7 @@ public class Powerup extends AbstractEntity {
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && pickupTime == 0) {
 			pickup((Player) e2);
-			Logger.getInstance().log("Player collected " + TYPE_STRING[type] + " powerup.");
+			Logger.getInstance().log(player.getPlayerString() + " collected " + TYPE_STRING[type] + " powerup.");
 		}
 	}
 

@@ -43,6 +43,7 @@ public final class Game {
 
 	private static final float CANVAS_SIZE = 500;
 	private static final int LIFE_SCORE = 10000;
+	private static final boolean LOG_SCORE = false;
 
 	/**
 	 * Constructor for a new game.
@@ -81,7 +82,11 @@ public final class Game {
 		}
 		score = 0;
 		spawner.reset();
-		Logger.getInstance().log("Game started.");
+		if (gamestate.getMode() == Gamestate.getModeArcade()) {
+			Logger.getInstance().log("Arcade game started.");
+		} else {
+			Logger.getInstance().log("Coop game started.");
+		}
 	}
 	
 	/**
@@ -246,18 +251,28 @@ public final class Game {
 			return;
 		}
 		if (player.isAlive() || gamestate.isCoop() && playerTwo.isAlive()) {
-			Logger.getInstance().log("Player gained " + score + " points.");
-			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
-				player.gainLife();
-				if (gamestate.isCoop()) {
-					playerTwo.gainLife();
-				}
-				Logger.getInstance().log("Player gained an extra life.");
+			if (LOG_SCORE) {
+				Logger.getInstance().log(score + " points gained.");
 			}
+			extraLife();
 			this.score += score;
 		}
 	}
 	
+	/**
+	 * handles the gaining of extra lives.
+	 */
+	private void extraLife() {
+		if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
+			player.gainLife();
+			if (gamestate.isCoop()) {
+				playerTwo.gainLife();
+				Logger.getInstance().log("Player 2 gained an extra life.");
+			}
+			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
+		}
+	}
+
 	/**
 	 * Amount of bullets currently in game.
 	 * @param player 
