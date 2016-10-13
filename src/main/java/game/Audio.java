@@ -62,22 +62,17 @@ public final class Audio {
 	 * Class that regulates the background track.
 	 */
 	private final BackgroundAudio bgtrack;
-	/**
-	 * Volume of rocket boost.
-	 */
-	private static final double BOOSTVOLUME = 35;
 	
-	private static Audio audio = new Audio();
-
-	
-	public static Audio getInstance() {
-		return audio;
-	}
+	private static final double BOOSTVOLUME = 0.5;
+	private static final double SHOOTINGVOLUME = 0.5;
+	private static final double UFOSMALLVOLUME = 0.3;
+	private static final double UFOBIGVOLUME = 0.3;
+	private static final double TELEPORTVOLUME = 0.7;
 
 	/**
 	 * Constructor for audio class.
 	 */
-	private Audio() {
+	public Audio() {
 		tracks = new ArrayList<AudioClip>();
 		bgtrack = new BackgroundAudio(PATH);
 		
@@ -100,13 +95,17 @@ public final class Audio {
 					PATH + "boost.wav").toURI().toURL().toString());
 			final AudioClip teleport = new AudioClip(new File(
 					PATH + "teleport.wav").toURI().toURL().toString());
-
 			
 			ufosmall.setCycleCount(AudioClip.INDEFINITE);
 			ufobig.setCycleCount(AudioClip.INDEFINITE);
 			boost.setCycleCount(AudioClip.INDEFINITE);
 			
+			// Adjust volume of the noisier audio clips
 			boost.setVolume(BOOSTVOLUME);
+			shooting.setVolume(SHOOTINGVOLUME);
+			ufosmall.setVolume(UFOSMALLVOLUME);
+			ufobig.setVolume(UFOBIGVOLUME);
+			teleport.setVolume(TELEPORTVOLUME);
 			
 			tracks.add(shooting);
 			tracks.add(smallexplosion);
@@ -129,7 +128,7 @@ public final class Audio {
 	 *            number of track to be played
 	 * @return AudioClip with that title
 	 */
-	public final AudioClip get(final int tracknumber) {
+	public AudioClip get(final int tracknumber) {
 		return tracks.get(tracknumber);
 	}
 
@@ -139,7 +138,7 @@ public final class Audio {
 	 * @param tracknumber
 	 *            number of track to be played
 	 */
-	public final void play(final int tracknumber) {
+	public void play(final int tracknumber) {
 		final AudioClip track = get(tracknumber);
 		if (!track.isPlaying()) {
 			track.play();
@@ -152,7 +151,7 @@ public final class Audio {
 	 * @param tracknumber
 	 *            number of track to be played
 	 */
-	public final void playMultiple(final int tracknumber) {
+	public void playMultiple(final int tracknumber) {
 		final AudioClip track = get(tracknumber);
 		track.play();
 	}
@@ -161,7 +160,7 @@ public final class Audio {
 	 * Get a track by title and stop it from playing.
 	 * @param tracknumber number of track to be stopped
 	 */
-	public final void stop(final int tracknumber) {
+	public void stop(final int tracknumber) {
 		if (get(tracknumber).isPlaying()) {
 			get(tracknumber).stop();
 		}
@@ -171,14 +170,14 @@ public final class Audio {
 	 * Pass the background track on to the appropriate class.
 	 * @param enemies amount of enemies in the game.
 	 */
-	public final void backgroundTrack(final int enemies) {
+	public void backgroundTrack(final int enemies) {
 		bgtrack.update(enemies);
 	}
 	
 	/**
 	 * Silence all currently playing tracks.
 	 */
-	public final void mute() {
+	public void mute() {
 		for (int i = 0; i < tracks.size(); i++) {
 			stop(i);
 		}

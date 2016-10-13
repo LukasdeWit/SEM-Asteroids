@@ -105,17 +105,17 @@ public class Asteroid extends AbstractEntity {
 				getThisGame().create(new Asteroid(getX(), getY(), (float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS, getThisGame()));
 			}
-			Audio.getInstance().play(Audio.LARGEEXPLOSION);
+			getThisGame().getAudio().playMultiple(Audio.LARGEEXPLOSION);
 			getThisGame().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
 				getThisGame().create(new Asteroid(getX(), getY(), (float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), SMALL_RADIUS, getThisGame()));
 			}
-			Audio.getInstance().play(Audio.MEDIUMEXPLOSION);
+			getThisGame().getAudio().playMultiple(Audio.MEDIUMEXPLOSION);
 			getThisGame().addScore(MEDIUM_SCORE);
 		} else {
-			Audio.getInstance().play(Audio.SMALLEXPLOSION);
+			getThisGame().getAudio().playMultiple(Audio.SMALLEXPLOSION);
 			getThisGame().addScore(SMALL_SCORE);
 		}
 		Particle.explosion(getX(), getY(), getThisGame());

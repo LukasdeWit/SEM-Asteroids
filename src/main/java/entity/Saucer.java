@@ -98,9 +98,9 @@ public class Saucer extends AbstractEntity {
 		changeDirection();
 		shoot();
 		if (isSmall()) {
-			Audio.getInstance().play(Audio.UFOSMALL);
+			getThisGame().getAudio().play(Audio.UFOSMALL);
 		} else {
-			Audio.getInstance().play(Audio.UFOBIG);
+			getThisGame().getAudio().play(Audio.UFOBIG);
 		}
 	}
 
@@ -233,9 +233,9 @@ public class Saucer extends AbstractEntity {
 		}
 		
 		if (isSmall()) {
-			Audio.getInstance().stop(Audio.UFOSMALL);
+			getThisGame().getAudio().stop(Audio.UFOSMALL);
 		} else {
-			Audio.getInstance().stop(Audio.UFOBIG);
+			getThisGame().getAudio().stop(Audio.UFOBIG);
 		}
 
 		getThisGame().addScore(points);

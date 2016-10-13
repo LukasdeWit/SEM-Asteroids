@@ -105,7 +105,7 @@ public class Player extends AbstractEntity {
 	public final void onHit() {		
 		if (shielding < 1) {
 			// boost sound will normally not stop if player dies mid-flight
-			Audio.getInstance().stop(Audio.BOOST);
+			getThisGame().getAudio().stop(Audio.BOOST);
 			lives--;
 			if (lives <= 0) {
 				// we are out of lives, call gameover
@@ -143,7 +143,7 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
-		Audio.getInstance().play(Audio.LIFEUP);
+		getThisGame().getAudio().play(Audio.LIFEUP);
 		if (lives == 1) {
 			respawnThePlayer();
 		}
@@ -184,9 +184,9 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
-			Audio.getInstance().play(Audio.BOOST);
+			getThisGame().getAudio().play(Audio.BOOST);
 		} else {
-			Audio.getInstance().stop(Audio.BOOST);
+			getThisGame().getAudio().stop(Audio.BOOST);
 		}
 
 		if (input.contains("DOWN") || input.contains("S")) {
@@ -318,7 +318,7 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
-		Audio.getInstance().play(Audio.TELEPORT);
+		getThisGame().getAudio().play(Audio.TELEPORT);
 		}
 	}
 
@@ -334,7 +334,7 @@ public class Player extends AbstractEntity {
 			}
 			lastShot = System.currentTimeMillis();
 			
-			Audio.getInstance().play(Audio.SHOOTING);
+			getThisGame().getAudio().playMultiple(Audio.SHOOTING);
 		}
 	}
 
