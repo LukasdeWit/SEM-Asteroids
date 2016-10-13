@@ -1,11 +1,11 @@
 package entity;
 
+import java.util.List;
+import java.util.Random;
+
 import display.DisplayEntity;
 import game.Game;
 import game.Logger;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is the player of the game.
@@ -43,6 +43,7 @@ public class Player extends AbstractEntity {
 	private boolean tripleShot;
 	private float bulletSize;
 	private int changeOfDying;
+	private String playerString;
 	
 	private static final float SPAWN_OFFSET = 40;
 	
@@ -67,6 +68,13 @@ public class Player extends AbstractEntity {
 		setRadius(RADIUS);
 		rotation = 0;
 		this.playerTwo = playerTwo;
+		playerString = "The Player";
+		if (thisGame.getGamestate().isCoop()) {
+			playerString = "Player 1";
+		}
+		if (playerTwo) {
+			playerString = "Player 2";
+		}
 		makeInvincible(INVINCIBILITY_START_TIME);
 		maxBullets = MAX_BULLETS;
 		fireRate = FIRE_RATE;
@@ -307,9 +315,9 @@ public class Player extends AbstractEntity {
 		final Random random = new Random();
 		if (random.nextInt(changeOfDying) == 0) {
 			onHit();
-			Logger.getInstance().log("Player died in hyperspace.");
+			Logger.getInstance().log(playerString + " died in hyperspace.");
 		} else {
-		Logger.getInstance().log("Player went into hyperspace.");
+		Logger.getInstance().log(playerString + " went into hyperspace.");
 		setX((float) (getThisGame().getScreenX() * Math.random()));
 		setY((float) (getThisGame().getScreenY() * Math.random()));
 		setDX(0);
@@ -359,12 +367,12 @@ public class Player extends AbstractEntity {
 			} else if (!invincible()) {
 				getThisGame().destroy(e2);
 				onHit();
-				Logger.getInstance().log("Player was hit by an asteroid.");
+				Logger.getInstance().log(playerString + " was hit by an asteroid.");
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			onHit();
-			Logger.getInstance().log("Player was hit by a bullet.");
+			Logger.getInstance().log(playerString + " was hit by a bullet.");
 		}
 	}
 
@@ -599,5 +607,12 @@ public class Player extends AbstractEntity {
 	 */
 	public final void setChangeOfDying(final int changeOfDying) {
 		this.changeOfDying = changeOfDying;
+	}
+	
+	/**
+	 * @return the Player String
+	 */
+	public final String getPlayerString() {
+		return playerString;
 	}
 }
