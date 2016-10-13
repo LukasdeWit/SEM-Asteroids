@@ -74,7 +74,7 @@ public class Saucer extends AbstractEntity {
 	}
 
 	/**
-	 * Set the direction of the Saucer, so change the dX and dY using direction.
+	 * Set the direction of the Saucer.
 	 *
 	 * @param direction - the direction in radians, 0 being right
 	 */
@@ -110,8 +110,8 @@ public class Saucer extends AbstractEntity {
 		} else {
 			if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 				if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
-	                final float shotDir = (float) (Math.random() * 2 * Math.PI);
-				final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
+					final float shotDir = (float) (Math.random() * 2 * Math.PI);
+					final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
 						(float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
 	                newBullet.setFriendly(false);
 	                getThisGame().create(newBullet);
@@ -222,7 +222,7 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		int points = BIG_SCORE;
-		if (getRadius() == SMALL_RADIUS) {
+		if (Float.compare(BIG_RADIUS, getRadius()) >= 0) {
 			points = SMALL_SCORE;
 		}
 		getThisGame().addScore(points);
@@ -241,7 +241,7 @@ public class Saucer extends AbstractEntity {
 	/**
 	 * @return the bigRadius
 	 */
-	public static final float getBigRadius() {
+	public static float getBigRadius() {
 		return BIG_RADIUS;
 	}
 
@@ -283,14 +283,14 @@ public class Saucer extends AbstractEntity {
 	/**
 	 * @return the smallScore
 	 */
-	public static final int getSmallScore() {
+	public static int getSmallScore() {
 		return SMALL_SCORE;
 	}
 
 	/**
 	 * @return the bigScore
 	 */
-	public static final int getBigScore() {
+	public static int getBigScore() {
 		return BIG_SCORE;
 	}
 }

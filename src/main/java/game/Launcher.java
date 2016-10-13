@@ -25,7 +25,7 @@ public class Launcher extends Application {
 	 * Time of one frame.
 	 */
 	private static final double FRAME_TIME = 0.017;
-	private static Group root = new Group();
+	private static final Group ROOT = new Group();
 
 	// Make a new Game
 	private final Game thisGame = new Game();
@@ -49,7 +49,7 @@ public class Launcher extends Application {
 		// set up the title
 		stage.setTitle("ASTEROIDS!");
 		// set up the scene
-		final Scene scene = new Scene(root, 500, 500, Color.BLACK);
+		final Scene scene = new Scene(ROOT, 500, 500, Color.BLACK);
 		stage.setScene(scene);
 		final List<String> input = getInput(scene);
 		// set up the timing control
@@ -110,7 +110,7 @@ public class Launcher extends Application {
 	 * @return the root
 	 */
 	public static Group getRoot() {
-		return root;
+		return ROOT;
 	}
 
 }

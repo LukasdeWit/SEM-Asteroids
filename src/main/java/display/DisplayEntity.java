@@ -325,6 +325,6 @@ public final class DisplayEntity {
 	 * @return the saucerShape
 	 */
 	public static double[][] getSaucerShape() {
-		return (double[][]) SAUCER_SHAPE.clone();
+		return SAUCER_SHAPE.clone();
 	}
 }

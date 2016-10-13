@@ -69,7 +69,7 @@ public class AsteroidTest {
 
 	@Test
 	public final void testUpdate() {
-		final List<String> input = new ArrayList<String>(0);
+		final List<String> input = new ArrayList<>(0);
 		asteroid.update(input);
 		assertEquals(asteroid.getX(), X_START + DX_START, 0);
 		assertEquals(asteroid.getY(), Y_START + DY_START, 0);
@@ -117,7 +117,7 @@ public class AsteroidTest {
 		asteroid.setShape(0);
 		asteroid.draw();
 		final int strokesInGroup = ((Polygon)Launcher.getRoot().getChildren().get(0)).getPoints().size();
-		final int strakesInShape = DisplayEntity.getAsteroidShapes()[0].length;
-		assertEquals(strokesInGroup, strakesInShape);
+		final int strokesInShape = DisplayEntity.getAsteroidShapes()[0].length;
+		assertEquals(strokesInGroup, strokesInShape);
 	}
 }

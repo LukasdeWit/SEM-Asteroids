@@ -16,17 +16,17 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Parameterized.class)
 public class DisplayUtilsTest {
 
-    private double[] target;
-    private double[] expected;
-    private DoubleFunction<Double> xFunction;
-    private DoubleFunction<Double> yFucntion;
+    private final double[] target;
+    private final double[] expected;
+    private final DoubleFunction<Double> xFunction;
+    private final DoubleFunction<Double> yFunction;
 
     public DisplayUtilsTest(final double[] target, final double[] expected, final DoubleFunction<Double> xFunction,
-                            final DoubleFunction<Double> yFucntion) {
+                            final DoubleFunction<Double> yFunction) {
         this.target = target;
         this.expected = expected;
         this.xFunction = xFunction;
-        this.yFucntion = yFucntion;
+        this.yFunction = yFunction;
     }
 
     @Parameterized.Parameters
@@ -51,7 +51,7 @@ public class DisplayUtilsTest {
 
     @Test
     public void translate() throws Exception {
-        assertTrue(Arrays.equals(expected, DisplayUtils.translate(xFunction, yFucntion, target)));
+        assertTrue(Arrays.equals(expected, DisplayUtils.translate(xFunction, yFunction, target)));
     }
 
     @Test(expected = NullPointerException.class)

@@ -154,12 +154,12 @@ public final class Game {
 			if (playerTwo == null) {
 				return;
 			}
-			DisplayText.livesTwo(playerTwo.getLives());
+			DisplayHud.lives(playerTwo.getLives(), playerTwo.isPlayerTwo());
 		}
 		if (player == null) {
 			return;
 		}
-		DisplayText.lives(player.getLives());
+		DisplayHud.lives(player.getLives(), player.isPlayerTwo());
 		
 	}
 

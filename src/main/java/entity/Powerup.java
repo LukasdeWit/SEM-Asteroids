@@ -196,21 +196,21 @@ public class Powerup extends AbstractEntity {
 	/**
 	 * @return the newBulletSize
 	 */
-	public static final float getNewBulletSize() {
+	public static float getNewBulletSize() {
 		return NEW_BULLET_SIZE;
 	}
 
 	/**
 	 * @return the newPiercingLevel
 	 */
-	public static final int getNewPiercingLevel() {
+	public static int getNewPiercingLevel() {
 		return NEW_PIERCING_LEVEL;
 	}
 
 	/**
 	 * @return the newFireRate
 	 */
-	public static final long getNewFireRate() {
+	public static long getNewFireRate() {
 		return NEW_FIRE_RATE;
 	}
 

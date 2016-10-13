@@ -107,10 +107,10 @@ public final class DisplayText {
 	}
 
 	/**
-	 * draw the pauze screen.
+	 * draw the pause screen.
 	 */
 	public static void pauseScreen() {
-		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "Pauze");
+		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "Pause");
 		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press p to start");
 	}
 

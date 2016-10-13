@@ -123,7 +123,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testUpdate() {
-		final List<String> input = new ArrayList<String>();	
+		final List<String> input = new ArrayList<>();
 		player.update(input);
 		assertEquals(X_START+DX_START,player.getX(),0);
 		assertEquals(Y_START+DY_START,player.getY(),0);

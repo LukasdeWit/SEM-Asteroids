@@ -1,11 +1,11 @@
 package entity;
 
-import java.util.List;
-import java.util.Random;
-
 import display.DisplayEntity;
 import game.Game;
 import game.Logger;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is the player of the game.
@@ -56,7 +56,7 @@ public class Player extends AbstractEntity {
 	* @param y         location of Player along the Y-axis.
 	* @param dX        velocity of Player along the X-axis.
 	* @param dY        velocity of Player along the Y-axis.
-	* @param playerTwo true if playertwo
+	* @param playerTwo whether this is player two or player one
 	* @param thisGame  the game this particle belongs to
 	*/
     public Player(final float x, final float y, final float dX, final float dY, final Game thisGame,

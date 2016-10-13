@@ -45,7 +45,7 @@ public class ParticleTest {
 
 	@Test
 	public void testUpdate1() {
-		final List<String> input = new ArrayList<String>(0);
+		final List<String> input = new ArrayList<>(0);
 		particle.update(input);
 		assertEquals(particle.getX(), X_START + DX_START, 0);
 		assertEquals(particle.getY(), Y_START + DY_START, 0);

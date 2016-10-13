@@ -14,7 +14,7 @@ public final class DisplayUtils {
 
     /**
      *  transform the given target array in the form (x,y,x,y,...) according to the given x function and y function.
-     *  the x funcion is applied to every x value (every uneven index) and the y function is applied to every
+     *  the x function is applied to every x value (every uneven index) and the y function is applied to every
      *  y value (every even index)
      * @param xFunction the function you want to apply to every x coord
      * @param yFunction the function you want to apply to every y coord
