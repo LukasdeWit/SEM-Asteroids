@@ -222,7 +222,7 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		int points = BIG_SCORE;
-		if (Float.compare(BIG_RADIUS, getRadius()) >= 0) {
+		if (Float.compare(SMALL_RADIUS, getRadius()) >= 0) {
 			points = SMALL_SCORE;
 		}
 		getThisGame().addScore(points);
