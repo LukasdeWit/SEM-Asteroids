@@ -66,13 +66,10 @@ public final class Gamestate {
 			DisplayText.highscoreScreen(thisGame.getHighscore());
 			break;
 		case STATE_PAUSE_SCREEN:
+		default:
 			DisplayText.pauseScreen();
 			pauseScreen(input);
 			break;
-		default:
-			mode = MODE_NONE;
-			state = STATE_START_SCREEN;
-			Logger.getInstance().log("ERROR | Gamestate not correct.");
 		}
 	}
 
@@ -201,5 +198,40 @@ public final class Gamestate {
 	 */
 	public boolean isCoop() {
 		return getMode() == getModeCoop();
+	}
+
+	/**
+	 * @return the stateGame
+	 */
+	public static int getStateGame() {
+		return STATE_GAME;
+	}
+
+	/**
+	 * @return the statePauseScreen
+	 */
+	public static int getStatePauseScreen() {
+		return STATE_PAUSE_SCREEN;
+	}
+
+	/**
+	 * @return the modeNone
+	 */
+	public static int getModeNone() {
+		return MODE_NONE;
+	}
+
+	/**
+	 * @param restartTime the restartTime to set
+	 */
+	public void setRestartTime(final long restartTime) {
+		this.restartTime = restartTime;
+	}
+
+	/**
+	 * @param pauseTime the pauseTime to set
+	 */
+	public void setPauseTime(final long pauseTime) {
+		this.pauseTime = pauseTime;
 	}
 }

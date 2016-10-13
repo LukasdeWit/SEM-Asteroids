@@ -1,14 +1,19 @@
 package entity;
 
-import game.Game;
-import game.Launcher;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import org.junit.Before;
+import org.junit.Test;
+
+import display.DisplayEntity;
+import game.Game;
+import game.Launcher;
+import javafx.scene.Group;
 
 /**
  * Tests for Saucer.
@@ -27,10 +32,13 @@ public class SaucerTest {
 	@Before
 	public final void setUp() {
 		thisGame = new Game();
+		thisGame.setPlayer(null);
+		thisGame.setScore(0);
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		saucer = new Saucer(X_START, Y_START, DX_START, DY_START, thisGame);
+		saucer.setRadius(Saucer.getBigRadius());
 	}
 	
 	@Test
@@ -61,7 +69,163 @@ public class SaucerTest {
 	}
 	
 	@Test
-	public final void testShoot(){
-		//LATER.
+	public final void testShoot1(){
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		thisGame.setPlayer(p);
+		saucer.update(null);
+		assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
+	}
+	
+	@Test
+	public final void testShoot2(){
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		p.setInvincibleStart(0);
+		thisGame.setPlayer(p);
+		saucer.setShotTime(0);
+		saucer.update(null);
+		assertEquals(1, thisGame.getCreateList().size(), 0);
+		final AbstractEntity b = thisGame.getCreateList().get(0);
+		assertTrue(b instanceof Bullet);
+		assertFalse(((Bullet) b).isFriendly());
+	}
+	
+	@Test
+	public final void testShoot3(){
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		p.setInvincibleStart(0);
+		thisGame.setPlayer(p);
+		saucer.update(null);
+		assertEquals(0, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public final void testShoot4(){
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		p.setInvincibleStart(0);
+		thisGame.setPlayer(p);
+		saucer.setRadius(Saucer.getSmallRadius());
+		saucer.setShotTime(0);
+		saucer.update(null);
+		assertEquals(1, thisGame.getCreateList().size(), 0);
+		final AbstractEntity b = thisGame.getCreateList().get(0);
+		assertTrue(b instanceof Bullet);
+		assertFalse(((Bullet) b).isFriendly());
+	}
+	
+	@Test
+	public final void testShoot5(){
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		p.setInvincibleStart(0);
+		thisGame.setPlayer(p);
+		saucer.setRadius(Saucer.getSmallRadius());
+		saucer.update(null);
+		assertEquals(0, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public final void testSmallShotDir(){
+		final Player p = new Player(Game.getCanvasSize() - X_START, Y_START, DX_START, DY_START, thisGame, false);
+		p.setInvincibleStart(0);
+		thisGame.setPlayer(p);
+		thisGame.setScore(120000);
+		saucer.setRadius(Saucer.getSmallRadius());
+		saucer.setShotTime(0);
+		saucer.update(null);
+		final Bullet b = (Bullet) thisGame.getCreateList().get(0);
+		assertEquals(4, b.getDX(), 0.1);
+		assertEquals(0, b.getDY(), 0.1);
+	}
+	
+	@Test
+	public final void testSmallShotTime(){
+		final Player p = new Player(Game.getCanvasSize() - X_START, Y_START, DX_START, DY_START, thisGame, false);
+		p.setInvincibleStart(0);
+		thisGame.setPlayer(p);
+		thisGame.setScore(50000);
+		saucer.setRadius(Saucer.getSmallRadius());
+		saucer.setShotTime(0);
+		saucer.update(null);
+		final Bullet b = (Bullet) thisGame.getCreateList().get(0);
+		assertEquals(4, b.getDX(), 4);
+		assertEquals(0, b.getDY(), 4);
+	}
+	
+	@Test
+	public final void testCheckEnd1(){
+		saucer.setX(Game.getCanvasSize() + 10);
+		saucer.update(null);
+		assertTrue(thisGame.getDestroyList().contains(saucer));
+	}
+	
+	@Test
+	public final void testCheckEnd2(){
+		saucer.setX(-10);
+		saucer.update(null);
+		assertTrue(thisGame.getDestroyList().contains(saucer));
+	}
+	
+	@Test
+	public final void testChangeDirection(){
+		saucer.setDirChangeTime(0);
+		saucer.update(null);
+		assertEquals(System.currentTimeMillis(), saucer.getDirChangeTime(), 0);
+	}
+	
+	@Test
+	public final void testDraw(){
+		saucer.draw();
+		final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
+		final int strokesInShape = DisplayEntity.getSaucerShape().length;
+		assertEquals(strokesInShape, strokesInGroup, 0);
+	}
+	
+	@Test
+	public final void testCollide(){
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		p.setInvincibleStart(0);
+		saucer.collide(p);
+		assertTrue(thisGame.getDestroyList().contains(saucer));
+	}
+	
+	@Test
+	public final void testCollide2(){
+		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		saucer.collide(p);
+		assertFalse(thisGame.getDestroyList().contains(saucer));
+	}
+	
+	@Test
+	public final void testCollide3(){
+		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		saucer.collide(b);
+		assertEquals(2, thisGame.getDestroyList().size(), 0);
+	}
+	
+	@Test
+	public final void testCollide4(){
+		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		b.setFriendly(false);
+		saucer.collide(b);
+		assertFalse(thisGame.getDestroyList().contains(saucer));
+	}
+	
+	@Test
+	public final void testCollide5(){
+		final Asteroid a = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		saucer.collide(a);
+		assertEquals(2, thisGame.getDestroyList().size(), 0);
+	}
+	
+	@Test
+	public final void testOnDeath(){
+		saucer.setRadius(Saucer.getSmallRadius());
+		saucer.onDeath();
+		assertEquals(Saucer.getSmallScore(), thisGame.getScore(), 0);
+	}
+	
+	@Test
+	public final void testOnDeath2(){
+		saucer.onDeath();
+		assertEquals(Saucer.getBigScore(), thisGame.getScore(), 0);
 	}
 }

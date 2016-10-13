@@ -30,7 +30,7 @@ import javafx.scene.shape.Rectangle;
 public final class Game {
 	private Player player;
 	private Player playerTwo;
-	private final List<AbstractEntity> entities;
+	private List<AbstractEntity> entities;
 	private final Random random;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
@@ -61,15 +61,38 @@ public final class Game {
 	}
 	
 	/**
+	 * Starts or restarts the game, with initial entities.
+	 */
+	public void startGame() {
+		gamestate.start();
+		entities.clear();
+		if (gamestate.isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
+			entities.add(player);
+			entities.add(playerTwo);
+		} else {
+			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
+			entities.add(player);
+		} 
+		if (this.score > highscore) {
+			highscore = this.score;
+			writeHighscore();
+		}
+		score = 0;
+		spawner.reset();
+		Logger.getInstance().log("Game started.");
+	}
+	
+	/**
 	 * reads the highscore from file in resources folder.
 	 * @return the highscore
 	 */
 	private long readHighscore() {
 		long currentHighscore = 0;
 		final String filePath = "src/main/resources/highscore.txt";
-		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(filePath),
-						StandardCharsets.UTF_8))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(
+				new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 			String sCurrentLine;
 			while ((sCurrentLine = br.readLine()) != null) {
 				currentHighscore = Long.parseLong(sCurrentLine);
@@ -97,30 +120,6 @@ public final class Game {
 	}
 	
 	/**
-	 * Starts or restarts the game, with initial entities.
-	 */
-	public void startGame() {
-		gamestate.start();
-		entities.clear();
-		if (gamestate.isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
-			entities.add(player);
-			entities.add(playerTwo);
-		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
-			entities.add(player);
-		} 
-		if (this.score > highscore) {
-			highscore = this.score;
-			writeHighscore();
-		}
-		score = 0;
-
-		Logger.getInstance().log("Game started.");
-	}
-	
-	/**
 	 * update runs every game tick and updates all necessary entities.
 	 * 
 	 * @param input
@@ -131,8 +130,6 @@ public final class Game {
 		final Rectangle r = new Rectangle(0, 0, screenX, screenY);
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
-		//root.setFill(Color.BLACK);
-		//root.fillRect(0, 0, screenX, screenY);
 		gamestate.update(input);
 		DisplayText.wave(spawner.getWave());
 	}	
@@ -159,7 +156,13 @@ public final class Game {
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
 		if (gamestate.isCoop()) {
+			if (playerTwo == null) {
+				return;
+			}
 			DisplayText.livesTwo(playerTwo.getLives());
+		}
+		if (player == null) {
+			return;
 		}
 		DisplayText.lives(player.getLives());
 		
@@ -239,6 +242,7 @@ public final class Game {
 	 */
 	public void addScore(final int score) {
 		if (player == null) {
+			this.score += score;
 			return;
 		}
 		if (player.isAlive() || gamestate.isCoop() && playerTwo.isAlive()) {
@@ -317,6 +321,13 @@ public final class Game {
 	}
 
 	/**
+	 * @param score the score to set
+	 */
+	public void setScore(final long score) {
+		this.score = score;
+	}
+
+	/**
 	 * Player getter.
 	 * @return the player
 	 */
@@ -325,10 +336,24 @@ public final class Game {
 	}
 
 	/**
+	 * @param player the player to set
+	 */
+	public void setPlayer(final Player player) {
+		this.player = player;
+	}
+
+	/**
 	 * @return the playerTwo
 	 */
 	public Optional<Player> getPlayerTwo() {
 		return Optional.of(playerTwo);
+	}
+
+	/**
+	 * @param playerTwo the playerTwo to set
+	 */
+	public void setPlayerTwo(final Player playerTwo) {
+		this.playerTwo = playerTwo;
 	}
 
 	/**
@@ -344,6 +369,13 @@ public final class Game {
 	 */
 	public long getHighscore() {
 		return highscore;
+	}
+
+	/**
+	 * @param highscore the highscore to set
+	 */
+	public void setHighscore(final long highscore) {
+		this.highscore = highscore;
 	}
 
 	/**
@@ -373,10 +405,32 @@ public final class Game {
 	public void setCreateList(final List<AbstractEntity> createList) {
 		this.createList = createList;
 	}
+
+	/**
+	 * @param entities the entities to set
+	 */
+	public void setEntities(final List<AbstractEntity> entities) {
+		this.entities = entities;
+	}
+
+	/**
+	 * @return the entities
+	 */
+	public List<AbstractEntity> getEntities() {
+		return entities;
+	}	
+	
 	/**
 	 * @return the gamestate
 	 */
 	public Gamestate getGamestate() {
 		return gamestate;
+	}
+
+	/**
+	 * @return the spawner
+	 */
+	public Spawner getSpawner() {
+		return spawner;
 	}
 }
