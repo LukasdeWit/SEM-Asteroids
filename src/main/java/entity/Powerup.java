@@ -30,8 +30,7 @@ public class Powerup extends AbstractEntity {
 	private static final int BULLET_SIZE = 2;
 	private static final int TRIPLE_SHOT = 3;
 	private static final int PIERCING = 4;
-	//default
-	//private static final int MINIGUN = 5;
+	private static final int MINIGUN = 5;
 	
 	private static final String[] TYPE_STRING = {
 			"an extra life", 
@@ -103,7 +102,8 @@ public class Powerup extends AbstractEntity {
 			case PIERCING:
 				p.setPiercing(NEW_PIERCING_LEVEL);
 				break;
-			default: //minigun
+			case MINIGUN:
+			default:
 				p.setFireRate(NEW_FIRE_RATE);
 				p.setMaxBullets(MINIGUN_BULLETS);
 				break;
@@ -155,7 +155,8 @@ public class Powerup extends AbstractEntity {
 			case PIERCING:
 				player.setPiercing(1);
 				break;
-			default: //minigun
+			case MINIGUN:
+			default:
 				player.setFireRate(Player.getFireRate());
 				player.setMaxBullets(Player.getMaxBullets());
 				break;
