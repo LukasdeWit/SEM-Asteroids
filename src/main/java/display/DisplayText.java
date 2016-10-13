@@ -253,6 +253,7 @@ public final class DisplayText {
 	private static final float PRESS_START_TEXT_X = 100;
 	private static final float PRESS_START_TEXT_Y = 250;
 	private static final float PRESS_START_TEXT_COOP_Y = 280;
+	private static final float PRESS_START_TEXT_BOSS_Y = 310;
 	private static final float CONGRATULATIONS_TEXT_X = 80;
 	private static final float CONGRATULATIONS_TEXT_Y = 100;
 	private static final float PRESS_R_TEXT_X = 80;
@@ -319,6 +320,8 @@ public final class DisplayText {
 				"press x for Arcade Mode");
 		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_COOP_Y, SMALL_TEXT_SIZE, 
 				"press c for Coop");
+		draw(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSS_Y, SMALL_TEXT_SIZE, 
+				"press b for Boss Mode");
 	}
 	
 	/**

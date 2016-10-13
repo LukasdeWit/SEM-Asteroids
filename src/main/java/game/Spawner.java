@@ -1,6 +1,7 @@
 package game;
 
 import entity.Asteroid;
+import entity.BossAngryAsteroid;
 import entity.Powerup;
 import entity.Saucer;
 
@@ -44,33 +45,38 @@ public final class Spawner {
 	 * This method is called every tick.
 	 */
 	public void update() {
-		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
-			spawnSaucer();
-			Logger.getInstance().log("Saucer was spawned");
-			startSaucerTime = System.currentTimeMillis();
-		}
-		if (System.currentTimeMillis() - startPowerupTime > POWERUP_TIME) {
-			spawnPowerup();
-			Logger.getInstance().log("Powerup was spawned");
-			startPowerupTime = System.currentTimeMillis();
-		}
-		if (thisGame.enemies() != 0) {
-			startRest = System.currentTimeMillis();
-		}
-		if (startRest == 0) {
-			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
-			spawnAsteroid(STARTING_ASTEROIDS);
-			startRest = System.currentTimeMillis();
-			wave++;
-		} else if (System.currentTimeMillis() - startRest > REST) {
-			int extra = wave * 2;
-			if (extra > MAX_EXTRA) {
-				extra = MAX_EXTRA;
+		if((thisGame.getGamestate().getMode() != 3)){
+			if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
+				spawnSaucer();
+				Logger.getInstance().log("Saucer was spawned");
+				startSaucerTime = System.currentTimeMillis();
 			}
-			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
-			spawnAsteroid(STARTING_ASTEROIDS + extra);
-			wave++;
-			startRest = System.currentTimeMillis();
+			if (System.currentTimeMillis() - startPowerupTime > POWERUP_TIME) {
+				spawnPowerup();
+				Logger.getInstance().log("Powerup was spawned");
+				startPowerupTime = System.currentTimeMillis();
+			}
+			if (thisGame.enemies() != 0) {
+				startRest = System.currentTimeMillis();
+			}
+			if (startRest == 0) {
+				Logger.getInstance().log("Wave: " + (wave + 1) + ".");
+				spawnAsteroid(STARTING_ASTEROIDS);
+				startRest = System.currentTimeMillis();
+				wave++;
+			} else if (System.currentTimeMillis() - startRest > REST) {
+				int extra = wave * 2;
+				if (extra > MAX_EXTRA) {
+					extra = MAX_EXTRA;
+				}
+				Logger.getInstance().log("Wave: " + (wave + 1) + ".");
+				spawnAsteroid(STARTING_ASTEROIDS + extra);
+				wave++;
+				startRest = System.currentTimeMillis();
+			}
+		} else if ((thisGame.enemies() < 1)
+				&& (System.currentTimeMillis() - startRest > REST)) {
+			spawnBossAngryAsteroid();
 		}
 	}
 	
@@ -128,6 +134,17 @@ public final class Spawner {
 		}
 		Logger.getInstance().log(times + " asteroids were spawned.");
 	}
+	
+	/**
+	 * 
+	 */
+	private void spawnBossAngryAsteroid() {
+		final BossAngryAsteroid newAngryAsteroid =
+				new BossAngryAsteroid(thisGame.getRandom().nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
+				* thisGame.getScreenY(), 0, 0, thisGame);
+		thisGame.create(newAngryAsteroid);
+	}
 
 	/**
 	 * reset.
@@ -147,10 +164,18 @@ public final class Spawner {
 	}
 
 	/**
-	 * getter for wave.
+	 * Getter for wave.
 	 * @return the wave
 	 */
 	public int getWave() {
 		return wave;
+	}
+	
+	/**
+	 * Setter for startRest
+	 * @param startRest
+	 */
+	public void setStartRest(long startRest) {
+		this.startRest = startRest;
 	}
 }

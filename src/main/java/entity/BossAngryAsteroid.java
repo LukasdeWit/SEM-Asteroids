@@ -192,6 +192,7 @@ public class BossAngryAsteroid extends AbstractEntity {
 
 	@Override
 	public final void onDeath() {
+		getThisGame().getSpawner().setStartRest(System.currentTimeMillis());
 		getThisGame().addScore(SCORE);
 		Particle.explosion(getX(), getY(), getThisGame());
 	}

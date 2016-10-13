@@ -15,6 +15,7 @@ import java.util.Random;
 import display.DisplayText;
 import entity.AbstractEntity;
 import entity.Asteroid;
+import entity.BossAngryAsteroid;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
@@ -134,7 +135,7 @@ public final class Game {
 		//root.setFill(Color.BLACK);
 		//root.fillRect(0, 0, screenX, screenY);
 		gamestate.update(input);
-		DisplayText.wave(spawner.getWave());
+		DisplayText.wave(getSpawner().getWave());
 	}	
 	
 	/**
@@ -149,7 +150,7 @@ public final class Game {
 			checkCollision(e);
 			e.draw();
 		}
-		spawner.update();
+		getSpawner().update();
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
@@ -277,7 +278,7 @@ public final class Game {
 	public int enemies() {
 		int enemies = 0;
 		for (final AbstractEntity entity : entities) {
-			if (entity instanceof Asteroid || entity instanceof Saucer) {
+			if (entity instanceof Asteroid || entity instanceof Saucer || entity instanceof BossAngryAsteroid) {
 				enemies++;
 			}
 		}
@@ -373,10 +374,18 @@ public final class Game {
 	public void setCreateList(final List<AbstractEntity> createList) {
 		this.createList = createList;
 	}
+	
 	/**
 	 * @return the gamestate
 	 */
 	public Gamestate getGamestate() {
 		return gamestate;
+	}
+	
+	/**
+	 * @return the spawner 
+	 */
+	public Spawner getSpawner() {
+		return spawner;
 	}
 }
