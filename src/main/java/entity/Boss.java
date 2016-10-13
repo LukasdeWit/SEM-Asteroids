@@ -3,6 +3,7 @@ package entity;
 import java.util.List;
 import java.util.Random;
 
+import display.DisplayEntity;
 import game.Game;
 import game.Logger;
 
@@ -64,9 +65,9 @@ public class Boss extends AbstractEntity {
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
-		checkEdge();
+		checkEdgeX();
+		checkEdgeY();
 		changeDirection();
-		wrapAround();
 		shoot();
 	}
 
@@ -106,11 +107,23 @@ public class Boss extends AbstractEntity {
 
 	/**
 	 * Causes the BossAngryAsteroid to turn around when it reaches the edge of
-	 * the screen.
+	 * the screen in the X-direction.
 	 */
-	public final void checkEdge() {
-		if (getX() > getThisGame().getScreenX() || getX() < 0) {
+	public final void checkEdgeX() {
+		if (getX() > getThisGame().getScreenX() && getDX() > 0 
+				|| getX() < 0 && getDX() < 0) {
 			setDX(-getDX());
+		}
+	}
+	
+	/**
+	 * Causes the BossAngryAsteroid to turn around when it reaches the edge of
+	 * the screen in the Y-direction.
+	 */
+	public final void checkEdgeY() {
+		if (getY() > getThisGame().getScreenY() && getDY() > 0 
+				|| getY() < 0 && getDY() < 0) {
+			setDY(-getDY());
 		}
 	}
 
@@ -171,22 +184,22 @@ public class Boss extends AbstractEntity {
 	}
 
 	@Override
-	public void draw() {
-		// To be implemented
+	public final void draw() {
+		DisplayEntity.boss(this);
 	}
 
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && !((Player) e2).invincible()) {
 			((Player) e2).onHit();
-			Logger.getInstance().log("Player hit an Angry Asteroid Boss.");
+			Logger.getInstance().log("Player hit a Boss.");
 		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			currentLives--;
 			if (currentLives < 1) {
 				getThisGame().destroy(this);
 			}
-			Logger.getInstance().log("Angry Asteroid Boss was hit.");
+			Logger.getInstance().log("Boss was hit.");
 		}
 	}
 
