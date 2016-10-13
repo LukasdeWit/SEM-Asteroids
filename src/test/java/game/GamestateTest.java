@@ -1,15 +1,13 @@
 package game;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import entity.AbstractEntity;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -21,7 +19,7 @@ public class GamestateTest {
 
 	private final Game thisGame = new Game();
 	private final Gamestate gamestate = thisGame.getGamestate();
-	private final List<String> input = new ArrayList<String>();
+	private final List<String> input = new ArrayList<>();
 
 	@Before
 	public final void setUp() {
@@ -31,10 +29,10 @@ public class GamestateTest {
 		gamestate.setState(Gamestate.getStateStartScreen());
 		thisGame.setScore(0);
 		thisGame.setHighscore(0);
-		thisGame.setEntities(new ArrayList<AbstractEntity>());
+		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		thisGame.setDestroyList(new ArrayList<AbstractEntity>());
-		thisGame.setCreateList(new ArrayList<AbstractEntity>());
+		thisGame.setDestroyList(new ArrayList<>());
+		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
 	}

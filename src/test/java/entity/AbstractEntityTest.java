@@ -1,16 +1,13 @@
 package entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-
+import game.Game;
+import game.Launcher;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.Game;
-import game.Launcher;
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 
 /**
@@ -18,7 +15,7 @@ import game.Launcher;
  * @author Kibo
  *
  */
-public class AbstrEntityTest {
+public class AbstractEntityTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
@@ -30,8 +27,8 @@ public class AbstrEntityTest {
 	@Before
 	public final void setUp() {
 		thisGame = new Game();
-		thisGame.setCreateList(new ArrayList<AbstractEntity>());
-		thisGame.setDestroyList(new ArrayList<AbstractEntity>());
+		thisGame.setCreateList(new ArrayList<>());
+		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		e = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 	}

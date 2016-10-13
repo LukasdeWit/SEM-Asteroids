@@ -5,6 +5,7 @@ import game.Game;
 import game.Gamestate;
 import game.Launcher;
 import javafx.scene.Group;
+import javafx.scene.shape.Polygon;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -122,7 +123,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testUpdate() {
-		final List<String> input = new ArrayList<String>();	
+		final List<String> input = new ArrayList<>();
 		player.update(input);
 		assertEquals(X_START+DX_START,player.getX(),0);
 		assertEquals(Y_START+DY_START,player.getY(),0);
@@ -375,7 +376,8 @@ public class PlayerTest {
 	@Test
 	public void testDraw(){
 		player.draw();
-		final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
+		final int strokesInGroup = ((Polygon) ((Group) Launcher.getRoot().getChildren().get(0))
+				.getChildren().get(0)).getPoints().size();
 		final int strokesInShape = DisplayEntity.getPlayerOneLines().length;
 		assertEquals(strokesInShape, strokesInGroup, 0);
 	}

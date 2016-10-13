@@ -1,21 +1,15 @@
 package game;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import entity.*;
+import javafx.scene.shape.Rectangle;
 import org.junit.Before;
 import org.junit.Test;
 
-import entity.AbstractEntity;
-import entity.Asteroid;
-import entity.Bullet;
-import entity.Player;
-import entity.Saucer;
-import javafx.scene.shape.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -27,17 +21,17 @@ public class GameTest {
 
 	private final Game thisGame = new Game();
 	private final Gamestate gamestate = thisGame.getGamestate();
-	private final List<String> noInput = new ArrayList<String>();
+	private final List<String> noInput = new ArrayList<>();
 
 	@Before
 	public final void setUp() {
 		gamestate.setMode(Gamestate.getModeArcade());
 		thisGame.setScore(0);
 		thisGame.setHighscore(0);
-		thisGame.setEntities(new ArrayList<AbstractEntity>());
+		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		thisGame.setDestroyList(new ArrayList<AbstractEntity>());
-		thisGame.setCreateList(new ArrayList<AbstractEntity>());
+		thisGame.setDestroyList(new ArrayList<>());
+		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
 	}
@@ -131,7 +125,7 @@ public class GameTest {
 		assertEquals(0, thisGame.getDestroyList().size(), 0);
 	}
 
-	private final void addToEntities(final AbstractEntity a) {
+	private void addToEntities(final AbstractEntity a) {
 		final List<AbstractEntity> entities = thisGame.getEntities();
 		entities.add(a);
 		thisGame.setEntities(entities);
@@ -320,6 +314,6 @@ public class GameTest {
 	
 	@Test
 	public final void testGetters(){
-		assertTrue(thisGame.getRandom() instanceof Random);
+		assertTrue(thisGame.getRandom() != null);
 	}
 }

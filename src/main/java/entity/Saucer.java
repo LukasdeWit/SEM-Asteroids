@@ -15,16 +15,16 @@ public class Saucer extends AbstractEntity {
 	private int toRight;
 	private final Random random;
 	private long dirChangeTime;
-	private long shotTime;	
-	
+	private long shotTime;
+
 	private static final float SMALL_RADIUS = 5;
 	private static final float BIG_RADIUS = 10;
-	
+
 	private static final double PATHS = 3;
 	private static final double PATH_ANGLE = Math.PI / 4;
 	private static final float BULLET_SPEED = 4;
 	private static final long CHANGE_DIR_TIME = 2000;
-	
+
 	private static final int BIG_SCORE = 200;
 	private static final int SMALL_SCORE = 1000;
 	private static final long SHOT_TIME = 1000;
@@ -33,15 +33,14 @@ public class Saucer extends AbstractEntity {
 
 	/**
 	 * Constructor for Saucer class.
-	 * 
-	 * @param x position of Saucer along the X-axis
-	 * @param y position of Saucer along the Y-axis
-	 * @param dX velocity of Saucer along the X-axis
-	 * @param dY velocity of Saucer along the Y-axis
+	 *
+	 * @param x        position of Saucer along the X-axis
+	 * @param y        position of Saucer along the Y-axis
+	 * @param dX       velocity of Saucer along the X-axis
+	 * @param dY       velocity of Saucer along the Y-axis
 	 * @param thisGame the game this particle belongs to
 	 */
-	public Saucer(final float x, final float y,
-			final float dX, final float dY, final Game thisGame) {
+	public Saucer(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		random = new Random();
 		setRadius(BIG_RADIUS);
@@ -56,9 +55,9 @@ public class Saucer extends AbstractEntity {
 
 	/**
 	 * Set Saucer path.
-	 * 
+	 *
 	 * @param toRight - Direction of Saucer
-	 * @param path - Low, mid or high path
+	 * @param path    - Low, mid or high path
 	 */
 	public final void setPath(final int toRight, final int path) {
 		this.toRight = toRight;
@@ -67,14 +66,16 @@ public class Saucer extends AbstractEntity {
 
 	/**
 	 * Set Saucer path.
+	 *
 	 * @param path - Low, mid or high path
 	 */
 	public final void setPath(final int path) {
 		setPath(toRight, path);
 	}
-	
+
 	/**
-	 * Set the direction of the Saucer, so change the dX and dY using direction.
+	 * Set the direction of the Saucer.
+	 *
 	 * @param direction - the direction in radians, 0 being right
 	 */
 	public final void setDirection(final float direction) {
@@ -84,7 +85,8 @@ public class Saucer extends AbstractEntity {
 
 	/**
 	 * Calculate new position of UFO.
-	 * @param input - the pressed keys
+	 *
+	 * @param input the pressed keys
 	 */
 	@Override
 	public final void update(final List<String> input) {
@@ -108,10 +110,9 @@ public class Saucer extends AbstractEntity {
 		} else {
 			if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 				if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
-	                final float shotDir = (float) (Math.random() * 2 * Math.PI);
-	                final Bullet newBullet = new Bullet(getX(), getY(),
-	                        (float) Math.cos(shotDir) * BULLET_SPEED,
-	                        (float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
+					final float shotDir = (float) (Math.random() * 2 * Math.PI);
+					final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
+						(float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
 	                newBullet.setFriendly(false);
 	                getThisGame().create(newBullet);
 	                shotTime = System.currentTimeMillis();
@@ -119,31 +120,30 @@ public class Saucer extends AbstractEntity {
             } else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
                 final float shotDir = smallShotDir();
 
-                final Bullet newBullet = new Bullet(getX(), getY(),
-                        (float) Math.cos(shotDir) * BULLET_SPEED,
-                        (float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
-                newBullet.setFriendly(false);
-                getThisGame().create(newBullet);
-                shotTime = System.currentTimeMillis();
-            }
+				final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
+						(float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
+				newBullet.setFriendly(false);
+				getThisGame().create(newBullet);
+				shotTime = System.currentTimeMillis();
+			}
 		}
 	}
 
 	/**
 	 * generates the shot direction of small saucer.
+	 *
 	 * @return direction in radians.
 	 */
 	private float smallShotDir() {
 		final float playerX = getThisGame().getPlayer().getX();
 		final float playerY = getThisGame().getPlayer().getY();
-		float accuracy = getThisGame().getScore()
-				/ (float) Spawner.getDifficultyStep();
+		float accuracy = getThisGame().getScore() / (float) Spawner.getDifficultyStep();
 		if (accuracy > MAX_ACCURACY) {
 			accuracy = MAX_ACCURACY;
 		}
-			//0 is completely random, 10 is perfect.
+		//0 is completely random, 10 is perfect.
 		final float randomRange = (float) (Math.PI * ((MAX_ACCURACY - accuracy) / MAX_ACCURACY) * Math.random());
-			//The angle of error.
+		//The angle of error.
 		float straightDir;
 		if (playerX > getX()) {
 			straightDir = (float) Math.atan((playerY - getY()) / (playerX - getX()));
@@ -152,18 +152,18 @@ public class Saucer extends AbstractEntity {
 		}
 			//Straight direction from saucer to player in radians.
 		final float errorRight = (float) (random.nextInt(2) * 2 - 1);
-			//-1 is error left, 1 is error right.
+		//-1 is error left, 1 is error right.
 		return straightDir + errorRight * randomRange;
 	}
 
 	/**
 	 * The time between shots of the small Saucer,
 	 * becomes more smaller when score is higher.
+	 *
 	 * @return shot time of small saucer
 	 */
 	private long smallShotTime() {
-		final long score =
-				getThisGame().getScore() / Spawner.getDifficultyStep();
+		final long score = getThisGame().getScore() / Spawner.getDifficultyStep();
 		if (score == 0) {
 			return SHOT_TIME;
 		} else if (score <= SHOT_TIME / (2 * LESS_SHOT)) {
@@ -209,8 +209,7 @@ public class Saucer extends AbstractEntity {
 			((Player) e2).onHit();
 			getThisGame().destroy(this);
 			Logger.getInstance().log("Player was hit by a saucer.");
-		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()
-				|| e2 instanceof Asteroid) {
+		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly() || e2 instanceof Asteroid) {
 			getThisGame().destroy(e2);
 			getThisGame().destroy(this);
 			Logger.getInstance().log("Saucer was hit.");
@@ -223,15 +222,16 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		int points = BIG_SCORE;
-		if (getRadius() == SMALL_RADIUS) {
+		if (Float.compare(SMALL_RADIUS, getRadius()) >= 0) {
 			points = SMALL_SCORE;
 		}
 		getThisGame().addScore(points);
 		Particle.explosion(getX(), getY(), getThisGame());
 	}
-	
+
 	/**
 	 * Getter for small radius.
+	 *
 	 * @return small saucer radius
 	 */
 	public static float getSmallRadius() {
@@ -241,7 +241,7 @@ public class Saucer extends AbstractEntity {
 	/**
 	 * @return the bigRadius
 	 */
-	public static final float getBigRadius() {
+	public static float getBigRadius() {
 		return BIG_RADIUS;
 	}
 
@@ -283,14 +283,14 @@ public class Saucer extends AbstractEntity {
 	/**
 	 * @return the smallScore
 	 */
-	public static final int getSmallScore() {
+	public static int getSmallScore() {
 		return SMALL_SCORE;
 	}
 
 	/**
 	 * @return the bigScore
 	 */
-	public static final int getBigScore() {
+	public static int getBigScore() {
 		return BIG_SCORE;
 	}
 }

@@ -1,13 +1,12 @@
 package game;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
+import entity.Saucer;
 import org.junit.Before;
 import org.junit.Test;
 
-import entity.Saucer;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -57,7 +56,7 @@ public class SpawnerTest {
 		spawner.setStartRest(System.currentTimeMillis());
 		thisGame.setScore(1000000);
 		spawner.update();
-		assertEquals(Saucer.getSmallRadius(), ((Saucer) thisGame.getCreateList().get(0)).getRadius(), 0);
+		assertEquals(Saucer.getSmallRadius(), thisGame.getCreateList().get(0).getRadius(), 0);
 	}
 	
 	@Test
@@ -66,14 +65,13 @@ public class SpawnerTest {
 		spawner.setStartRest(System.currentTimeMillis());
 		thisGame.setScore(50000);
 		spawner.update();
-		assertEquals(Saucer.getSmallRadius(), ((Saucer) thisGame.getCreateList().get(0)).getRadius(), 5);
+		assertEquals(Saucer.getSmallRadius(), thisGame.getCreateList().get(0).getRadius(), 5);
 	}
 	
 	@Test
 	public final void testReset(){
 		spawner.setWave(12);
 		spawner.reset();
-		Spawner.getDifficultyStep();
 		assertEquals(0, spawner.getWave(), 0);
 	}
 }

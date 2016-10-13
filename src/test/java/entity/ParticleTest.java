@@ -1,20 +1,16 @@
 package entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class ParticleTest {
 	private static final float X_START = 1;
@@ -49,7 +45,7 @@ public class ParticleTest {
 
 	@Test
 	public void testUpdate1() {
-		final List<String> input = new ArrayList<String>(0);
+		final List<String> input = new ArrayList<>(0);
 		particle.update(input);
 		assertEquals(particle.getX(), X_START + DX_START, 0);
 		assertEquals(particle.getY(), Y_START + DY_START, 0);
@@ -88,14 +84,8 @@ public class ParticleTest {
 	@Test
 	public void testExplosion() {
 		Particle.explosion(X_START, Y_START, thisGame);
-		final ArrayList<AbstractEntity> creation = (ArrayList<AbstractEntity>) thisGame.getCreateList();
-		int containsparticles = 0;
-		for(final AbstractEntity x : creation){
-			if(x instanceof Particle){
-				containsparticles++;
-			}
-		}
-		assertEquals(Particle.getExplosionParticles(), containsparticles);
+		final List<AbstractEntity> creation = thisGame.getCreateList();
+		int containsParticles = (int) creation.stream().filter(e -> e instanceof Particle).count();
+		assertEquals(Particle.getExplosionParticles(), containsParticles);
 	}
-
 }
