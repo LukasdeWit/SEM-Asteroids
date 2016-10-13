@@ -104,10 +104,10 @@ public final class Spawner {
 	 * @return the ratio
 	 */
 	private double smallSaucerRatio() {
-		if (thisGame.getScore() < DIFFICULTY_STEP) {
+		if (thisGame.getScoreCounter().getScore() < DIFFICULTY_STEP) {
 			return .5;
-		} else if (thisGame.getScore() < MAX_DIFFICULTY_SCORE) {
-			return .5 + ((thisGame.getScore() / (double) DIFFICULTY_STEP)
+		} else if (thisGame.getScoreCounter().getScore() < MAX_DIFFICULTY_SCORE) {
+			return .5 + ((thisGame.getScoreCounter().getScore() / (double) DIFFICULTY_STEP)
 					* .5 / (double) (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
 		} else {
 			return 1;
