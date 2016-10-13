@@ -1,14 +1,16 @@
 package entity;
 
 import game.Game;
+import game.Launcher;
+import javafx.scene.Node;
+import javafx.scene.shape.Circle;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ParticleTest {
 	private static final float X_START = 1;
@@ -30,31 +32,36 @@ public class ParticleTest {
 	
 	@Test
 	public void testConstructor() {
-		assertFalse(particle == null);
-		assertTrue(particle.getX() == X_START);
-		assertTrue(particle.getY() == Y_START);
-		assertTrue(particle.getDX() == DX_START);
-		assertTrue(particle.getDY() == DY_START);
+		assertNotSame(particle, null);
+		assertEquals(particle.getX(), X_START, 0);
+		assertEquals(particle.getY(), Y_START, 0);
+	}
+	
+	@Test
+	public void testConstructor2() {
+		assertEquals(particle.getDX(), DX_START, 0);
+		assertEquals(particle.getDY(), DY_START, 0);
 	}
 
 	@Test
-	public void testUpdate() {
-		List<String> input = new ArrayList<String>(0);
+	public void testUpdate1() {
+		final List<String> input = new ArrayList<String>(0);
 		particle.update(input);
-		assertTrue(particle.getX() == X_START + DX_START);
-		assertTrue(particle.getY() == Y_START + DY_START);
+		assertEquals(particle.getX(), X_START + DX_START, 0);
+		assertEquals(particle.getY(), Y_START + DY_START, 0);
 	}
+	
 	@Test
 	public void testUpdate2() {
-		List<String> input = new ArrayList<String>(0);
-		particle.update(input);
-		assertTrue(particle.getX() == X_START + DX_START);
-		assertTrue(particle.getY() == Y_START + DY_START);
+		particle.setBirthTime(0);
+		particle.update(null);
+		assertEquals(particle.getX(), X_START + DX_START, 0);
+		assertEquals(particle.getY(), Y_START + DY_START, 0);
 	}
 
 	@Test
 	public void testCollide() {
-        Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		particle.collide(e2);
         assertFalse(thisGame.getDestroyList().contains(particle));
         assertFalse(thisGame.getDestroyList().contains(e2));
@@ -66,25 +73,19 @@ public class ParticleTest {
         assertFalse(thisGame.getDestroyList().contains(particle));
 	}
 	
-	
-	//@Test
-	//public void testDraw() {
-	//	particle.draw();
-	//	final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
-	//	final int strakesInShape = DisplayEntity.particle(particle);
-	//	assertEquals(strokesInGroup, strakesInShape);
-	//}
+	@Test
+	public void testDraw() {
+		particle.draw();
+		final Node c = Launcher.getRoot().getChildren().get(0);
+		assertTrue(c instanceof Circle);
+		assertEquals(X_START, c.getTranslateX(), 0);
+	}
 
 	@Test
 	public void testExplosion() {
 		Particle.explosion(X_START, Y_START, thisGame);
-		List<AbstractEntity> creation = thisGame.getCreateList();
-		boolean containsParticles = false;
-
-		if (creation.stream().filter(e -> e instanceof Particle).count() != 0) {
-			containsParticles = true;
-		}
-		assertTrue(containsParticles);
+		final List<AbstractEntity> creation = thisGame.getCreateList();
+		int containsParticles = (int) creation.stream().filter(e -> e instanceof Particle).count();
+		assertEquals(Particle.getExplosionParticles(), containsParticles);
 	}
-
 }

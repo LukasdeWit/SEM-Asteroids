@@ -108,16 +108,17 @@ public class Saucer extends AbstractEntity {
 		if (getThisGame().getPlayer().invincible()) {
 			shotTime = System.currentTimeMillis();
 		} else {
-			if (Float.compare(BIG_RADIUS, getRadius()) == 0 && System.currentTimeMillis() - shotTime > SHOT_TIME) {
-				final float shotDir = (float) (Math.random() * 2 * Math.PI);
-
+			if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
+				if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
+	                final float shotDir = (float) (Math.random() * 2 * Math.PI);
 				final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
 						(float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
-				newBullet.setFriendly(false);
-				getThisGame().create(newBullet);
-				shotTime = System.currentTimeMillis();
-			} else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
-				final float shotDir = smallShotDir();
+	                newBullet.setFriendly(false);
+	                getThisGame().create(newBullet);
+	                shotTime = System.currentTimeMillis();
+				}
+            } else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
+                final float shotDir = smallShotDir();
 
 				final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
 						(float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
@@ -149,8 +150,7 @@ public class Saucer extends AbstractEntity {
 		} else {
 			straightDir = (float) (Math.PI + Math.atan((playerY - getY()) / (playerX - getX())));
 		}
-		//straightDir = (float) -(Math.PI / 2); //debug.
-		//Straight direction from saucer to player in radians.
+			//Straight direction from saucer to player in radians.
 		final float errorRight = (float) (random.nextInt(2) * 2 - 1);
 		//-1 is error left, 1 is error right.
 		return straightDir + errorRight * randomRange;
@@ -222,7 +222,7 @@ public class Saucer extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		int points = BIG_SCORE;
-		if (Float.compare(BIG_RADIUS, getRadius()) >= 0) {
+		if (getRadius() == SMALL_RADIUS) {
 			points = SMALL_SCORE;
 		}
 		getThisGame().addScore(points);
@@ -239,9 +239,58 @@ public class Saucer extends AbstractEntity {
 	}
 
 	/**
+	 * @return the bigRadius
+	 */
+	public static final float getBigRadius() {
+		return BIG_RADIUS;
+	}
+
+	/**
 	 * @return the toRight
 	 */
 	public final int getToRight() {
 		return toRight;
+	}
+
+	/**
+	 * @return the shotTime
+	 */
+	public final long getShotTime() {
+		return shotTime;
+	}
+
+	/**
+	 * @param shotTime the shotTime to set
+	 */
+	public final void setShotTime(final long shotTime) {
+		this.shotTime = shotTime;
+	}
+
+	/**
+	 * @param dirChangeTime the dirChangeTime to set
+	 */
+	public final void setDirChangeTime(final long dirChangeTime) {
+		this.dirChangeTime = dirChangeTime;
+	}
+
+	/**
+	 * @return the dirChangeTime
+	 */
+	public final long getDirChangeTime() {
+		return dirChangeTime;
+	}
+
+	/**
+	 * @return the smallScore
+	 */
+	public static final int getSmallScore() {
+		return SMALL_SCORE;
+	}
+
+	/**
+	 * @return the bigScore
+	 */
+	public static final int getBigScore() {
+		return BIG_SCORE;
 	}
 }

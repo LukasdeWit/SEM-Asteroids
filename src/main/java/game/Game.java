@@ -21,7 +21,7 @@ import java.util.Random;
 public final class Game {
 	private Player player;
 	private Player playerTwo;
-	private final List<AbstractEntity> entities;
+	private List<AbstractEntity> entities;
 	private final Random random;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
@@ -34,6 +34,7 @@ public final class Game {
 
 	private static final float CANVAS_SIZE = 500;
 	private static final int LIFE_SCORE = 10000;
+	private static final boolean LOG_SCORE = false;
 
 	/**
 	 * Constructor for a new game.
@@ -51,6 +52,34 @@ public final class Game {
 		gamestate = new Gamestate(this);
 	}
 
+	/**
+	 * Starts or restarts the game, with initial entities.
+	 */
+	public void startGame() {
+		gamestate.start();
+		entities.clear();
+		if (gamestate.isCoop()) {
+			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
+			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
+			entities.add(player);
+			entities.add(playerTwo);
+		} else {
+			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
+			entities.add(player);
+		} 
+		if (this.score > highscore) {
+			highscore = this.score;
+			writeHighscore();
+		}
+		score = 0;
+		spawner.reset();
+		if (gamestate.getMode() == Gamestate.getModeArcade()) {
+			Logger.getInstance().log("Arcade game started.");
+		} else {
+			Logger.getInstance().log("Coop game started.");
+		}
+	}
+	
 	/**
 	 * reads the highscore from file in resources folder.
 	 *
@@ -84,31 +113,6 @@ public final class Game {
 		} catch (IOException e) {
 			Logger.getInstance().log("unable to write highscore to file", e);
 		}
-	}
-
-	/**
-	 * Starts or restarts the game, with initial entities.
-	 */
-	public void startGame() {
-		gamestate.start();
-		entities.clear();
-		spawner.reset();
-		if (gamestate.isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
-			entities.add(player);
-			entities.add(playerTwo);
-		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
-			entities.add(player);
-		}
-		if (this.score > highscore) {
-			highscore = this.score;
-			writeHighscore();
-		}
-		score = 0;
-
-		Logger.getInstance().log("Game started.");
 	}
 
 	/**
@@ -146,10 +150,17 @@ public final class Game {
 		createList.clear();
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
-		DisplayHud.lives(player.getLives(), player.isPlayerTwo());
-		if (getGamestate().isCoop()) {
-			DisplayHud.lives(playerTwo.getLives(), playerTwo.isPlayerTwo());
+		if (gamestate.isCoop()) {
+			if (playerTwo == null) {
+				return;
+			}
+			DisplayText.livesTwo(playerTwo.getLives());
 		}
+		if (player == null) {
+			return;
+		}
+		DisplayText.lives(player.getLives());
+		
 	}
 
 	/**
@@ -223,18 +234,30 @@ public final class Game {
 	 */
 	public void addScore(final int score) {
 		if (player == null) {
+			this.score += score;
 			return;
 		}
 		if (player.isAlive() || gamestate.isCoop() && playerTwo.isAlive()) {
-			Logger.getInstance().log("Player gained " + score + " points.");
-			if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
-				player.gainLife();
-				if (gamestate.isCoop()) {
-					playerTwo.gainLife();
-				}
-				Logger.getInstance().log("Player gained an extra life.");
+			if (LOG_SCORE) {
+				Logger.getInstance().log(score + " points gained.");
 			}
+			extraLife(score);
 			this.score += score;
+		}
+	}
+
+	/**
+	 * handles the gaining of extra lives.
+	 * @param score - the score that will be added
+	 */
+	private void extraLife(final int score) {
+		if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
+			player.gainLife();
+			if (gamestate.isCoop()) {
+				playerTwo.gainLife();
+				Logger.getInstance().log("Player 2 gained an extra life.");
+			}
+			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 		}
 	}
 
@@ -301,6 +324,13 @@ public final class Game {
 	}
 
 	/**
+	 * @param score the score to set
+	 */
+	public void setScore(final long score) {
+		this.score = score;
+	}
+
+	/**
 	 * Player getter.
 	 *
 	 * @return the player
@@ -310,10 +340,24 @@ public final class Game {
 	}
 
 	/**
+	 * @param player the player to set
+	 */
+	public void setPlayer(final Player player) {
+		this.player = player;
+	}
+
+	/**
 	 * @return the playerTwo
 	 */
 	public Optional<Player> getPlayerTwo() {
 		return Optional.of(playerTwo);
+	}
+
+	/**
+	 * @param playerTwo the playerTwo to set
+	 */
+	public void setPlayerTwo(final Player playerTwo) {
+		this.playerTwo = playerTwo;
 	}
 
 	/**
@@ -330,6 +374,13 @@ public final class Game {
 	 */
 	public long getHighscore() {
 		return highscore;
+	}
+
+	/**
+	 * @param highscore the highscore to set
+	 */
+	public void setHighscore(final long highscore) {
+		this.highscore = highscore;
 	}
 
 	/**
@@ -361,9 +412,30 @@ public final class Game {
 	}
 
 	/**
+	 * @param entities the entities to set
+	 */
+	public void setEntities(final List<AbstractEntity> entities) {
+		this.entities = entities;
+	}
+
+	/**
+	 * @return the entities
+	 */
+	public List<AbstractEntity> getEntities() {
+		return entities;
+	}	
+	
+	/**
 	 * @return the gamestate
 	 */
 	public Gamestate getGamestate() {
 		return gamestate;
+	}
+
+	/**
+	 * @return the spawner
+	 */
+	public Spawner getSpawner() {
+		return spawner;
 	}
 }

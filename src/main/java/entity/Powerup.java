@@ -13,9 +13,9 @@ import java.util.Random;
  * @author Dario
  */
 public class Powerup extends AbstractEntity {
-	private final int type;
-
-	private final long startTime;
+	private int type;
+	
+	private long startTime;
 	private long pickupTime;
 
 	private Player player;
@@ -73,7 +73,6 @@ public class Powerup extends AbstractEntity {
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Player && pickupTime == 0) {
 			pickup((Player) e2);
-            Logger.getInstance().log(String.format("Player collected %s powerup.", TYPE_STRING[type]));
         }
 	}
 
@@ -105,11 +104,9 @@ public class Powerup extends AbstractEntity {
 				p.setPiercing(NEW_PIERCING_LEVEL);
 				break;
 			case MINIGUN:
+			default:
 				p.setFireRate(NEW_FIRE_RATE);
 				p.setMaxBullets(MINIGUN_BULLETS);
-				break;
-			default:
-				getThisGame().destroy(this);
 				break;
 		}
 	}
@@ -130,9 +127,11 @@ public class Powerup extends AbstractEntity {
 
 	@Override
 	public final void update(final List<String> input) {
-		if (pickupTime == 0 && PERISH_TIME < (System.currentTimeMillis() - startTime)) {
-			getThisGame().destroy(this);
-		} else if (pickupTime != 0 && POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
+		if (pickupTime == 0) {
+			if (PERISH_TIME < (System.currentTimeMillis() - startTime)) {
+				getThisGame().destroy(this);
+	 		} 
+		} else if (POWERUP_DURATION < (System.currentTimeMillis() - pickupTime)) {
 			runOut();
 		}
 	}
@@ -141,8 +140,13 @@ public class Powerup extends AbstractEntity {
 	 * Run out.
 	 */
 	private void runOut() {
-		switch (type) {
-			case BULLET_SIZE:
+		if (player == null) {
+			Logger.getInstance().log("ERROR | No player was linked to this powerup for runOut().");
+			getThisGame().destroy(this);
+			return;
+		}
+		switch(type) {
+			case BULLET_SIZE: 
 				player.setBulletSize(Player.getBulletSize());
 				break;
 			case TRIPLE_SHOT:
@@ -153,10 +157,9 @@ public class Powerup extends AbstractEntity {
 				player.setPiercing(1);
 				break;
 			case MINIGUN:
+			default:
 				player.setFireRate(Player.getFireRate());
 				player.setMaxBullets(Player.getMaxBullets());
-				break;
-			default:
 				break;
 		}
 		getThisGame().destroy(this);
@@ -167,5 +170,54 @@ public class Powerup extends AbstractEntity {
 	 */
 	public final Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * @param player the player to set
+	 */
+	public final void setPlayer(final Player player) {
+		this.player = player;
+	}
+
+	/**
+	 * @param pickupTime the pickupTime to set
+	 */
+	public final void setPickupTime(final long pickupTime) {
+		this.pickupTime = pickupTime;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public final void setType(final int type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the newBulletSize
+	 */
+	public static final float getNewBulletSize() {
+		return NEW_BULLET_SIZE;
+	}
+
+	/**
+	 * @return the newPiercingLevel
+	 */
+	public static final int getNewPiercingLevel() {
+		return NEW_PIERCING_LEVEL;
+	}
+
+	/**
+	 * @return the newFireRate
+	 */
+	public static final long getNewFireRate() {
+		return NEW_FIRE_RATE;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public final void setStartTime(final long startTime) {
+		this.startTime = startTime;
 	}
 }

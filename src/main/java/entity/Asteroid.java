@@ -36,6 +36,12 @@ public class Asteroid extends AbstractEntity {
 		final Random random = new Random();
 		setRadius(BIG_RADIUS);
 		shape = random.nextInt(SHAPES);
+		if (getDX() == 0) {
+			setDX(1);
+		}
+		if (getDY() == 0) {
+			setDY(1);
+		}
 		while (speed() < MIN_SPEED) {
 			setDX(getDX() * 2);
 			setDY(getDY() * 2);

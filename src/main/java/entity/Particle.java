@@ -10,8 +10,8 @@ import java.util.List;
  * @author Kibo
  */
 public class Particle extends AbstractEntity {
-	private final long birthTime;
-
+	private long birthTime;
+	
 	private static final long LIFETIME = 750;
 	private static final int EXPLOSION_PARTICLES = 10;
 	private static final float SPEED = .75f;
@@ -100,5 +100,12 @@ public class Particle extends AbstractEntity {
 	 */
 	public static int getExplosionParticles() {
 		return EXPLOSION_PARTICLES;
+	}
+
+	/**
+	 * @param birthTime the birthTime to set
+	 */
+	public final void setBirthTime(final long birthTime) {
+		this.birthTime = birthTime;
 	}
 }
