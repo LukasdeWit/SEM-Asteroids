@@ -9,8 +9,8 @@ import java.util.Random;
 
 /**
  * This class is the player of the game.
- * @author Kibo
  *
+ * @author Kibo
  */
 public class Player extends AbstractEntity {
 	private int lives;
@@ -21,7 +21,7 @@ public class Player extends AbstractEntity {
 	private long hyperspaceStart;
 	private boolean boost;
 	private final boolean playerTwo;
-	
+
 	private static final int STARTING_LIVES = 3;
 	private static final float RADIUS = 5;
 	private static final int INVINCIBILITY_START_TIME = 1000;
@@ -35,7 +35,7 @@ public class Player extends AbstractEntity {
 	private static final int MAX_BULLETS = 4;
 	private static final int CHANCE_OF_DYING = 25;
 	private static final float BULLET_SIZE = 2;
-	
+
 	private int maxBullets;
 	private double fireRate;
 	private int piercing;
@@ -43,30 +43,36 @@ public class Player extends AbstractEntity {
 	private boolean tripleShot;
 	private float bulletSize;
 	private int changeOfDying;
+	private String playerString;
 	
 	private static final float SPAWN_OFFSET = 40;
-	
-	private static final String LEFT = "LEFT";
-	private static final String RIGHT = "RIGHT";
-	private static final double TRIPLE_SHOT_ANGLE = .1;
-	
-	/**
-	 * Constructor for the Player class.
-	 * 
-	 * @param x location of Player along the X-axis.
-	 * @param y location of Player along the Y-axis.
-	 * @param dX velocity of Player along the X-axis.
-	 * @param dY velocity of Player along the Y-axis.
-	 * @param playerTwo true if playertwo
-	 * @param thisGame the game this particle belongs to
-	 */
-	public Player(final float x, final float y,
-			final float dX, final float dY, final Game thisGame, final boolean playerTwo) {
+
+    private static final double TRIPLE_SHOT_ANGLE = .1;
+
+    /**
+	* create a player, with default properties.
+	*
+	* @param x         location of Player along the X-axis.
+	* @param y         location of Player along the Y-axis.
+	* @param dX        velocity of Player along the X-axis.
+	* @param dY        velocity of Player along the Y-axis.
+	* @param playerTwo whether this is player two or player one
+	* @param thisGame  the game this particle belongs to
+	*/
+    public Player(final float x, final float y, final float dX, final float dY, final Game thisGame,
+                  final boolean playerTwo) {
 		super(x, y, dX, dY, thisGame);
 		lives = STARTING_LIVES;
 		setRadius(RADIUS);
 		rotation = 0;
 		this.playerTwo = playerTwo;
+		playerString = "The Player";
+		if (thisGame.getGamestate().isCoop()) {
+			playerString = "Player 1";
+		}
+		if (playerTwo) {
+			playerString = "Player 2";
+		}
 		makeInvincible(INVINCIBILITY_START_TIME);
 		maxBullets = MAX_BULLETS;
 		fireRate = FIRE_RATE;
@@ -90,7 +96,7 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * handle the player taking a hit (and is not invincible)
+	 * handle the player taking a hit (and is not invincible).
 	 *
 	 * this happens when (for example) the player collides with an asteroid
 	 * or is hit by the bullet of an saucer.
@@ -103,46 +109,39 @@ public class Player extends AbstractEntity {
 				getThisGame().over();
 			} else {
 				// we lose one live
-	
-				// respawn the player
-				if (isPlayerTwo()) {
-					setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
-				} else if (getThisGame().getGamestate().isCoop()) {
-					setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
-				} else {
-					setX(getThisGame().getScreenX() / 2);
-				}
-				setY(getThisGame().getScreenY() / 2);
-				setDX(0);
-				setDY(0);
-				rotation = 0;
-				makeInvincible(INVINCIBILITY_START_TIME);
-			} 
+				respawnThePlayer();
+			}
 		} else {
 			shielding--;
 			makeInvincible(INVINCIBILITY_START_TIME);
 		}
 	}
 
+    /**
+     * respawn the current player, accounts for multiplayer offsets.
+     */
+	private void respawnThePlayer() {
+		if (isPlayerTwo()) {
+            setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
+        } else if (getThisGame().getGamestate().isCoop()) {
+            setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
+        } else {
+            setX(getThisGame().getScreenX() / 2);
+        }
+		setY(getThisGame().getScreenY() / 2);
+		setDX(0);
+		setDY(0);
+		rotation = 0;
+		makeInvincible(INVINCIBILITY_START_TIME);
+	}
+
 	/**
-	 * Achievement: get a life.
+	 * add an additional live to the current player, if the player is dead they are respawned.
 	 */
 	public final void gainLife() {
 		lives++;
 		if (lives == 1) {
-			if (isPlayerTwo()) {
-				setX(getThisGame().getScreenX() / 2 + SPAWN_OFFSET);
-			} else if (getThisGame().getGamestate().isCoop()) {
-				setX(getThisGame().getScreenX() / 2 - SPAWN_OFFSET);
-			} else {
-				setX(getThisGame().getScreenX() / 2);
-			}
-			setY(getThisGame().getScreenY() / 2);
-			setDX(0);
-			setDY(0);
-			rotation = 0;
-			makeInvincible(INVINCIBILITY_START_TIME);
-			getThisGame().create(this);
+			respawnThePlayer();
 		}
 	}
 
@@ -166,17 +165,16 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * Method that translates keyboard input into player character movement.
-	 * 
+	 * handle user key input.
+	 *
 	 * @param input List containing the keyboard input
 	 */
-	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandler(final List<String> input) {
-		if (input.contains(LEFT) || input.contains("A")) {
+		if (input.contains("LEFT") || input.contains("A")) {
 			turnLeft();
 		}
 
-		if (input.contains(RIGHT) || input.contains("D")) {
+		if (input.contains("RIGHT") || input.contains("D")) {
 			turnRight();
 		}
 
@@ -192,31 +190,30 @@ public class Player extends AbstractEntity {
 			fire();
 		}
 	}
-	
+
 	/**
-	 * key handler for coop.
-	 * 
+	 * handle user(s) key input for coop.
+	 *
 	 * @param input List containing the keyboard input
 	 */
-	@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 	private void keyHandlerTwo(final List<String> input) {
 		if (isPlayerTwo()) {
-			if (input.contains(LEFT)) {
+			if (input.contains("LEFT")) {
 				turnLeft();
 			}
-	
-			if (input.contains(RIGHT)) {
+
+			if (input.contains("RIGHT")) {
 				turnRight();
 			}
-	
+
 			if (input.contains("UP")) {
 				accelerate();
 			}
-	
+
 			if (input.contains("DOWN")) {
 				goHyperspace();
 			}
-	
+
 			if (input.contains("ENTER")) {
 				fire();
 			}
@@ -224,19 +221,19 @@ public class Player extends AbstractEntity {
 			if (input.contains("A")) {
 				turnLeft();
 			}
-	
+
 			if (input.contains("D")) {
 				turnRight();
 			}
-	
+
 			if (input.contains("W")) {
 				accelerate();
 			}
-	
+
 			if (input.contains("S")) {
 				goHyperspace();
 			}
-	
+
 			if (input.contains("SPACE")) {
 				fire();
 			}
@@ -275,16 +272,14 @@ public class Player extends AbstractEntity {
 	 */
 	private void slowDown() {
 		if (Float.compare(Math.abs(getDX()) + Math.abs(getDY()), 0) != 0) {
-			setDX(getDX() - (DECELERATION * getDX())
-					/ (Math.abs(getDX()) + Math.abs(getDY())));
-			setDY(getDY() - (DECELERATION * getDY())
-					/ (Math.abs(getDX()) + Math.abs(getDY())));
+			setDX(getDX() - (DECELERATION * getDX()) / (Math.abs(getDX()) + Math.abs(getDY())));
+			setDY(getDY() - (DECELERATION * getDY()) / (Math.abs(getDX()) + Math.abs(getDY())));
 		}
 	}
 
 	/**
 	 * Starts invincibility that lasts the given amount of milliseconds.
-	 * 
+	 *
 	 * @param milliseconds amount of milliseconds the player should stay
 	 *                        invincible.
 	 */
@@ -307,9 +302,9 @@ public class Player extends AbstractEntity {
 		final Random random = new Random();
 		if (random.nextInt(changeOfDying) == 0) {
 			onHit();
-			Logger.getInstance().log("Player died in hyperspace.");
+			Logger.getInstance().log(playerString + " died in hyperspace.");
 		} else {
-		Logger.getInstance().log("Player went into hyperspace.");
+		Logger.getInstance().log(playerString + " went into hyperspace.");
 		setX((float) (getThisGame().getScreenX() * Math.random()));
 		setY((float) (getThisGame().getScreenY() * Math.random()));
 		setDX(0);
@@ -323,8 +318,7 @@ public class Player extends AbstractEntity {
 	 * Method to handle firing bullets.
 	 */
 	private void fire() {
-		if (System.currentTimeMillis() - lastShot >	fireRate 
-				&& getThisGame().bullets(this) < maxBullets) {
+		if (System.currentTimeMillis() - lastShot >	fireRate && getThisGame().bullets(this) < maxBullets) {
 			fireBullet(rotation);
 			if (tripleShot) {
 				fireBullet(rotation - TRIPLE_SHOT_ANGLE);
@@ -333,14 +327,13 @@ public class Player extends AbstractEntity {
 			lastShot = System.currentTimeMillis();
 		}
 	}
-	
+
 	/**
 	 * fire a bullet in a direction.
 	 * @param direction - the direction
 	 */
 	private void fireBullet(final double direction) {
-		final Bullet b = new Bullet(getX(), getY(),
-				(float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
+		final Bullet b = new Bullet(getX(), getY(), (float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
 				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing, getThisGame());
 		getThisGame().create(b);
 		b.setPlayer(this);
@@ -359,12 +352,12 @@ public class Player extends AbstractEntity {
 			} else if (!invincible()) {
 				getThisGame().destroy(e2);
 				onHit();
-				Logger.getInstance().log("Player was hit by an asteroid.");
+				Logger.getInstance().log(playerString + " was hit by an asteroid.");
 			}
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			onHit();
-			Logger.getInstance().log("Player was hit by a bullet.");
+			Logger.getInstance().log(playerString + " was hit by a bullet.");
 		}
 	}
 
@@ -397,7 +390,7 @@ public class Player extends AbstractEntity {
 	public final int getLives() {
 		return lives;
 	}
-	
+
 	/**
 	 * @param lives the lives to set
 	 */
@@ -481,12 +474,26 @@ public class Player extends AbstractEntity {
 	public final void setBulletSize(final float bulletSize) {
 		this.bulletSize = bulletSize;
 	}
-
+	
+	/**
+	 * @return bulletSize
+	 */
+	public final float getCurrentBulletSize() {
+		return bulletSize;
+	}
+	
 	/**
 	 * @param tripleShot the tripleShot to set
 	 */
 	public final void setTripleShot(final boolean tripleShot) {
 		this.tripleShot = tripleShot;
+	}
+
+	/**
+	 * @return the tripleShot
+	 */
+	public final boolean isTripleShot() {
+		return tripleShot;
 	}
 
 	/**
@@ -497,10 +504,24 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
+	 * @return the piercing
+	 */
+	public final int getPiercing() {
+		return piercing;
+	}
+
+	/**
 	 * @param fireRate the fireRate to set
 	 */
 	public final void setFireRate(final double fireRate) {
 		this.fireRate = fireRate;
+	}
+	
+	/**
+	 * @return fireRate
+	 */
+	public final double getCurrentFireRate() {
+		return fireRate;
 	}
 
 	/**
@@ -521,7 +542,7 @@ public class Player extends AbstractEntity {
 	 * gain a shield level.
 	 */
 	public final void gainShield() {
-		shielding++;		
+		shielding++;
 	}
 
 	/**
@@ -571,5 +592,12 @@ public class Player extends AbstractEntity {
 	 */
 	public final void setChangeOfDying(final int changeOfDying) {
 		this.changeOfDying = changeOfDying;
+	}
+	
+	/**
+	 * @return the Player String
+	 */
+	public final String getPlayerString() {
+		return playerString;
 	}
 }

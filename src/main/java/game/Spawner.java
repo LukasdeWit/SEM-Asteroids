@@ -7,8 +7,8 @@ import entity.Saucer;
 
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.
- * @author Kibo
  *
+ * @author Kibo
  */
 public final class Spawner {
 	private long startSaucerTime;
@@ -28,9 +28,10 @@ public final class Spawner {
 	private static final long DIFFICULTY_STEP = 10000;
 	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
 	private static final float ASTEROID_SPEED = 1;
-	
+
 	/**
 	 * Constructor of Spawner.
+	 *
 	 * @param game the game this particle belongs to
 	 */
 	public Spawner(final Game game) {
@@ -79,7 +80,7 @@ public final class Spawner {
 			spawnBossAngryAsteroid();
 		}
 	}
-	
+
 	/**
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
@@ -92,7 +93,7 @@ public final class Spawner {
 		}
 		thisGame.create(newSaucer);
 	}
-	
+
 	/**
 	 * adds a Powerup with random X and Y and type.
 	 */
@@ -100,11 +101,12 @@ public final class Spawner {
 		thisGame.create(new Powerup(thisGame.getScreenY()
 				* (float) Math.random(),
 				thisGame.getScreenY()
-				* (float) Math.random(), thisGame));
+						* (float) Math.random(), thisGame));
 	}
 
 	/**
 	 * Calculates the ratio of small saucers.
+	 *
 	 * @return the ratio
 	 */
 	private double smallSaucerRatio() {
@@ -121,16 +123,14 @@ public final class Spawner {
 	/**
 	 * adds asteroids with random Y, side of screen and direction, but with
 	 * radius 20.
-	 * 
-	 * @param times
-	 *            - the number of asteroids
+	 *
+	 * @param times the number of asteroids
 	 */
 	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
-			thisGame.create(new Asteroid(0, thisGame.getScreenY()
-					* (float) Math.random(),
-					(float) (Math.random() - .5) * ASTEROID_SPEED,
-					(float) (Math.random() - .5) * ASTEROID_SPEED, thisGame));
+			thisGame.create(new Asteroid(0, thisGame.getScreenY() * (float) Math.random(),
+					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
+					thisGame));
 		}
 		Logger.getInstance().log(times + " asteroids were spawned.");
 	}
@@ -152,11 +152,13 @@ public final class Spawner {
 	public void reset() {
 		wave = 0;
 		startSaucerTime = System.currentTimeMillis();
+		startPowerupTime = System.currentTimeMillis();
 		startRest = 0;
 	}
 
 	/**
 	 * Getter for difficultyStep.
+	 *
 	 * @return the difficultyStep
 	 */
 	public static long getDifficultyStep() {
@@ -164,16 +166,37 @@ public final class Spawner {
 	}
 
 	/**
-	 * Getter for wave.
+	 * getter for wave.
+	 *
 	 * @return the wave
 	 */
 	public int getWave() {
 		return wave;
 	}
-	
+
 	/**
-	 * Setter for startRest.
-	 * @param startRest - the startrest that should be set
+	 * @param wave the wave to set
+	 */
+	public void setWave(final int wave) {
+		this.wave = wave;
+	}
+
+	/**
+	 * @param startSaucerTime the startSaucerTime to set
+	 */
+	public void setStartSaucerTime(final long startSaucerTime) {
+		this.startSaucerTime = startSaucerTime;
+	}
+
+	/**
+	 * @param startPowerupTime the startPowerupTime to set
+	 */
+	public void setStartPowerupTime(final long startPowerupTime) {
+		this.startPowerupTime = startPowerupTime;
+	}
+
+	/**
+	 * @param startRest the startRest to set
 	 */
 	public void setStartRest(final long startRest) {
 		this.startRest = startRest;

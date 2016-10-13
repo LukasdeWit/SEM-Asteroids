@@ -5,6 +5,7 @@ import game.Game;
 import game.Gamestate;
 import game.Launcher;
 import javafx.scene.Group;
+import javafx.scene.shape.Polygon;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ public class PlayerTest {
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
+	private static final String SPACE = "SPACE";
 	private Player player;
 	private Game thisGame;
 
@@ -121,7 +123,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testUpdate() {
-		final List<String> input = new ArrayList<String>();	
+		final List<String> input = new ArrayList<>();
 		player.update(input);
 		assertEquals(X_START+DX_START,player.getX(),0);
 		assertEquals(Y_START+DY_START,player.getY(),0);
@@ -185,7 +187,7 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandler9() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		update(player, input, false);
 		assertEquals(System.currentTimeMillis(), player.getLastShot(), 1);
 	}
@@ -254,7 +256,7 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo9() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		update(player, input, true);
 		assertEquals(System.currentTimeMillis(), player.getLastShot(), 1);
 	}
@@ -286,7 +288,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testFire() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		player.setTripleShot(true);
 		update(player, input, false);
 		assertEquals(3, thisGame.getCreateList().size(), 0);
@@ -294,7 +296,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testFire2() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		update(player, input, false);
 		update(player, input, false);
 		assertEquals(1, thisGame.getCreateList().size(), 0);
@@ -302,7 +304,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testFire3() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		player.setMaxBullets(0);
 		update(player, input, false);
 		assertEquals(0, thisGame.getCreateList().size(), 0);
@@ -374,7 +376,8 @@ public class PlayerTest {
 	@Test
 	public void testDraw(){
 		player.draw();
-		final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
+		final int strokesInGroup = ((Polygon) ((Group) Launcher.getRoot().getChildren().get(0))
+				.getChildren().get(0)).getPoints().size();
 		final int strokesInShape = DisplayEntity.getPlayerOneLines().length;
 		assertEquals(strokesInShape, strokesInGroup, 0);
 	}
