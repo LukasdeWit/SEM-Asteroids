@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 
 import java.util.function.DoubleFunction;
@@ -241,6 +242,11 @@ public final class DisplayEntity {
 			group.getChildren().add(polygon);
 		}
 
+		final Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE,
+				PLAYER_TWO_CIRCLE[1] * PLAYER_TWO_SIZE, PLAYER_TWO_CIRCLE[2] * PLAYER_TWO_SIZE);
+		c.setFill(color);
+		group.getChildren().add(c);
+
 		if (p.isBoost()) {
 			for (double[] shape : PLAYER_TWO_BOOST) {
 				final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, shape));
@@ -248,11 +254,6 @@ public final class DisplayEntity {
 				boostModel.setStrokeWidth(2 * PLAYER_TWO_SIZE);
 				group.getChildren().add(boostModel);
 			}
-
-			final Circle c = new Circle(PLAYER_TWO_CIRCLE[0] * PLAYER_TWO_SIZE,
-					PLAYER_TWO_CIRCLE[1] * PLAYER_TWO_SIZE, PLAYER_TWO_CIRCLE[2] * PLAYER_TWO_SIZE);
-			c.setFill(color);
-			group.getChildren().add(c);
 			p.setBoost(false);
 		}
 	}
@@ -276,6 +277,11 @@ public final class DisplayEntity {
 			boostModel.setStroke(Color.WHITE);
 			boostModel.setStrokeWidth(2 * PLAYER_ONE_SIZE);
 			group.getChildren().add(boostModel);
+			final Line l = new Line((-PLAYER_ONE_BOOST[0] + 2) * PLAYER_ONE_SIZE, 0,
+										(-PLAYER_ONE_BOOST[0] + 2) * PLAYER_ONE_SIZE, 1);
+							//so rotation is not wrong
+
+			group.getChildren().add(l);
 
 			p.setBoost(false);
 		}
