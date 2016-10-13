@@ -11,8 +11,8 @@ import java.util.Locale;
 
 /**
  * This class will log every action.
- * @author Kibo
  *
+ * @author Kibo
  */
 public final class Logger {
 	/**
@@ -27,7 +27,7 @@ public final class Logger {
 	 * the singleton INSTANCE.
 	 */
 	private static final Logger INSTANCE = new Logger();
-	
+
 	/**
 	 * Private constructor of Logger.
 	 */
@@ -43,22 +43,24 @@ public final class Logger {
 			System.out.println("unable to write log to file");
 		}
 	}
-	
+
 	/**
 	 * getter for the INSTANCE.
+	 *
 	 * @return the logger.
 	 */
 	public static Logger getInstance() {
 		return INSTANCE;
 	}
-	
+
 	/**
 	 * This method logs a message with the current time to a file.
-	 * @param message - the message
+	 *
+	 * @param message the message
 	 */
 	@SuppressWarnings("PMD.SystemPrintln")
-	public void log(final String message) {		
-		final String string = sdf.format(new Date(System.currentTimeMillis())) 
+	public void log(final String message) {
+		final String string = sdf.format(new Date(System.currentTimeMillis()))
 				+ " | " + message + "\n";
 		System.out.print(string);
 		try {
@@ -69,13 +71,14 @@ public final class Logger {
 			System.out.println("unable to write log to file");
 		}
 	}
-	
+
 	/**
 	 * This method logs a message and exception.
-	 * @param message - the message
-	 * @param e - the exception
+	 *
+	 * @param message the message
+	 * @param e       the exception
 	 */
-	public void log(final String message, final Exception e) {		
+	public void log(final String message, final Exception e) {
 		e.printStackTrace();
 		log(message);
 	}
