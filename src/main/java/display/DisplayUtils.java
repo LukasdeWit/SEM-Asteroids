@@ -23,6 +23,9 @@ public final class DisplayUtils {
      */
     public static double[] translate(final DoubleFunction<Double> xFunction, final DoubleFunction<Double> yFunction,
                                      final double[] target) {
+        if (xFunction == null || yFunction == null || target == null) {
+            throw new NullPointerException("parameters can't be null");
+        }
         final double[] temp = new double[target.length];
 
         for (int i = 0; i < temp.length; i++) {
