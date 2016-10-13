@@ -1,7 +1,7 @@
 package game;
 
 import entity.Asteroid;
-import entity.BossAngryAsteroid;
+import entity.Boss;
 import entity.Powerup;
 import entity.Saucer;
 
@@ -139,11 +139,11 @@ public final class Spawner {
 	 * 
 	 */
 	private void spawnBossAngryAsteroid() {
-		final BossAngryAsteroid newAngryAsteroid =
-				new BossAngryAsteroid(thisGame.getRandom().nextInt(1)
+		final Boss boss =
+				new Boss(thisGame.getRandom().nextInt(1)
 				* 2 * thisGame.getScreenX(), (float) Math.random()
 				* thisGame.getScreenY(), 0, 0, thisGame);
-		thisGame.create(newAngryAsteroid);
+		thisGame.create(boss);
 	}
 
 	/**

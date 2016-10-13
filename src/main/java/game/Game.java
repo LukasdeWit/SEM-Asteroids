@@ -283,7 +283,7 @@ public final class Game {
 	 */
 	public int enemies() {
 		return Math.toIntExact(entities.stream()
-				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof BossAngryAsteroid)
+				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof Boss)
 				.count());
 	}
 

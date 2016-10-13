@@ -7,13 +7,13 @@ import game.Game;
 import game.Logger;
 
 /**
- * Class that represents an Angry Asteroid Boss. Moves like a saucer from one
+ * Class that represents a Boss. Moves like a saucer from one
  * side of the screen to the other until it's killed.
  * 
  * @author Dario
  *
  */
-public class BossAngryAsteroid extends AbstractEntity {
+public class Boss extends AbstractEntity {
 	private int toRight;
 	private long shotTime;
 	private int currentLives;
@@ -39,7 +39,7 @@ public class BossAngryAsteroid extends AbstractEntity {
 	 * @param dY speed of boss along y-axis
 	 * @param thisGame game the boss exists in
 	 */
-	public BossAngryAsteroid(final float x, final float y, final float dX, final float dY, final Game thisGame) {
+	public Boss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		random = new Random();
 		setRadius(RADIUS);
@@ -196,5 +196,4 @@ public class BossAngryAsteroid extends AbstractEntity {
 		getThisGame().addScore(SCORE);
 		Particle.explosion(getX(), getY(), getThisGame());
 	}
-
 }
