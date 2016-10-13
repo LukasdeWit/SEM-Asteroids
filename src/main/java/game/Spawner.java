@@ -45,7 +45,7 @@ public final class Spawner {
 	 * This method is called every tick.
 	 */
 	public void update() {
-		if((thisGame.getGamestate().getMode() != 3)){
+		if ((thisGame.getGamestate().getMode() != Gamestate.getModeBoss())) {
 			if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
 				spawnSaucer();
 				Logger.getInstance().log("Saucer was spawned");
@@ -172,10 +172,10 @@ public final class Spawner {
 	}
 	
 	/**
-	 * Setter for startRest
-	 * @param startRest
+	 * Setter for startRest.
+	 * @param startRest - the startrest that should be set
 	 */
-	public void setStartRest(long startRest) {
+	public void setStartRest(final long startRest) {
 		this.startRest = startRest;
 	}
 }

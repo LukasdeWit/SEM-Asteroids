@@ -278,7 +278,8 @@ public final class Game {
 	public int enemies() {
 		int enemies = 0;
 		for (final AbstractEntity entity : entities) {
-			if (entity instanceof Asteroid || entity instanceof Saucer || entity instanceof BossAngryAsteroid) {
+			if (entity instanceof Asteroid || entity instanceof Saucer
+					|| entity instanceof BossAngryAsteroid) {
 				enemies++;
 			}
 		}
