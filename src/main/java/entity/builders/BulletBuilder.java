@@ -2,6 +2,7 @@ package entity.builders;
 
 import entity.AbstractEntity;
 import entity.Bullet;
+import entity.Player;
 import game.Game;
 
 /**
@@ -53,8 +54,25 @@ public class BulletBuilder implements EntityBuilder {
 		bullet.setPierce(pierce);
 	}
 	
-	public final void setFriendly(boolean friendly) {
-		
+	/**
+	 * @param friendly - true if the bullet can't hurt the player, false if it can.
+	 */
+	public final void setFriendly(final boolean friendly) {
+		bullet.setFriendly(friendly);
+	}
+	
+	/**
+	 * @param radius - the radius of the bullet.
+	 */
+	public final void setRadius(final float radius) {
+		bullet.setRadius(radius);
+	}
+	
+	/**
+	 * @param player - the player that shot the bullet.
+	 */
+	public final void setPlayer(final Player player) {
+		bullet.setPlayer(player);
 	}
 
 	@Override

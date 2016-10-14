@@ -72,6 +72,8 @@ public class Player extends AbstractEntity {
 		bBuilder = new BulletBuilder();
 		bBuilder.setThisGame(getThisGame());
 		bBuilder.setPierce(piercing);
+		bBuilder.setFriendly(true);
+		bBuilder.setPlayer(this);
     }
 
 	/**
@@ -328,11 +330,10 @@ public class Player extends AbstractEntity {
 		bBuilder.setY(getY());
 		bBuilder.setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
 		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
+		bBuilder.setRadius(bulletSize);
 		final Bullet b = (Bullet) bBuilder.getResult();
 		
 		getThisGame().create(b);
-		b.setPlayer(this);
-		b.setRadius(bulletSize);
 	}
 
 	/**

@@ -54,9 +54,11 @@ public class Saucer extends AbstractEntity {
 			nextToRight = 1;
 		}
 		setPath(nextToRight, random.nextInt((int) PATHS));
+		
 		bBuilder = new BulletBuilder();
 		bBuilder.setThisGame(thisGame);
 		bBuilder.setPierce(PIERCING);
+		bBuilder.setFriendly(false);
 	}
 
 	/**
@@ -124,7 +126,6 @@ public class Saucer extends AbstractEntity {
 					bBuilder.setDY((float) Math.sin(shotDir) * BULLET_SPEED);
 					Bullet newBullet = (Bullet) bBuilder.getResult();
 					
-	                newBullet.setFriendly(false);
 	                getThisGame().create(newBullet);
 	                shotTime = System.currentTimeMillis();
 				}
@@ -135,7 +136,6 @@ public class Saucer extends AbstractEntity {
 				bBuilder.setDY((float) Math.sin(shotDir) * BULLET_SPEED);
 				Bullet newBullet = (Bullet) bBuilder.getResult();
 				
-				newBullet.setFriendly(false);
 				getThisGame().create(newBullet);
 				shotTime = System.currentTimeMillis();
 			}
