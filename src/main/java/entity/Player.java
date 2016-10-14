@@ -1,11 +1,11 @@
 package entity;
 
-import display.DisplayEntity;
-import game.Game;
-import game.Logger;
-
 import java.util.List;
 import java.util.Random;
+
+import display.DisplayEntity;
+import entity.builders.BulletBuilder;
+import game.Logger;
 
 /**
  * This class is the player of the game.
@@ -44,6 +44,7 @@ public class Player extends AbstractEntity {
 	private float bulletSize;
 	private int changeOfDying;
 	private String playerString;
+	private BulletBuilder bBuilder;
 	
 	private static final float SPAWN_OFFSET = 40;
 
@@ -67,6 +68,10 @@ public class Player extends AbstractEntity {
 		bulletSize = BULLET_SIZE;
 		tripleShot = false;
 		changeOfDying = CHANCE_OF_DYING;
+		// Initialize the Bullet Builder
+		bBuilder = new BulletBuilder();
+		bBuilder.setThisGame(getThisGame());
+		bBuilder.setPierce(piercing);
     }
 
 	/**
@@ -319,8 +324,12 @@ public class Player extends AbstractEntity {
 	 * @param direction - the direction
 	 */
 	private void fireBullet(final double direction) {
-		final Bullet b = new Bullet(getX(), getY(), (float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
-				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing, getThisGame());
+		bBuilder.setX(getX());
+		bBuilder.setY(getY());
+		bBuilder.setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
+		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
+		final Bullet b = (Bullet) bBuilder.getResult();
+		
 		getThisGame().create(b);
 		b.setPlayer(this);
 		b.setRadius(bulletSize);

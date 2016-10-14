@@ -32,23 +32,31 @@ public class BulletBuilder implements EntityBuilder {
 	}
 
 	@Override
-	public void setDX(float dX) {
+	public final void setDX(final float dX) {
 		bullet.setDX(dX);
 	}
 
 	@Override
-	public void setDY(float dY) {
+	public final void setDY(final float dY) {
 		bullet.setDY(dY);
 	}
 
 	@Override
-	public void setThisGame(Game thisGame) {
+	public final void setThisGame(final Game thisGame) {
 		bullet.setThisGame(thisGame);
+	}
+	
+	/**
+	 * @param pierce - the amount of objects the bullet pierces.
+	 */
+	public final void setPierce(final int pierce) {
+		bullet.setPierce(pierce);
 	}
 
 	@Override
-	public AbstractEntity getResult() {
+	public final AbstractEntity getResult() {
 		Bullet temp = bullet.shallowCopy();
+		temp.setBirthTime(System.currentTimeMillis());
 		temp.setShot(true);
 		return temp;
 	}

@@ -28,42 +28,6 @@ public class Bullet extends AbstractEntity {
 		friendly = true;
 		shot = false;
 	}
-	
-	/**
-	 * Constructor for the bullet class.
-	 *
-	 * @param x        position of bullet along the x-axis
-	 * @param y        position of bullet along the y-axis
-	 * @param dX       velocity of bullet along the x-axis
-	 * @param dY       velocity of bullet along the y-axis
-	 * @param thisGame Game the bullet exists in.
-	 */
-	public Bullet(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
-		setRadius(RADIUS);
-		birthTime = System.currentTimeMillis();
-		friendly = true;
-	}
-
-	/**
-	 * Constructor for the bullet class.
-	 *
-	 * @param x        position of bullet along the x-axis
-	 * @param y        position of bullet along the y-axis
-	 * @param dX       velocity of bullet along the x-axis
-	 * @param dY       velocity of bullet along the y-axis
-	 * @param pierce   the number of asteroids this
-	 * @param thisGame Game the bullet exists in.
-	 *                 bullet should be capable of piercing
-	 */
-	public Bullet(final float x, final float y, final float dX, final float dY, final int pierce,
-				  final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
-		setRadius(RADIUS);
-		birthTime = System.currentTimeMillis();
-		friendly = true;
-		piercing = pierce;
-	}
 
 	/**
 	 * Calculate new position of Bullet.
@@ -158,5 +122,40 @@ public class Bullet extends AbstractEntity {
 	 */
 	public final void setBirthTime(final long birthTime) {
 		this.birthTime = birthTime;
+	}
+	
+	/**
+	 * @param pierce - the amount of objects the bullet pierces.
+	 */
+	public final void setPierce(final int pierce) {
+		this.piercing = pierce;
+	}
+	
+	/**
+	 * @return the amount of objects the bullet pierces
+	 */
+	public final int getPierce() {
+		return this.piercing;
+	}
+	
+	/**
+	 * @param shot - true if the bullet is shot and moving, false otherwise
+	 */
+	public final void setShot(final boolean shot) {
+		this.shot = shot;
+	}
+	
+	/**
+	 * @return a shallow copy of the current bullet, useful for making two entities.
+	 */
+	public final Bullet shallowCopy() {
+		Bullet bullet = new Bullet();
+		bullet.setX(this.getX());
+		bullet.setY(this.getY());
+		bullet.setDX(this.getDX());
+		bullet.setDY(this.getDY());
+		bullet.setThisGame(this.getThisGame());
+		bullet.setPierce(this.getPierce());
+		return bullet;
 	}
 }
