@@ -33,15 +33,6 @@ public class Powerup extends AbstractEntity {
 	private static final int PIERCING = 4;
 	private static final int MINIGUN = 5;
 
-	private static final String[] TYPE_STRING = {
-			"an extra life",
-			"a shield",
-			"a bullet size increase",
-			"a tripleshot",
-			"a piercing bullet",
-			"a minigun"
-	};
-
 	private static final float NEW_BULLET_SIZE = 6;
 	private static final int NEW_PIERCING_LEVEL = 3;
 	private static final long NEW_FIRE_RATE = 50;

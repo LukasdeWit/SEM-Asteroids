@@ -1,14 +1,19 @@
 package game;
 
-import display.DisplayHud;
-import display.DisplayText;
-import entity.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import display.DisplayHud;
+import display.DisplayText;
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.Bullet;
+import entity.Player;
+import entity.Saucer;
+import entity.builders.PlayerBuilder;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * This class defines everything within the game.
@@ -51,13 +56,31 @@ public final class Game {
 	public void startGame() {
 		gamestate.start();
 		entities.clear();
+		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
+			// Create player 1
+			pBuilder.setX(screenX / 2 - Player.getSpawnOffset());
+			pBuilder.setY(screenY / 2);
+			pBuilder.setDX(0);
+			pBuilder.setDY(0);
+			pBuilder.setThisGame(this);
+			pBuilder.setPlayerTwo(false);
+			player = (Player) pBuilder.getResult();
+			// Change the relevant player two statistics
+			pBuilder.setPlayerTwo(true);
+			pBuilder.setX(screenX / 2 + Player.getSpawnOffset());
+			playerTwo = (Player) pBuilder.getResult();
+			
 			entities.add(player);
 			entities.add(playerTwo);
 		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
+			pBuilder.setX(screenX / 2);
+			pBuilder.setY(screenY / 2);
+			pBuilder.setDX(0);
+			pBuilder.setDY(0);
+			pBuilder.setThisGame(this);
+			pBuilder.setPlayerTwo(false);
+			player = (Player) pBuilder.getResult();
 			entities.add(player);
 		} 
 		scorecounter.startGame();
