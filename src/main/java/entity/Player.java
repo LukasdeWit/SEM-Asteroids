@@ -20,7 +20,7 @@ public class Player extends AbstractEntity {
 	private int invincibleMS;
 	private long hyperspaceStart;
 	private boolean boost;
-	private final boolean playerTwo;
+	private boolean playerTwo;
 
 	private static final int STARTING_LIVES = 3;
 	private static final float RADIUS = 5;
@@ -82,6 +82,14 @@ public class Player extends AbstractEntity {
 		tripleShot = false;
 		changeOfDying = CHANCE_OF_DYING;
 	}
+    
+    /**
+     * create an uninitialized player with only the default player.
+     */
+    public Player() {
+    	super();
+    	playerTwo = false;
+    }
 
 	/**
 	 * Perform actions that happen when a player dies.
@@ -396,6 +404,10 @@ public class Player extends AbstractEntity {
 	 */
 	public final void setLives(final int lives) {
 		this.lives = lives;
+	}
+	
+	public final void setPlayerTwo(final boolean playerTwo) {
+		this.playerTwo = playerTwo;
 	}
 
 	/**
