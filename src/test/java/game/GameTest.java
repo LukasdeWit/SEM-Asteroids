@@ -26,6 +26,7 @@ public class GameTest {
 	@Before
 	public final void setUp() {
 		gamestate.setMode(Gamestate.getModeArcade());
+		thisGame.getScoreCounter().clearHighscores();
 		thisGame.getScoreCounter().setScore(0);
 		thisGame.getScoreCounter().setHighscore(0);
 		thisGame.setEntities(new ArrayList<>());

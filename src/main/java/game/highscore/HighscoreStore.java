@@ -132,6 +132,11 @@ public class HighscoreStore {
         }
     }
 
+    public final void clear() {
+        this.highScores.clear();
+        this.writeScores();
+    }
+
     /**
      * get an Immutable list of all the highscores in the store.
      * @return an immutable list of highscores

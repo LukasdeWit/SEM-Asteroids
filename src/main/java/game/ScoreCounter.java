@@ -127,4 +127,11 @@ public class ScoreCounter {
 	public final Game getThisGame() {
 		return thisGame;
 	}
+
+	/**
+	 * clear all saved highscores, and reset the stored file
+	 */
+	public final void clearHighscores() {
+		highscoreStore.clear();
+	}
 }
