@@ -28,7 +28,6 @@ public class PowerupTest {
 	public final void setUp() {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
-		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		powerup = new Powerup(X_START, Y_START, thisGame);
 		powerup.setType(0);
@@ -69,7 +68,7 @@ public class PowerupTest {
 		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
 		powerup.setType(1);
 		powerup.collide(p);
-		assertTrue(thisGame.getDestroyList().contains(powerup));
+		assertFalse(thisGame.getEntities().contains(powerup));
 	}
 	
 	@Test
@@ -107,7 +106,7 @@ public class PowerupTest {
 	@Test
 	public final void onDeath(){
 		powerup.onDeath();
-		assertFalse(thisGame.getDestroyList().contains(powerup));
+		assertTrue(thisGame.getEntities().contains(powerup));
 	}
 	
 	@Test
@@ -129,27 +128,27 @@ public class PowerupTest {
 	public void testUpdate1() {
 		powerup.setStartTime(0);
 		powerup.update(null);
-		assertTrue(thisGame.getDestroyList().contains(powerup));
+		assertFalse(thisGame.getEntities().contains(powerup));
 	}
 	
 	@Test
 	public void testUpdate2() {
 		powerup.update(null);
-		assertFalse(thisGame.getDestroyList().contains(powerup));
+		assertTrue(thisGame.getEntities().contains(powerup));
 	}
 	
 	@Test
 	public void testUpdate3() {
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertTrue(thisGame.getDestroyList().contains(powerup));
+		assertFalse(thisGame.getEntities().contains(powerup));
 	}
 	
 	@Test
 	public void testUpdate4() {
 		powerup.setPickupTime(System.currentTimeMillis());
 		powerup.update(null);
-		assertFalse(thisGame.getDestroyList().contains(powerup));
+		assertTrue(thisGame.getEntities().contains(powerup));
 	}
 	
 	@Test

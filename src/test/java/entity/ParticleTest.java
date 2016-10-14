@@ -27,7 +27,6 @@ public class ParticleTest {
 		thisGame = new Game();
 		particle = new Particle(X_START, Y_START, DX_START, DY_START, thisGame);
 		thisGame.setCreateList(new ArrayList<>());
-		thisGame.setDestroyList(new ArrayList<>());
 	}
 	
 	@Test
@@ -63,14 +62,14 @@ public class ParticleTest {
 	public void testCollide() {
 		final Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		particle.collide(e2);
-        assertFalse(thisGame.getDestroyList().contains(particle));
-        assertFalse(thisGame.getDestroyList().contains(e2));
+        assertTrue(thisGame.getEntities().contains(particle));
+        assertTrue(thisGame.getEntities().contains(e2));
 	}
 
 	@Test
 	public void testOnDeath() {
 		particle.onDeath();
-        assertFalse(thisGame.getDestroyList().contains(particle));
+        assertTrue(thisGame.getEntities().contains(particle));
 	}
 	
 	@Test

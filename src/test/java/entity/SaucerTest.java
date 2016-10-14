@@ -35,7 +35,6 @@ public class SaucerTest {
 		thisGame.setPlayer(null);
 		thisGame.getScoreCounter().setScore(0);
 		thisGame.setCreateList(new ArrayList<>());
-		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		saucer = new Saucer(X_START, Y_START, DX_START, DY_START, thisGame);
 		saucer.setRadius(Saucer.getBigRadius());
@@ -154,14 +153,14 @@ public class SaucerTest {
 	public final void testCheckEnd1(){
 		saucer.setX(Game.getCanvasSize() + 10);
 		saucer.update(null);
-		assertTrue(thisGame.getDestroyList().contains(saucer));
+		assertFalse(thisGame.getEntities().contains(saucer));
 	}
 	
 	@Test
 	public final void testCheckEnd2(){
 		saucer.setX(-10);
 		saucer.update(null);
-		assertTrue(thisGame.getDestroyList().contains(saucer));
+		assertFalse(thisGame.getEntities().contains(saucer));
 	}
 	
 	@Test
@@ -184,21 +183,14 @@ public class SaucerTest {
 		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
 		p.setInvincibleStart(0);
 		saucer.collide(p);
-		assertTrue(thisGame.getDestroyList().contains(saucer));
+		assertFalse(thisGame.getEntities().contains(saucer));
 	}
 	
 	@Test
 	public final void testCollide2(){
 		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
 		saucer.collide(p);
-		assertFalse(thisGame.getDestroyList().contains(saucer));
-	}
-	
-	@Test
-	public final void testCollide3(){
-		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
-		saucer.collide(b);
-		assertEquals(2, thisGame.getDestroyList().size(), 0);
+		assertTrue(thisGame.getEntities().contains(saucer));
 	}
 	
 	@Test
@@ -206,14 +198,7 @@ public class SaucerTest {
 		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
 		b.setFriendly(false);
 		saucer.collide(b);
-		assertFalse(thisGame.getDestroyList().contains(saucer));
-	}
-	
-	@Test
-	public final void testCollide5(){
-		final Asteroid a = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
-		saucer.collide(a);
-		assertEquals(2, thisGame.getDestroyList().size(), 0);
+		assertTrue(thisGame.getEntities().contains(saucer));
 	}
 	
 	@Test

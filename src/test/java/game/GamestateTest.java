@@ -31,7 +31,6 @@ public class GamestateTest {
 		thisGame.getScoreCounter().setHighscore(0);
 		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);

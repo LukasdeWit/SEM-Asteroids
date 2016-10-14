@@ -28,7 +28,6 @@ public class PlayerTest {
 	public final void setUp() {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
-		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.getGamestate().setMode(Gamestate.getModeArcade());
 		Launcher.getRoot().getChildren().clear();
 		player = new Player(X_START, Y_START, DX_START, DY_START, thisGame,  false);
@@ -51,7 +50,7 @@ public class PlayerTest {
 	@Test
 	public void testOnDeath() {
 		player.onDeath();
-		assertTrue(thisGame.getDestroyList().isEmpty());
+		assertFalse(thisGame.getEntities().isEmpty());
 	}
 
 	@Test
@@ -315,7 +314,6 @@ public class PlayerTest {
 		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		player.setInvincibleStart(0);
 		player.collide(ae);
-		assertEquals(1, thisGame.getDestroyList().size(), 0);
 		assertEquals(2, player.getLives(), 0);
 	}
 	

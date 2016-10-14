@@ -28,7 +28,6 @@ public class AbstractEntityTest {
 	public final void setUp() {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
-		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		e = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 	}

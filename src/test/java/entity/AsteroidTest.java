@@ -31,7 +31,6 @@ public class AsteroidTest {
 	public final void setUp() {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
-		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		asteroid = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 	}
@@ -79,15 +78,15 @@ public class AsteroidTest {
 	public final void testCollide() {
 		final AbstractEntity e2 = new Asteroid(X_START, Y_START, DX_START + 1, DY_START + 1, thisGame);
 		asteroid.collide(e2);
-		assertFalse(thisGame.getDestroyList().contains(asteroid));
+		assertTrue(thisGame.getEntities().contains(asteroid));
 	}
 	
 	@Test
 	public final void testCollide2() {
 		final AbstractEntity e2 = new Bullet(X_START, Y_START, DX_START + 1, DY_START + 1, thisGame);
 		asteroid.collide(e2);
-		assertTrue(thisGame.getDestroyList().contains(asteroid));
-		assertTrue(thisGame.getDestroyList().contains(e2));
+		assertFalse(thisGame.getEntities().contains(asteroid));
+		assertFalse(thisGame.getEntities().contains(e2));
 	}
 	
 	@Test

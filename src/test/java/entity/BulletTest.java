@@ -46,7 +46,6 @@ public class BulletTest {
 		//Used for testing methods involving the piercing attribute.
 		ball = new Bullet(X_START,Y_START, DX_START, DY_START, 3, thisGame);
 		thisGame.setCreateList(new ArrayList<>());
-		thisGame.setDestroyList(new ArrayList<>());
 	}
 
 	/**
@@ -87,7 +86,7 @@ public class BulletTest {
 		final List<String> input = new ArrayList<>(0);
 		bullet.setBirthTime(0);
 		bullet.update(input);
-        assertTrue(thisGame.getDestroyList().contains(bullet));
+        assertFalse(thisGame.getEntities().contains(bullet));
 	}
 	
 	/**
@@ -106,8 +105,8 @@ public class BulletTest {
 	public final void testCollide1() {
 		final Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		bullet.collide(e2);
-		assertTrue(thisGame.getDestroyList().contains(bullet));
-		assertTrue(thisGame.getDestroyList().contains(e2));
+		assertFalse(thisGame.getEntities().contains(bullet));
+		assertFalse(thisGame.getEntities().contains(e2));
      }
 	
 	/**
@@ -117,8 +116,8 @@ public class BulletTest {
 	public final void testCollide2() {
 		final Asteroid e3 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
 		ball.collide(e3);
-		assertFalse(thisGame.getDestroyList().contains(ball));
-		assertTrue(thisGame.getDestroyList().contains(e3));
+		assertTrue(thisGame.getEntities().contains(ball));
+		assertFalse(thisGame.getEntities().contains(e3));
      }
 	
 	/**
@@ -128,8 +127,8 @@ public class BulletTest {
 	public final void testCollide3() {
 		final Player e2 = new Player(X_START, Y_START, 0, 0, thisGame, false);
 		bullet.collide(e2);
-		assertFalse(thisGame.getDestroyList().contains(bullet));
-        assertFalse(thisGame.getDestroyList().contains(e2));
+		assertTrue(thisGame.getEntities().contains(bullet));
+        assertTrue(thisGame.getEntities().contains(e2));
         }
 
 	/**
@@ -138,7 +137,7 @@ public class BulletTest {
 	@Test
 	public final void testOnDeath() {
 		bullet.onDeath();
-        assertFalse(thisGame.getDestroyList().contains(bullet));
+        assertTrue(thisGame.getEntities().contains(bullet));
     }
 	
 	@Test

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
@@ -30,7 +31,6 @@ public class GameTest {
 		thisGame.getScoreCounter().setHighscore(0);
 		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
@@ -86,44 +86,6 @@ public class GameTest {
 		thisGame.updateGame(noInput);
 		assertTrue(Launcher.getRoot().getChildren().size() > 0);
 	}
-	
-	@Test
-	public final void testCollision1(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 1, 0, 0, thisGame);
-		addToEntities(e2);
-		thisGame.checkCollision(e1);
-		assertEquals(2, thisGame.getDestroyList().size(), 0);
-	}
-	
-	@Test
-	public final void testCollision2(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 1, 0, 0, thisGame);
-		thisGame.destroy(e2);
-		addToEntities(e2);
-		thisGame.checkCollision(e1);
-		assertEquals(1, thisGame.getDestroyList().size(), 0);
-	}
-	
-	@Test
-	public final void testCollision3(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 1, 0, 0, thisGame);
-		thisGame.destroy(e1);
-		addToEntities(e2);
-		thisGame.checkCollision(e1);
-		assertEquals(1, thisGame.getDestroyList().size(), 0);
-	}
-	
-	@Test
-	public final void testCollision4(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 100, 0, 0, thisGame);
-		addToEntities(e2);
-		thisGame.checkCollision(e1);
-		assertEquals(0, thisGame.getDestroyList().size(), 0);
-	}
 
 	private void addToEntities(final AbstractEntity a) {
 		final List<AbstractEntity> entities = thisGame.getEntities();
@@ -139,12 +101,6 @@ public class GameTest {
 	}
 
 	@Test
-	public final void testOver1() {
-		thisGame.over();
-		assertEquals(0, thisGame.getDestroyList().size(), 0);
-	}
-
-	@Test
 	public final void testOver2() {
 		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
 		p1.setLives(0);
@@ -153,20 +109,7 @@ public class GameTest {
 		thisGame.setPlayerTwo(p2);
 		gamestate.setMode(Gamestate.getModeCoop());
 		thisGame.over();
-		assertTrue(thisGame.getDestroyList().contains(p1));
-	}
-
-	@Test
-	public final void testOver3() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
-		p1.setLives(0);
-		thisGame.setPlayer(p1);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
-		p2.setLives(0);
-		thisGame.setPlayerTwo(p2);
-		gamestate.setMode(Gamestate.getModeCoop());
-		thisGame.over();
-		assertEquals(2, thisGame.getDestroyList().size(), 0);
+		assertFalse(thisGame.getEntities().contains(p1));
 	}
 
 	@Test
@@ -177,7 +120,7 @@ public class GameTest {
 		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
 		thisGame.setPlayerTwo(p2);
 		thisGame.over();
-		assertTrue(thisGame.getDestroyList().contains(p1));
+		assertFalse(thisGame.getEntities().contains(p1));
 	}
 
 	@Test
@@ -187,7 +130,7 @@ public class GameTest {
 		thisGame.setPlayer(p1);
 		thisGame.getScoreCounter().setScore(10);
 		thisGame.over();
-		assertTrue(thisGame.getDestroyList().contains(p1));
+		assertFalse(thisGame.getEntities().contains(p1));
 		assertEquals(10, thisGame.getScoreCounter().getHighscore(), 0);
 	}
 
