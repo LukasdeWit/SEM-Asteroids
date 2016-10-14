@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import display.DisplayEntity;
+import entity.builders.BulletBuilder;
+import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Group;
@@ -28,6 +30,8 @@ public class SaucerTest {
 
 	private Game thisGame;
 	private Saucer saucer;
+	private PlayerBuilder pBuilder;
+	private BulletBuilder bBuilder;
 
 	@Before
 	public final void setUp() {
@@ -39,6 +43,21 @@ public class SaucerTest {
 		Launcher.getRoot().getChildren().clear();
 		saucer = new Saucer(X_START, Y_START, DX_START, DY_START, thisGame);
 		saucer.setRadius(Saucer.getBigRadius());
+		
+		pBuilder = new PlayerBuilder();
+		pBuilder.setX(X_START);
+		pBuilder.setY(Y_START);
+		pBuilder.setDX(DX_START);
+		pBuilder.setDY(DY_START);
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setPlayerTwo(false);
+		
+		bBuilder = new BulletBuilder();
+		bBuilder.setX(X_START);
+		bBuilder.setY(Y_START);
+		bBuilder.setDX(DX_START);
+		bBuilder.setDY(DY_START);
+		bBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
@@ -70,7 +89,7 @@ public class SaucerTest {
 	
 	@Test
 	public final void testShoot1(){
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p);
 		saucer.update(null);
 		assertEquals(System.currentTimeMillis(), saucer.getShotTime(), 0);
@@ -78,7 +97,7 @@ public class SaucerTest {
 	
 	@Test
 	public final void testShoot2(){
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
 		saucer.setShotTime(0);
@@ -91,7 +110,7 @@ public class SaucerTest {
 	
 	@Test
 	public final void testShoot3(){
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
 		saucer.update(null);
@@ -100,7 +119,7 @@ public class SaucerTest {
 	
 	@Test
 	public final void testShoot4(){
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
 		saucer.setRadius(Saucer.getSmallRadius());
@@ -114,7 +133,7 @@ public class SaucerTest {
 	
 	@Test
 	public final void testShoot5(){
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
 		saucer.setRadius(Saucer.getSmallRadius());
@@ -124,7 +143,8 @@ public class SaucerTest {
 	
 	@Test
 	public final void testSmallShotDir(){
-		final Player p = new Player(Game.getCanvasSize() - X_START, Y_START, DX_START, DY_START, thisGame, false);
+		pBuilder.setX(Game.getCanvasSize() - X_START);
+		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
 		thisGame.setScore(120000);
@@ -138,7 +158,8 @@ public class SaucerTest {
 	
 	@Test
 	public final void testSmallShotTime(){
-		final Player p = new Player(Game.getCanvasSize() - X_START, Y_START, DX_START, DY_START, thisGame, false);
+		pBuilder.setX(Game.getCanvasSize() - X_START);
+		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
 		thisGame.setScore(50000);
@@ -181,7 +202,7 @@ public class SaucerTest {
 	
 	@Test
 	public final void testCollide(){
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		saucer.collide(p);
 		assertTrue(thisGame.getDestroyList().contains(saucer));
@@ -189,21 +210,21 @@ public class SaucerTest {
 	
 	@Test
 	public final void testCollide2(){
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		saucer.collide(p);
 		assertFalse(thisGame.getDestroyList().contains(saucer));
 	}
 	
 	@Test
 	public final void testCollide3(){
-		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Bullet b = (Bullet) bBuilder.getResult();
 		saucer.collide(b);
 		assertEquals(2, thisGame.getDestroyList().size(), 0);
 	}
 	
 	@Test
 	public final void testCollide4(){
-		final Bullet b = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Bullet b = (Bullet) bBuilder.getResult();
 		b.setFriendly(false);
 		saucer.collide(b);
 		assertFalse(thisGame.getDestroyList().contains(saucer));
