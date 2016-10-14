@@ -1,7 +1,8 @@
 package entity;
-import game.Game;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import game.Game;
 
 /**
  * This is the superclass of all entities in the game.
@@ -14,6 +15,8 @@ public abstract class AbstractEntity {
 	private float dX;
 	private float dY;
 	private float radius;
+	
+	private ArrayList<EntityObserver> observers;
 	/**
 	 * The Game this Entity belongs to.
 	 */
@@ -34,6 +37,7 @@ public abstract class AbstractEntity {
 		this.setDX(dX);
 		this.setDY(dY);
 		this.setThisGame(thisGame);
+		observers = new ArrayList<>();
 	}
 
 	/**
@@ -92,6 +96,13 @@ public abstract class AbstractEntity {
 	 */
 	public final float speed() {
 		return (float) Math.sqrt(Math.pow(Math.abs(getDX()), 2) + Math.pow(Math.abs(getDY()), 2));
+	}
+	
+	/**
+	 * @param e - observer to add to the list.
+	 */
+	public final void addObserver(final EntityObserver e) {
+		observers.add(e);
 	}
 
 	/**
@@ -209,5 +220,25 @@ public abstract class AbstractEntity {
 	 */
 	public final void setY(final float y) {
 		this.y = y;
+	}
+	
+	/**
+	 * Interface to be implemented by the observer of the entity.
+	 * 
+	 * @author Lukas
+	 *
+	 */
+	public interface EntityObserver {
+		/**
+		 * Method that should be called when the entity dies.
+		 * @param e - entity that died
+		 */
+		void notifyDeath(AbstractEntity e);
+		/**
+		 * Method that should be called when the entity is created.
+		 * @param e - entity that is created
+		 */
+		void notifyCreate(AbstractEntity e);
+		
 	}
 }

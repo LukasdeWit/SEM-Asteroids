@@ -40,7 +40,8 @@ public class Particle extends AbstractEntity {
 	 */
 	public static void explosion(final float x, final float y, final Game thisGame) {
 		for (int i = 0; i < EXPLOSION_PARTICLES; i++) {
-			thisGame.create(randomParticle(x, y, thisGame));
+			Particle p = randomParticle(x, y, thisGame);
+			thisGame.notifyCreate(p);
 		}
 	}
 

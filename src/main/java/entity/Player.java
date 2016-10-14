@@ -335,7 +335,7 @@ public class Player extends AbstractEntity {
 	private void fireBullet(final double direction) {
 		final Bullet b = new Bullet(getX(), getY(), (float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
 				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), piercing, getThisGame());
-		getThisGame().create(b);
+		getThisGame().notifyCreate(b);
 		b.setPlayer(this);
 		b.setRadius(bulletSize);
 	}

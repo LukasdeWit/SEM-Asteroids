@@ -1,21 +1,26 @@
 package game;
 
-import display.DisplayHud;
-import display.DisplayText;
-import entity.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import display.DisplayHud;
+import display.DisplayText;
+import entity.AbstractEntity;
+import entity.AbstractEntity.EntityObserver;
+import entity.Asteroid;
+import entity.Bullet;
+import entity.Player;
+import entity.Saucer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * This class defines everything within the game.
  *
  * @author Kibo
  */
-public final class Game {
+public final class Game implements EntityObserver {
 	private Player player;
 	private Player playerTwo;
 	private List<AbstractEntity> entities;
@@ -54,11 +59,11 @@ public final class Game {
 		if (gamestate.isCoop()) {
 			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
 			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
-			entities.add(player);
-			entities.add(playerTwo);
+			notifyCreate(player);
+			notifyCreate(playerTwo);
 		} else {
 			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
-			entities.add(player);
+			notifyCreate(player);
 		} 
 		scorecounter.startGame();
 		spawner.reset();
@@ -148,7 +153,8 @@ public final class Game {
 	 * @param e - the Entity
 	 */
 	public void create(final AbstractEntity e) {
-		createList.add(e);
+		e.addObserver(this);
+		entities.add(e);
 	}
 
 	/**
@@ -357,5 +363,16 @@ public final class Game {
 	 */
 	public ScoreCounter getScoreCounter() {
 		return scorecounter;
+	}
+
+	@Override
+	public void notifyDeath(final AbstractEntity e) {
+		e.onDeath();
+		entities.remove(e);
+	}
+
+	@Override
+	public void notifyCreate(final AbstractEntity e) {
+		create(e);
 	}
 }

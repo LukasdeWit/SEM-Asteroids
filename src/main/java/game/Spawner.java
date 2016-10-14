@@ -89,17 +89,16 @@ public final class Spawner {
 		if (Math.random() < smallSaucerRatio()) {
 			newSaucer.setRadius(Saucer.getSmallRadius());
 		}
-		thisGame.create(newSaucer);
+		thisGame.notifyCreate(newSaucer);
 	}
 
 	/**
 	 * adds a Powerup with random X and Y and type.
 	 */
 	private void spawnPowerup() {
-		thisGame.create(new Powerup(thisGame.getScreenY()
-				* (float) Math.random(),
-				thisGame.getScreenY()
-						* (float) Math.random(), thisGame));
+		final Powerup p = new Powerup(thisGame.getScreenY() * (float) Math.random(),
+				thisGame.getScreenY() * (float) Math.random(), thisGame);
+		thisGame.notifyCreate(p);
 	}
 
 	/**
@@ -126,9 +125,10 @@ public final class Spawner {
 	 */
 	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
-			thisGame.create(new Asteroid(0, thisGame.getScreenY() * (float) Math.random(),
+			final Asteroid a = new Asteroid(0, thisGame.getScreenY() * (float) Math.random(),
 					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
-					thisGame));
+					thisGame);
+			thisGame.notifyCreate(a);
 		}
 		Logger.getInstance().log(times + " asteroids were spawned.");
 	}
