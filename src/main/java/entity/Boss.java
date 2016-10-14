@@ -211,7 +211,7 @@ public class Boss extends AbstractEntity {
 	}
 	
 	/**
-	 * Gets the toRight of the class
+	 * Gets the toRight of the class.
 	 * @return the toRight
 	 */
 	public final int getToRight() {
