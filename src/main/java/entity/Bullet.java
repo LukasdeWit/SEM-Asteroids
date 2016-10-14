@@ -148,7 +148,7 @@ public class Bullet extends AbstractEntity {
 	 * @return a shallow copy of the current bullet, useful for making two entities.
 	 */
 	public final Bullet shallowCopy() {
-		Bullet bullet = new Bullet();
+		final Bullet bullet = new Bullet();
 		bullet.setX(this.getX());
 		bullet.setY(this.getY());
 		bullet.setDX(this.getDX());

@@ -17,7 +17,7 @@ public class Saucer extends AbstractEntity {
 	private final Random random;
 	private long dirChangeTime;
 	private long shotTime;
-	private BulletBuilder bBuilder;
+	private final BulletBuilder bBuilder;
 
 	private static final float SMALL_RADIUS = 5;
 	private static final float BIG_RADIUS = 10;
@@ -124,7 +124,7 @@ public class Saucer extends AbstractEntity {
 					
 					bBuilder.setDX((float) Math.cos(shotDir) * BULLET_SPEED);
 					bBuilder.setDY((float) Math.sin(shotDir) * BULLET_SPEED);
-					Bullet newBullet = (Bullet) bBuilder.getResult();
+					final Bullet newBullet = (Bullet) bBuilder.getResult();
 					
 	                getThisGame().create(newBullet);
 	                shotTime = System.currentTimeMillis();
@@ -134,7 +134,7 @@ public class Saucer extends AbstractEntity {
 
                 bBuilder.setDX((float) Math.cos(shotDir) * BULLET_SPEED);
 				bBuilder.setDY((float) Math.sin(shotDir) * BULLET_SPEED);
-				Bullet newBullet = (Bullet) bBuilder.getResult();
+				final Bullet newBullet = (Bullet) bBuilder.getResult();
 				
 				getThisGame().create(newBullet);
 				shotTime = System.currentTimeMillis();

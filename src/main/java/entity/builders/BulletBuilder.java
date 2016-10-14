@@ -13,7 +13,7 @@ import game.Game;
  */
 public class BulletBuilder implements EntityBuilder {
 
-	private Bullet bullet;
+	private final Bullet bullet;
 	
 	/**
 	 * Constructor for the BulletBuilder class.
@@ -77,7 +77,7 @@ public class BulletBuilder implements EntityBuilder {
 
 	@Override
 	public final AbstractEntity getResult() {
-		Bullet temp = bullet.shallowCopy();
+		final Bullet temp = bullet.shallowCopy();
 		temp.setBirthTime(System.currentTimeMillis());
 		temp.setShot(true);
 		return temp;

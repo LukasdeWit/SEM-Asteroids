@@ -44,7 +44,7 @@ public class Player extends AbstractEntity {
 	private float bulletSize;
 	private int changeOfDying;
 	private String playerString;
-	private BulletBuilder bBuilder;
+	private final BulletBuilder bBuilder;
 	
 	private static final float SPAWN_OFFSET = 40;
 
@@ -613,7 +613,7 @@ public class Player extends AbstractEntity {
 	 * @return a shallow copy of the current player, useful for making two entities.
 	 */
 	public final Player shallowCopy() {
-		Player newPlayer = new Player();
+		final Player newPlayer = new Player();
 		newPlayer.setX(this.getX());
 		newPlayer.setY(this.getY());
 		newPlayer.setDX(this.getDX());

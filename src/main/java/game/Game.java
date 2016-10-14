@@ -68,7 +68,7 @@ public final class Game {
 	public void startGame() {
 		gamestate.start();
 		entities.clear();
-		PlayerBuilder pBuilder = new PlayerBuilder();
+		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
 			// Create player 1
 			pBuilder.setX(screenX / 2 - Player.getSpawnOffset());

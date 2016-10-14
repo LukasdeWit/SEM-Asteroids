@@ -12,7 +12,7 @@ import game.Game;
  */
 public class PlayerBuilder implements EntityBuilder {
 
-	private Player player;
+	private final Player player;
 	
 	/**
 	 * Constructor for the PlayerBuilder.
