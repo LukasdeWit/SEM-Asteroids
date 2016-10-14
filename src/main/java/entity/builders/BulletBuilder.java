@@ -52,6 +52,10 @@ public class BulletBuilder implements EntityBuilder {
 	public final void setPierce(final int pierce) {
 		bullet.setPierce(pierce);
 	}
+	
+	public final void setFriendly(boolean friendly) {
+		
+	}
 
 	@Override
 	public final AbstractEntity getResult() {

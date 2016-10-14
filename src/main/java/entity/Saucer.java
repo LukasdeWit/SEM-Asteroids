@@ -1,12 +1,13 @@
 package entity;
 
+import java.util.List;
+import java.util.Random;
+
 import display.DisplayEntity;
+import entity.builders.BulletBuilder;
 import game.Game;
 import game.Logger;
 import game.Spawner;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Class that represents a Saucer.
@@ -16,6 +17,7 @@ public class Saucer extends AbstractEntity {
 	private final Random random;
 	private long dirChangeTime;
 	private long shotTime;
+	private BulletBuilder bBuilder;
 
 	private static final float SMALL_RADIUS = 5;
 	private static final float BIG_RADIUS = 10;
@@ -30,6 +32,7 @@ public class Saucer extends AbstractEntity {
 	private static final long SHOT_TIME = 1000;
 	private static final long LESS_SHOT = 50;
 	private static final float MAX_ACCURACY = 10;
+	private static final int PIERCING = 1;
 
 	/**
 	 * Constructor for Saucer class.
@@ -51,6 +54,9 @@ public class Saucer extends AbstractEntity {
 			nextToRight = 1;
 		}
 		setPath(nextToRight, random.nextInt((int) PATHS));
+		bBuilder = new BulletBuilder();
+		bBuilder.setThisGame(thisGame);
+		bBuilder.setPierce(PIERCING);
 	}
 
 	/**
@@ -108,11 +114,16 @@ public class Saucer extends AbstractEntity {
 		if (getThisGame().getPlayer().invincible()) {
 			shotTime = System.currentTimeMillis();
 		} else {
+			bBuilder.setX(getX());
+			bBuilder.setY(getY());
 			if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
 				if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
 					final float shotDir = (float) (Math.random() * 2 * Math.PI);
-					final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
-						(float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
+					
+					bBuilder.setDX((float) Math.cos(shotDir) * BULLET_SPEED);
+					bBuilder.setDY((float) Math.sin(shotDir) * BULLET_SPEED);
+					Bullet newBullet = (Bullet) bBuilder.getResult();
+					
 	                newBullet.setFriendly(false);
 	                getThisGame().create(newBullet);
 	                shotTime = System.currentTimeMillis();
@@ -120,8 +131,10 @@ public class Saucer extends AbstractEntity {
             } else if (System.currentTimeMillis() - shotTime > smallShotTime()) {
                 final float shotDir = smallShotDir();
 
-				final Bullet newBullet = new Bullet(getX(), getY(), (float) Math.cos(shotDir) * BULLET_SPEED,
-						(float) Math.sin(shotDir) * BULLET_SPEED, getThisGame());
+                bBuilder.setDX((float) Math.cos(shotDir) * BULLET_SPEED);
+				bBuilder.setDY((float) Math.sin(shotDir) * BULLET_SPEED);
+				Bullet newBullet = (Bullet) bBuilder.getResult();
+				
 				newBullet.setFriendly(false);
 				getThisGame().create(newBullet);
 				shotTime = System.currentTimeMillis();
