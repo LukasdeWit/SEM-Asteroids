@@ -37,7 +37,7 @@ public class SaucerTest {
 	public final void setUp() {
 		thisGame = new Game();
 		thisGame.setPlayer(null);
-		thisGame.setScore(0);
+		thisGame.getScoreCounter().setScore(0);
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
@@ -147,7 +147,7 @@ public class SaucerTest {
 		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
-		thisGame.setScore(120000);
+		thisGame.getScoreCounter().setScore(120000);
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.setShotTime(0);
 		saucer.update(null);
@@ -162,7 +162,7 @@ public class SaucerTest {
 		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
-		thisGame.setScore(50000);
+		thisGame.getScoreCounter().setScore(50000);
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.setShotTime(0);
 		saucer.update(null);
@@ -241,12 +241,12 @@ public class SaucerTest {
 	public final void testOnDeath(){
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.onDeath();
-		assertEquals(Saucer.getSmallScore(), thisGame.getScore(), 0);
+		assertEquals(Saucer.getSmallScore(), thisGame.getScoreCounter().getScore(), 0);
 	}
 	
 	@Test
 	public final void testOnDeath2(){
 		saucer.onDeath();
-		assertEquals(Saucer.getBigScore(), thisGame.getScore(), 0);
+		assertEquals(Saucer.getBigScore(), thisGame.getScoreCounter().getScore(), 0);
 	}
 }

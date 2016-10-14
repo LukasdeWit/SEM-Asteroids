@@ -150,7 +150,7 @@ public class Saucer extends AbstractEntity {
 	private float smallShotDir() {
 		final float playerX = getThisGame().getPlayer().getX();
 		final float playerY = getThisGame().getPlayer().getY();
-		float accuracy = getThisGame().getScore() / (float) Spawner.getDifficultyStep();
+		float accuracy = getThisGame().getScoreCounter().getScore() / (float) Spawner.getDifficultyStep();
 		if (accuracy > MAX_ACCURACY) {
 			accuracy = MAX_ACCURACY;
 		}
@@ -176,7 +176,7 @@ public class Saucer extends AbstractEntity {
 	 * @return shot time of small saucer
 	 */
 	private long smallShotTime() {
-		final long score = getThisGame().getScore() / Spawner.getDifficultyStep();
+		final long score = getThisGame().getScoreCounter().getScore() / Spawner.getDifficultyStep();
 		if (score == 0) {
 			return SHOT_TIME;
 		} else if (score <= SHOT_TIME / (2 * LESS_SHOT)) {

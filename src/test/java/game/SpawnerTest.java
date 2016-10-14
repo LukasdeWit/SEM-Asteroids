@@ -54,7 +54,7 @@ public class SpawnerTest {
 	public final void testSpawnSaucer(){
 		spawner.setStartPowerupTime(System.currentTimeMillis());
 		spawner.setStartRest(System.currentTimeMillis());
-		thisGame.setScore(1000000);
+		thisGame.getScoreCounter().setScore(1000000);
 		spawner.update();
 		assertEquals(Saucer.getSmallRadius(), thisGame.getCreateList().get(0).getRadius(), 0);
 	}
@@ -63,7 +63,7 @@ public class SpawnerTest {
 	public final void testSmallSaucerRatio(){
 		spawner.setStartPowerupTime(System.currentTimeMillis());
 		spawner.setStartRest(System.currentTimeMillis());
-		thisGame.setScore(50000);
+		thisGame.getScoreCounter().setScore(50000);
 		spawner.update();
 		assertEquals(Saucer.getSmallRadius(), thisGame.getCreateList().get(0).getRadius(), 5);
 	}
