@@ -215,6 +215,9 @@ public class Player extends AbstractEntity {
 
 			if (input.contains("UP")) {
 				accelerate();
+				getThisGame().getAudio().play(Audio.BOOST2);
+			} else {
+				getThisGame().getAudio().stop(Audio.BOOST2);
 			}
 
 			if (input.contains("DOWN")) {
@@ -235,6 +238,9 @@ public class Player extends AbstractEntity {
 
 			if (input.contains("W")) {
 				accelerate();
+				getThisGame().getAudio().play(Audio.BOOST);
+			} else {
+				getThisGame().getAudio().stop(Audio.BOOST);
 			}
 
 			if (input.contains("S")) {
@@ -333,8 +339,11 @@ public class Player extends AbstractEntity {
 				fireBullet(rotation + TRIPLE_SHOT_ANGLE);
 			}
 			lastShot = System.currentTimeMillis();
-			
-			getThisGame().getAudio().playMultiple(Audio.SHOOTING);
+			if (isPlayerTwo()) {
+				getThisGame().getAudio().playMultiple(Audio.SHOOTING2);
+			} else {
+				getThisGame().getAudio().playMultiple(Audio.SHOOTING);
+			}
 		}
 	}
 

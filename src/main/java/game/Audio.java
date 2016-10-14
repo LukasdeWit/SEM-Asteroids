@@ -51,13 +51,22 @@ public final class Audio {
 	 */
 	public static final int BOOST = 7;
 	/**
-	 * Track number for hyperspace.
+	 * Track number for player 2's rocket boost.
 	 */
-	public static final int TELEPORT = 8;
+	public static final int BOOST2 = 8;
 	/**
 	 * Track number for powerup.
 	 */
 	public static final int POWERUP = 9;
+	/**
+	 * Track number for hyperspace.
+	 */
+	public static final int TELEPORT = 10;
+	/**
+	 * Track number for second player shooting.
+	 */
+	public static final int SHOOTING2 = 11;
+
 	/**
 	 * Map with key and value to easily find tracks.
 	 */
@@ -68,10 +77,14 @@ public final class Audio {
 	private final BackgroundAudio bgtrack;
 	
 	private static final double BOOSTVOLUME = 0.5;
-	private static final double SHOOTINGVOLUME = 0.5;
+	private static final double SHOOTINGVOLUME = 0.4;
 	private static final double UFOSMALLVOLUME = 0.3;
 	private static final double UFOBIGVOLUME = 0.3;
 	private static final double TELEPORTVOLUME = 0.7;
+	private static final double SHOOTING2VOLUME = 0.3;
+	private static final double ASTEROIDVOLUME = 0.5;
+	private static final double POWERUPVOLUME = 0.5;
+	
 
 	/**
 	 * Constructor for audio class.
@@ -101,6 +114,11 @@ public final class Audio {
 					PATH + "teleport.wav").toURI().toURL().toString());
 			final AudioClip powerup = new AudioClip(new File(
 					PATH + "pickup.wav").toURI().toURL().toString());
+			final AudioClip boost2 = new AudioClip(new File(
+					PATH + "boost2.wav").toURI().toURL().toString());
+			final AudioClip shooting2 = new AudioClip(new File(
+					PATH + "fire2.wav").toURI().toURL().toString());
+
 			
 			ufosmall.setCycleCount(AudioClip.INDEFINITE);
 			ufobig.setCycleCount(AudioClip.INDEFINITE);
@@ -112,6 +130,11 @@ public final class Audio {
 			ufosmall.setVolume(UFOSMALLVOLUME);
 			ufobig.setVolume(UFOBIGVOLUME);
 			teleport.setVolume(TELEPORTVOLUME);
+			shooting2.setVolume(SHOOTING2VOLUME);
+			smallexplosion.setVolume(ASTEROIDVOLUME);
+			mediumexplosion.setVolume(ASTEROIDVOLUME);
+			largeexplosion.setVolume(ASTEROIDVOLUME);
+			powerup.setVolume(POWERUPVOLUME);
 			
 			tracks.add(shooting);
 			tracks.add(smallexplosion);
@@ -121,8 +144,10 @@ public final class Audio {
 			tracks.add(ufosmall);
 			tracks.add(ufobig);
 			tracks.add(boost);
-			tracks.add(teleport);
+			tracks.add(boost2);
 			tracks.add(powerup);
+			tracks.add(teleport);
+			tracks.add(shooting2);
 		} catch (MalformedURLException e) {
 			Logger.getInstance().log("failed to initialize audio");
 		}
