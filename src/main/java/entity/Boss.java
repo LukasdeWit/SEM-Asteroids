@@ -209,4 +209,8 @@ public class Boss extends AbstractEntity {
 		getThisGame().addScore(SCORE);
 		Particle.explosion(getX(), getY(), getThisGame());
 	}
+
+	public final int getToRight() {
+		return toRight;
+	}
 }
