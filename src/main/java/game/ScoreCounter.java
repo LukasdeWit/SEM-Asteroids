@@ -72,7 +72,8 @@ public class ScoreCounter {
 	}
 	
 	/**
-	 * Describes what should happen at the start of the game.
+	 * Set score to 0 at start of game.
+	 * Write existing score as highscore if larger than current highscore.
 	 */
 	protected final void startGame() {
 		if (this.score > highscore) {
@@ -124,8 +125,10 @@ public class ScoreCounter {
 	 * Update the highscore.
 	 */
 	protected final void updateHighscore() {
-		highscore = score;
-		writeHighscore();
+		if (isHighscore()) {
+			highscore = score;
+			writeHighscore();
+		}
 	}
 	
 	/**
@@ -157,5 +160,12 @@ public class ScoreCounter {
 	 */
 	public final void setHighscore(final long highscore) {
 		this.highscore = highscore;
+	}
+	
+	/**
+	 * @return game this scorecounter belongs to
+	 */
+	public final Game getThisGame() {
+		return thisGame;
 	}
 }
