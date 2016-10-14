@@ -155,6 +155,10 @@ public class Bullet extends AbstractEntity {
 		bullet.setDY(this.getDY());
 		bullet.setThisGame(this.getThisGame());
 		bullet.setPierce(this.getPierce());
+		bullet.setPlayer(getPlayer());
+		bullet.setBirthTime(birthTime);
+		bullet.setShot(isShot());
+		bullet.setFriendly(isFriendly());
 		return bullet;
 	}
 }
