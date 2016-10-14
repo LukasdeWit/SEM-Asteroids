@@ -24,7 +24,6 @@ public final class Game implements EntityObserver {
 	private Player player;
 	private Player playerTwo;
 	private List<AbstractEntity> entities;
-	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
 	private final float screenX;
 	private final float screenY;
@@ -44,7 +43,6 @@ public final class Game implements EntityObserver {
 		screenY = CANVAS_SIZE;
 		entities = new ArrayList<>();
 		spawner = new Spawner(this);
-		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		gamestate = new Gamestate(this);
 		scorecounter = new ScoreCounter(this);
@@ -101,11 +99,7 @@ public final class Game implements EntityObserver {
 		});
 
 		spawner.update();
-		destroyList.forEach(AbstractEntity::onDeath);
-		entities.removeAll(destroyList);
 		entities.addAll(createList);
-		createList.clear();
-		destroyList.clear();
 		createList.clear();
 		scorecounter.displayScore();
 		if (gamestate.isCoop()) {
@@ -130,9 +124,7 @@ public final class Game implements EntityObserver {
 	public void checkCollision(final AbstractEntity e1) {
 		entities.stream()
 				.filter(e2 -> !e1.equals(e2)
-						&& AbstractEntity.collision(e1, e2)
-						&& !destroyList.contains(e1)
-						&& !destroyList.contains(e2))
+						&& AbstractEntity.collision(e1, e2))
 				.forEach(e1::collide);
 	}
 
@@ -143,7 +135,7 @@ public final class Game implements EntityObserver {
 	 * @param e - the Entity
 	 */
 	public void destroy(final AbstractEntity e) {
-		destroyList.add(e);
+		entities.remove(e);
 	}
 
 	/**
@@ -300,20 +292,6 @@ public final class Game implements EntityObserver {
 	 */
 	public void setPlayerTwo(final Player playerTwo) {
 		this.playerTwo = playerTwo;
-	}
-
-	/**
-	 * @return the destroyList
-	 */
-	public List<AbstractEntity> getDestroyList() {
-		return destroyList;
-	}
-
-	/**
-	 * @param destroyList the destroyList to set
-	 */
-	public void setDestroyList(final List<AbstractEntity> destroyList) {
-		this.destroyList = destroyList;
 	}
 
 	/**
