@@ -13,10 +13,22 @@ public class Bullet extends AbstractEntity {
 	private boolean friendly;
 	private Player player;
 	private int piercing = 1;
+	private boolean shot;
 
 	private static final long LIFETIME = 2000;
 	private static final float RADIUS = 2;
 
+	/**
+	 * Constructor for the Bullet class.
+	 */
+	public Bullet() {
+		super();
+		setRadius(RADIUS);
+		birthTime = 0;
+		friendly = true;
+		shot = false;
+	}
+	
 	/**
 	 * Constructor for the bullet class.
 	 *
@@ -60,11 +72,13 @@ public class Bullet extends AbstractEntity {
 	 */
 	@Override
 	public final void update(final List<String> input) {
-		setX(getX() + getDX());
-		setY(getY() + getDY());
-		wrapAround();
-		if (System.currentTimeMillis() - birthTime > LIFETIME) {
-			getThisGame().destroy(this);
+		if (this.isShot()) {
+			setX(getX() + getDX());
+			setY(getY() + getDY());
+			wrapAround();
+			if (System.currentTimeMillis() - birthTime > LIFETIME) {
+				getThisGame().destroy(this);
+			}
 		}
 	}
 
@@ -108,6 +122,13 @@ public class Bullet extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		//no-op
+	}
+	
+	/**
+	 * @return true if the bullet is shot, false otherwise.
+	 */
+	public final boolean isShot() {
+		return this.shot;
 	}
 
 	/**
