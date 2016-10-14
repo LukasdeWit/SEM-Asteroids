@@ -13,7 +13,7 @@ import javafx.scene.media.AudioClip;
  * @author Esmee
  *
  */
-public final class Audio {
+public class Audio {
 	/**
 	 * Path for the location of the audiofiles.
 	 */
@@ -160,7 +160,7 @@ public final class Audio {
 	 *            number of track to be played
 	 * @return AudioClip with that title
 	 */
-	public AudioClip get(final int tracknumber) {
+	public final AudioClip get(final int tracknumber) {
 		return tracks.get(tracknumber);
 	}
 
@@ -170,7 +170,7 @@ public final class Audio {
 	 * @param tracknumber
 	 *            number of track to be played
 	 */
-	public void play(final int tracknumber) {
+	public final void play(final int tracknumber) {
 		final AudioClip track = get(tracknumber);
 		if (!track.isPlaying()) {
 			track.play();
@@ -183,7 +183,7 @@ public final class Audio {
 	 * @param tracknumber
 	 *            number of track to be played
 	 */
-	public void playMultiple(final int tracknumber) {
+	public final void playMultiple(final int tracknumber) {
 		final AudioClip track = get(tracknumber);
 		track.play();
 	}
@@ -192,7 +192,7 @@ public final class Audio {
 	 * Get a track by title and stop it from playing.
 	 * @param tracknumber number of track to be stopped
 	 */
-	public void stop(final int tracknumber) {
+	public final void stop(final int tracknumber) {
 		if (get(tracknumber).isPlaying()) {
 			get(tracknumber).stop();
 		}
@@ -202,14 +202,14 @@ public final class Audio {
 	 * Pass the background track on to the appropriate class.
 	 * @param enemies amount of enemies in the game.
 	 */
-	public void backgroundTrack(final int enemies) {
+	public final void backgroundTrack(final int enemies) {
 		bgtrack.update(enemies);
 	}
 	
 	/**
 	 * Silence all currently playing tracks.
 	 */
-	public void mute() {
+	public final void mute() {
 		for (int i = 0; i < tracks.size(); i++) {
 			stop(i);
 		}
