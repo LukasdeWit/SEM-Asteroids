@@ -42,7 +42,6 @@ public class HighscoreStore {
      * @return the list of highscores
      */
     private List<HighScore> readHighScores() {
-
         try (InputStreamReader reader = new InputStreamReader(
                 new FileInputStream(HighscoreUtils.getHighScoreFile()),
                 StandardCharsets.UTF_8)) {

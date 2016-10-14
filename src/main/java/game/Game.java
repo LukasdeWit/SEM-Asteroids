@@ -3,6 +3,7 @@ package game;
 import display.DisplayHud;
 import display.DisplayText;
 import entity.*;
+import game.highscore.HighscoreStore;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
