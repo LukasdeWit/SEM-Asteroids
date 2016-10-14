@@ -31,6 +31,7 @@ public final class Game {
 	private long highscore;
 	private final Spawner spawner;
 	private final Gamestate gamestate;
+	private final Audio audio;
 
 	private static final float CANVAS_SIZE = 500;
 	private static final int LIFE_SCORE = 10000;
@@ -50,6 +51,7 @@ public final class Game {
 		random = new Random();
 		highscore = readHighscore();
 		gamestate = new Gamestate(this);
+		audio = new Audio();
 	}
 
 	/**
@@ -148,6 +150,7 @@ public final class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
+		audio.backgroundTrack(enemies());
 		DisplayText.score(score);
 		DisplayText.highscore(highscore);
 		if (gamestate.isCoop()) {
@@ -225,6 +228,7 @@ public final class Game {
 			Logger.getInstance().log("New highscore is " + highscore + ".");
 			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}
+		audio.mute();
 	}
 
 	/**
@@ -437,5 +441,12 @@ public final class Game {
 	 */
 	public Spawner getSpawner() {
 		return spawner;
+	}
+	
+	/**
+	 * @return the audio
+	 */
+	public Audio getAudio() {
+		return audio;
 	}
 }

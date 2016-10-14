@@ -1,6 +1,7 @@
 package entity;
 import display.DisplayEntity;
 import display.DisplayHud;
+import game.Audio;
 import game.Game;
 import game.Logger;
 
@@ -84,6 +85,7 @@ public class Powerup extends AbstractEntity {
 	private void pickup(final Player p) {
 		player = p;
 		pickupTime = System.currentTimeMillis();
+		getThisGame().getAudio().play(Audio.POWERUP);
 		switch (type) {
 			case EXTRA_LIFE:
 				p.gainLife();
