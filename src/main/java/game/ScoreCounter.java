@@ -18,11 +18,12 @@ public class ScoreCounter {
 	private final HighscoreStore highscoreStore;
 	// not used  right now, but useful when we want to separate
 	// highscores for each game mode
-	private Game thisGame;
+	private final Game thisGame;
 	
 	/**
 	 * Constructor for score counter.
 	 * @param game this scorecounter belongs to
+	 * @param highscoreStore the HighscoreStore used for managing the highscores
 	 */
 	public ScoreCounter(final Game game, final HighscoreStore highscoreStore) {
 		this.thisGame = game;

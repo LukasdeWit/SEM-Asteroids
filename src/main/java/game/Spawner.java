@@ -1,10 +1,10 @@
 package game;
 
-import java.util.Random;
-
 import entity.Asteroid;
 import entity.Powerup;
 import entity.Saucer;
+
+import java.util.Random;
 
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.
@@ -16,7 +16,7 @@ public final class Spawner {
 	private long startPowerupTime;
 	private long startRest;
 	private int wave;
-	private Random random;
+	private final Random random;
 	/**
 	 * The Game this spawner belongs to.
 	 */
