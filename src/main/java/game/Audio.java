@@ -55,6 +55,10 @@ public final class Audio {
 	 */
 	public static final int TELEPORT = 8;
 	/**
+	 * Track number for powerup.
+	 */
+	public static final int POWERUP = 9;
+	/**
 	 * Map with key and value to easily find tracks.
 	 */
 	private final List<AudioClip> tracks;
@@ -95,6 +99,8 @@ public final class Audio {
 					PATH + "boost.wav").toURI().toURL().toString());
 			final AudioClip teleport = new AudioClip(new File(
 					PATH + "teleport.wav").toURI().toURL().toString());
+			final AudioClip powerup = new AudioClip(new File(
+					PATH + "pickup.wav").toURI().toURL().toString());
 			
 			ufosmall.setCycleCount(AudioClip.INDEFINITE);
 			ufobig.setCycleCount(AudioClip.INDEFINITE);
@@ -116,6 +122,7 @@ public final class Audio {
 			tracks.add(ufobig);
 			tracks.add(boost);
 			tracks.add(teleport);
+			tracks.add(powerup);
 		} catch (MalformedURLException e) {
 			Logger.getInstance().log("failed to initialize audio");
 		}
