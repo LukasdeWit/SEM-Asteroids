@@ -1,15 +1,20 @@
 package entity;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 
 /**
@@ -23,6 +28,7 @@ public class PowerupTest {
 
 	private Game thisGame;
 	private Powerup powerup;
+	private PlayerBuilder pBuilder;
 
 	@Before
 	public final void setUp() {
@@ -32,6 +38,14 @@ public class PowerupTest {
 		Launcher.getRoot().getChildren().clear();
 		powerup = new Powerup(X_START, Y_START, thisGame);
 		powerup.setType(0);
+		
+		pBuilder = new PlayerBuilder();
+		pBuilder.setX(X_START);
+		pBuilder.setY(Y_START);
+		pBuilder.setDX(3);
+		pBuilder.setDY(4);
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setPlayerTwo(false);
 	}
 	
 	@Test
@@ -43,14 +57,14 @@ public class PowerupTest {
 	
 	@Test
 	public final void testCollide1(){
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		powerup.collide(p);
 		assertEquals(p, powerup.getPlayer());
 	}
 	
 	@Test
 	public final void testCollide2(){
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		powerup.setPickupTime(1);
 		powerup.collide(p);
 		assertEquals(null, powerup.getPlayer());
@@ -66,7 +80,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup1(){
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(1);
 		powerup.collide(p);
 		assertTrue(thisGame.getDestroyList().contains(powerup));
@@ -74,7 +88,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup2(){
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(2);
 		powerup.collide(p);
 		assertEquals(Powerup.getNewBulletSize(), p.getCurrentBulletSize(), 0);
@@ -82,7 +96,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup3(){
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(3);
 		powerup.collide(p);
 		assertTrue(p.isTripleShot());
@@ -90,7 +104,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup4(){
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(4);
 		powerup.collide(p);
 		assertEquals(Powerup.getNewPiercingLevel(), p.getPiercing(), 0);
@@ -98,7 +112,7 @@ public class PowerupTest {
 	
 	@Test
 	public final void testPickup5(){
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(5);
 		powerup.collide(p);
 		assertEquals(Powerup.getNewFireRate(), p.getCurrentFireRate(), 0);
@@ -154,7 +168,7 @@ public class PowerupTest {
 	
 	@Test
 	public void testRunOut1() {
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setBulletSize(0);
 		powerup.setPlayer(p);
 		powerup.setType(2);
@@ -165,7 +179,7 @@ public class PowerupTest {
 	
 	@Test
 	public void testRunOut2() {
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setTripleShot(true);
 		powerup.setPlayer(p);
 		powerup.setType(3);
@@ -176,7 +190,7 @@ public class PowerupTest {
 	
 	@Test
 	public void testRunOut3() {
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setPiercing(5);
 		powerup.setPlayer(p);
 		powerup.setType(4);
@@ -187,7 +201,7 @@ public class PowerupTest {
 	
 	@Test
 	public void testRunOut4() {
-		final Player p = new Player(X_START, Y_START, 3, 4, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		p.setFireRate(0);
 		powerup.setPlayer(p);
 		powerup.setType(5);

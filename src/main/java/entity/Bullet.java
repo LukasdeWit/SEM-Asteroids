@@ -1,9 +1,8 @@
 package entity;
-import display.DisplayEntity;
-import game.Game;
-import game.Logger;
-
 import java.util.List;
+
+import display.DisplayEntity;
+import game.Logger;
 
 /**
  * Class that stores the information for a bullet.
