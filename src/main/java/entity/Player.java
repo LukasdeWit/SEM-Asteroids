@@ -48,40 +48,6 @@ public class Player extends AbstractEntity {
 	private static final float SPAWN_OFFSET = 40;
 
     private static final double TRIPLE_SHOT_ANGLE = .1;
-
-    /**
-	* create a player, with default properties.
-	*
-	* @param x         location of Player along the X-axis.
-	* @param y         location of Player along the Y-axis.
-	* @param dX        velocity of Player along the X-axis.
-	* @param dY        velocity of Player along the Y-axis.
-	* @param playerTwo whether this is player two or player one
-	* @param thisGame  the game this particle belongs to
-	*/
-    public Player(final float x, final float y, final float dX, final float dY, final Game thisGame,
-                  final boolean playerTwo) {
-		super(x, y, dX, dY, thisGame);
-		lives = STARTING_LIVES;
-		setRadius(RADIUS);
-		rotation = 0;
-		this.playerTwo = playerTwo;
-		playerString = "The Player";
-		if (thisGame.getGamestate().isCoop()) {
-			playerString = "Player 1";
-		}
-		if (playerTwo) {
-			playerString = "Player 2";
-		}
-		makeInvincible(INVINCIBILITY_START_TIME);
-		maxBullets = MAX_BULLETS;
-		fireRate = FIRE_RATE;
-		piercing = 1;
-		shielding = 0;
-		bulletSize = BULLET_SIZE;
-		tripleShot = false;
-		changeOfDying = CHANCE_OF_DYING;
-	}
     
     /**
      * create an uninitialized player with only the default player.
