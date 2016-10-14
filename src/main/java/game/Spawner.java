@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Random;
+
 import entity.Asteroid;
 import entity.Powerup;
 import entity.Saucer;
@@ -14,6 +16,7 @@ public final class Spawner {
 	private long startPowerupTime;
 	private long startRest;
 	private int wave;
+	private Random random;
 	/**
 	 * The Game this spawner belongs to.
 	 */
@@ -39,6 +42,7 @@ public final class Spawner {
 		startPowerupTime = System.currentTimeMillis();
 		startRest = 0;
 		wave = 0;
+		random = new Random();
 	}
 
 	/**
@@ -79,7 +83,7 @@ public final class Spawner {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	private void spawnSaucer() {
-		final Saucer newSaucer = new Saucer(thisGame.getRandom().nextInt(1)
+		final Saucer newSaucer = new Saucer(random.nextInt(1)
 				* 2 * thisGame.getScreenX(), (float) Math.random()
 				* thisGame.getScreenY(), 0, 0, thisGame);
 		if (Math.random() < smallSaucerRatio()) {
@@ -104,10 +108,10 @@ public final class Spawner {
 	 * @return the ratio
 	 */
 	private double smallSaucerRatio() {
-		if (thisGame.getScore() < DIFFICULTY_STEP) {
+		if (thisGame.getScoreCounter().getScore() < DIFFICULTY_STEP) {
 			return .5;
-		} else if (thisGame.getScore() < MAX_DIFFICULTY_SCORE) {
-			return .5 + ((thisGame.getScore() / (double) DIFFICULTY_STEP)
+		} else if (thisGame.getScoreCounter().getScore() < MAX_DIFFICULTY_SCORE) {
+			return .5 + ((thisGame.getScoreCounter().getScore() / (double) DIFFICULTY_STEP)
 					* .5 / (double) (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
 		} else {
 			return 1;
