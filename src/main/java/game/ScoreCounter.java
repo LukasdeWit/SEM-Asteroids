@@ -23,12 +23,17 @@ public class ScoreCounter {
 
 	private long score;
 	private long highscore;
+	// not used  right now, but useful when we want to separate
+	// highscores for each game mode
+	private Game thisGame;
 	
 	/**
 	 * Constructor for score counter.
+	 * @param game this scorecounter belongs to
 	 */
-	public ScoreCounter() {
+	public ScoreCounter(final Game game) {
 		highscore = readHighscore();
+		thisGame = game;
 	}
 	
 	/**
@@ -132,6 +137,7 @@ public class ScoreCounter {
 	}
 	
 	/**
+	 * Method to check if the player has enough points to gain a life.
 	 * @param points amount of points that the player gains
 	 * @return true when the player can gain a life
 	 */
