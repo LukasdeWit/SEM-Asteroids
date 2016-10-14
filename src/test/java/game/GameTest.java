@@ -311,9 +311,4 @@ public class GameTest {
 		addToEntities(a);
 		assertEquals(2, thisGame.enemies(), 0);
 	}
-	
-	@Test
-	public final void testGetters(){
-		assertTrue(thisGame.getRandom() != null);
-	}
 }

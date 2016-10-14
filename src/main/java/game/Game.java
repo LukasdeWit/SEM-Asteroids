@@ -9,7 +9,6 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * This class defines everything within the game.
@@ -20,7 +19,6 @@ public final class Game {
 	private Player player;
 	private Player playerTwo;
 	private List<AbstractEntity> entities;
-	private final Random random;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
 	private final float screenX;
@@ -43,7 +41,6 @@ public final class Game {
 		spawner = new Spawner(this);
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
-		random = new Random();
 		gamestate = new Gamestate(this);
 		scorecounter = new ScoreCounter();
 	}
@@ -297,15 +294,6 @@ public final class Game {
 	 */
 	public void setPlayerTwo(final Player playerTwo) {
 		this.playerTwo = playerTwo;
-	}
-
-	/**
-	 * random getter.
-	 *
-	 * @return the random
-	 */
-	public Random getRandom() {
-		return random;
 	}
 
 	/**
