@@ -132,6 +132,9 @@ public class HighscoreStore {
         }
     }
 
+    /**
+     * clear all stored highscores and reset the file stored on disk.
+     */
     public final void clear() {
         this.highScores.clear();
         this.writeScores();

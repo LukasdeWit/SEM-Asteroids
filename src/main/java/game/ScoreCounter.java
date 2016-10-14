@@ -129,7 +129,7 @@ public class ScoreCounter {
 	}
 
 	/**
-	 * clear all saved highscores, and reset the stored file
+	 * clear all saved highscores, and reset the stored file.
 	 */
 	public final void clearHighscores() {
 		highscoreStore.clear();
