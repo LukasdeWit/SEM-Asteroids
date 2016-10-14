@@ -13,40 +13,39 @@ public class Bullet extends AbstractEntity {
 	private boolean friendly;
 	private Player player;
 	private int piercing = 1;
-	
+
 	private static final long LIFETIME = 2000;
 	private static final float RADIUS = 2;
 
 	/**
 	 * Constructor for the bullet class.
 	 *
-	 * @param x position of bullet along the x-axis
-	 * @param y position of bullet along the y-axis
-	 * @param dX velocity of bullet along the x-axis
-	 * @param dY velocity of bullet along the y-axis
-	 * @param thisGame Game the bulelt exists in.
+	 * @param x        position of bullet along the x-axis
+	 * @param y        position of bullet along the y-axis
+	 * @param dX       velocity of bullet along the x-axis
+	 * @param dY       velocity of bullet along the y-axis
+	 * @param thisGame Game the bullet exists in.
 	 */
-	public Bullet(final float x, final float y, 
-			final float dX, final float dY, final Game thisGame) {
+	public Bullet(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
 		friendly = true;
 	}
-	
+
 	/**
 	 * Constructor for the bullet class.
 	 *
-	 * @param x position of bullet along the x-axis
-	 * @param y position of bullet along the y-axis
-	 * @param dX velocity of bullet along the x-axis
-	 * @param dY velocity of bullet along the y-axis
-	 * @param pierce - the number of asteroids this
+	 * @param x        position of bullet along the x-axis
+	 * @param y        position of bullet along the y-axis
+	 * @param dX       velocity of bullet along the x-axis
+	 * @param dY       velocity of bullet along the y-axis
+	 * @param pierce   the number of asteroids this
 	 * @param thisGame Game the bullet exists in.
-	 * bullet should be capable of piercing
+	 *                 bullet should be capable of piercing
 	 */
-	public Bullet(final float x, final float y, 
-			final float dX, final float dY, final int pierce, final Game thisGame) {
+	public Bullet(final float x, final float y, final float dX, final float dY, final int pierce,
+				  final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		setRadius(RADIUS);
 		birthTime = System.currentTimeMillis();
@@ -56,7 +55,8 @@ public class Bullet extends AbstractEntity {
 
 	/**
 	 * Calculate new position of Bullet.
-	 * @param input - the pressed keys
+	 *
+	 * @param input the pressed keys
 	 */
 	@Override
 	public final void update(final List<String> input) {
@@ -70,6 +70,7 @@ public class Bullet extends AbstractEntity {
 
 	/**
 	 * Get whether the bullet is friendly.
+	 *
 	 * @return boolean that is true when bullet is friendly
 	 */
 	public final boolean isFriendly() {
@@ -78,6 +79,7 @@ public class Bullet extends AbstractEntity {
 
 	/**
 	 * Set whether the bullet is friendly.
+	 *
 	 * @param friendly value that is true when the bullet is friendly
 	 */
 	public final void setFriendly(final boolean friendly) {
@@ -91,7 +93,7 @@ public class Bullet extends AbstractEntity {
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
 			if (piercing < 2) {
-			getThisGame().destroy(this);
+				getThisGame().destroy(this);
 			} else {
 				piercing--;
 			}

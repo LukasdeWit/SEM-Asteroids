@@ -1,19 +1,15 @@
 package entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 
 /**
@@ -31,8 +27,8 @@ public class PowerupTest {
 	@Before
 	public final void setUp() {
 		thisGame = new Game();
-		thisGame.setCreateList(new ArrayList<AbstractEntity>());
-		thisGame.setDestroyList(new ArrayList<AbstractEntity>());
+		thisGame.setCreateList(new ArrayList<>());
+		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		powerup = new Powerup(X_START, Y_START, thisGame);
 		powerup.setType(0);

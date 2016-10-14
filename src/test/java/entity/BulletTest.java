@@ -73,7 +73,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testUpdate() {
-		final List<String> input = new ArrayList<String>(0);
+		final List<String> input = new ArrayList<>(0);
 		bullet.update(input);
 		assertEquals(bullet.getX(), X_START + DX_START, 0);
 		assertEquals(bullet.getY(), Y_START + DY_START, 0);
@@ -84,7 +84,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testUpdate2() {
-		final List<String> input = new ArrayList<String>(0);
+		final List<String> input = new ArrayList<>(0);
 		bullet.setBirthTime(0);
 		bullet.update(input);
         assertTrue(thisGame.getDestroyList().contains(bullet));
