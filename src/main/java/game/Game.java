@@ -42,7 +42,7 @@ public final class Game {
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		gamestate = new Gamestate(this);
-		scorecounter = new ScoreCounter();
+		scorecounter = new ScoreCounter(this);
 	}
 
 	/**
