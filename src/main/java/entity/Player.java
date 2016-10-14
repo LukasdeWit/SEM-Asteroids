@@ -88,7 +88,19 @@ public class Player extends AbstractEntity {
      */
     public Player() {
     	super();
+    	lives = STARTING_LIVES;
+		setRadius(RADIUS);
+		rotation = 0;
     	playerTwo = false;
+    	playerString = "Player 1";
+    	makeInvincible(INVINCIBILITY_START_TIME);
+		maxBullets = MAX_BULLETS;
+		fireRate = FIRE_RATE;
+		piercing = 1;
+		shielding = 0;
+		bulletSize = BULLET_SIZE;
+		tripleShot = false;
+		changeOfDying = CHANCE_OF_DYING;
     }
 
 	/**
@@ -406,8 +418,16 @@ public class Player extends AbstractEntity {
 		this.lives = lives;
 	}
 	
+	/**
+	 * @param playerTwo - true if the player is player two, false otherwise.
+	 */
 	public final void setPlayerTwo(final boolean playerTwo) {
 		this.playerTwo = playerTwo;
+		if (playerTwo) {
+			this.playerString = "Player 2";
+		} else {
+			this.playerString = "Player 1";
+		}
 	}
 
 	/**
@@ -611,5 +631,19 @@ public class Player extends AbstractEntity {
 	 */
 	public final String getPlayerString() {
 		return playerString;
+	}
+	
+	/**
+	 * @return a shallow copy of the current player, useful for making two entities.
+	 */
+	public final Player shallowCopy() {
+		Player newPlayer = new Player();
+		newPlayer.setX(this.getX());
+		newPlayer.setY(this.getY());
+		newPlayer.setDX(this.getDX());
+		newPlayer.setDY(this.getDY());
+		newPlayer.setThisGame(this.getThisGame());
+		newPlayer.setPlayerTwo(this.isPlayerTwo());
+		return newPlayer;
 	}
 }

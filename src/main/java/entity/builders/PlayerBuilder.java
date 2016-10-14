@@ -55,9 +55,11 @@ public class PlayerBuilder implements EntityBuilder {
 
 	@Override
 	public final AbstractEntity getResult() {
-		Player thisPlayer = this.player;
-		this.player = new Player();
-		return thisPlayer;
+		/*
+		 *  Return a shallow copy of the player, so the factory can be used
+		 *  multiple times with the same settings.
+		 */
+		return player.shallowCopy();
 	}
 
 }
