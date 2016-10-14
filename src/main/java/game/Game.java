@@ -93,7 +93,7 @@ public final class Game implements EntityObserver {
 	 *
 	 * @param input - all keys pressed at the time of update
 	 */
-	public void updateGame(final List<String> input) {
+	public synchronized void updateGame(final List<String> input) {
 		entities.forEach(e -> {
 			e.update(input);
 			checkCollision(e);
@@ -152,9 +152,9 @@ public final class Game implements EntityObserver {
 	 *
 	 * @param e - the Entity
 	 */
-	public void create(final AbstractEntity e) {
+	public synchronized void create(final AbstractEntity e) {
 		e.addObserver(this);
-		entities.add(e);
+		createList.add(e);
 	}
 
 	/**
@@ -366,7 +366,7 @@ public final class Game implements EntityObserver {
 	}
 
 	@Override
-	public void notifyDeath(final AbstractEntity e) {
+	public synchronized void notifyDeath(final AbstractEntity e) {
 		e.onDeath();
 		entities.remove(e);
 	}
