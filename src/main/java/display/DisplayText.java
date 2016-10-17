@@ -47,7 +47,7 @@ public final class DisplayText {
 	private static final Font LARGE_FONT;
 	private static final Font WAVE_FONT;
 
-	private static boolean test = false;
+	private static boolean test;
 
 	static {
 		final String fontLoc = "/fonts/HyperspaceBold.otf";
