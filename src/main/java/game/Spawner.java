@@ -51,16 +51,16 @@ public final class Spawner {
 	 * This method is called every tick.
 	 */
 	public void update() {
-		if (thisGame.getGamestate().getMode() != Gamestate.getModeBoss()) {
+		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
+				&& System.currentTimeMillis() - startRest > REST) {
+			spawnBoss();
+		} else {
 			updateSaucer();
 			updatePowerup();
 			if (thisGame.enemies() != 0) {
 				startRest = System.currentTimeMillis();
 			}
 			updateWave();
-		} else if (thisGame.enemies() < 1
-				&& System.currentTimeMillis() - startRest > REST) {
-			spawnBoss();
 		}
 	}
 	

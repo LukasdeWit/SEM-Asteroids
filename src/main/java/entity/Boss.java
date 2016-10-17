@@ -21,7 +21,7 @@ public class Boss extends AbstractEntity {
 	private int currentLives;
 	private final Random random;
 	private long dirChangeTime;
-	private BulletBuilder bBuilder;
+	private final BulletBuilder bBuilder;
 	private static final double PATHS = 3;
 	private static final double PATH_ANGLE = Math.PI / 4;
 	private static final long CHANGE_DIR_TIME = 2000;

@@ -206,12 +206,19 @@ public final class Gamestate {
 	public static int getModeBoss() {
 		return MODE_BOSS;
 	}
-	
+
 	/**
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
 		return getMode() == getModeCoop();
+	}
+	
+	/**
+	 * @return true if boss
+	 */
+	public boolean isBoss() {
+		return getMode() == getModeBoss();
 	}
 
 	/**

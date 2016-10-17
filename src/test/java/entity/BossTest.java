@@ -83,7 +83,7 @@ public class BossTest {
 	@Test
 	public void testCollide() {
 		//Hit the boss with a friendly bullet.
-		BulletBuilder bBuilder = new BulletBuilder();
+		final BulletBuilder bBuilder = new BulletBuilder();
 		bBuilder.setX(boss.getX());
 		bBuilder.setY(boss.getY());
 		bBuilder.setDX(0f);
@@ -105,7 +105,7 @@ public class BossTest {
 
 	@Test
 	public void testCollide2() {
-		PlayerBuilder pBuilder = new PlayerBuilder();
+		final PlayerBuilder pBuilder = new PlayerBuilder();
 		//Hit the boss with a player.
 		pBuilder.setX(0);
 		pBuilder.setY(0);
@@ -113,7 +113,7 @@ public class BossTest {
 		pBuilder.setDY(0);
 		pBuilder.setThisGame(thisGame);
 		pBuilder.setPlayerTwo(false);
-		Player player = (Player) pBuilder.getResult();
+		final Player player = (Player) pBuilder.getResult();
 		
 		final int initiallives = player.getLives();
 		boss.collide(player);
