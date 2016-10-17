@@ -54,7 +54,7 @@ public class DisplayUtilsTest {
         assertTrue(Arrays.equals(expected, DisplayUtils.translate(xFunction, yFunction, target)));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void translateNull() {
         DisplayUtils.translate(null, value -> value + 1, new double[]{1});
         DisplayUtils.translate(value -> value + 1, null, new double[]{1});
