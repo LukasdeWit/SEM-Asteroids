@@ -394,7 +394,6 @@ public final class Game {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Score getter.
 	 * @return score
 	 */
@@ -407,8 +406,6 @@ public final class Game {
 	}
 
 	/**
-=======
->>>>>>> master
 	 * Player getter.
 	 *
 	 * @return the player
