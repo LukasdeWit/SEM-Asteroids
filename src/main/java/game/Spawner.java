@@ -97,7 +97,9 @@ public final class Spawner {
 		final int extra = (int) (thisGame.getScore() 
 				/ SURVIVAL_POINTS_PER_ASTEROID);
 		final int enemies = thisGame.convertedBigEnemies();
-		spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
+		if (STARTING_ASTEROIDS + extra - enemies > 0) {
+			spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
+		}
 	}
 	
 	/**
@@ -151,7 +153,11 @@ public final class Spawner {
 					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
 					thisGame));
 		}
-		Logger.getInstance().log(times + " asteroids were spawned.");
+		if (times == 1) {
+			Logger.getInstance().log("1 asteroid was spawned.");
+		} else {
+			Logger.getInstance().log(times + " asteroids were spawned.");
+		}
 	}
 
 	/**
