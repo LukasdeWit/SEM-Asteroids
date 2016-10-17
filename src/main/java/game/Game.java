@@ -460,6 +460,9 @@ public final class Game {
 		return survivalHighscore;
 	}
 	
+	/**
+	 * @param playerTwo - a new player two.
+	 */
 	public void setPlayerTwo(final Player playerTwo) {
 		this.playerTwo = playerTwo;
 	}
