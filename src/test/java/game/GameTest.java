@@ -289,7 +289,7 @@ public class GameTest {
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
 		final Bullet b = (Bullet) bBuilder.getResult();
-		b.setPlayer(p1);
+		b.setShooter(p1);
 		addToEntities(b);
 		assertEquals(1, thisGame.bullets(p1), 0);
 	}
@@ -301,7 +301,7 @@ public class GameTest {
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
 		final Bullet b = (Bullet) bBuilder.getResult();
-		b.setPlayer(p2);
+		b.setShooter(p2);
 		addToEntities(b);
 		assertEquals(0, thisGame.bullets(p1), 0);
 	}

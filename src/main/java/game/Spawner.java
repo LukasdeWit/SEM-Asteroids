@@ -170,7 +170,7 @@ public final class Spawner {
 	 */
 	private void spawnBoss() {
 		final Boss boss =
-				new Boss(thisGame.getRandom().nextInt(1)
+				new Boss(random.nextInt(1)
 				* 2 * thisGame.getScreenX(), (float) Math.random()
 				* thisGame.getScreenY(), 0, 0, thisGame);
 		thisGame.create(boss);

@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import entity.builders.BulletBuilder;
+import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
@@ -80,14 +82,21 @@ public class BossTest {
 
 	@Test
 	public void testCollide() {
-		//Hit the boss with a bullet.
-		final Bullet bullet = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
-		bullet.setFriendly(true);
+		//Hit the boss with a friendly bullet.
+		BulletBuilder bBuilder = new BulletBuilder();
+		bBuilder.setX(boss.getX());
+		bBuilder.setY(boss.getY());
+		bBuilder.setDX(0f);
+		bBuilder.setDY(0f);
+		bBuilder.setThisGame(thisGame);
+		bBuilder.setFriendly(true);
+		final Bullet bullet = (Bullet) bBuilder.getResult();
+
 		boss.collide(bullet);
 		//Show that the bullet is destroyed but the boss still has lives.
 		assertTrue(boss.getThisGame().getDestroyList().contains(bullet));
 		assertFalse(boss.getThisGame().getDestroyList().contains(boss));
-		for(int i = 0; i < 9; i++) {
+		for(int i = 0; i < boss.getStartingLives(); i++) {
 			boss.collide(bullet);
 		}
 		//Show that the boss' lives are exhausted.
@@ -96,8 +105,16 @@ public class BossTest {
 
 	@Test
 	public void testCollide2() {
-		//Hit the boss with a bullet.
-		final Player player = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		PlayerBuilder pBuilder = new PlayerBuilder();
+		//Hit the boss with a player.
+		pBuilder.setX(0);
+		pBuilder.setY(0);
+		pBuilder.setDX(0);
+		pBuilder.setDY(0);
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setPlayerTwo(false);
+		Player player = (Player) pBuilder.getResult();
+		
 		final int initiallives = player.getLives();
 		boss.collide(player);
 		//Show that the player doesn't lose a life, since they are currently invinicible.
@@ -111,9 +128,9 @@ public class BossTest {
 	
 	@Test
 	public void testOnDeath() {
-		final double initialScore = boss.getThisGame().getScore();
+		final double initialScore = boss.getThisGame().getScoreCounter().getScore();
 		boss.onDeath();
-		assertEquals(initialScore + 20000,boss.getThisGame().getScore(),0);
+		assertEquals(initialScore + 20000,boss.getThisGame().getScoreCounter().getScore(),0);
 	}
 
 	//Since each method calls the other, more than one test would be silly.

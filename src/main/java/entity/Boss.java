@@ -188,9 +188,9 @@ public class Boss extends AbstractEntity {
 		bBuilder.setY(getY());
 		bBuilder.setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
 		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
-		//bBuilder.setRadius(bulletSize);
 		bBuilder.setThisGame(getThisGame());
 		bBuilder.setShooter(this);
+		bBuilder.setFriendly(false);
 		final Bullet b = (Bullet) bBuilder.getResult();
 
 		getThisGame().create(b);
@@ -229,5 +229,13 @@ public class Boss extends AbstractEntity {
 	 */
 	public final int getToRight() {
 		return toRight;
+	}
+	
+	/**
+	 * Gets the starting lives of the boss.
+	 * @return the amount of starting lives
+	 */
+	public final int getStartingLives() {
+		return STARTING_LIVES;
 	}
 }
