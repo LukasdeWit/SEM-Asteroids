@@ -49,11 +49,13 @@ public class DisplayUtilsTest {
         });
     }
 
+    @SuppressWarnings("PMD")
     @Test
     public void translate() throws Exception {
         assertTrue(Arrays.equals(expected, DisplayUtils.translate(xFunction, yFunction, target)));
     }
 
+    @SuppressWarnings("PMD")
     @Test(expected = NullPointerException.class)
     public void translateNull() throws Exception {
         DisplayUtils.translate(null, value -> value + 1, new double[]{1});

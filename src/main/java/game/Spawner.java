@@ -16,7 +16,7 @@ public final class Spawner {
 	private long startPowerupTime;
 	private long startRest;
 	private int wave;
-	private Random random;
+	private final Random random;
 	/**
 	 * The Game this spawner belongs to.
 	 */

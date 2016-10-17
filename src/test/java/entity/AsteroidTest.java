@@ -89,7 +89,7 @@ public class AsteroidTest {
 	
 	@Test
 	public final void testCollide2() {
-		BulletBuilder bBuilder = new BulletBuilder();
+		final BulletBuilder bBuilder = new BulletBuilder();
 		bBuilder.setX(X_START);
 		bBuilder.setY(Y_START);
 		bBuilder.setDX(DX_START + 1);
