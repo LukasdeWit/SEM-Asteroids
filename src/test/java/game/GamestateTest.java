@@ -3,6 +3,8 @@ package game;
 import org.junit.Before;
 import org.junit.Test;
 
+import display.DisplayText;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class GamestateTest {
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
+		DisplayText.setTest(true);
 	}
 	
 	@Test

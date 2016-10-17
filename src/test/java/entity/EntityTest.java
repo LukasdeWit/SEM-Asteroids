@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  * @author Kibo
  *
  */
-public class AbstractEntityTest {
+public class EntityTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
