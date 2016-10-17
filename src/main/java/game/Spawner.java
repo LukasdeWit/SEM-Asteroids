@@ -90,7 +90,8 @@ public final class Spawner {
 	 * Checks if the wave should be updated and does so if needed.
 	 */
 	private void updateWave() {
-		if ((startRest == 0 || System.currentTimeMillis() - startRest > REST) && wave % WAVES_BETWEEN_BOSSES == 0) {
+		if ((startRest == 0 || System.currentTimeMillis() - startRest > REST) 
+				&& wave != 0 && wave % WAVES_BETWEEN_BOSSES == 0) {
 			spawnBoss();
 			startRest = System.currentTimeMillis();
 			wave++;
