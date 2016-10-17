@@ -50,17 +50,17 @@ public class BossTest {
 	@Test
 	public void testUpdate() {
 		//Test basic movement
-		float DX = boss.getDX();
-		float DY = boss.getDY();
+		final float dX = boss.getDX();
+		final float dY = boss.getDY();
 		final List<String> input = new ArrayList<>(0);
 		boss.update(input);
-		assertEquals(boss.getX(), X_START + DX, 0);
-		assertEquals(boss.getY(), Y_START + DY, 0);
+		assertEquals(boss.getX(), X_START + dX, 0);
+		assertEquals(boss.getY(), Y_START + dY, 0);
 	}
 	
 	@Test
 	public void testUpdate2() {
-		Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
+		final Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
 		//Test resetting of movement values to keep inside screen.
 		boss2.setDX(-2);
 		boss2.setDY(-2);
@@ -81,7 +81,7 @@ public class BossTest {
 	@Test
 	public void testCollide() {
 		//Hit the boss with a bullet.
-		Bullet bullet = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Bullet bullet = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
 		bullet.setFriendly(true);
 		boss.collide(bullet);
 		//Show that the bullet is destroyed but the boss still has lives.
@@ -97,12 +97,11 @@ public class BossTest {
 	@Test
 	public void testCollide2() {
 		//Hit the boss with a bullet.
-		Player player = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
-		int initiallives = player.getLives();
+		final Player player = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		final int initiallives = player.getLives();
 		boss.collide(player);
 		//Show that the player doesn't lose a life, since they are currently invinicible.
-		assertNotEquals(initiallives - 1, player.getLives());
-		assertFalse(boss.getThisGame().getDestroyList().contains(boss));
+		assertEquals(initiallives, player.getLives());
 		//Make player not invincible and show that they lose a life.
 		player.setInvincibleStart(0);
 		boss.collide(player);
@@ -112,7 +111,7 @@ public class BossTest {
 	
 	@Test
 	public void testOnDeath() {
-		double initialScore = boss.getThisGame().getScore();
+		final double initialScore = boss.getThisGame().getScore();
 		boss.onDeath();
 		assertEquals(initialScore + 20000,boss.getThisGame().getScore(),0);
 	}
@@ -120,9 +119,9 @@ public class BossTest {
 	//Since each method calls the other, more than one test would be silly.
 	@Test
 	public void testSetPath() {
-		int toRight = boss.getToRight();
-		int pathtoset = 1;
-		double predictedangle = (Math.PI * toRight) + ((pathtoset-1) * (Math.PI / 4));
+		final int toRight = boss.getToRight();
+		final int pathtoset = 1;
+		final double predictedangle = Math.PI * toRight + (pathtoset-1) * Math.PI / 4;
 		boss.setPath(pathtoset);
 		assertEquals(boss.getDX(),Math.cos(predictedangle) * 2,0);
 		assertEquals(boss.getDY(),-Math.sin(predictedangle) * 2,0);
@@ -130,7 +129,7 @@ public class BossTest {
 
 	@Test
 	public void testCheckEdgeX() {
-		Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
+		final Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
 		boss2.setDX(-2);
 		boss2.checkEdgeX();
 		assertEquals(boss2.getDX(), 2.0,0);
@@ -138,7 +137,7 @@ public class BossTest {
 
 	@Test
 	public void testCheckEdgeY() {
-		Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
+		final Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
 		boss2.setDY(-2);
 		boss2.checkEdgeY();
 		assertEquals(boss2.getDY(), 2.0,0);
