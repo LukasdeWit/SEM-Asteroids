@@ -97,7 +97,7 @@ public class ScoreCounterTest {
 	
 	@Test
 	public void testConstructor() {
-		ScoreCounter score = new ScoreCounter(thisGame);
+		final ScoreCounter score = new ScoreCounter(thisGame);
 		assertEquals(score.getThisGame(), thisGame);
 	}
 	
@@ -108,7 +108,7 @@ public class ScoreCounterTest {
 		sc.updateHighscore();
 		
 		// check if the highscore is read by new ScoreCounter object
-		ScoreCounter counter = new ScoreCounter(thisGame);
+		final ScoreCounter counter = new ScoreCounter(thisGame);
 		assertEquals(1234, counter.getHighscore());
 	}
 

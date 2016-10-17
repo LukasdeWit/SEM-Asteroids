@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import display.DisplayText;
 import entity.AbstractEntity;
 import entity.Asteroid;
 import entity.Bullet;
@@ -59,6 +60,8 @@ public class GameTest {
 		bBuilder.setDX(0);
 		bBuilder.setDY(0);
 		bBuilder.setThisGame(thisGame);
+		
+		DisplayText.setTest(true);
 	}
 	
 	@Test

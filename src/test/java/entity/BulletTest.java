@@ -45,7 +45,7 @@ public class BulletTest {
 	@Before
 	public void setUp() throws Exception {
 		thisGame = new Game();
-		BulletBuilder bBuilder = new BulletBuilder();
+		final BulletBuilder bBuilder = new BulletBuilder();
 		bBuilder.setX(X_START);
 		bBuilder.setY(Y_START);
 		bBuilder.setDX(DX_START);
