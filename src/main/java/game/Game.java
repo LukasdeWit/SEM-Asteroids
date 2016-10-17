@@ -57,10 +57,6 @@ public final class Game {
 	private static final float CANVAS_SIZE = 500;
 	
 	/**
-	 * amount of points needed to gain an extra life.
-	 */
-	private static final long POINTS_PER_LIFE = 10000;
-	/**
 	 * Size of a big asteroid in survival.
 	 */
 	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
@@ -278,17 +274,7 @@ public final class Game {
 			return;
 		}
 		destroy(player);
-
-		long score;
-		long highscore;
 		
-		if (gamestate.isArcade()) {
-			score = arcadeScore;
-			highscore = arcadeHighscore;
-		} else {
-			score = survivalScore;
-			highscore = survivalHighscore;
-		}
 		if (gamestate.isCoop()) {
 			destroy(playerTwo);
 		}
@@ -308,7 +294,6 @@ public final class Game {
 	 * @param score - the score to be added.
 	 */
 	public void addScore(final int score) {
-		long currentScore = getScore();
 		if (player == null) {
 			scorecounter.addScore(score);
 			return;

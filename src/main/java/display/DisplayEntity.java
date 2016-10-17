@@ -254,7 +254,7 @@ public final class DisplayEntity {
 		group.getChildren().add(c);
 
 		if (p.isBoost()) {
-			for (double[] shape : PLAYER_TWO_BOOST) {
+			for (final double[] shape : PLAYER_TWO_BOOST) {
 				final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, shape));
 				boostModel.setStroke(Color.WHITE);
 				boostModel.setStrokeWidth(2 * PLAYER_TWO_SIZE);
@@ -300,7 +300,7 @@ public final class DisplayEntity {
 	 */
 	public static void saucer(final Saucer s) {
 		final Group group = new Group();
-		for (double[] shape : SAUCER_SHAPE) {
+		for (final double[] shape : SAUCER_SHAPE) {
 			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (s.getRadius() * SAUCER_SIZE),
 					p -> p * (s.getRadius() * SAUCER_SIZE), shape));
 			polygon.setStroke(Color.WHITE);
