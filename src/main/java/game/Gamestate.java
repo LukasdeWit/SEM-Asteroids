@@ -116,6 +116,8 @@ public final class Gamestate {
 		if (input.contains("R")) {
 			Logger.getInstance().log("Game stopped.");
 			thisGame.startGame();
+			mode = MODE_NONE;
+			state = STATE_START_SCREEN;
 		}
 	}
 
