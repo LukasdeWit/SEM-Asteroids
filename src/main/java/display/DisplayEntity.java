@@ -154,7 +154,7 @@ public final class DisplayEntity {
 	 */
 	public static void asteroid(final Asteroid a) {
 		final Polygon polygon = new Polygon(DisplayUtils.translate(
-				ASTEROID_SHAPES[a.getShape()],d -> d * (a.getRadius() * ASTEROID_SIZE),
+				ASTEROID_SHAPES[a.getShape()], d -> d * (a.getRadius() * ASTEROID_SIZE),
 				d -> d * (a.getRadius() * ASTEROID_SIZE)));
 
 		polygon.setStroke(Color.WHITE);
