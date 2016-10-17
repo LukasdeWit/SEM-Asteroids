@@ -31,7 +31,7 @@ public class SpawnerTest {
 	@Test
 	public final void testUpdate1() {
 		spawner.update();
-		assertEquals(6, thisGame.getCreateList().size(), 0);
+		assertEquals(3, thisGame.getCreateList().size());
 	}
 	
 	@Test
