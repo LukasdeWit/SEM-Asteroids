@@ -1,44 +1,44 @@
 package entity;
+import java.util.List;
+
 import display.DisplayEntity;
 import game.Game;
 
-import java.util.List;
-
 /**
  * This class is a particle used in explosions.
- * @author Kibo
  *
+ * @author Kibo
  */
 public class Particle extends AbstractEntity {
-	private final long birthTime;
+	private long birthTime;
 	
 	private static final long LIFETIME = 750;
 	private static final int EXPLOSION_PARTICLES = 10;
 	private static final float SPEED = .75f;
-	
+
 	/**
 	 * Constructor of a particle.
-	 * @param x - x coordinate
-	 * @param y - y coordinate
-	 * @param dX - horizontal speed
-	 * @param dY - vertical speed
+	 *
+	 * @param x        x coordinate
+	 * @param y        y coordinate
+	 * @param dX       horizontal speed
+	 * @param dY       vertical speed
 	 * @param thisGame the game this particle belongs to
 	 */
-	public Particle(final float x, final float y, 
-			final float dX, final float dY, final Game thisGame) {
+	public Particle(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		setRadius(1);
 		birthTime = System.currentTimeMillis();
 	}
-	
+
 	/**
 	 * This function makes an explosion of particles.
-	 * @param x - x coordinate of explosion
-	 * @param y - y coordinate of explosion
-	 * @param thisGame - the game this explosion is added to
+	 *
+	 * @param x        x coordinate of explosion
+	 * @param y        y coordinate of explosion
+	 * @param thisGame the game this explosion is added to
 	 */
-	public static void explosion(final float x, final float y, 
-			final Game thisGame) {
+	public static void explosion(final float x, final float y, final Game thisGame) {
 		for (int i = 0; i < EXPLOSION_PARTICLES; i++) {
 			thisGame.create(randomParticle(x, y, thisGame));
 		}
@@ -46,15 +46,14 @@ public class Particle extends AbstractEntity {
 
 	/**
 	 * This method creates a random particle.
-	 * @param x - x coordinate
-	 * @param y - y coordinate
+	 *
+	 * @param x        x coordinate
+	 * @param y        y coordinate
 	 * @param thisGame the game this particle belongs to
 	 * @return the random particle
 	 */
 	private static Particle randomParticle(final float x, final float y, final Game thisGame) {
-		return new Particle(x, y,
-				(float) (Math.random() - .5) * SPEED,
-				(float) (Math.random() - .5) * SPEED, thisGame);
+		return new Particle(x, y, (float) (Math.random() - .5) * SPEED, (float) (Math.random() - .5) * SPEED, thisGame);
 	}
 
 	/**
@@ -83,6 +82,7 @@ public class Particle extends AbstractEntity {
 
 	/**
 	 * update the location of this particle, called every tick.
+	 *
 	 * @param input list of current key inputs this tick (not used)
 	 */
 	@Override
@@ -100,5 +100,12 @@ public class Particle extends AbstractEntity {
 	 */
 	public static int getExplosionParticles() {
 		return EXPLOSION_PARTICLES;
+	}
+
+	/**
+	 * @param birthTime the birthTime to set
+	 */
+	public final void setBirthTime(final long birthTime) {
+		this.birthTime = birthTime;
 	}
 }

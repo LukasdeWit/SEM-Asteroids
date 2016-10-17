@@ -1,5 +1,8 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -12,29 +15,25 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This class is the main launcher of the game.
- * 
- * @author Lukas
  *
+ * @author Lukas
  */
 public class Launcher extends Application {
 	/**
 	 * Time of one frame.
 	 */
 	private static final double FRAME_TIME = 0.017;
-	private static Group root  = new Group();
+	private static final Group ROOT = new Group();
 
 	// Make a new Game
 	private final Game thisGame = new Game();
 
 	/**
 	 * Main method.
-	 * 
-	 * @param args - standard
+	 *
+	 * @param args standard
 	 */
 	public static void main(final String... args) {
 		launch(args);
@@ -42,15 +41,15 @@ public class Launcher extends Application {
 
 	/**
 	 * starts the window and boots the game.
-	 * 
-	 * @param stage - the stage for the scenes
+	 *
+	 * @param stage the stage for the scenes
 	 */
 	@Override
 	public final void start(final Stage stage) {
 		// set up the title
 		stage.setTitle("ASTEROIDS!");
 		// set up the scene
-		final Scene scene = new Scene(root, 500, 500, Color.BLACK);
+		final Scene scene = new Scene(ROOT, 500, 500, Color.BLACK);
 		stage.setScene(scene);
 		final List<String> input = getInput(scene);
 		// set up the timing control
@@ -58,24 +57,25 @@ public class Launcher extends Application {
 		renderLoop.setCycleCount(Timeline.INDEFINITE);
 		final KeyFrame kf = new KeyFrame(Duration.seconds(FRAME_TIME),
 				new EventHandler<ActionEvent>() {
-			/**
-			 * Updates game based on keyboard input.
-			 */
-			@Override
-			public void handle(final ActionEvent e) {
-				thisGame.update(input);
-			}
-		});
+					/**
+					 * Updates game based on keyboard input.
+					 */
+					@Override
+					public void handle(final ActionEvent e) {
+						thisGame.update(input);
+					}
+				});
 		// add game to scene
 		renderLoop.getKeyFrames().add(kf);
 		renderLoop.play();
 		// show game
 		stage.show();
 	}
-	
+
 	/**
 	 * get the input.
-	 * @param scene - the scene
+	 *
+	 * @param scene the scene
 	 * @return the input
 	 */
 	private List<String> getInput(final Scene scene) {
@@ -110,7 +110,7 @@ public class Launcher extends Application {
 	 * @return the root
 	 */
 	public static Group getRoot() {
-		return root;
+		return ROOT;
 	}
 
 }

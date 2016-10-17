@@ -1,26 +1,37 @@
 package entity;
 
-import display.DisplayEntity;
-import game.Game;
-import game.Gamestate;
-import game.Launcher;
-import javafx.scene.Group;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import display.DisplayEntity;
+import entity.builders.BulletBuilder;
+import entity.builders.PlayerBuilder;
+import game.Game;
+import game.Gamestate;
+import game.Launcher;
+import javafx.scene.Group;
+import javafx.scene.shape.Polygon;
 
 public class PlayerTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
+	private static final String SPACE = "SPACE";
 	private Player player;
+	private Player player2;
 	private Game thisGame;
+	private BulletBuilder bBuilder;
+	private PlayerBuilder pBuilder;
 
 	@Before
 	public final void setUp() {
@@ -29,7 +40,26 @@ public class PlayerTest {
 		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.getGamestate().setMode(Gamestate.getModeArcade());
 		Launcher.getRoot().getChildren().clear();
-		player = new Player(X_START, Y_START, DX_START, DY_START, thisGame,  false);
+		
+		pBuilder = new PlayerBuilder();
+		pBuilder.setX(X_START);
+		pBuilder.setY(Y_START);
+		pBuilder.setDX(DX_START);
+		pBuilder.setDY(DY_START);
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setPlayerTwo(false);
+		player = (Player) pBuilder.getResult();
+		pBuilder.setDX(DX_START + 2);
+		pBuilder.setDY(DY_START + 2);
+		pBuilder.setPlayerTwo(true);
+		player2 = (Player) pBuilder.getResult();
+		
+		bBuilder = new BulletBuilder();
+		bBuilder.setX(X_START);
+		bBuilder.setY(Y_START);
+		bBuilder.setDX(DX_START);
+		bBuilder.setDY(DY_START);
+		bBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
@@ -75,14 +105,13 @@ public class PlayerTest {
 
 	@Test
 	public void testOnHit4() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		player2.onHit();
 		assertEquals(thisGame.getScreenX() / 2 + Player.getSpawnOffset(), player2.getX(), 0);
 	}
 
 	@Test
 	public void testOnHit5() {
-		thisGame.getGamestate().setMode(Gamestate.getModeCoop());
+		thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
 		player.onHit();
 		assertEquals(thisGame.getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
 	}
@@ -103,7 +132,6 @@ public class PlayerTest {
 	
 	@Test
 	public void testGainLife3() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		player2.setLives(0);
 		player2.gainLife();
 		assertEquals(1,player2.getLives(),0);
@@ -112,7 +140,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testGainLife4() {
-		thisGame.getGamestate().setMode(Gamestate.getModeCoop());
+		thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
 		player.setLives(0);
 		player.gainLife();
 		assertEquals(1,player.getLives(),0);
@@ -121,7 +149,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testUpdate() {
-		final List<String> input = new ArrayList<String>();	
+		final List<String> input = new ArrayList<>();
 		player.update(input);
 		assertEquals(X_START+DX_START,player.getX(),0);
 		assertEquals(Y_START+DY_START,player.getY(),0);
@@ -185,7 +213,7 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandler9() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		update(player, input, false);
 		assertEquals(System.currentTimeMillis(), player.getLastShot(), 1);
 	}
@@ -194,7 +222,6 @@ public class PlayerTest {
 	
 	@Test
 	public void testKeyHandlerTwo1() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"LEFT"};
 		update(player2, input, true);
 		assertEquals(Player.getRotationSpeed(),player2.getRotation(),0);
@@ -202,7 +229,6 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo2() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"RIGHT"};
 		update(player2, input, true);
 		assertEquals(-Player.getRotationSpeed(),player2.getRotation(),0);
@@ -224,7 +250,6 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo5() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"UP"};
 		update(player2, input, true);
 		assertTrue(player2.isBoost());
@@ -239,7 +264,6 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo7() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"DOWN"};
 		update(player2, input, true);
 		assertTrue(System.currentTimeMillis() == player2.getHyperspaceStart() || player2.getLives() == 2);
@@ -254,14 +278,13 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo9() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		update(player, input, true);
 		assertEquals(System.currentTimeMillis(), player.getLastShot(), 1);
 	}
 
 	@Test
 	public void testKeyHandlerTwo10() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"ENTER"};
 		update(player2, input, true);
 		assertEquals(System.currentTimeMillis(), player2.getLastShot(), 1);
@@ -286,7 +309,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testFire() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		player.setTripleShot(true);
 		update(player, input, false);
 		assertEquals(3, thisGame.getCreateList().size(), 0);
@@ -294,7 +317,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testFire2() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		update(player, input, false);
 		update(player, input, false);
 		assertEquals(1, thisGame.getCreateList().size(), 0);
@@ -302,7 +325,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testFire3() {
-		final String[] input = {"SPACE"};
+		final String[] input = {SPACE};
 		player.setMaxBullets(0);
 		update(player, input, false);
 		assertEquals(0, thisGame.getCreateList().size(), 0);
@@ -351,14 +374,14 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide6() {
-		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = bBuilder.getResult();
 		player.collide(ae);
 		assertEquals(3, player.getLives(), 0);
 	}
 	
 	@Test
 	public void testCollide7() {
-		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = bBuilder.getResult();
 		((Bullet) ae).setFriendly(false);
 		player.collide(ae);
 		assertEquals(2, player.getLives(), 0);
@@ -366,7 +389,10 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide8() {
-		final AbstractEntity ae = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		pBuilder.setDX(DX_START);
+		pBuilder.setDY(DY_START);
+		pBuilder.setPlayerTwo(false);
+		final AbstractEntity ae = pBuilder.getResult();
 		player.collide(ae);
 		assertEquals(3, player.getLives(), 0);
 	}
@@ -374,7 +400,8 @@ public class PlayerTest {
 	@Test
 	public void testDraw(){
 		player.draw();
-		final int strokesInGroup = ((Group)Launcher.getRoot().getChildren().get(0)).getChildren().size();
+		final int strokesInGroup = ((Polygon) ((Group) Launcher.getRoot().getChildren().get(0))
+				.getChildren().get(0)).getPoints().size();
 		final int strokesInShape = DisplayEntity.getPlayerOneLines().length;
 		assertEquals(strokesInShape, strokesInGroup, 0);
 	}
@@ -403,7 +430,7 @@ public class PlayerTest {
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);
 		if (coop) {
-			thisGame.getGamestate().setMode(Gamestate.getModeCoop());
+			thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
 		}
 		player.setInvincibleStart(0);
 		player.update(input);

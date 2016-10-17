@@ -1,19 +1,22 @@
 package game;
 
+import java.util.Random;
+
 import entity.Asteroid;
 import entity.Powerup;
 import entity.Saucer;
 
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.
- * @author Kibo
  *
+ * @author Kibo
  */
 public final class Spawner {
 	private long startSaucerTime;
 	private long startPowerupTime;
 	private long startRest;
 	private int wave;
+	private Random random;
 	/**
 	 * The Game this spawner belongs to.
 	 */
@@ -34,6 +37,7 @@ public final class Spawner {
 	
 	/**
 	 * Constructor of Spawner.
+	 *
 	 * @param game the game this particle belongs to
 	 */
 	public Spawner(final Game game) {
@@ -42,6 +46,7 @@ public final class Spawner {
 		startPowerupTime = System.currentTimeMillis();
 		startRest = 0;
 		wave = 0;
+		random = new Random();
 	}
 
 	/**
@@ -77,7 +82,7 @@ public final class Spawner {
 			startRest = System.currentTimeMillis();
 		}
 	}
-	
+
 	/**
 	 * This method is called every tick of a survival game.
 	 */
@@ -99,7 +104,7 @@ public final class Spawner {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	private void spawnSaucer() {
-		final Saucer newSaucer = new Saucer(thisGame.getRandom().nextInt(1)
+		final Saucer newSaucer = new Saucer(random.nextInt(1)
 				* 2 * thisGame.getScreenX(), (float) Math.random()
 				* thisGame.getScreenY(), 0, 0, thisGame);
 		if (Math.random() < smallSaucerRatio()) {
@@ -107,7 +112,7 @@ public final class Spawner {
 		}
 		thisGame.create(newSaucer);
 	}
-	
+
 	/**
 	 * adds a Powerup with random X and Y and type.
 	 */
@@ -115,18 +120,19 @@ public final class Spawner {
 		thisGame.create(new Powerup(thisGame.getScreenY()
 				* (float) Math.random(),
 				thisGame.getScreenY()
-				* (float) Math.random(), thisGame));
+						* (float) Math.random(), thisGame));
 	}
 
 	/**
 	 * Calculates the ratio of small saucers.
+	 *
 	 * @return the ratio
 	 */
 	private double smallSaucerRatio() {
-		if (thisGame.getScore() < DIFFICULTY_STEP) {
+		if (thisGame.getScoreCounter().getScore() < DIFFICULTY_STEP) {
 			return .5;
-		} else if (thisGame.getScore() < MAX_DIFFICULTY_SCORE) {
-			return .5 + ((thisGame.getScore() / (double) DIFFICULTY_STEP)
+		} else if (thisGame.getScoreCounter().getScore() < MAX_DIFFICULTY_SCORE) {
+			return .5 + ((thisGame.getScoreCounter().getScore() / (double) DIFFICULTY_STEP)
 					* .5 / (double) (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
 		} else {
 			return 1;
@@ -136,16 +142,14 @@ public final class Spawner {
 	/**
 	 * adds asteroids with random Y, side of screen and direction, but with
 	 * radius 20.
-	 * 
-	 * @param times
-	 *            - the number of asteroids
+	 *
+	 * @param times the number of asteroids
 	 */
 	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
-			thisGame.create(new Asteroid(0, thisGame.getScreenY()
-					* (float) Math.random(),
-					(float) (Math.random() - .5) * ASTEROID_SPEED,
-					(float) (Math.random() - .5) * ASTEROID_SPEED, thisGame));
+			thisGame.create(new Asteroid(0, thisGame.getScreenY() * (float) Math.random(),
+					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
+					thisGame));
 		}
 		Logger.getInstance().log(times + " asteroids were spawned.");
 	}
@@ -156,11 +160,13 @@ public final class Spawner {
 	public void reset() {
 		wave = 0;
 		startSaucerTime = System.currentTimeMillis();
+		startPowerupTime = System.currentTimeMillis();
 		startRest = 0;
 	}
 
 	/**
 	 * Getter for difficultyStep.
+	 *
 	 * @return the difficultyStep
 	 */
 	public static long getDifficultyStep() {
@@ -169,9 +175,38 @@ public final class Spawner {
 
 	/**
 	 * getter for wave.
+	 *
 	 * @return the wave
 	 */
 	public int getWave() {
 		return wave;
+	}
+
+	/**
+	 * @param wave the wave to set
+	 */
+	public void setWave(final int wave) {
+		this.wave = wave;
+	}
+
+	/**
+	 * @param startSaucerTime the startSaucerTime to set
+	 */
+	public void setStartSaucerTime(final long startSaucerTime) {
+		this.startSaucerTime = startSaucerTime;
+	}
+
+	/**
+	 * @param startPowerupTime the startPowerupTime to set
+	 */
+	public void setStartPowerupTime(final long startPowerupTime) {
+		this.startPowerupTime = startPowerupTime;
+	}
+
+	/**
+	 * @param startRest the startRest to set
+	 */
+	public void setStartRest(final long startRest) {
+		this.startRest = startRest;
 	}
 }
