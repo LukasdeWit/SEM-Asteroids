@@ -110,7 +110,7 @@ public class Bullet extends AbstractEntity {
 	}
 
 	/**
-	 * @param player the player to set
+	 * @param shooter the entity to set as the bullet's shooter
 	 */
 	public final void setShooter(final AbstractEntity shooter) {
 		this.shooter = shooter;

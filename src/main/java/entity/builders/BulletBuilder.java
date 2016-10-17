@@ -2,7 +2,6 @@ package entity.builders;
 
 import entity.AbstractEntity;
 import entity.Bullet;
-import entity.Player;
 import game.Game;
 
 /**
@@ -69,7 +68,7 @@ public class BulletBuilder implements EntityBuilder {
 	}
 	
 	/**
-	 * @param player - the player that shot the bullet.
+	 * @param shooter - the entity that shot the bullet.
 	 */
 	public final void setShooter(final AbstractEntity shooter) {
 		bullet.setShooter(shooter);
