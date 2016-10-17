@@ -1,9 +1,8 @@
 package entity;
-import display.DisplayEntity;
-import game.Game;
-import game.Logger;
-
 import java.util.List;
+
+import display.DisplayEntity;
+import game.Logger;
 
 /**
  * Class that stores the information for a bullet.
@@ -11,46 +10,22 @@ import java.util.List;
 public class Bullet extends AbstractEntity {
 	private long birthTime;
 	private boolean friendly;
-	private Player player;
+	private AbstractEntity shooter;
 	private int piercing = 1;
+	private boolean shot;
 
 	private static final long LIFETIME = 2000;
 	private static final float RADIUS = 2;
 
 	/**
-	 * Constructor for the bullet class.
-	 *
-	 * @param x        position of bullet along the x-axis
-	 * @param y        position of bullet along the y-axis
-	 * @param dX       velocity of bullet along the x-axis
-	 * @param dY       velocity of bullet along the y-axis
-	 * @param thisGame Game the bullet exists in.
+	 * Constructor for the Bullet class.
 	 */
-	public Bullet(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+	public Bullet() {
+		super();
 		setRadius(RADIUS);
-		birthTime = System.currentTimeMillis();
+		birthTime = 0;
 		friendly = true;
-	}
-
-	/**
-	 * Constructor for the bullet class.
-	 *
-	 * @param x        position of bullet along the x-axis
-	 * @param y        position of bullet along the y-axis
-	 * @param dX       velocity of bullet along the x-axis
-	 * @param dY       velocity of bullet along the y-axis
-	 * @param pierce   the number of asteroids this
-	 * @param thisGame Game the bullet exists in.
-	 *                 bullet should be capable of piercing
-	 */
-	public Bullet(final float x, final float y, final float dX, final float dY, final int pierce,
-				  final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
-		setRadius(RADIUS);
-		birthTime = System.currentTimeMillis();
-		friendly = true;
-		piercing = pierce;
+		shot = false;
 	}
 
 	/**
@@ -60,11 +35,13 @@ public class Bullet extends AbstractEntity {
 	 */
 	@Override
 	public final void update(final List<String> input) {
-		setX(getX() + getDX());
-		setY(getY() + getDY());
-		wrapAround();
-		if (System.currentTimeMillis() - birthTime > LIFETIME) {
-			getThisGame().destroy(this);
+		if (this.isShot()) {
+			setX(getX() + getDX());
+			setY(getY() + getDY());
+			wrapAround();
+			if (System.currentTimeMillis() - birthTime > LIFETIME) {
+				getThisGame().destroy(this);
+			}
 		}
 	}
 
@@ -109,6 +86,13 @@ public class Bullet extends AbstractEntity {
 	public final void onDeath() {
 		//no-op
 	}
+	
+	/**
+	 * @return true if the bullet is shot, false otherwise.
+	 */
+	public final boolean isShot() {
+		return this.shot;
+	}
 
 	/**
 	 * DisplayText bullet on screen.
@@ -121,15 +105,15 @@ public class Bullet extends AbstractEntity {
 	/**
 	 * @return the player
 	 */
-	public final Player getPlayer() {
-		return player;
+	public final AbstractEntity getShooter() {
+		return shooter;
 	}
 
 	/**
 	 * @param player the player to set
 	 */
-	public final void setPlayer(final Player player) {
-		this.player = player;
+	public final void setShooter(final AbstractEntity shooter) {
+		this.shooter = shooter;
 	}
 
 	/**
@@ -137,5 +121,44 @@ public class Bullet extends AbstractEntity {
 	 */
 	public final void setBirthTime(final long birthTime) {
 		this.birthTime = birthTime;
+	}
+	
+	/**
+	 * @param pierce - the amount of objects the bullet pierces.
+	 */
+	public final void setPierce(final int pierce) {
+		this.piercing = pierce;
+	}
+	
+	/**
+	 * @return the amount of objects the bullet pierces
+	 */
+	public final int getPierce() {
+		return this.piercing;
+	}
+	
+	/**
+	 * @param shot - true if the bullet is shot and moving, false otherwise
+	 */
+	public final void setShot(final boolean shot) {
+		this.shot = shot;
+	}
+	
+	/**
+	 * @return a shallow copy of the current bullet, useful for making two entities.
+	 */
+	public final Bullet shallowCopy() {
+		final Bullet bullet = new Bullet();
+		bullet.setX(this.getX());
+		bullet.setY(this.getY());
+		bullet.setDX(this.getDX());
+		bullet.setDY(this.getDY());
+		bullet.setThisGame(this.getThisGame());
+		bullet.setPierce(this.getPierce());
+		bullet.setShooter(getShooter());
+		bullet.setBirthTime(birthTime);
+		bullet.setShot(isShot());
+		bullet.setFriendly(isFriendly());
+		return bullet;
 	}
 }

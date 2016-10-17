@@ -1,19 +1,25 @@
 package entity;
 
-import display.DisplayEntity;
-import game.Game;
-import game.Gamestate;
-import game.Launcher;
-import javafx.scene.Group;
-import javafx.scene.shape.Polygon;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import display.DisplayEntity;
+import entity.builders.BulletBuilder;
+import entity.builders.PlayerBuilder;
+import game.Game;
+import game.Gamestate;
+import game.Launcher;
+import javafx.scene.Group;
+import javafx.scene.shape.Polygon;
 
 public class PlayerTest {
 	private static final float X_START = 1;
@@ -22,7 +28,10 @@ public class PlayerTest {
 	private static final float DY_START = 4;
 	private static final String SPACE = "SPACE";
 	private Player player;
+	private Player player2;
 	private Game thisGame;
+	private BulletBuilder bBuilder;
+	private PlayerBuilder pBuilder;
 
 	@Before
 	public final void setUp() {
@@ -31,7 +40,26 @@ public class PlayerTest {
 		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.getGamestate().setMode(Gamestate.getModeArcade());
 		Launcher.getRoot().getChildren().clear();
-		player = new Player(X_START, Y_START, DX_START, DY_START, thisGame,  false);
+		
+		pBuilder = new PlayerBuilder();
+		pBuilder.setX(X_START);
+		pBuilder.setY(Y_START);
+		pBuilder.setDX(DX_START);
+		pBuilder.setDY(DY_START);
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setPlayerTwo(false);
+		player = (Player) pBuilder.getResult();
+		pBuilder.setDX(DX_START + 2);
+		pBuilder.setDY(DY_START + 2);
+		pBuilder.setPlayerTwo(true);
+		player2 = (Player) pBuilder.getResult();
+		
+		bBuilder = new BulletBuilder();
+		bBuilder.setX(X_START);
+		bBuilder.setY(Y_START);
+		bBuilder.setDX(DX_START);
+		bBuilder.setDY(DY_START);
+		bBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
@@ -77,7 +105,6 @@ public class PlayerTest {
 
 	@Test
 	public void testOnHit4() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		player2.onHit();
 		assertEquals(thisGame.getScreenX() / 2 + Player.getSpawnOffset(), player2.getX(), 0);
 	}
@@ -105,7 +132,6 @@ public class PlayerTest {
 	
 	@Test
 	public void testGainLife3() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		player2.setLives(0);
 		player2.gainLife();
 		assertEquals(1,player2.getLives(),0);
@@ -196,7 +222,6 @@ public class PlayerTest {
 	
 	@Test
 	public void testKeyHandlerTwo1() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"LEFT"};
 		update(player2, input, true);
 		assertEquals(Player.getRotationSpeed(),player2.getRotation(),0);
@@ -204,7 +229,6 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo2() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"RIGHT"};
 		update(player2, input, true);
 		assertEquals(-Player.getRotationSpeed(),player2.getRotation(),0);
@@ -226,7 +250,6 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo5() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"UP"};
 		update(player2, input, true);
 		assertTrue(player2.isBoost());
@@ -241,7 +264,6 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo7() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"DOWN"};
 		update(player2, input, true);
 		assertTrue(System.currentTimeMillis() == player2.getHyperspaceStart() || player2.getLives() == 2);
@@ -263,7 +285,6 @@ public class PlayerTest {
 
 	@Test
 	public void testKeyHandlerTwo10() {
-		final Player player2 = new Player(X_START, Y_START, DX_START + 2, DY_START + 2, thisGame, true);
 		final String[] input = {"ENTER"};
 		update(player2, input, true);
 		assertEquals(System.currentTimeMillis(), player2.getLastShot(), 1);
@@ -353,14 +374,14 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide6() {
-		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = bBuilder.getResult();
 		player.collide(ae);
 		assertEquals(3, player.getLives(), 0);
 	}
 	
 	@Test
 	public void testCollide7() {
-		final AbstractEntity ae = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = bBuilder.getResult();
 		((Bullet) ae).setFriendly(false);
 		player.collide(ae);
 		assertEquals(2, player.getLives(), 0);
@@ -368,7 +389,10 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide8() {
-		final AbstractEntity ae = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		pBuilder.setDX(DX_START);
+		pBuilder.setDY(DY_START);
+		pBuilder.setPlayerTwo(false);
+		final AbstractEntity ae = pBuilder.getResult();
 		player.collide(ae);
 		assertEquals(3, player.getLives(), 0);
 	}

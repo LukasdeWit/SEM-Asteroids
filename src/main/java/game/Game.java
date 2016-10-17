@@ -1,17 +1,20 @@
 package game;
 
-import display.DisplayHud;
-import display.DisplayText;
-import entity.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+
+import display.DisplayHud;
+import display.DisplayText;
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.Boss;
+import entity.Bullet;
+import entity.Player;
+import entity.Saucer;
+import entity.builders.PlayerBuilder;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * This class defines everything within the game.
@@ -22,18 +25,15 @@ public final class Game {
 	private Player player;
 	private Player playerTwo;
 	private List<AbstractEntity> entities;
-	private final Random random;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
 	private final float screenX;
 	private final float screenY;
-	private long score;
-	private long highscore;
 	private final Spawner spawner;
 	private final Gamestate gamestate;
+	private final ScoreCounter scorecounter;
 
 	private static final float CANVAS_SIZE = 500;
-	private static final int LIFE_SCORE = 10000;
 	private static final boolean LOG_SCORE = false;
 
 	/**
@@ -47,9 +47,8 @@ public final class Game {
 		spawner = new Spawner(this);
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
-		random = new Random();
-		highscore = readHighscore();
 		gamestate = new Gamestate(this);
+		scorecounter = new ScoreCounter(this);
 	}
 
 	/**
@@ -58,60 +57,39 @@ public final class Game {
 	public void startGame() {
 		gamestate.start();
 		entities.clear();
+		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
-			player = new Player(screenX / 2 - Player.getSpawnOffset(), screenY / 2, 0, 0, this, false);
-			playerTwo = new Player(screenX / 2 + Player.getSpawnOffset(), screenY / 2, 0, 0, this, true);
+			// Create player 1
+			pBuilder.setX(screenX / 2 - Player.getSpawnOffset());
+			pBuilder.setY(screenY / 2);
+			pBuilder.setDX(0);
+			pBuilder.setDY(0);
+			pBuilder.setThisGame(this);
+			pBuilder.setPlayerTwo(false);
+			player = (Player) pBuilder.getResult();
+			// Change the relevant player two statistics
+			pBuilder.setPlayerTwo(true);
+			pBuilder.setX(screenX / 2 + Player.getSpawnOffset());
+			playerTwo = (Player) pBuilder.getResult();
+			
 			entities.add(player);
 			entities.add(playerTwo);
 		} else {
-			player = new Player(screenX / 2, screenY / 2, 0, 0, this, false);
+			pBuilder.setX(screenX / 2);
+			pBuilder.setY(screenY / 2);
+			pBuilder.setDX(0);
+			pBuilder.setDY(0);
+			pBuilder.setThisGame(this);
+			pBuilder.setPlayerTwo(false);
+			player = (Player) pBuilder.getResult();
 			entities.add(player);
 		} 
-		if (this.score > highscore) {
-			highscore = this.score;
-			writeHighscore();
-		}
-		score = 0;
+		scorecounter.startGame();
 		spawner.reset();
 		if (gamestate.getMode() == Gamestate.getModeArcade()) {
 			Logger.getInstance().log("Arcade game started.");
 		} else {
 			Logger.getInstance().log("Coop game started.");
-		}
-	}
-	
-	/**
-	 * reads the highscore from file in resources folder.
-	 *
-	 * @return the highscore
-	 */
-	private long readHighscore() {
-		long currentHighscore = 0;
-		final String filePath = "src/main/resources/highscore.txt";
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),
-				StandardCharsets.UTF_8))) {
-			String sCurrentLine;
-			while ((sCurrentLine = br.readLine()) != null) {
-				currentHighscore = Long.parseLong(sCurrentLine);
-			}
-		} catch (IOException e) {
-			Logger.getInstance().log("unable to read highscore from file", e);
-		}
-		return currentHighscore;
-	}
-
-	/**
-	 * writes the highscore to file in resources folder.
-	 */
-	private void writeHighscore() {
-		final String content = String.valueOf(highscore);
-		final File file = new File("src/main/resources/highscore.txt");
-		try (FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile())) {
-			fos.write(content.getBytes(StandardCharsets.UTF_8));
-			fos.flush();
-			fos.close();
-		} catch (IOException e) {
-			Logger.getInstance().log("unable to write highscore to file", e);
 		}
 	}
 
@@ -148,8 +126,7 @@ public final class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
-		DisplayText.score(score);
-		DisplayText.highscore(highscore);
+		scorecounter.displayScore();
 		if (gamestate.isCoop()) {
 			if (playerTwo == null) {
 				return;
@@ -217,12 +194,11 @@ public final class Game {
 			destroy(playerTwo);
 		}
 		Logger.getInstance().log("Game over.");
-		if (score <= highscore) {
+		if (scorecounter.isNotHighscore()) {
 			gamestate.setState(Gamestate.getStateStartScreen());
 		} else {
-			highscore = score;
-			writeHighscore();
-			Logger.getInstance().log("New highscore is " + highscore + ".");
+			scorecounter.updateHighscore();
+			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
 			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}
 	}
@@ -234,7 +210,7 @@ public final class Game {
 	 */
 	public void addScore(final int score) {
 		if (player == null) {
-			this.score += score;
+			scorecounter.addScore(score);
 			return;
 		}
 		if (player.isAlive() || gamestate.isCoop() && playerTwo.isAlive()) {
@@ -242,7 +218,7 @@ public final class Game {
 				Logger.getInstance().log(score + " points gained.");
 			}
 			extraLife(score);
-			this.score += score;
+			scorecounter.addScore(score);
 		}
 	}
 
@@ -251,7 +227,7 @@ public final class Game {
 	 * @param score - the score that will be added
 	 */
 	private void extraLife(final int score) {
-		if (this.score % LIFE_SCORE + score >= LIFE_SCORE) {
+		if (scorecounter.canGainLife(score)) {
 			player.gainLife();
 			if (gamestate.isCoop()) {
 				playerTwo.gainLife();
@@ -272,7 +248,7 @@ public final class Game {
 				.filter(e -> e instanceof Bullet)
 				.map(e -> (Bullet) e)
 				.filter(Bullet::isFriendly)
-				.filter(bullet -> bullet.getPlayer().equals(player))
+				.filter(bullet -> bullet.getShooter().equals(player))
 				.count());
 	}
 
@@ -315,22 +291,6 @@ public final class Game {
 	}
 
 	/**
-	 * Score getter.
-	 *
-	 * @return score
-	 */
-	public long getScore() {
-		return score;
-	}
-
-	/**
-	 * @param score the score to set
-	 */
-	public void setScore(final long score) {
-		this.score = score;
-	}
-
-	/**
 	 * Player getter.
 	 *
 	 * @return the player
@@ -358,29 +318,6 @@ public final class Game {
 	 */
 	public void setPlayerTwo(final Player playerTwo) {
 		this.playerTwo = playerTwo;
-	}
-
-	/**
-	 * random getter.
-	 *
-	 * @return the random
-	 */
-	public Random getRandom() {
-		return random;
-	}
-
-	/**
-	 * @return the highscore
-	 */
-	public long getHighscore() {
-		return highscore;
-	}
-
-	/**
-	 * @param highscore the highscore to set
-	 */
-	public void setHighscore(final long highscore) {
-		this.highscore = highscore;
 	}
 
 	/**
@@ -437,5 +374,12 @@ public final class Game {
 	 */
 	public Spawner getSpawner() {
 		return spawner;
+	}
+	
+	/**
+	 * @return the scorecounter
+	 */
+	public ScoreCounter getScoreCounter() {
+		return scorecounter;
 	}
 }

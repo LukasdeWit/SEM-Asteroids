@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import display.DisplayEntity;
+import entity.builders.BulletBuilder;
 import game.Game;
 import game.Logger;
 
@@ -20,6 +21,7 @@ public class Boss extends AbstractEntity {
 	private int currentLives;
 	private final Random random;
 	private long dirChangeTime;
+	private BulletBuilder bBuilder;
 	private static final double PATHS = 3;
 	private static final double PATH_ANGLE = Math.PI / 4;
 	private static final long CHANGE_DIR_TIME = 2000;
@@ -52,6 +54,11 @@ public class Boss extends AbstractEntity {
 			nextToRight = 1;
 		}
 		setPath(nextToRight, random.nextInt((int) PATHS));
+		
+		// Initialize the Bullet Builder
+		bBuilder = new BulletBuilder();
+		bBuilder.setPierce(0);
+		bBuilder.setFriendly(false);
 	}
 
 	/**
@@ -177,9 +184,15 @@ public class Boss extends AbstractEntity {
 	 *            - the direction
 	 */
 	private void fireBullet(final double direction) {
-		final Bullet b = new Bullet(getX(), getY(), (float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED),
-				(float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED), getThisGame());
-		b.setFriendly(false);
+		bBuilder.setX(getX());
+		bBuilder.setY(getY());
+		bBuilder.setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
+		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
+		//bBuilder.setRadius(bulletSize);
+		bBuilder.setThisGame(getThisGame());
+		bBuilder.setShooter(this);
+		final Bullet b = (Bullet) bBuilder.getResult();
+
 		getThisGame().create(b);
 	}
 
