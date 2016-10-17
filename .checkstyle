@@ -4,7 +4,7 @@
   <local-check-config name="AsteroidsCheck" location="AsteroidsChecks.xml" type="project" description="">
     <additional-data name="protect-config-file" value="false"/>
   </local-check-config>
-  <fileset name="AsteroidsCheck" enabled="true" check-config-name="AsteroidsCheck" local="false">
+  <fileset name="AsteroidsCheck" enabled="true" check-config-name="AsteroidsChecks" local="false">
     <file-match-pattern match-pattern=".java$" include-pattern="true"/>
   </fileset>
 </fileset-config>
