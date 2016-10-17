@@ -94,8 +94,8 @@ public final class DisplayHud {
 
         for (int i = 0; i < lives; i++) {
             final int index = i;
-            final double[] points = DisplayUtils.translate(t -> t * LIVES_SIZE + x + index * width * LIVES_SIZE,
-                    t -> t * LIVES_SIZE + y, LIVES);
+            final double[] points = DisplayUtils.translate(LIVES, t -> t * LIVES_SIZE + x + index * width * LIVES_SIZE,
+                    t -> t * LIVES_SIZE + y);
             final Polygon shape = new Polygon(points);
 
             shape.setFill(Color.WHITE);

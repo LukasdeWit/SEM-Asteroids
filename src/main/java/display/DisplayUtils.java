@@ -21,10 +21,10 @@ public final class DisplayUtils {
      * @param target the target array (this remains unchanged)
      * @return a new array with both function applied
      */
-    public static double[] translate(final DoubleFunction<Double> xFunction, final DoubleFunction<Double> yFunction,
-                                     final double[] target) {
+    public static double[] translate(final double[] target, final DoubleFunction<Double> xFunction,
+    		final DoubleFunction<Double> yFunction) {
         if (xFunction == null || yFunction == null || target == null) {
-            throw new NullPointerException("parameters can't be null");
+            throw new IllegalArgumentException("parameters can't be null");
         }
         final double[] temp = new double[target.length];
 

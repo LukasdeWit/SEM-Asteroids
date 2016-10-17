@@ -51,13 +51,13 @@ public class DisplayUtilsTest {
 
     @Test
     public void translate() throws Exception {
-        assertTrue(Arrays.equals(expected, DisplayUtils.translate(xFunction, yFunction, target)));
+        assertTrue(Arrays.equals(expected, DisplayUtils.translate(target, xFunction, yFunction)));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void translateNull() throws Exception {
-        DisplayUtils.translate(null, value -> value + 1, new double[]{1});
-        DisplayUtils.translate(value -> value + 1, null, new double[]{1});
-        DisplayUtils.translate(value -> value + 1, value -> value + 1, null);
+        DisplayUtils.translate(new double[]{1}, null, value -> value + 1);
+        DisplayUtils.translate(new double[]{1}, value -> value + 1, null);
+        DisplayUtils.translate(null, value -> value + 1, value -> value + 1);
     }
 }

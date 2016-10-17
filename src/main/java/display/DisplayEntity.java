@@ -1,6 +1,14 @@
 package display;
 
-import entity.*;
+import java.util.function.DoubleFunction;
+
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.Bullet;
+import entity.Particle;
+import entity.Player;
+import entity.Powerup;
+import entity.Saucer;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -8,8 +16,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-
-import java.util.function.DoubleFunction;
 
 /**
  * This class displays all entities.
@@ -148,8 +154,8 @@ public final class DisplayEntity {
 	 */
 	public static void asteroid(final Asteroid a) {
 		final Polygon polygon = new Polygon(DisplayUtils.translate(
-				d -> d * (a.getRadius() * ASTEROID_SIZE), d -> d * (a.getRadius() * ASTEROID_SIZE),
-				ASTEROID_SHAPES[a.getShape()]));
+				ASTEROID_SHAPES[a.getShape()],d -> d * (a.getRadius() * ASTEROID_SIZE),
+				d -> d * (a.getRadius() * ASTEROID_SIZE)));
 
 		polygon.setStroke(Color.WHITE);
 		polygon.setStrokeWidth(ASTEROID_WIDTH * ASTEROID_SIZE);
@@ -236,7 +242,7 @@ public final class DisplayEntity {
 		final DoubleFunction<Double> function = d -> d * PLAYER_ONE_SIZE;
 
 		for (final double[] f : PLAYER_TWO_LINES) {
-			final Polygon polygon = new Polygon(DisplayUtils.translate(function, function, f));
+			final Polygon polygon = new Polygon(DisplayUtils.translate(f, function, function));
 			polygon.setStroke(color);
 			polygon.setStrokeWidth(2 * PLAYER_TWO_SIZE);
 			group.getChildren().add(polygon);
@@ -248,8 +254,8 @@ public final class DisplayEntity {
 		group.getChildren().add(c);
 
 		if (p.isBoost()) {
-			for (double[] shape : PLAYER_TWO_BOOST) {
-				final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, shape));
+			for (final double[] shape : PLAYER_TWO_BOOST) {
+				final Polygon boostModel = new Polygon(DisplayUtils.translate(shape, function, function));
 				boostModel.setStroke(Color.WHITE);
 				boostModel.setStrokeWidth(2 * PLAYER_TWO_SIZE);
 				group.getChildren().add(boostModel);
@@ -267,13 +273,13 @@ public final class DisplayEntity {
 	 */
 	private static void playerOne(final Player p, final Paint color, final Group group) {
 		final DoubleFunction<Double> function = d -> d * PLAYER_ONE_SIZE;
-		final Polygon playerModel = new Polygon(DisplayUtils.translate(function, function, PLAYER_ONE_LINES));
+		final Polygon playerModel = new Polygon(DisplayUtils.translate(PLAYER_ONE_LINES, function, function));
 		playerModel.setStroke(color);
 		playerModel.setStrokeWidth(2 * PLAYER_ONE_SIZE);
 		group.getChildren().add(playerModel);
 
 		if (p.isBoost()) {
-			final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, PLAYER_ONE_BOOST));
+			final Polygon boostModel = new Polygon(DisplayUtils.translate(PLAYER_ONE_BOOST, function, function));
 			boostModel.setStroke(Color.WHITE);
 			boostModel.setStrokeWidth(2 * PLAYER_ONE_SIZE);
 			group.getChildren().add(boostModel);
@@ -294,9 +300,10 @@ public final class DisplayEntity {
 	 */
 	public static void saucer(final Saucer s) {
 		final Group group = new Group();
-		for (double[] shape : SAUCER_SHAPE) {
-			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (s.getRadius() * SAUCER_SIZE),
-					p -> p * (s.getRadius() * SAUCER_SIZE), shape));
+		for (final double[] shape : SAUCER_SHAPE) {
+			final Polygon polygon = new Polygon(DisplayUtils.translate(shape,
+					p -> p * (s.getRadius() * SAUCER_SIZE),
+					p -> p * (s.getRadius() * SAUCER_SIZE)));
 			polygon.setStroke(Color.WHITE);
 			polygon.setStrokeWidth(SAUCER_WIDTH * SAUCER_SIZE);
 			group.getChildren().add(polygon);
