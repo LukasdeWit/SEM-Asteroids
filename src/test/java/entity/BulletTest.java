@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import entity.builders.BulletBuilder;
+import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
@@ -30,6 +32,7 @@ public class BulletTest {
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
 	private Game thisGame;
+	private PlayerBuilder pBuilder;
 	/**
 	 * Test bullet.
 	 */
@@ -42,9 +45,25 @@ public class BulletTest {
 	@Before
 	public void setUp() throws Exception {
 		thisGame = new Game();
-		bullet = new Bullet(X_START, Y_START, DX_START, DY_START, thisGame);
-		//Used for testing methods involving the piercing attribute.
-		ball = new Bullet(X_START,Y_START, DX_START, DY_START, 3, thisGame);
+		BulletBuilder bBuilder = new BulletBuilder();
+		bBuilder.setX(X_START);
+		bBuilder.setY(Y_START);
+		bBuilder.setDX(DX_START);
+		bBuilder.setDY(DY_START);
+		bBuilder.setThisGame(thisGame);
+		bullet = (Bullet) bBuilder.getResult();
+		
+		bBuilder.setPierce(3);
+		ball = (Bullet) bBuilder.getResult();
+		
+		pBuilder = new PlayerBuilder();
+		pBuilder.setX(X_START);
+		pBuilder.setY(Y_START);
+		pBuilder.setDX(DX_START);
+		pBuilder.setDY(DY_START);
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setPlayerTwo(false);
+		
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 	}
@@ -126,7 +145,9 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide3() {
-		final Player e2 = new Player(X_START, Y_START, 0, 0, thisGame, false);
+		pBuilder.setDX(0);
+		pBuilder.setDY(0);
+		final Player e2 = (Player) pBuilder.getResult();
 		bullet.collide(e2);
 		assertFalse(thisGame.getDestroyList().contains(bullet));
         assertFalse(thisGame.getDestroyList().contains(e2));
@@ -151,7 +172,9 @@ public class BulletTest {
 	
 	@Test
 	public void testPlayer() {
-		final Player p = new Player(X_START, Y_START, DX_START, DY_START, thisGame, false);
+		pBuilder.setDX(DX_START);
+		pBuilder.setDY(DY_START);
+		final Player p = (Player) pBuilder.getResult();
 		bullet.setPlayer(p);
 		assertEquals(DX_START,bullet.getPlayer().getDX(),0);
 	}

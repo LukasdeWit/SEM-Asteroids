@@ -1,15 +1,22 @@
 package game;
 
-import entity.*;
-import javafx.scene.shape.Rectangle;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.Bullet;
+import entity.Player;
+import entity.Saucer;
+import entity.builders.BulletBuilder;
+import entity.builders.PlayerBuilder;
+import javafx.scene.shape.Rectangle;
 
 
 /**
@@ -22,6 +29,9 @@ public class GameTest {
 	private final Game thisGame = new Game();
 	private final Gamestate gamestate = thisGame.getGamestate();
 	private final List<String> noInput = new ArrayList<>();
+	
+	private PlayerBuilder pBuilder;
+	private BulletBuilder bBuilder;
 
 	@Before
 	public final void setUp() {
@@ -35,6 +45,21 @@ public class GameTest {
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
+		
+		pBuilder = new PlayerBuilder();
+		pBuilder.setX(0);
+		pBuilder.setY(0);
+		pBuilder.setDX(0);
+		pBuilder.setDY(0);
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setPlayerTwo(false);
+		
+		bBuilder = new BulletBuilder();
+		bBuilder.setX(0);
+		bBuilder.setY(1);
+		bBuilder.setDX(0);
+		bBuilder.setDY(0);
+		bBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
@@ -72,7 +97,7 @@ public class GameTest {
 	@Test
 	public final void testUpdateGame2(){
 		gamestate.setMode(Gamestate.getModeCoop());
-		final Player p = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p);
 		thisGame.updateGame(noInput);
 		assertTrue(Launcher.getRoot().getChildren().size() > 0);
@@ -81,7 +106,7 @@ public class GameTest {
 	@Test
 	public final void testUpdateGame3(){
 		gamestate.setMode(Gamestate.getModeCoop());
-		final Player p = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p);
 		thisGame.setPlayerTwo(p);
 		thisGame.updateGame(noInput);
@@ -91,7 +116,7 @@ public class GameTest {
 	@Test
 	public final void testCollision1(){
 		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 1, 0, 0, thisGame);
+		final Bullet e2 = (Bullet) bBuilder.getResult();
 		addToEntities(e2);
 		thisGame.checkCollision(e1);
 		assertEquals(2, thisGame.getDestroyList().size(), 0);
@@ -100,7 +125,7 @@ public class GameTest {
 	@Test
 	public final void testCollision2(){
 		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 1, 0, 0, thisGame);
+		final Bullet e2 = (Bullet) bBuilder.getResult();
 		thisGame.destroy(e2);
 		addToEntities(e2);
 		thisGame.checkCollision(e1);
@@ -110,7 +135,7 @@ public class GameTest {
 	@Test
 	public final void testCollision3(){
 		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 1, 0, 0, thisGame);
+		final Bullet e2 = (Bullet) bBuilder.getResult();
 		thisGame.destroy(e1);
 		addToEntities(e2);
 		thisGame.checkCollision(e1);
@@ -120,7 +145,8 @@ public class GameTest {
 	@Test
 	public final void testCollision4(){
 		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
-		final Bullet e2 = new Bullet(0, 100, 0, 0, thisGame);
+		bBuilder.setY(100);
+		final Bullet e2 = (Bullet) bBuilder.getResult();
 		addToEntities(e2);
 		thisGame.checkCollision(e1);
 		assertEquals(0, thisGame.getDestroyList().size(), 0);
@@ -147,10 +173,10 @@ public class GameTest {
 
 	@Test
 	public final void testOver2() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
 		gamestate.setMode(Gamestate.getModeCoop());
 		thisGame.over();
@@ -159,10 +185,10 @@ public class GameTest {
 
 	@Test
 	public final void testOver3() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p2 = (Player) pBuilder.getResult();
 		p2.setLives(0);
 		thisGame.setPlayerTwo(p2);
 		gamestate.setMode(Gamestate.getModeCoop());
@@ -172,10 +198,10 @@ public class GameTest {
 
 	@Test
 	public final void testOver4() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
 		thisGame.over();
 		assertTrue(thisGame.getDestroyList().contains(p1));
@@ -183,7 +209,7 @@ public class GameTest {
 
 	@Test
 	public final void testOver5() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
 		thisGame.getScoreCounter().setScore(10);
@@ -200,9 +226,9 @@ public class GameTest {
 
 	@Test
 	public final void testAddScore2() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p1);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
 		gamestate.setMode(Gamestate.getModeCoop());
 		thisGame.addScore(10000);
@@ -213,7 +239,7 @@ public class GameTest {
 
 	@Test
 	public final void testAddScore3() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p1);
 		thisGame.addScore(10000);
 		assertEquals(10000, thisGame.getScoreCounter().getScore(), 0);
@@ -222,10 +248,10 @@ public class GameTest {
 
 	@Test
 	public final void testAddScore4() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p2 = (Player) pBuilder.getResult();
 		p2.setLives(0);
 		thisGame.setPlayerTwo(p2);
 		gamestate.setMode(Gamestate.getModeCoop());
@@ -236,7 +262,7 @@ public class GameTest {
 
 	@Test
 	public final void testAddScore5() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
 		thisGame.addScore(10000);
@@ -246,10 +272,10 @@ public class GameTest {
 
 	@Test
 	public final void testAddScore6() {
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
 		gamestate.setMode(Gamestate.getModeCoop());
 		thisGame.addScore(10000);
@@ -260,10 +286,10 @@ public class GameTest {
 	
 	@Test
 	public final void testBullets1(){
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Bullet b = new Bullet(0, 0, 0, 0, thisGame);
+		final Bullet b = (Bullet) bBuilder.getResult();
 		b.setPlayer(p1);
 		addToEntities(b);
 		assertEquals(1, thisGame.bullets(p1), 0);
@@ -271,11 +297,11 @@ public class GameTest {
 	
 	@Test
 	public final void testBullets2(){
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
-		final Player p2 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
+		final Player p2 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Bullet b = new Bullet(0, 0, 0, 0, thisGame);
+		final Bullet b = (Bullet) bBuilder.getResult();
 		b.setPlayer(p2);
 		addToEntities(b);
 		assertEquals(0, thisGame.bullets(p1), 0);
@@ -283,10 +309,10 @@ public class GameTest {
 	
 	@Test
 	public final void testBullets3(){
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Bullet b = new Bullet(0, 0, 0, 0, thisGame);
+		final Bullet b = (Bullet) bBuilder.getResult();
 		b.setFriendly(false);
 		addToEntities(b);
 		assertEquals(0, thisGame.bullets(p1), 0);
@@ -294,7 +320,7 @@ public class GameTest {
 	
 	@Test
 	public final void testBullets4(){
-		final Player p1 = new Player(0, 0, 0, 0, thisGame, false);
+		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
 		final Asteroid b = new Asteroid(0, 0, 0, 0, thisGame);
@@ -304,7 +330,7 @@ public class GameTest {
 	
 	@Test
 	public final void testEnemies(){
-		final Bullet b = new Bullet(0, 0, 0, 0, thisGame);
+		final Bullet b = (Bullet) bBuilder.getResult();
 		final Saucer s = new Saucer(0, 0, 0, 0, thisGame);
 		final Asteroid a = new Asteroid(0, 0, 0, 0, thisGame);
 		addToEntities(b);
