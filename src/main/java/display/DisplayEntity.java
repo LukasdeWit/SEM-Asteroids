@@ -68,7 +68,7 @@ public final class DisplayEntity {
 	private static final float ASTEROID_SIZE = .25f;
 	private static final float ASTEROID_WIDTH = 4;
 
-	private static final float BULLET_SIZE = .5f;
+	private static final float BULLET_SIZE = .25f;
 	private static final float PARTICLE_SIZE = .5f;
 	private static final float POWERUP_SIZE = .5f;
 
@@ -170,7 +170,7 @@ public final class DisplayEntity {
 	 * @param b - the bullet
 	 */
 	public static void bullet(final Bullet b) {
-		drawEntity(b, Color.WHITE, BULLET_SIZE);
+		drawEntity(b, Color.WHITE, BULLET_SIZE * b.getRadius());
 	}
 
 	/**

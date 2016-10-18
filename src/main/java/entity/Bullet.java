@@ -159,6 +159,7 @@ public class Bullet extends AbstractEntity {
 		bullet.setBirthTime(birthTime);
 		bullet.setShot(isShot());
 		bullet.setFriendly(isFriendly());
+		bullet.setRadius(this.getRadius());
 		return bullet;
 	}
 }

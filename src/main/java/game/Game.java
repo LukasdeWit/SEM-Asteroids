@@ -79,7 +79,6 @@ public final class Game {
 			pBuilder.setDX(0);
 			pBuilder.setDY(0);
 			pBuilder.setThisGame(this);
-			pBuilder.setPlayerTwo(false);
 			player = (Player) pBuilder.getResult();
 			entities.add(player);
 		} 
@@ -182,9 +181,11 @@ public final class Game {
 			return;
 		}
 		if (player.isAlive()) {
+			Logger.getInstance().log("Player 2 died.");
 			destroy(playerTwo);
 			return;
 		} else if (gamestate.isCoop() && playerTwo.isAlive()) {
+			Logger.getInstance().log("Player 1 died.");
 			destroy(player);
 			return;
 		}
@@ -228,11 +229,11 @@ public final class Game {
 	private void extraLife(final int score) {
 		if (scorecounter.canGainLife(score)) {
 			player.gainLife();
+			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 			if (gamestate.isCoop()) {
 				playerTwo.gainLife();
 				Logger.getInstance().log("Player 2 gained an extra life.");
 			}
-			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 		}
 	}
 
