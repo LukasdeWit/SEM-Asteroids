@@ -59,7 +59,7 @@ public class Player extends AbstractEntity {
 		setRadius(RADIUS);
 		rotation = 0;
     	playerTwo = false;
-    	playerString = "Player 1";
+    	playerString = "The player";
     	makeInvincible(INVINCIBILITY_START_TIME);
 		maxBullets = MAX_BULLETS;
 		fireRate = FIRE_RATE;
@@ -132,7 +132,9 @@ public class Player extends AbstractEntity {
 	public final void gainLife() {
 		lives++;
 		if (lives == 1) {
+			getThisGame().create(this);
 			respawnThePlayer();
+			Logger.getInstance().log(playerString + " was resurrected.");
 		}
 	}
 
@@ -347,6 +349,7 @@ public class Player extends AbstractEntity {
 		bBuilder.setRadius(bulletSize);
 		bBuilder.setThisGame(getThisGame());
 		bBuilder.setShooter(this);
+		bBuilder.setPierce(piercing);
 		final Bullet b = (Bullet) bBuilder.getResult();
 		
 		getThisGame().create(b);
@@ -415,10 +418,12 @@ public class Player extends AbstractEntity {
 	 */
 	public final void setPlayerTwo(final boolean playerTwo) {
 		this.playerTwo = playerTwo;
-		if (playerTwo) {
-			this.playerString = "Player 2";
-		} else {
-			this.playerString = "Player 1";
+		if (getThisGame().getGamestate().isCoop()) {
+			if (playerTwo) {
+				this.playerString = "Player 2";
+			} else {
+				this.playerString = "Player 1";
+			}
 		}
 	}
 
