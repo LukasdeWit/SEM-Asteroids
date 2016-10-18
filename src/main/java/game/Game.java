@@ -86,11 +86,7 @@ public final class Game {
 		} 
 		scorecounter.startGame();
 		spawner.reset();
-		if (gamestate.getMode() == Gamestate.getModeArcade()) {
-			Logger.getInstance().log("Arcade game started.");
-		} else {
-			Logger.getInstance().log("Coop game started.");
-		}
+		Logger.getInstance().log(gamestate.toString() + " game started.");
 	}
 
 	/**

@@ -149,10 +149,16 @@ public class Boss extends AbstractEntity {
 	 * Makes the Saucer shoot.
 	 */
 	private void shoot() {
-		if (getThisGame().getPlayer() == null) {
+		Player player = getThisGame().getPlayer();
+		if (getThisGame().getGamestate().isCoop()) {
+			if (random.nextInt(1) == 0) {
+				player = getThisGame().getPlayerTwo().get();
+			}
+		} 
+		if (player == null) {
 			return;
 		}
-		if (getThisGame().getPlayer().invincible()) {
+		if (player.invincible()) {
 			shotTime = System.currentTimeMillis();
 		} else {
 			if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
