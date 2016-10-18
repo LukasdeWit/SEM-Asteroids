@@ -1,11 +1,8 @@
 package game;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +32,8 @@ public final class Game {
 	private List<AbstractEntity> createList;
 	private final float screenX;
 	private final float screenY;
+	private final Spawner spawner;
+	private final Gamestate gamestate = new Gamestate(this);
 	/**
 	 * current score for arcade mode.
 	 */
@@ -51,8 +50,6 @@ public final class Game {
 	 * current highscore for survival mode.
 	 */
 	private long survivalHighscore;
-	private final Spawner spawner;
-	private final Gamestate gamestate = new Gamestate(this);
 
 	private static final float CANVAS_SIZE = 500;
 	
@@ -76,29 +73,6 @@ public final class Game {
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		scorecounter = new ScoreCounter(this);
-		readHighscores();
-	}
-	
-	/**
-	 * reads the highscore from file in resources folder.
-	 */
-	private void readHighscores() {
-		long[] highscores = {0, 0};
-		final String filePath = "src/main/resources/highscore.txt";
-		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(filePath),
-						StandardCharsets.UTF_8))) {
-			String sCurrentLine;
-			int index = 0;
-			while ((sCurrentLine = br.readLine()) != null) {
-				highscores[index] = Long.parseLong(sCurrentLine);
-				index++;
-			}
-		} catch (IOException e) {
-			Logger.getInstance().log("unable to read highscore from file", e);
-		}
-		arcadeHighscore = highscores[0];
-		survivalHighscore = highscores[1];
 	}
 
 	/**
