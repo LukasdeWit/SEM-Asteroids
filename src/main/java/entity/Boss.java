@@ -58,6 +58,8 @@ public class Boss extends AbstractEntity {
 		// Initialize the Bullet Builder
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(0);
+		bBuilder.setThisGame(getThisGame());
+		bBuilder.setShooter(this);
 		bBuilder.setFriendly(false);
 	}
 
@@ -194,9 +196,6 @@ public class Boss extends AbstractEntity {
 		bBuilder.setY(getY());
 		bBuilder.setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
 		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
-		bBuilder.setThisGame(getThisGame());
-		bBuilder.setShooter(this);
-		bBuilder.setFriendly(false);
 		final Bullet b = (Bullet) bBuilder.getResult();
 
 		getThisGame().create(b);
