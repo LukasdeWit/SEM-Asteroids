@@ -4,8 +4,10 @@ import java.util.Random;
 
 import entity.Asteroid;
 import entity.Boss;
+import entity.DoubleBoss;
 import entity.Powerup;
 import entity.Saucer;
+import entity.TeleBoss;
 
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.
@@ -17,6 +19,8 @@ public final class Spawner {
 	private long startPowerupTime;
 	private long startRest;
 	private int wave;
+	private final double telebossratio;
+	private final double doublebossratio;
 	private final Random random;
 	/**
 	 * The Game this spawner belongs to.
@@ -24,6 +28,8 @@ public final class Spawner {
 	private final Game thisGame;
 
 	private static final long SAUCER_TIME = 20000;
+	private static final double TELE_RATIO = 0.3;
+	private static final double DOUBLE_RATIO = 0.3;
 	private static final long POWERUP_TIME = 10000;
 	private static final long REST = 4000;
 	private static final int STARTING_ASTEROIDS = 4;
@@ -45,6 +51,8 @@ public final class Spawner {
 		startRest = 0;
 		wave = 0;
 		random = new Random();
+		telebossratio = TELE_RATIO;
+		doublebossratio = DOUBLE_RATIO;
 	}
 
 	/**
@@ -53,7 +61,18 @@ public final class Spawner {
 	public void update() {
 		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
 				&& System.currentTimeMillis() - startRest > REST) {
-			spawnBoss();
+			if(Math.random()<telebossratio){
+				spawnTeleBoss();
+			}
+			else{
+				if(Math.random()<(telebossratio+doublebossratio)){
+					spawnDoubleBoss();
+					spawnDoubleBoss();
+				}
+				else{
+					spawnBoss();
+				}
+			}
 		} else {
 			updateSaucer();
 			updatePowerup();
@@ -92,7 +111,12 @@ public final class Spawner {
 	private void updateWave() {
 		if ((startRest == 0 || System.currentTimeMillis() - startRest > REST) 
 				&& wave != 0 && wave % WAVES_BETWEEN_BOSSES == 0) {
-			spawnBoss();
+			if(Math.random()<telebossratio){
+				spawnTeleBoss();
+			}
+			else{
+				spawnBoss();
+			}
 			startRest = System.currentTimeMillis();
 			wave++;
 		} else if (startRest == 0) {
@@ -177,6 +201,25 @@ public final class Spawner {
 		thisGame.create(boss);
 	}
 
+	/**
+	 * Spawn Teleporting Boss.
+	 */
+	private void spawnTeleBoss() {
+		final TeleBoss telboss =
+				new TeleBoss(random.nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
+				* thisGame.getScreenY(), 0, 0, thisGame);
+		thisGame.create(telboss);
+	}
+	
+	private void spawnDoubleBoss() {
+		final DoubleBoss doubboss =
+				new DoubleBoss(random.nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
+				* thisGame.getScreenY(), 0, 0, thisGame);
+		thisGame.create(doubboss);
+	}
+	
 	/**
 	 * reset.
 	 */

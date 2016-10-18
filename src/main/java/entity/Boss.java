@@ -22,6 +22,8 @@ public class Boss extends AbstractEntity {
 	private final Random random;
 	private long dirChangeTime;
 	private final BulletBuilder bBuilder;
+	private long shotSpeed;
+	private int bullets;
 	private static final double PATHS = 3;
 	private static final double PATH_ANGLE = Math.PI / 4;
 	private static final long CHANGE_DIR_TIME = 2000;
@@ -48,7 +50,7 @@ public class Boss extends AbstractEntity {
 		setRadius(RADIUS);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
-		currentLives = STARTING_LIVES;
+		setCurrentLives(STARTING_LIVES);
 		int nextToRight = 0;
 		if (x > (getThisGame().getScreenX() / 2)) {
 			nextToRight = 1;
@@ -59,6 +61,8 @@ public class Boss extends AbstractEntity {
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(0);
 		bBuilder.setFriendly(false);
+		shotSpeed = SHOT_TIME;
+		bullets = BULLETNUMBER;
 	}
 
 	/**
@@ -69,7 +73,7 @@ public class Boss extends AbstractEntity {
 	 *            - the pressed keys
 	 */
 	@Override
-	public final void update(final List<String> input) {
+	public void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		checkEdgeX();
@@ -148,14 +152,14 @@ public class Boss extends AbstractEntity {
 	/**
 	 * Makes the Saucer shoot.
 	 */
-	private void shoot() {
+	protected void shoot() {
 		if (getThisGame().getPlayer() == null) {
 			return;
 		}
 		if (getThisGame().getPlayer().invincible()) {
 			shotTime = System.currentTimeMillis();
 		} else {
-			if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
+			if (System.currentTimeMillis() - shotTime > shotSpeed) {
 				final float playerX = getThisGame().getPlayer().getX();
 				final float playerY = getThisGame().getPlayer().getY();
 				final float randomRange = (float) (Math.PI * (Math.random() / ACCURACY));
@@ -169,7 +173,7 @@ public class Boss extends AbstractEntity {
 
 				final float shotDir = straightDir + errorRight * randomRange;
 
-				for (int i = 0; i < BULLETNUMBER; i++) {
+				for (int i = 0; i < bullets; i++) {
 					fireBullet(shotDir - i * MULTI_SHOT_ANGLE);
 				}
 				shotTime = System.currentTimeMillis();
@@ -208,8 +212,8 @@ public class Boss extends AbstractEntity {
 			Logger.getInstance().log("Player hit a Boss.");
 		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
-			currentLives--;
-			if (currentLives < 1) {
+			setCurrentLives(getCurrentLives() - 1);
+			if (getCurrentLives() < 1) {
 				getThisGame().destroy(this);
 			}
 			Logger.getInstance().log("Boss was hit.");
@@ -237,5 +241,33 @@ public class Boss extends AbstractEntity {
 	 */
 	public final int getStartingLives() {
 		return STARTING_LIVES;
+	}
+
+	/**
+	 * @return the currentLives
+	 */
+	public int getCurrentLives() {
+		return currentLives;
+	}
+
+	/**
+	 * @param currentLives the currentLives to set
+	 */
+	public void setCurrentLives(int currentLives) {
+		this.currentLives = currentLives;
+	}
+	
+	/**
+	 * @param shotspeed the shotSpeed to set
+	 */
+	public void setShotSpeed(int shotspeed) {
+		this.shotSpeed = shotspeed;
+	}
+	
+	/**
+	 * @param bullets the number of bullets to set
+	 */
+	public void setBullets(int bullets) {
+		this.bullets = bullets;
 	}
 }
