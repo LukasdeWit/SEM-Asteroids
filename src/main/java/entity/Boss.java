@@ -9,8 +9,8 @@ import game.Game;
 import game.Logger;
 
 /**
- * Class that represents a Boss. Moves like a saucer from one
- * side of the screen to the other until it's killed.
+ * Class that represents a Boss. Moves like a saucer from one side of the screen
+ * to the other until it's killed.
  * 
  * @author Dario
  *
@@ -36,11 +36,12 @@ public class Boss extends AbstractEntity {
 
 	/**
 	 * Constructor for boss.
-	 * @param x location of boss along x-axis
-	 * @param y location of boss along y-axis
-	 * @param dX speed of boss along x-axis
-	 * @param dY speed of boss along y-axis
-	 * @param thisGame game the boss exists in
+	 * 
+	 * @param x - location of boss along x-axis
+	 * @param y - location of boss along y-axis
+	 * @param dX - speed of boss along x-axis
+	 * @param dY - speed of boss along y-axis
+	 * @param thisGame - game the boss exists in
 	 */
 	public Boss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
@@ -54,7 +55,7 @@ public class Boss extends AbstractEntity {
 			nextToRight = 1;
 		}
 		setPath(nextToRight, random.nextInt((int) PATHS));
-		
+
 		// Initialize the Bullet Builder
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(0);
@@ -67,8 +68,7 @@ public class Boss extends AbstractEntity {
 	 * Calculate new position of BossAngryAsteroid, get it to shoot, get it to
 	 * change direction and if it hits the wall get it to turn back.
 	 * 
-	 * @param input
-	 *            - the pressed keys
+	 * @param input - the pressed keys
 	 */
 	@Override
 	public final void update(final List<String> input) {
@@ -94,10 +94,8 @@ public class Boss extends AbstractEntity {
 	/**
 	 * Set BossAngryAsteroid path.
 	 * 
-	 * @param toRight
-	 *            - Direction of Saucer
-	 * @param path
-	 *            - Low, mid or high path
+	 * @param toRight - Direction of Saucer
+	 * @param path - Low, mid or high path
 	 */
 	public final void setPath(final int toRight, final int path) {
 		this.toRight = toRight;
@@ -107,8 +105,7 @@ public class Boss extends AbstractEntity {
 	/**
 	 * Set BossAngryAsteroid path.
 	 * 
-	 * @param path
-	 *            - Low, mid or high path
+	 * @param path - Low, mid or high path
 	 */
 	public final void setPath(final int path) {
 		setPath(toRight, path);
@@ -119,19 +116,17 @@ public class Boss extends AbstractEntity {
 	 * the screen in the X-direction.
 	 */
 	public final void checkEdgeX() {
-		if (getX() > getThisGame().getScreenX() && getDX() > 0 
-				|| getX() < 0 && getDX() < 0) {
+		if (getX() > getThisGame().getScreenX() && getDX() > 0 || getX() < 0 && getDX() < 0) {
 			setDX(-getDX());
 		}
 	}
-	
+
 	/**
 	 * Causes the BossAngryAsteroid to turn around when it reaches the edge of
 	 * the screen in the Y-direction.
 	 */
 	public final void checkEdgeY() {
-		if (getY() > getThisGame().getScreenY() && getDY() > 0 
-				|| getY() < 0 && getDY() < 0) {
+		if (getY() > getThisGame().getScreenY() && getDY() > 0 || getY() < 0 && getDY() < 0) {
 			setDY(-getDY());
 		}
 	}
@@ -139,8 +134,7 @@ public class Boss extends AbstractEntity {
 	/**
 	 * Set the direction of the Saucer, so change the dX and dY using direction.
 	 * 
-	 * @param direction
-	 *            - the direction in radians, 0 being right
+	 * @param direction - the direction in radians, 0 being right
 	 */
 	public final void setDirection(final float direction) {
 		setDX((float) Math.cos(direction) * 2);
@@ -151,45 +145,49 @@ public class Boss extends AbstractEntity {
 	 * Makes the Saucer shoot.
 	 */
 	private void shoot() {
-		Player player = getThisGame().getPlayer();
-		if (getThisGame().getGamestate().isCoop()) {
-			if (random.nextInt(1) == 0) {
-				player = getThisGame().getPlayerTwo().get();
-			}
-		} 
+		final Player player = getPlayer();
 		if (player == null) {
 			return;
 		}
 		if (player.invincible()) {
 			shotTime = System.currentTimeMillis();
-		} else {
-			if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
-				final float playerX = getThisGame().getPlayer().getX();
-				final float playerY = getThisGame().getPlayer().getY();
-				final float randomRange = (float) (Math.PI * (Math.random() / ACCURACY));
-				float straightDir;
-				if (playerX > getX()) {
-					straightDir = (float) Math.atan((playerY - getY()) / (playerX - getX()));
-				} else {
-					straightDir = (float) (Math.PI + Math.atan((playerY - getY()) / (playerX - getX())));
-				}
-				final float errorRight = (float) (random.nextInt(2) * 2 - 1);
-
-				final float shotDir = straightDir + errorRight * randomRange;
-
-				for (int i = 0; i < BULLETNUMBER; i++) {
-					fireBullet(shotDir - i * MULTI_SHOT_ANGLE);
-				}
-				shotTime = System.currentTimeMillis();
+		} else if (System.currentTimeMillis() - shotTime > SHOT_TIME) {
+			final float playerX = getThisGame().getPlayer().getX();
+			final float playerY = getThisGame().getPlayer().getY();
+			final float randomRange = (float) (Math.PI * (Math.random() / ACCURACY));
+			float straightDir;
+			if (playerX > getX()) {
+				straightDir = (float) Math.atan((playerY - getY()) / (playerX - getX()));
+			} else {
+				straightDir = (float) (Math.PI + Math.atan((playerY - getY()) / (playerX - getX())));
 			}
+			final float errorRight = (float) (random.nextInt(2) * 2 - 1);
+
+			final float shotDir = straightDir + errorRight * randomRange;
+
+			for (int i = 0; i < BULLETNUMBER; i++) {
+				fireBullet(shotDir - i * MULTI_SHOT_ANGLE);
+			}
+			shotTime = System.currentTimeMillis();
 		}
+	}
+	
+	/**
+	 * Fetch player for shoot method.
+	 * @return player one of the players in the game
+	 */
+	private Player getPlayer() {
+		Player player = getThisGame().getPlayer();
+		if (getThisGame().getGamestate().isCoop() && random.nextInt(1) == 0) {
+			player = getThisGame().getPlayerTwo().get();
+		}
+		return player;
 	}
 
 	/**
 	 * fire a bullet in a direction.
 	 * 
-	 * @param direction
-	 *            - the direction
+	 * @param direction - the direction
 	 */
 	private void fireBullet(final double direction) {
 		bBuilder.setX(getX());
@@ -227,17 +225,19 @@ public class Boss extends AbstractEntity {
 		getThisGame().addScore(SCORE);
 		Particle.explosion(getX(), getY(), getThisGame());
 	}
-	
+
 	/**
 	 * Gets the toRight of the class.
+	 * 
 	 * @return the toRight
 	 */
 	public final int getToRight() {
 		return toRight;
 	}
-	
+
 	/**
 	 * Gets the starting lives of the boss.
+	 * 
 	 * @return the amount of starting lives
 	 */
 	public final int getStartingLives() {
