@@ -86,7 +86,7 @@ public class Boss extends AbstractEntity {
 	 * Change the boss's direction randomly at certain times in a random
 	 * direction.
 	 */
-	private void changeDirection() {
+	private final void changeDirection() {
 		if (System.currentTimeMillis() - dirChangeTime > CHANGE_DIR_TIME) {
 			dirChangeTime = System.currentTimeMillis();
 			setPath(random.nextInt((int) PATHS));
@@ -152,7 +152,7 @@ public class Boss extends AbstractEntity {
 	/**
 	 * Makes the Saucer shoot.
 	 */
-	protected void shoot() {
+	protected final void shoot() {
 		if (getThisGame().getPlayer() == null) {
 			return;
 		}
@@ -246,28 +246,28 @@ public class Boss extends AbstractEntity {
 	/**
 	 * @return the currentLives
 	 */
-	public int getCurrentLives() {
+	public final int getCurrentLives() {
 		return currentLives;
 	}
 
 	/**
 	 * @param currentLives the currentLives to set
 	 */
-	public void setCurrentLives(int currentLives) {
+	public final void setCurrentLives(final int currentLives) {
 		this.currentLives = currentLives;
 	}
 	
 	/**
 	 * @param shotspeed the shotSpeed to set
 	 */
-	public void setShotSpeed(int shotspeed) {
+	public final void setShotSpeed(final int shotspeed) {
 		this.shotSpeed = shotspeed;
 	}
 	
 	/**
 	 * @param bullets the number of bullets to set
 	 */
-	public void setBullets(int bullets) {
+	public final void setBullets(final int bullets) {
 		this.bullets = bullets;
 	}
 }

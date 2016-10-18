@@ -29,7 +29,7 @@ public final class Spawner {
 
 	private static final long SAUCER_TIME = 20000;
 	private static final double TELE_RATIO = 0.3;
-	private static final double DOUBLE_RATIO = 0.3;
+	private static final double DOUBLE_RATIO = 0.2;
 	private static final long POWERUP_TIME = 10000;
 	private static final long REST = 4000;
 	private static final int STARTING_ASTEROIDS = 4;
@@ -61,15 +61,13 @@ public final class Spawner {
 	public void update() {
 		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
 				&& System.currentTimeMillis() - startRest > REST) {
-			if(Math.random()<telebossratio){
+			if (Math.random() < (telebossratio)) {
 				spawnTeleBoss();
-			}
-			else{
-				if(Math.random()<(telebossratio+doublebossratio)){
+			} else {
+				if (Math.random() < (telebossratio + doublebossratio)) {
 					spawnDoubleBoss();
 					spawnDoubleBoss();
-				}
-				else{
+				} else {
 					spawnBoss();
 				}
 			}
@@ -111,11 +109,15 @@ public final class Spawner {
 	private void updateWave() {
 		if ((startRest == 0 || System.currentTimeMillis() - startRest > REST) 
 				&& wave != 0 && wave % WAVES_BETWEEN_BOSSES == 0) {
-			if(Math.random()<telebossratio){
+			if (Math.random() < (telebossratio)) {
 				spawnTeleBoss();
-			}
-			else{
-				spawnBoss();
+			} else {
+				if (Math.random() < (telebossratio + doublebossratio)) {
+					spawnDoubleBoss();
+					spawnDoubleBoss();
+				} else {
+					spawnBoss();
+				}
 			}
 			startRest = System.currentTimeMillis();
 			wave++;
@@ -212,6 +214,9 @@ public final class Spawner {
 		thisGame.create(telboss);
 	}
 	
+	/**
+	 * Spawn one of a pair of bosses.
+	 */
 	private void spawnDoubleBoss() {
 		final DoubleBoss doubboss =
 				new DoubleBoss(random.nextInt(1)
