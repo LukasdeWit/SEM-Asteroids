@@ -2,6 +2,7 @@ package display;
 
 import game.Launcher;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -45,6 +46,8 @@ public final class DisplayText {
 	private static final Font SCORE_FONT;
 	private static final Font LARGE_FONT;
 	private static final Font WAVE_FONT;
+
+	private static boolean test;
 
 	static {
 		final String fontLoc = "/fonts/HyperspaceBold.otf";
@@ -131,6 +134,10 @@ public final class DisplayText {
 	 * @param text the text to draw
 	 */
 	public static void drawText(final float x, final float y, final Font font, final String text) {
+		if (test) {
+			Launcher.getRoot().getChildren().add(new Line());
+			return;
+		}
 		final Text textNode = new Text(x, y, text);
 		textNode.setFont(font);
 		textNode.setTextAlignment(TextAlignment.CENTER);
@@ -146,5 +153,12 @@ public final class DisplayText {
 	 */
 	public static void drawText(final float x, final float y, final String text) {
 		drawText(x, y, DEFAULT_FONT, text);
+	}
+
+	/**
+	 * @param test the test to set
+	 */
+	public static void setTest(final boolean test) {
+		DisplayText.test = test;
 	}
 }

@@ -1,6 +1,14 @@
 package display;
 
-import entity.*;
+import java.util.function.DoubleFunction;
+
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.Bullet;
+import entity.Particle;
+import entity.Player;
+import entity.Powerup;
+import entity.Saucer;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -8,8 +16,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-
-import java.util.function.DoubleFunction;
 
 /**
  * This class displays all entities.
@@ -62,7 +68,7 @@ public final class DisplayEntity {
 	private static final float ASTEROID_SIZE = .25f;
 	private static final float ASTEROID_WIDTH = 4;
 
-	private static final float BULLET_SIZE = .5f;
+	private static final float BULLET_SIZE = .25f;
 	private static final float PARTICLE_SIZE = .5f;
 	private static final float POWERUP_SIZE = .5f;
 
@@ -164,7 +170,7 @@ public final class DisplayEntity {
 	 * @param b - the bullet
 	 */
 	public static void bullet(final Bullet b) {
-		drawEntity(b, Color.WHITE, BULLET_SIZE);
+		drawEntity(b, Color.WHITE, BULLET_SIZE * b.getRadius());
 	}
 
 	/**
@@ -248,7 +254,7 @@ public final class DisplayEntity {
 		group.getChildren().add(c);
 
 		if (p.isBoost()) {
-			for (double[] shape : PLAYER_TWO_BOOST) {
+			for (final double[] shape : PLAYER_TWO_BOOST) {
 				final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, shape));
 				boostModel.setStroke(Color.WHITE);
 				boostModel.setStrokeWidth(2 * PLAYER_TWO_SIZE);
@@ -294,7 +300,7 @@ public final class DisplayEntity {
 	 */
 	public static void saucer(final Saucer s) {
 		final Group group = new Group();
-		for (double[] shape : SAUCER_SHAPE) {
+		for (final double[] shape : SAUCER_SHAPE) {
 			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (s.getRadius() * SAUCER_SIZE),
 					p -> p * (s.getRadius() * SAUCER_SIZE), shape));
 			polygon.setStroke(Color.WHITE);

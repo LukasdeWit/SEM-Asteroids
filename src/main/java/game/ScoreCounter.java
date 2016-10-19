@@ -25,7 +25,7 @@ public class ScoreCounter {
 	private long highscore;
 	// not used  right now, but useful when we want to separate
 	// highscores for each game mode
-	private Game thisGame;
+	private final Game thisGame;
 	
 	/**
 	 * Constructor for score counter.
@@ -51,7 +51,7 @@ public class ScoreCounter {
 				currentHighscore = Long.parseLong(sCurrentLine);
 			}
 		} catch (IOException e) {
-			Logger.getInstance().log("unable to read highscore from file", e);
+			Logger.getInstance().log("Creating highscore file");
 		}
 		return currentHighscore;
 	}

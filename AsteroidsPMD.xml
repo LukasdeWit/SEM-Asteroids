@@ -13,7 +13,6 @@
     <rule ref="rulesets/java/basic.xml"/>
     <rule ref="rulesets/java/empty.xml"/>
     <rule ref="rulesets/java/finalizers.xml"/>
-    <rule ref="rulesets/java/junit.xml"/>
     <rule ref="rulesets/java/migrating.xml"/>
     <rule ref="rulesets/java/strictexception.xml"/>
     <rule ref="rulesets/java/typeresolution.xml"/>
@@ -21,6 +20,10 @@
     <rule ref="rulesets/java/unusedcode.xml"/>
 
     <!-- partial rulesets -->
+     <rule ref="rulesets/java/junit.xml">
+        <exclude name="UseAssertEqualsInsteadOfAssertTrue"/>
+    </rule>
+    
     <rule ref="rulesets/java/imports.xml">
         <exclude name="TooManyStaticImports"/>
     </rule>
@@ -37,6 +40,7 @@
     </rule>
 
     <rule ref="rulesets/java/design.xml">
+        <exclude name="UseVarargs"/>
         <exclude name="SwitchDensity"/>
         <exclude name="ConstructorCallsOverridableMethod"/>
         <exclude name="AccessorClassGeneration"/>

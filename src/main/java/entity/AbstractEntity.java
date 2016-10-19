@@ -1,7 +1,7 @@
 package entity;
-import game.Game;
-
 import java.util.List;
+
+import game.Game;
 
 /**
  * This is the superclass of all entities in the game.
@@ -34,6 +34,17 @@ public abstract class AbstractEntity {
 		this.setDX(dX);
 		this.setDY(dY);
 		this.setThisGame(thisGame);
+	}
+	
+	/**
+	 * Constructor that leaves everything uninitialized.
+	 */
+	public AbstractEntity() {
+		this.setX(0);
+		this.setY(0);
+		this.setDX(0);
+		this.setDY(0);
+		this.setThisGame(null);
 	}
 
 	/**

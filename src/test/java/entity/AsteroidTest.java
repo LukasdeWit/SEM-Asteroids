@@ -1,16 +1,21 @@
 package entity;
 
-import display.DisplayEntity;
-import game.Game;
-import game.Launcher;
-import javafx.scene.shape.Polygon;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import display.DisplayEntity;
+import entity.builders.BulletBuilder;
+import game.Game;
+import game.Launcher;
+import javafx.scene.shape.Polygon;
 
 
 /**
@@ -84,7 +89,13 @@ public class AsteroidTest {
 	
 	@Test
 	public final void testCollide2() {
-		final AbstractEntity e2 = new Bullet(X_START, Y_START, DX_START + 1, DY_START + 1, thisGame);
+		final BulletBuilder bBuilder = new BulletBuilder();
+		bBuilder.setX(X_START);
+		bBuilder.setY(Y_START);
+		bBuilder.setDX(DX_START + 1);
+		bBuilder.setDY(DY_START + 1);
+		bBuilder.setThisGame(thisGame);
+		final AbstractEntity e2 = bBuilder.getResult();
 		asteroid.collide(e2);
 		assertTrue(thisGame.getDestroyList().contains(asteroid));
 		assertTrue(thisGame.getDestroyList().contains(e2));
