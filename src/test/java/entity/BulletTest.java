@@ -175,7 +175,7 @@ public class BulletTest {
 		pBuilder.setDX(DX_START);
 		pBuilder.setDY(DY_START);
 		final Player p = (Player) pBuilder.getResult();
-		bullet.setPlayer(p);
-		assertEquals(DX_START,bullet.getPlayer().getDX(),0);
+		bullet.setShooter(p);
+		assertEquals(DX_START,bullet.getShooter().getDX(),0);
 	}
 }
