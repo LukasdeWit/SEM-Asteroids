@@ -201,14 +201,14 @@ public class PlayerTest {
 	public void testKeyHandler7() {
 		final String[] input = {"DOWN"};
 		update(player, input, false);
-		assertTrue(System.currentTimeMillis() == player.getHyperspaceStart() || player.getLives() == 2);
+		assertTrue(0 != player.getHyperspaceStart() || player.getLives() == 2);
 	}
 
 	@Test
 	public void testKeyHandler8() {
 		final String[] input = {"S"};
 		update(player, input, false);
-		assertTrue(System.currentTimeMillis() == player.getHyperspaceStart() || player.getLives() == 2);
+		assertTrue(0 != player.getHyperspaceStart() || player.getLives() == 2);
 	}
 
 	@Test
