@@ -10,7 +10,7 @@ import game.Logger;
 public class Bullet extends AbstractEntity {
 	private long birthTime;
 	private boolean friendly;
-	private Player player;
+	private AbstractEntity shooter;
 	private int piercing = 1;
 	private boolean shot;
 
@@ -105,15 +105,15 @@ public class Bullet extends AbstractEntity {
 	/**
 	 * @return the player
 	 */
-	public final Player getPlayer() {
-		return player;
+	public final AbstractEntity getShooter() {
+		return shooter;
 	}
 
 	/**
-	 * @param player the player to set
+	 * @param shooter the entity to set as the bullet's shooter
 	 */
-	public final void setPlayer(final Player player) {
-		this.player = player;
+	public final void setShooter(final AbstractEntity shooter) {
+		this.shooter = shooter;
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class Bullet extends AbstractEntity {
 		bullet.setDY(this.getDY());
 		bullet.setThisGame(this.getThisGame());
 		bullet.setPierce(this.getPierce());
-		bullet.setPlayer(getPlayer());
+		bullet.setShooter(getShooter());
 		bullet.setBirthTime(birthTime);
 		bullet.setShot(isShot());
 		bullet.setFriendly(isFriendly());

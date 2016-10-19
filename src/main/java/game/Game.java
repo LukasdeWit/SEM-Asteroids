@@ -8,6 +8,7 @@ import display.DisplayHud;
 import display.DisplayText;
 import entity.AbstractEntity;
 import entity.Asteroid;
+import entity.Boss;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
@@ -84,11 +85,7 @@ public final class Game {
 		} 
 		scorecounter.startGame();
 		spawner.reset();
-		if (gamestate.getMode() == Gamestate.getModeArcade()) {
-			Logger.getInstance().log("Arcade game started.");
-		} else {
-			Logger.getInstance().log("Coop game started.");
-		}
+		Logger.getInstance().log(gamestate.toString() + " game started.");
 	}
 
 	/**
@@ -248,7 +245,7 @@ public final class Game {
 				.filter(e -> e instanceof Bullet)
 				.map(e -> (Bullet) e)
 				.filter(Bullet::isFriendly)
-				.filter(bullet -> bullet.getPlayer().equals(player))
+				.filter(bullet -> bullet.getShooter().equals(player))
 				.count());
 	}
 
@@ -259,7 +256,7 @@ public final class Game {
 	 */
 	public int enemies() {
 		return Math.toIntExact(entities.stream()
-				.filter(e -> e instanceof Asteroid || e instanceof Saucer)
+				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof Boss)
 				.count());
 	}
 

@@ -348,7 +348,7 @@ public class Player extends AbstractEntity {
 		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
 		bBuilder.setRadius(bulletSize);
 		bBuilder.setThisGame(getThisGame());
-		bBuilder.setPlayer(this);
+		bBuilder.setShooter(this);
 		bBuilder.setPierce(piercing);
 		final Bullet b = (Bullet) bBuilder.getResult();
 		

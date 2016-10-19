@@ -24,7 +24,9 @@ public final class Gamestate {
 	private static final int MODE_NONE = 0;
 	private static final int MODE_ARCADE = 1;
 	private static final int MODE_COOP = 2;
-	
+	private static final int MODE_BOSS = 3;
+	private static final int MODE_BOSS_COOP = 4;
+		
 	private static final long MINIMAL_PAUSE_TIME = 300;
 	private static final long MINIMAL_RESTART_TIME = 300;
 	
@@ -87,6 +89,14 @@ public final class Gamestate {
 			mode = MODE_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
+		} else if (input.contains("B")) {
+			mode = MODE_BOSS;
+			state = STATE_GAME;
+			thisGame.startGame();
+		} else if (input.contains("N")) {
+			mode = MODE_BOSS_COOP;
+			state = STATE_GAME;
+			thisGame.startGame();
 		}
 	}
 
@@ -137,6 +147,35 @@ public final class Gamestate {
 			thisGame.startGame();
 			state = STATE_GAME;
 		}
+	}
+	
+	/**
+	 * Get string of current gamestate for logging.
+	 * @return String representing the current state.
+	 */
+	public String toString() {
+		String res;
+		switch (state) {
+		case MODE_NONE:
+			res = "None";
+			break;
+		case MODE_ARCADE:
+			res = "Arcade";
+			break;
+		case MODE_COOP:
+			res = "Arcade coop";
+			break;
+		case MODE_BOSS:
+			res = "Boss";
+			break;
+		case MODE_BOSS_COOP:
+			res = "Boss coop";
+			break;
+		default:
+			res = "";
+			break;
+		}
+		return res;
 	}
 
 	/**
@@ -196,10 +235,31 @@ public final class Gamestate {
 	}
 	
 	/**
+	 * @return the modeBoss
+	 */
+	public static int getModeBoss() {
+		return MODE_BOSS;
+	}
+	
+	/**
+	 * @return the modeBossCoop
+	 */
+	public static int getModeBossCoop() {
+		return MODE_BOSS_COOP;
+	}
+
+	/**
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
-		return getMode() == getModeCoop();
+		return getMode() == getModeCoop() || getMode() == getModeBossCoop();
+	}
+	
+	/**
+	 * @return true if boss
+	 */
+	public boolean isBoss() {
+		return getMode() == getModeBoss() || getMode() == getModeBossCoop();
 	}
 
 	/**
