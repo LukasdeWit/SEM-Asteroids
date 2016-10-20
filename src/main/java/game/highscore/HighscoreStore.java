@@ -1,22 +1,25 @@
 package game.highscore;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonWriter;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import game.Logger;
-import game.highscore.model.HighScore;
-
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
+
+import game.Logger;
+import game.highscore.model.HighScore;
 
 /**
  * Created by douwe on 20-9-16.
@@ -70,9 +73,8 @@ public class HighscoreStore {
     /**
      * join the local highscores and those stored on the disk. the result will
      * become the new list of highscores, both locally and on the disk
-     */
+     *//*
     @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
-    @SuppressWarnings("unused")
     private void join() {
         highScores = Stream.concat(highScores.stream(), readHighScores()
                 .stream())
@@ -80,7 +82,7 @@ public class HighscoreStore {
                 .sorted()
                 .collect(Collectors.toList());
         writeScores();
-    }
+    }*/
 
     /**
      * adds a <strong>nonnull</strong> highscore to the store.

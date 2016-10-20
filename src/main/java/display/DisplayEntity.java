@@ -1,6 +1,15 @@
 package display;
 
-import entity.*;
+import java.util.function.DoubleFunction;
+
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.Boss;
+import entity.Bullet;
+import entity.Particle;
+import entity.Player;
+import entity.Powerup;
+import entity.Saucer;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -8,8 +17,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-
-import java.util.function.DoubleFunction;
 
 /**
  * This class displays all entities.
@@ -62,7 +69,7 @@ public final class DisplayEntity {
 	private static final float ASTEROID_SIZE = .25f;
 	private static final float ASTEROID_WIDTH = 4;
 
-	private static final float BULLET_SIZE = .5f;
+	private static final float BULLET_SIZE = .25f;
 	private static final float PARTICLE_SIZE = .5f;
 	private static final float POWERUP_SIZE = .5f;
 
@@ -133,6 +140,8 @@ public final class DisplayEntity {
 
 	private static final float SAUCER_SIZE = .20f;
 	private static final float SAUCER_WIDTH = 4;
+	
+	private static final float BOSS_SIZE = 1f;
 
 	/**
 	 * private constructor for utility class.
@@ -164,7 +173,7 @@ public final class DisplayEntity {
 	 * @param b - the bullet
 	 */
 	public static void bullet(final Bullet b) {
-		drawEntity(b, Color.WHITE, BULLET_SIZE);
+		drawEntity(b, Color.WHITE, BULLET_SIZE * b.getRadius());
 	}
 
 	/**
@@ -183,6 +192,15 @@ public final class DisplayEntity {
 	 */
 	public static void powerup(final Powerup p) {
 		drawEntity(p, Color.GRAY, POWERUP_SIZE);
+	}
+	
+	/**
+	 * draw boss.
+	 * 
+	 * @param boss -  the boss
+	 */
+	public static void boss(final Boss boss) {
+		drawEntity(boss, Color.WHITE, BOSS_SIZE);
 	}
 
 	/**

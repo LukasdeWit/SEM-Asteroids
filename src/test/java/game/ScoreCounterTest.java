@@ -1,11 +1,15 @@
 package game;
 
 
-import game.highscore.HighscoreStore;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import game.highscore.HighscoreStore;
 
 public class ScoreCounterTest {
 	private final Game thisGame = new Game();
@@ -96,7 +100,7 @@ public class ScoreCounterTest {
 	
 	@Test
 	public void testConstructor() {
-		ScoreCounter score = new ScoreCounter(thisGame, new HighscoreStore());
+		final ScoreCounter score = new ScoreCounter(thisGame, new HighscoreStore());
 		assertEquals(score.getThisGame(), thisGame);
 	}
 	
@@ -107,7 +111,7 @@ public class ScoreCounterTest {
 		sc.updateHighscore();
 		
 		// check if the highscore is read by new ScoreCounter object
-		ScoreCounter counter = new ScoreCounter(thisGame, new HighscoreStore());
+		final ScoreCounter counter = new ScoreCounter(thisGame, new HighscoreStore());
 		assertEquals(1234, counter.getHighscore());
 	}
 

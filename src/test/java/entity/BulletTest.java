@@ -45,7 +45,7 @@ public class BulletTest {
 	@Before
 	public void setUp() throws Exception {
 		thisGame = new Game();
-		BulletBuilder bBuilder = new BulletBuilder();
+		final BulletBuilder bBuilder = new BulletBuilder();
 		bBuilder.setX(X_START);
 		bBuilder.setY(Y_START);
 		bBuilder.setDX(DX_START);
@@ -175,7 +175,7 @@ public class BulletTest {
 		pBuilder.setDX(DX_START);
 		pBuilder.setDY(DY_START);
 		final Player p = (Player) pBuilder.getResult();
-		bullet.setPlayer(p);
-		assertEquals(DX_START,bullet.getPlayer().getDX(),0);
+		bullet.setShooter(p);
+		assertEquals(DX_START,bullet.getShooter().getDX(),0);
 	}
 }

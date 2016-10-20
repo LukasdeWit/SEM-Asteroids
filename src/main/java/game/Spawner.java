@@ -1,6 +1,7 @@
 package game;
 
 import entity.Asteroid;
+import entity.Boss;
 import entity.Powerup;
 import entity.Saucer;
 
@@ -30,6 +31,7 @@ public final class Spawner {
 	private static final long DIFFICULTY_STEP = 10000;
 	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
 	private static final float ASTEROID_SPEED = 1;
+	private static final float WAVES_BETWEEN_BOSSES = 5;
 
 	/**
 	 * Constructor of Spawner.
@@ -49,34 +51,73 @@ public final class Spawner {
 	 * This method is called every tick.
 	 */
 	public void update() {
+		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
+				&& System.currentTimeMillis() - startRest > REST) {
+			spawnBoss();
+		} else {
+			updateSaucer();
+			updatePowerup();
+			if (thisGame.enemies() != 0) {
+				startRest = System.currentTimeMillis();
+			}
+			updateWave();
+		}
+	}
+	
+	/**
+	 * Checks if a saucer should be added and does so if needed.
+	 */
+	private void updateSaucer() {
 		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
 			spawnSaucer();
 			Logger.getInstance().log("Saucer was spawned");
 			startSaucerTime = System.currentTimeMillis();
 		}
+	}
+	
+	/**
+	 * Checks if a powerup should be added and does so if needed.
+	 */
+	private void updatePowerup() {
 		if (System.currentTimeMillis() - startPowerupTime > POWERUP_TIME) {
 			spawnPowerup();
 			Logger.getInstance().log("Powerup was spawned");
 			startPowerupTime = System.currentTimeMillis();
 		}
-		if (thisGame.enemies() != 0) {
+	}
+	
+
+	/**
+	 * Checks if the wave should be updated and does so if needed.
+	 */
+	private void updateWave() {
+		if ((startRest == 0 || System.currentTimeMillis() - startRest > REST) 
+				&& wave != 0 && wave % WAVES_BETWEEN_BOSSES == 0) {
+			spawnBoss();
 			startRest = System.currentTimeMillis();
-		}
-		if (startRest == 0) {
+			wave++;
+		} else if (startRest == 0) {
 			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS);
 			startRest = System.currentTimeMillis();
 			wave++;
 		} else if (System.currentTimeMillis() - startRest > REST) {
-			int extra = wave * 2;
-			if (extra > MAX_EXTRA) {
-				extra = MAX_EXTRA;
-			}
-			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
-			spawnAsteroid(STARTING_ASTEROIDS + extra);
-			wave++;
-			startRest = System.currentTimeMillis();
+			nextWave();
 		}
+	}
+	
+	/**
+	 * Spawns the next wave of asteroids.
+	 */
+	private void nextWave() {
+		int extra = wave * 2;
+		if (extra > MAX_EXTRA) {
+			extra = MAX_EXTRA;
+		}
+		Logger.getInstance().log("Wave: " + (wave + 1) + ".");
+		spawnAsteroid(STARTING_ASTEROIDS + extra);
+		wave++;
+		startRest = System.currentTimeMillis();
 	}
 
 	/**
@@ -131,6 +172,17 @@ public final class Spawner {
 					thisGame));
 		}
 		Logger.getInstance().log(times + " asteroids were spawned.");
+	}
+	
+	/**
+	 * 
+	 */
+	private void spawnBoss() {
+		final Boss boss =
+				new Boss(random.nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
+				* thisGame.getScreenY(), 0, 0, thisGame);
+		thisGame.create(boss);
 	}
 
 	/**

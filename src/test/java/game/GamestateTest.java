@@ -3,6 +3,8 @@ package game;
 import org.junit.Before;
 import org.junit.Test;
 
+import display.DisplayText;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class GamestateTest {
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
+		DisplayText.setTest(true);
 	}
 	
 	@Test
@@ -115,8 +118,8 @@ public class GamestateTest {
 		gamestate.setState(Gamestate.getStateHighscoreScreen());
 		input.add("R");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateHighscoreScreen(), gamestate.getState(), 0);
+		assertEquals(Gamestate.getModeNone(), gamestate.getMode(), 0);
+		assertEquals(Gamestate.getStateStartScreen(), gamestate.getState(), 0);
 	}
 	
 	@Test

@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import display.DisplayText;
 import entity.AbstractEntity;
 import entity.Asteroid;
 import entity.Bullet;
@@ -60,6 +61,8 @@ public class GameTest {
 		bBuilder.setDX(0);
 		bBuilder.setDY(0);
 		bBuilder.setThisGame(thisGame);
+		
+		DisplayText.setTest(true);
 	}
 	
 	@Test
@@ -290,7 +293,7 @@ public class GameTest {
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
 		final Bullet b = (Bullet) bBuilder.getResult();
-		b.setPlayer(p1);
+		b.setShooter(p1);
 		addToEntities(b);
 		assertEquals(1, thisGame.bullets(p1), 0);
 	}
@@ -302,7 +305,7 @@ public class GameTest {
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
 		final Bullet b = (Bullet) bBuilder.getResult();
-		b.setPlayer(p2);
+		b.setShooter(p2);
 		addToEntities(b);
 		assertEquals(0, thisGame.bullets(p1), 0);
 	}

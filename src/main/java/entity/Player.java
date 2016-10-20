@@ -59,7 +59,7 @@ public class Player extends AbstractEntity {
 		setRadius(RADIUS);
 		rotation = 0;
     	playerTwo = false;
-    	playerString = "Player 1";
+    	playerString = "The player";
     	makeInvincible(INVINCIBILITY_START_TIME);
 		maxBullets = MAX_BULLETS;
 		fireRate = FIRE_RATE;
@@ -132,7 +132,9 @@ public class Player extends AbstractEntity {
 	public final void gainLife() {
 		lives++;
 		if (lives == 1) {
+			getThisGame().create(this);
 			respawnThePlayer();
+			Logger.getInstance().log(playerString + " was resurrected.");
 		}
 	}
 
@@ -161,14 +163,7 @@ public class Player extends AbstractEntity {
 	 * @param input List containing the keyboard input
 	 */
 	private void keyHandler(final List<String> input) {
-		if (input.contains("LEFT") || input.contains("A")) {
-			turnLeft();
-		}
-
-		if (input.contains("RIGHT") || input.contains("D")) {
-			turnRight();
-		}
-
+		turnKeys(input);
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
 		}
@@ -181,6 +176,21 @@ public class Player extends AbstractEntity {
 			fire();
 		}
 	}
+	
+	/**
+	 * turn using keys.
+	 * @param input - the input.
+	 */
+	private void turnKeys(final List<String> input) {
+		if (input.contains("LEFT") || input.contains("A")) {
+			turnLeft();
+		}
+
+		if (input.contains("RIGHT") || input.contains("D")) {
+			turnRight();
+		}
+	}
+	
 
 	/**
 	 * handle user(s) key input for coop.
@@ -189,25 +199,7 @@ public class Player extends AbstractEntity {
 	 */
 	private void keyHandlerTwo(final List<String> input) {
 		if (isPlayerTwo()) {
-			if (input.contains("LEFT")) {
-				turnLeft();
-			}
-
-			if (input.contains("RIGHT")) {
-				turnRight();
-			}
-
-			if (input.contains("UP")) {
-				accelerate();
-			}
-
-			if (input.contains("DOWN")) {
-				goHyperspace();
-			}
-
-			if (input.contains("ENTER")) {
-				fire();
-			}
+			playerTwoKeys(input);
 		} else {
 			if (input.contains("A")) {
 				turnLeft();
@@ -228,6 +220,32 @@ public class Player extends AbstractEntity {
 			if (input.contains("SPACE")) {
 				fire();
 			}
+		}
+	}
+	
+	/**
+	 * Keys for player Two.
+	 * @param input - the input
+	 */
+	private void playerTwoKeys(final List<String> input) {
+		if (input.contains("LEFT")) {
+			turnLeft();
+		}
+
+		if (input.contains("RIGHT")) {
+			turnRight();
+		}
+
+		if (input.contains("UP")) {
+			accelerate();
+		}
+
+		if (input.contains("DOWN")) {
+			goHyperspace();
+		}
+
+		if (input.contains("ENTER")) {
+			fire();
 		}
 	}
 
@@ -330,7 +348,8 @@ public class Player extends AbstractEntity {
 		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
 		bBuilder.setRadius(bulletSize);
 		bBuilder.setThisGame(getThisGame());
-		bBuilder.setPlayer(this);
+		bBuilder.setShooter(this);
+		bBuilder.setPierce(piercing);
 		final Bullet b = (Bullet) bBuilder.getResult();
 		
 		getThisGame().create(b);
@@ -399,10 +418,12 @@ public class Player extends AbstractEntity {
 	 */
 	public final void setPlayerTwo(final boolean playerTwo) {
 		this.playerTwo = playerTwo;
-		if (playerTwo) {
-			this.playerString = "Player 2";
-		} else {
-			this.playerString = "Player 1";
+		if (getThisGame().getGamestate().isCoop()) {
+			if (playerTwo) {
+				this.playerString = "Player 2";
+			} else {
+				this.playerString = "Player 1";
+			}
 		}
 	}
 

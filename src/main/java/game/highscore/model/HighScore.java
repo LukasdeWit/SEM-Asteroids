@@ -76,10 +76,17 @@ public class HighScore implements Comparable<HighScore> {
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
-        }
+        }        
+        return checkHighscore(o);       
+    }
 
-        final HighScore highScore = (HighScore) o;
-
+    /**
+     * Checks individual parts of highscore.
+     * @param o - the object.
+     * @return true if equal.
+     */
+    private boolean checkHighscore(final Object o) {
+    	final HighScore highScore = (HighScore) o;
         if (getScore() != highScore.getScore()) {
             return false;
         }
@@ -88,16 +95,15 @@ public class HighScore implements Comparable<HighScore> {
         }
         if (getGamemode() != highScore.getGamemode()) {
             return false;
-        }
-
+        }        
         if (getUserName() == null) {
             return highScore.getUserName() == null;
         } else {
             return getUserName().equals(highScore.getUserName());
         }
-    }
+	}
 
-    /**
+	/**
      * {@inheritDoc}
      */
     @Override

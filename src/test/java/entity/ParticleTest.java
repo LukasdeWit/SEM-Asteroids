@@ -85,7 +85,7 @@ public class ParticleTest {
 	public void testExplosion() {
 		Particle.explosion(X_START, Y_START, thisGame);
 		final List<AbstractEntity> creation = thisGame.getCreateList();
-		int containsParticles = (int) creation.stream().filter(e -> e instanceof Particle).count();
+		final int containsParticles = (int) creation.stream().filter(e -> e instanceof Particle).count();
 		assertEquals(Particle.getExplosionParticles(), containsParticles);
 	}
 }
