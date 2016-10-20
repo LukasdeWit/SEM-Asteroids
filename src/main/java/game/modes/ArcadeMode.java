@@ -2,23 +2,32 @@ package game.modes;
 
 import game.Game;
 
+/**
+ * Class that represents single-player arcade mode.
+ * @author Esmee
+ *
+ */
 public class ArcadeMode extends AbstractMode {
-	public ArcadeMode(Game game) {
+	/**
+	 * Constructor for arcademode.
+	 * @param game this mode belongs to.
+	 */
+	public ArcadeMode(final Game game) {
 		super(game);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return "Single Player Arcade";
 	}
 
 	@Override
-	public boolean isCoop() {
+	public final boolean isCoop() {
 		return false;
 	}
 
 	@Override
-	public boolean isBoss() {
+	public final boolean isBoss() {
 		return false;
 	}
 }

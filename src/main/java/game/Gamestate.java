@@ -1,6 +1,5 @@
 package game;
 
-import display.DisplayText;
 import game.gamestates.AbstractState;
 import game.gamestates.HighscoreScreenState;
 import game.gamestates.OngoingGameState;
@@ -12,7 +11,6 @@ import game.modes.CoopArcadeMode;
 import game.modes.CoopBossMode;
 import game.modes.ArcadeMode;
 import game.modes.NoneMode;
-import game.modes.ArcadeMode;
 
 import java.util.List;
 
@@ -21,9 +19,7 @@ import java.util.List;
  * @author Kibo
  *
  */
-public final class Gamestate {
-	private final Game thisGame;
-	
+public final class Gamestate {	
 	// states
 	private AbstractState currentState;
 	private HighscoreScreenState highscoreScreenState;
@@ -53,10 +49,11 @@ public final class Gamestate {
 		noneMode = new NoneMode(thisGame);
 		arcadeMode = new ArcadeMode(thisGame);
 		currentMode = noneMode;
-		
-		this.thisGame = thisGame;
 	}
 	
+	/**
+	 * start game.
+	 */
 	public void start() {
 		currentState.start();
 	}
@@ -120,10 +117,10 @@ public final class Gamestate {
 	}
 	
 	/**
-	 * Set the current state
+	 * Set the current state.
 	 * @param state the gamestate should be
 	 */
-	public void setState(AbstractState state) {
+	public void setState(final AbstractState state) {
 		this.currentState = state;
 	}
 	
@@ -156,10 +153,10 @@ public final class Gamestate {
 	}
 	
 	/**
-	 * Setter for mode
+	 * Setter for mode.
 	 * @param mode the game should be in
 	 */
-	public void setMode(AbstractMode mode) {
+	public void setMode(final AbstractMode mode) {
 		this.currentMode = mode;
 	}
 	

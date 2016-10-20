@@ -2,24 +2,32 @@ package game.modes;
 
 import game.Game;
 
+/**
+ * Class that represents when the game isn't in any gamemode.
+ * @author Esmee
+ *
+ */
 public class NoneMode extends AbstractMode {
-
-	public NoneMode(Game game) {
+	/**
+	 * Constructor for none mode.
+	 * @param game this mode belongs to.
+	 */
+	public NoneMode(final Game game) {
 		super(game);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return "None";
 	}
 
 	@Override
-	public boolean isCoop() {
+	public final boolean isCoop() {
 		return false;
 	}
 
 	@Override
-	public boolean isBoss() {
+	public final boolean isBoss() {
 		return false;
 	}
 }

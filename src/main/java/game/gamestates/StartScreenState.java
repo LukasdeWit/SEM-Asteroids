@@ -6,13 +6,22 @@ import display.DisplayText;
 import game.Game;
 import game.Gamestate;
 
-public class StartScreenState extends AbstractState {	
-	public StartScreenState (Game game) {
+/**
+ * Start screen state.
+ * @author Esmee
+ *
+ */
+public class StartScreenState extends AbstractState {
+	/**
+	 * Constructor for start screen state.
+	 * @param game this state belongs to
+	 */
+	public StartScreenState(final Game game) {
 		super(game);
 	}
 
 	@Override
-	public void update(List<String> input) {
+	public final void update(final List<String> input) {
 		startScreen(input);
 		DisplayText.startScreen();		
 	}

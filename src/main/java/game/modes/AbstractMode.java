@@ -2,18 +2,53 @@ package game.modes;
 
 import game.Game;
 
+/**
+ * Abstract class that game modes can inherit from.
+ * @author Esmee
+ *
+ */
 public abstract class AbstractMode {
-	Game thisGame;
+	private Game thisGame;
 	
-	public AbstractMode (Game game) {
-		thisGame = game;
+	/**
+	 * Constructor for AbstractMode.
+	 * @param game that this mode belongs to
+	 */
+	public AbstractMode(final Game game) {
+		setThisGame(game);
 	}
 	
-	public String toString() {
-		return "";
-	}
+	/**
+	 * Default tostring method.
+	 * @return string that represents this gamemode
+	 */
+	public abstract String toString();
 	
+	/**
+	 * Abstract method that returns whether the mode is a coop mode.
+	 * @return true when it's a coop mode
+	 */
 	public abstract boolean isCoop();
 	
+	/**
+	 * Abstract method that returns whether the mode is a boss mode.
+	 * @return true when it's a boss mode
+	 */
 	public abstract boolean isBoss();
+	
+	/**
+	 * Getter for thisGame.
+	 * @return thisgame
+	 */
+	public final Game getThisGame() {
+		return thisGame;
+	}
+	
+	/**
+	 * Setter for thisgame.
+	 * @param game thisGame should be
+	 */
+	public final void setThisGame(final Game game) {
+		thisGame = game;
+	}
 }

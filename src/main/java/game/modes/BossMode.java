@@ -2,24 +2,32 @@ package game.modes;
 
 import game.Game;
 
+/**
+ * Class that represents single-player boss mode.
+ * @author Esmee
+ *
+ */
 public class BossMode extends AbstractMode {
-
-	public BossMode(Game game) {
+	/**
+	 * Constructor for bossmode.
+	 * @param game this belongs to
+	 */
+	public BossMode(final Game game) {
 		super(game);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return "None";
 	}
 
 	@Override
-	public boolean isCoop() {
+	public final boolean isCoop() {
 		return false;
 	}
 
 	@Override
-	public boolean isBoss() {
+	public final boolean isBoss() {
 		return true;
 	}
 }

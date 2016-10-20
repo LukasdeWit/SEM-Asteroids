@@ -7,14 +7,22 @@ import game.Game;
 import game.Gamestate;
 import game.Logger;
 
+/**
+ * Highscore screen state.
+ * @author Esmee
+ *
+ */
 public class HighscoreScreenState extends AbstractState {
-
-	public HighscoreScreenState(Game game) {
+	/**
+	 * Constructor for highscore screen state.
+	 * @param game this screen belongs to
+	 */
+	public HighscoreScreenState(final Game game) {
 		super(game);
 	}
 
 	@Override
-	public void update(List<String> input) {
+	public final void update(final List<String> input) {
 		highscoreScreen(input);
 		DisplayText.highscoreScreen(getThisGame().getScoreCounter().getHighscore());		
 	}

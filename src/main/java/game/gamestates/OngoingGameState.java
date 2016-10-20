@@ -6,12 +6,22 @@ import game.Game;
 import game.Gamestate;
 import game.Logger;
 
+/**
+ * Class that represents the state of an ongoing game.
+ * @author Esmee
+ *
+ */
 public class OngoingGameState extends AbstractState {
-	public OngoingGameState (Game game) {
+	/**
+	 * Constructor for ongoing game state.
+	 * @param game this state belongs to
+	 */
+	public OngoingGameState(final Game game) {
 		super(game);
 	}
+	
 	@Override
-	public void update(List<String> input) {
+	public final void update(final List<String> input) {
 		getThisGame().updateGame(input);
 		game(input);		
 	}
@@ -24,13 +34,13 @@ public class OngoingGameState extends AbstractState {
 		Gamestate gameState = getThisGame().getGamestate();
 
 		if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
+				- getRestartTime() > MINIMAL_RESTART_TIME) {
 			Logger.getInstance().log("Game stopped.");
 			gameState.setMode(gameState.getNoneMode());
 			gameState.setState(gameState.getStartScreenState());
 		} else if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
+				- getPauseTime() > MINIMAL_PAUSE_TIME) {
+			setPauseTime(System.currentTimeMillis());
 			Logger.getInstance().log("Game paused.");
 			gameState.setState(gameState.getPauseScreenState());
 		}

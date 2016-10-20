@@ -2,24 +2,32 @@ package game.modes;
 
 import game.Game;
 
+/**
+ * Class that represents coop arcade mode.
+ * @author Esmee
+ *
+ */
 public class CoopArcadeMode extends AbstractMode {
-
-	public CoopArcadeMode(Game game) {
+	/**
+	 * Constructor for coop arcade mode.
+	 * @param game this belongs to
+	 */
+	public CoopArcadeMode(final Game game) {
 		super(game);
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return "Arcade Coop";
 	}
 
 	@Override
-	public boolean isCoop() {
+	public final boolean isCoop() {
 		return true;
 	}
 
 	@Override
-	public boolean isBoss() {
+	public final boolean isBoss() {
 		return false;
 	}
 
