@@ -24,3 +24,4 @@ target/
 log.txt
 *.checkstyle
 *.project
+src/main/resources/highscore.txt

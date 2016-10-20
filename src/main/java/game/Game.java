@@ -27,13 +27,14 @@ public final class Game {
 	private List<AbstractEntity> entities;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
+	private final ScoreCounter scorecounter;
 	private final float screenX;
 	private final float screenY;
 	private final Spawner spawner;
 	private final Gamestate gamestate;
-	private final ScoreCounter scorecounter;
-
+	
 	private static final float CANVAS_SIZE = 500;
+	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
 	private static final boolean LOG_SCORE = false;
 
 	/**
@@ -113,8 +114,15 @@ public final class Game {
 			checkCollision(e);
 			e.draw();
 		});
-
-		spawner.update();
+		
+		if (gamestate.isArcade()) {
+			spawner.updateArcade();
+		} else if (gamestate.isBoss()) {
+			spawner.updateBoss();
+		} else {
+			spawner.updateSurvival();
+		}
+		
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
@@ -259,6 +267,24 @@ public final class Game {
 				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof Boss)
 				.count());
 	}
+	
+	/**
+	 * Amount of big enemies, where 2 medium asteroids count as 1 big
+	 * big asteroid, and 2 small asteroids count as 1 medium asteroid.
+	 * @return amount of converted big enemies
+	 */
+	public int convertedBigEnemies() {
+		int enemies = 0;
+		for (final AbstractEntity entity : entities) {
+			if (entity instanceof Asteroid) {
+				enemies += ((Asteroid) entity).getSurvivalSize();
+			}
+		}
+		if (enemies % SURVIVAL_ASTEROID_SIZE_BIG == 0) {
+			return (int) (enemies / SURVIVAL_ASTEROID_SIZE_BIG);
+		}
+		return (int) (enemies / SURVIVAL_ASTEROID_SIZE_BIG) + 1;
+	}
 
 	/**
 	 * CanvasSize getter.
@@ -311,7 +337,7 @@ public final class Game {
 	}
 
 	/**
-	 * @param playerTwo the playerTwo to set
+	 * @param playerTwo - a new player two.
 	 */
 	public void setPlayerTwo(final Player playerTwo) {
 		this.playerTwo = playerTwo;
