@@ -1,12 +1,12 @@
 package entity;
+import java.util.List;
+import java.util.Random;
+
 import display.DisplayEntity;
 import display.DisplayHud;
 import game.Audio;
 import game.Game;
 import game.Logger;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Class that represents a Powerup.

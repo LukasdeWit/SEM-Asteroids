@@ -111,7 +111,7 @@ public class PlayerTest {
 
 	@Test
 	public void testOnHit5() {
-		thisGame.getGamestate().setMode(Gamestate.getModeCoop());
+		thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
 		player.onHit();
 		assertEquals(thisGame.getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
 	}
@@ -140,7 +140,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testGainLife4() {
-		thisGame.getGamestate().setMode(Gamestate.getModeCoop());
+		thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
 		player.setLives(0);
 		player.gainLife();
 		assertEquals(1,player.getLives(),0);
@@ -430,7 +430,7 @@ public class PlayerTest {
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);
 		if (coop) {
-			thisGame.getGamestate().setMode(Gamestate.getModeCoop());
+			thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
 		}
 		player.setInvincibleStart(0);
 		player.update(input);

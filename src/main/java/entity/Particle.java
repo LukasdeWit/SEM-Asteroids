@@ -1,8 +1,8 @@
 package entity;
+import java.util.List;
+
 import display.DisplayEntity;
 import game.Game;
-
-import java.util.List;
 
 /**
  * This class is a particle used in explosions.

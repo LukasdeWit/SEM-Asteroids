@@ -22,6 +22,15 @@ public class Player extends AbstractEntity {
 	private long hyperspaceStart;
 	private boolean boost;
 	private boolean playerTwo;
+	private int maxBullets;
+	private double fireRate;
+	private int piercing;
+	private int shielding;
+	private boolean tripleShot;
+	private float bulletSize;
+	private int changeOfDying;
+	private String playerString;
+	private final BulletBuilder bBuilder;
 
 	private static final int STARTING_LIVES = 3;
 	private static final float RADIUS = 5;
@@ -36,19 +45,7 @@ public class Player extends AbstractEntity {
 	private static final int MAX_BULLETS = 4;
 	private static final int CHANCE_OF_DYING = 25;
 	private static final float BULLET_SIZE = 2;
-
-	private int maxBullets;
-	private double fireRate;
-	private int piercing;
-	private int shielding;
-	private boolean tripleShot;
-	private float bulletSize;
-	private int changeOfDying;
-	private String playerString;
-	private final BulletBuilder bBuilder;
-	
 	private static final float SPAWN_OFFSET = 40;
-
     private static final double TRIPLE_SHOT_ANGLE = .1;
     
     /**
@@ -198,7 +195,6 @@ public class Player extends AbstractEntity {
 		}
 	}
 	
-
 	/**
 	 * handle user(s) key input for coop.
 	 *
