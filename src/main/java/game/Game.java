@@ -33,7 +33,7 @@ public final class Game {
 	private final float screenY;
 	private final Spawner spawner;
 	private final Gamestate gamestate;
-	
+	private final Audio audio;
 	private static final float CANVAS_SIZE = 500;
 	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
 	private static final boolean LOG_SCORE = false;
@@ -51,6 +51,7 @@ public final class Game {
 		createList = new ArrayList<>();
 		gamestate = new Gamestate(this);
 		scorecounter = new ScoreCounter(this, new HighscoreStore());
+		audio = new Audio();
 	}
 
 	/**
@@ -130,6 +131,7 @@ public final class Game {
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
+		audio.backgroundTrack(enemies());
 		scorecounter.displayScore();
 		if (gamestate.isCoop()) {
 			if (playerTwo == null) {
@@ -207,6 +209,7 @@ public final class Game {
 			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
 			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}
+		audio.stopAll();
 	}
 
 	/**
@@ -400,6 +403,13 @@ public final class Game {
 		return spawner;
 	}
 	
+	/**
+	 * @return the audio
+	 */
+	public Audio getAudio() {
+		return audio;
+	}
+		
 	/**
 	 * @return the scorecounter
 	 */

@@ -1,11 +1,12 @@
 package entity;
 
+import display.DisplayEntity;
+import game.Audio;
+import game.Logger;
+import entity.builders.BulletBuilder;
+
 import java.util.List;
 import java.util.Random;
-
-import display.DisplayEntity;
-import entity.builders.BulletBuilder;
-import game.Logger;
 
 /**
  * This class is the player of the game.
@@ -91,6 +92,8 @@ public class Player extends AbstractEntity {
 	 */
 	public final void onHit() {
 		if (shielding < 1) {
+			// boost sound will normally not stop if player dies mid-flight
+			getThisGame().getAudio().stop(Audio.BOOST);
 			lives--;
 			if (lives <= 0) {
 				// we are out of lives, call gameover
@@ -128,6 +131,7 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
+		getThisGame().getAudio().play(Audio.LIFEUP);
 		if (lives == 1) {
 			getThisGame().create(this);
 			respawnThePlayer();
@@ -163,6 +167,9 @@ public class Player extends AbstractEntity {
 		turnKeys(input);
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
+			getThisGame().getAudio().play(Audio.BOOST);
+		} else {
+			getThisGame().getAudio().stop(Audio.BOOST);
 		}
 
 		if (input.contains("DOWN") || input.contains("S")) {
@@ -207,6 +214,9 @@ public class Player extends AbstractEntity {
 
 			if (input.contains("W")) {
 				accelerate();
+				getThisGame().getAudio().play(Audio.BOOST);
+			} else {
+				getThisGame().getAudio().stop(Audio.BOOST);
 			}
 
 			if (input.contains("S")) {
@@ -234,6 +244,9 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP")) {
 			accelerate();
+			getThisGame().getAudio().play(Audio.BOOST2);
+		} else {
+			getThisGame().getAudio().stop(Audio.BOOST2);
 		}
 
 		if (input.contains("DOWN")) {
@@ -316,6 +329,7 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
+		getThisGame().getAudio().play(Audio.TELEPORT);
 		}
 	}
 
@@ -330,6 +344,11 @@ public class Player extends AbstractEntity {
 				fireBullet(rotation + TRIPLE_SHOT_ANGLE);
 			}
 			lastShot = System.currentTimeMillis();
+			if (isPlayerTwo()) {
+				getThisGame().getAudio().playMultiple(Audio.SHOOTING2);
+			} else {
+				getThisGame().getAudio().playMultiple(Audio.SHOOTING);
+			}
 		}
 	}
 
