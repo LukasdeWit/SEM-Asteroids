@@ -30,6 +30,15 @@ public class Particle extends AbstractEntity {
 		setRadius(1);
 		birthTime = System.currentTimeMillis();
 	}
+	
+	/**
+	 * Empty constructor of a Particle.
+	 */
+	public Particle() {
+		super();
+		setRadius(1);
+		birthTime = System.currentTimeMillis();
+	}
 
 	/**
 	 * This function makes an explosion of particles.
@@ -107,5 +116,19 @@ public class Particle extends AbstractEntity {
 	 */
 	public final void setBirthTime(final long birthTime) {
 		this.birthTime = birthTime;
+	}
+	
+	/**
+	 * @return a shallow copy of the Particle, useful for making two copies
+	 */
+	public final Particle shallowCopy() {
+		final Particle temp = new Particle();
+		temp.setX(this.getX());
+		temp.setY(this.getY());
+		temp.setDX(this.getDX());
+		temp.setDY(this.getDY());
+		temp.setThisGame(this.getThisGame());
+		temp.setBirthTime(this.birthTime);
+		return temp;
 	}
 }
