@@ -69,7 +69,7 @@ public class GamestateTest {
 	
 	@Test
 	public final void testStartScreen1() {
-		input.add("X");
+		input.add("A");
 		gamestate.update(input);
 		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
 		assertEquals(Gamestate.getStateGame(), gamestate.getState(), 0);
@@ -79,8 +79,24 @@ public class GamestateTest {
 	public final void testStartScreen2() {
 		input.add("C");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeCoop(), gamestate.getMode(), 0);
+		assertEquals(Gamestate.getModeSurvivalCoop(), gamestate.getMode(), 0);
 		assertEquals(Gamestate.getStateGame(), gamestate.getState(), 0);
+	}
+	
+	@Test
+	public final void testStartScreen3() {
+		input.add("Z");
+		gamestate.update(input);
+		assertEquals(Gamestate.getModeArcadeCoop(), gamestate.getMode());
+		assertEquals(Gamestate.getStateGame(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testStartScreen4() {
+		input.add("D");
+		gamestate.update(input);
+		assertEquals(Gamestate.getModeSurvival(), gamestate.getMode());
+		assertEquals(Gamestate.getStateGame(), gamestate.getState());
 	}
 	
 	@Test

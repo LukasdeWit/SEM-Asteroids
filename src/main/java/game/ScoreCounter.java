@@ -9,9 +9,6 @@ import game.highscore.HighscoreStore;
  *
  */
 public class ScoreCounter {
-	/**
-	 * The amount of points needed to gain a life.
-	 */
 	private static final int LIFE_SCORE = 10000;
 
 	private long score;

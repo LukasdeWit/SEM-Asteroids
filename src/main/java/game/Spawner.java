@@ -18,9 +18,6 @@ public final class Spawner {
 	private long startRest;
 	private int wave;
 	private final Random random;
-	/**
-	 * The Game this spawner belongs to.
-	 */
 	private final Game thisGame;
 
 	private static final long SAUCER_TIME = 20000;
@@ -31,8 +28,9 @@ public final class Spawner {
 	private static final long DIFFICULTY_STEP = 10000;
 	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
 	private static final float ASTEROID_SPEED = 1;
+	private static final long SURVIVAL_POINTS_PER_ASTEROID = 10000;
 	private static final float WAVES_BETWEEN_BOSSES = 5;
-
+	
 	/**
 	 * Constructor of Spawner.
 	 *
@@ -48,9 +46,21 @@ public final class Spawner {
 	}
 
 	/**
-	 * This method is called every tick.
+	 * This method is called every tick of an arcade game.
 	 */
-	public void update() {
+	public void updateArcade() {
+		updateSaucer();
+		updatePowerup();
+		if (thisGame.enemies() != 0) {
+			startRest = System.currentTimeMillis();
+		}
+		updateWave();
+	}
+
+	/**
+	 * This method is called every tick of a boss game.
+	 */
+	public void updateBoss() {
 		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
 				&& System.currentTimeMillis() - startRest > REST) {
 			spawnBoss();
@@ -61,6 +71,19 @@ public final class Spawner {
 				startRest = System.currentTimeMillis();
 			}
 			updateWave();
+		}
+	}
+
+	/**
+	 * This method is called every tick of a survival game.
+	 */
+	public void updateSurvival() {
+		updateSaucer();
+		updatePowerup();
+		final int extra = (int) (thisGame.getScoreCounter().getScore() / SURVIVAL_POINTS_PER_ASTEROID);
+		final int enemies = thisGame.convertedBigEnemies();
+		if (STARTING_ASTEROIDS + extra - enemies > 0) {
+			spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
 		}
 	}
 	
@@ -86,7 +109,6 @@ public final class Spawner {
 		}
 	}
 	
-
 	/**
 	 * Checks if the wave should be updated and does so if needed.
 	 */
@@ -119,7 +141,7 @@ public final class Spawner {
 		wave++;
 		startRest = System.currentTimeMillis();
 	}
-
+	
 	/**
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
@@ -171,11 +193,15 @@ public final class Spawner {
 					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
 					thisGame));
 		}
-		Logger.getInstance().log(times + " asteroids were spawned.");
+		if (times == 1) {
+			Logger.getInstance().log("1 asteroid was spawned.");
+		} else {
+			Logger.getInstance().log(times + " asteroids were spawned.");
+		}
 	}
 	
 	/**
-	 * 
+	 * Spawns a boss.
 	 */
 	private void spawnBoss() {
 		final Boss boss =

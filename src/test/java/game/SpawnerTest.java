@@ -30,7 +30,7 @@ public class SpawnerTest {
 	
 	@Test
 	public final void testUpdate1() {
-		spawner.update();
+		spawner.updateArcade();
 		assertEquals(6, thisGame.getCreateList().size(), 0);
 	}
 	
@@ -38,7 +38,7 @@ public class SpawnerTest {
 	public final void testUpdate2() {
 		spawner.setStartRest(1);
 		spawner.setWave(8);
-		spawner.update();
+		spawner.updateArcade();
 		assertEquals(13, thisGame.getCreateList().size(), 0);
 	}
 	
@@ -46,7 +46,7 @@ public class SpawnerTest {
 	public final void testUpdate3() {
 		spawner.setStartRest(1);
 		spawner.setWave(2);
-		spawner.update();
+		spawner.updateArcade();
 		assertEquals(10, thisGame.getCreateList().size(), 0);
 	}
 	
@@ -55,7 +55,7 @@ public class SpawnerTest {
 		spawner.setStartPowerupTime(System.currentTimeMillis());
 		spawner.setStartRest(System.currentTimeMillis());
 		thisGame.getScoreCounter().setScore(1000000);
-		spawner.update();
+		spawner.updateArcade();
 		assertEquals(Saucer.getSmallRadius(), thisGame.getCreateList().get(0).getRadius(), 0);
 	}
 	
@@ -64,7 +64,7 @@ public class SpawnerTest {
 		spawner.setStartPowerupTime(System.currentTimeMillis());
 		spawner.setStartRest(System.currentTimeMillis());
 		thisGame.getScoreCounter().setScore(50000);
-		spawner.update();
+		spawner.updateArcade();
 		assertEquals(Saucer.getSmallRadius(), thisGame.getCreateList().get(0).getRadius(), 5);
 	}
 	
