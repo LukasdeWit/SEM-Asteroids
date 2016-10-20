@@ -6,6 +6,7 @@ import entity.Asteroid;
 import entity.Boss;
 import entity.Powerup;
 import entity.Saucer;
+import entity.builders.AsteroidBuilder;
 import entity.builders.SaucerBuilder;
 
 /**
@@ -21,6 +22,7 @@ public final class Spawner {
 	private final Random random;
 	private final Game thisGame;
 	private final SaucerBuilder sBuilder;
+	private final AsteroidBuilder aBuilder;
 
 	private static final long SAUCER_TIME = 20000;
 	private static final long POWERUP_TIME = 10000;
@@ -45,6 +47,11 @@ public final class Spawner {
 		startRest = 0;
 		wave = 0;
 		random = new Random();
+		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setThisGame(thisGame);
+		aBuilder.setRadius(Asteroid.getBigRadius());
+		aBuilder.setX(0);
 		
 		sBuilder = new SaucerBuilder();
 		sBuilder.setThisGame(thisGame);
@@ -196,9 +203,10 @@ public final class Spawner {
 	 */
 	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
-			thisGame.create(new Asteroid(0, thisGame.getScreenY() * (float) Math.random(),
-					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
-					thisGame));
+			aBuilder.setY(thisGame.getScreenY() * (float) Math.random());
+			aBuilder.setDX((float) (Math.random() - .5) * ASTEROID_SPEED);
+			aBuilder.setDY((float) (Math.random() - .5) * ASTEROID_SPEED);
+			thisGame.create(aBuilder.getResult());
 		}
 		if (times == 1) {
 			Logger.getInstance().log("1 asteroid was spawned.");

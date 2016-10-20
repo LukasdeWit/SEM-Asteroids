@@ -5,6 +5,8 @@ import game.Launcher;
 import org.junit.Before;
 import org.junit.Test;
 
+import entity.builders.AsteroidBuilder;
+
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -22,7 +24,7 @@ public class EntityTest {
 	private static final float DY_START = 4;
 	
 	private Game thisGame;
-	private AbstractEntity e;
+	private AsteroidBuilder aBuilder;
 
 	@Before
 	public final void setUp() {
@@ -30,11 +32,18 @@ public class EntityTest {
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		e = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setX(X_START);
+		aBuilder.setY(Y_START);
+		aBuilder.setDX(DX_START);
+		aBuilder.setDY(DY_START);
+		aBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
 	public final void testWrapAround1(){
+		final AbstractEntity e = aBuilder.getResult();
 		e.setY(Game.getCanvasSize() + 10);
 		e.wrapAround();
 		assertEquals(10, e.getY(), 0);
@@ -42,6 +51,7 @@ public class EntityTest {
 	
 	@Test
 	public final void testWrapAround2(){
+		final AbstractEntity e = aBuilder.getResult();
 		e.setY(-10);
 		e.wrapAround();
 		assertEquals(Game.getCanvasSize() - 10, e.getY(), 0);
@@ -49,21 +59,36 @@ public class EntityTest {
 	
 	@Test
 	public final void testDistance(){
+		final AbstractEntity e = aBuilder.getResult();
 		e.setX(3);
 		e.setY(4);
-		final Asteroid e2 = new Asteroid(0, 0, 0, 0, thisGame);
+		aBuilder.setX(0);
+		aBuilder.setY(0);
+		aBuilder.setDX(0);
+		aBuilder.setDY(0);
+		final Asteroid e2 = (Asteroid) aBuilder.getResult();
 		assertEquals(5, AbstractEntity.distance(e, e2), 0);
 	}
 	
 	@Test
 	public final void testCollision1(){
-		final Asteroid e2 = new Asteroid(0, 0, 0, 0, thisGame);
+		final AbstractEntity e = aBuilder.getResult();
+		aBuilder.setX(0);
+		aBuilder.setY(0);
+		aBuilder.setDX(0);
+		aBuilder.setDY(0);
+		final Asteroid e2 = (Asteroid) aBuilder.getResult();
 		assertTrue(AbstractEntity.collision(e, e2));
 	}
 	
 	@Test
 	public final void testCollision2(){
-		final Asteroid e2 = new Asteroid(50, 0, 0, 0, thisGame);
+		final AbstractEntity e = aBuilder.getResult();
+		aBuilder.setX(50);
+		aBuilder.setY(0);
+		aBuilder.setDX(0);
+		aBuilder.setDY(0);
+		final Asteroid e2 = (Asteroid) aBuilder.getResult();
 		assertFalse(AbstractEntity.collision(e, e2));
 	}
 }

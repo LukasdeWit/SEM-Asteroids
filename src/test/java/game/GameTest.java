@@ -15,6 +15,7 @@ import entity.Asteroid;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
+import entity.builders.AsteroidBuilder;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import entity.builders.SaucerBuilder;
@@ -35,6 +36,7 @@ public class GameTest {
 	private PlayerBuilder pBuilder;
 	private BulletBuilder bBuilder;
 	private SaucerBuilder sBuilder;
+	private AsteroidBuilder aBuilder;
 
 	@Before
 	public final void setUp() {
@@ -70,6 +72,13 @@ public class GameTest {
 		sBuilder.setDY(0);
 		sBuilder.setThisGame(thisGame);
 		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setX(0);
+		aBuilder.setY(0);
+		aBuilder.setDX(1);
+		aBuilder.setDY(0);
+		aBuilder.setThisGame(thisGame);
+		
 		DisplayText.setTest(true);
 	}
 	
@@ -99,7 +108,7 @@ public class GameTest {
 	
 	@Test
 	public final void testUpdateGame1(){
-		final Asteroid a = new Asteroid(0, 0, 1, 0, thisGame);
+		final Asteroid a = (Asteroid) aBuilder.getResult();
 		addToEntities(a);
 		thisGame.updateGame(noInput);
 		assertEquals(1, a.getX(), 0);
@@ -126,7 +135,7 @@ public class GameTest {
 	
 	@Test
 	public final void testCollision1(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
+		final Asteroid e1 = (Asteroid) aBuilder.getResult();
 		final Bullet e2 = (Bullet) bBuilder.getResult();
 		addToEntities(e2);
 		thisGame.checkCollision(e1);
@@ -135,7 +144,7 @@ public class GameTest {
 	
 	@Test
 	public final void testCollision2(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
+		final Asteroid e1 = (Asteroid) aBuilder.getResult();
 		final Bullet e2 = (Bullet) bBuilder.getResult();
 		thisGame.destroy(e2);
 		addToEntities(e2);
@@ -145,7 +154,7 @@ public class GameTest {
 	
 	@Test
 	public final void testCollision3(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
+		final Asteroid e1 = (Asteroid) aBuilder.getResult();
 		final Bullet e2 = (Bullet) bBuilder.getResult();
 		thisGame.destroy(e1);
 		addToEntities(e2);
@@ -155,7 +164,7 @@ public class GameTest {
 	
 	@Test
 	public final void testCollision4(){
-		final Asteroid e1 = new Asteroid(0, 0, 1, 0, thisGame);
+		final Asteroid e1 = (Asteroid) aBuilder.getResult();
 		bBuilder.setY(100);
 		final Bullet e2 = (Bullet) bBuilder.getResult();
 		addToEntities(e2);
@@ -171,7 +180,7 @@ public class GameTest {
 
 	@Test
 	public final void testCreate() {
-		final Asteroid a = new Asteroid(0, 0, 0, 0, thisGame);
+		final Asteroid a = (Asteroid) aBuilder.getResult();
 		thisGame.create(a);
 		assertTrue(thisGame.getCreateList().contains(a));
 	}
@@ -334,7 +343,8 @@ public class GameTest {
 		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
 		thisGame.setPlayer(p1);
-		final Asteroid b = new Asteroid(0, 0, 0, 0, thisGame);
+		aBuilder.setDX(0);
+		final Asteroid b = (Asteroid) aBuilder.getResult();
 		addToEntities(b);
 		assertEquals(0, thisGame.bullets(p1), 0);
 	}
@@ -343,7 +353,8 @@ public class GameTest {
 	public final void testEnemies(){
 		final Bullet b = (Bullet) bBuilder.getResult();
 		final Saucer s = (Saucer) sBuilder.getResult();
-		final Asteroid a = new Asteroid(0, 0, 0, 0, thisGame);
+		aBuilder.setDX(0);
+		final Asteroid a = (Asteroid) aBuilder.getResult();
 		addToEntities(b);
 		addToEntities(s);
 		addToEntities(a);

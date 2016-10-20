@@ -7,6 +7,8 @@ import javafx.scene.shape.Circle;
 import org.junit.Before;
 import org.junit.Test;
 
+import entity.builders.AsteroidBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class ParticleTest {
 
 	private Game thisGame;
 	private Particle particle;
+	private AsteroidBuilder aBuilder;
 
 
 	@Before
@@ -28,6 +31,13 @@ public class ParticleTest {
 		particle = new Particle(X_START, Y_START, DX_START, DY_START, thisGame);
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
+		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setX(X_START);
+		aBuilder.setY(Y_START);
+		aBuilder.setDX(DX_START);
+		aBuilder.setDY(DY_START);
+		aBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
@@ -61,7 +71,7 @@ public class ParticleTest {
 
 	@Test
 	public void testCollide() {
-		final Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Asteroid e2 = (Asteroid) aBuilder.getResult();
 		particle.collide(e2);
         assertFalse(thisGame.getDestroyList().contains(particle));
         assertFalse(thisGame.getDestroyList().contains(e2));

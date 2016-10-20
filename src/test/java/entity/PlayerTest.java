@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import display.DisplayEntity;
+import entity.builders.AsteroidBuilder;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
@@ -32,6 +33,7 @@ public class PlayerTest {
 	private Game thisGame;
 	private BulletBuilder bBuilder;
 	private PlayerBuilder pBuilder;
+	private AsteroidBuilder aBuilder;
 
 	@Before
 	public final void setUp() {
@@ -60,6 +62,13 @@ public class PlayerTest {
 		bBuilder.setDX(DX_START);
 		bBuilder.setDY(DY_START);
 		bBuilder.setThisGame(thisGame);
+		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setX(X_START);
+		aBuilder.setY(Y_START);
+		aBuilder.setDX(DX_START);
+		aBuilder.setDY(DY_START);
+		aBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
@@ -333,7 +342,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = aBuilder.getResult();
 		player.setInvincibleStart(0);
 		player.collide(ae);
 		assertEquals(1, thisGame.getDestroyList().size(), 0);
@@ -342,14 +351,14 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide2() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = aBuilder.getResult();
 		player.collide(ae);
 		assertEquals(System.currentTimeMillis(), player.getInvincibleStart(), 2);
 	}
 	
 	@Test
 	public void testCollide3() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = aBuilder.getResult();
 		player.setHyperspaceStart(System.currentTimeMillis());
 		player.collide(ae);
 		assertEquals(System.currentTimeMillis(), player.getInvincibleStart(), 2);
@@ -357,7 +366,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide4() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = aBuilder.getResult();
 		player.setInvincibleStart(0);
 		player.collide(ae);
 		assertEquals(System.currentTimeMillis(), player.getInvincibleStart(), 2);
@@ -365,7 +374,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testCollide5() {
-		final AbstractEntity ae = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final AbstractEntity ae = aBuilder.getResult();
 		player.setHyperspaceStart(System.currentTimeMillis());
 		player.setInvincibleStart(0);
 		player.collide(ae);

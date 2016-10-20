@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import entity.builders.AsteroidBuilder;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
@@ -33,6 +34,7 @@ public class BulletTest {
 	private static final float DY_START = 4;
 	private Game thisGame;
 	private PlayerBuilder pBuilder;
+	private AsteroidBuilder aBuilder;
 	/**
 	 * Test bullet.
 	 */
@@ -63,6 +65,13 @@ public class BulletTest {
 		pBuilder.setDY(DY_START);
 		pBuilder.setThisGame(thisGame);
 		pBuilder.setPlayerTwo(false);
+		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setX(X_START);
+		aBuilder.setY(Y_START);
+		aBuilder.setDX(DX_START);
+		aBuilder.setDY(DY_START);
+		aBuilder.setThisGame(thisGame);
 		
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
@@ -123,7 +132,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide1() {
-		final Asteroid e2 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Asteroid e2 = (Asteroid) aBuilder.getResult();
 		bullet.collide(e2);
 		assertTrue(thisGame.getDestroyList().contains(bullet));
 		assertTrue(thisGame.getDestroyList().contains(e2));
@@ -134,7 +143,7 @@ public class BulletTest {
 	 */
 	@Test
 	public final void testCollide2() {
-		final Asteroid e3 = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Asteroid e3 = (Asteroid) aBuilder.getResult();
 		ball.collide(e3);
 		assertFalse(thisGame.getDestroyList().contains(ball));
 		assertTrue(thisGame.getDestroyList().contains(e3));

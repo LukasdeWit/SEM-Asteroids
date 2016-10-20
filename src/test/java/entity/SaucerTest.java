@@ -2,7 +2,6 @@ package entity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import display.DisplayEntity;
+import entity.builders.AsteroidBuilder;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import entity.builders.SaucerBuilder;
@@ -33,6 +33,7 @@ public class SaucerTest {
 	private PlayerBuilder pBuilder;
 	private BulletBuilder bBuilder;
 	private SaucerBuilder sBuilder;
+	private AsteroidBuilder aBuilder;
 
 	@Before
 	public final void setUp() {
@@ -65,6 +66,13 @@ public class SaucerTest {
 		sBuilder.setDY(DY_START);
 		sBuilder.setThisGame(thisGame);
 		sBuilder.setRadius(Saucer.getBigRadius());
+		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setX(X_START);
+		aBuilder.setY(Y_START);
+		aBuilder.setDX(DX_START);
+		aBuilder.setDY(DY_START);
+		aBuilder.setThisGame(thisGame);
 	}
 	
 	@Test
@@ -243,7 +251,7 @@ public class SaucerTest {
 	@Test
 	public final void testCollide5(){
 		final Saucer saucer = (Saucer) sBuilder.getResult();
-		final Asteroid a = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		final Asteroid a = (Asteroid) aBuilder.getResult();
 		saucer.collide(a);
 		assertEquals(2, thisGame.getDestroyList().size(), 0);
 	}
