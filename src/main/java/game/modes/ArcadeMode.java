@@ -2,15 +2,14 @@ package game.modes;
 
 import game.Game;
 
-public class BossMode extends AbstractMode {
-
-	public BossMode(Game game) {
+public class ArcadeMode extends AbstractMode {
+	public ArcadeMode(Game game) {
 		super(game);
 	}
 
 	@Override
 	public String toString() {
-		return "None";
+		return "Single Player Arcade";
 	}
 
 	@Override
@@ -20,6 +19,6 @@ public class BossMode extends AbstractMode {
 
 	@Override
 	public boolean isBoss() {
-		return true;
+		return false;
 	}
 }

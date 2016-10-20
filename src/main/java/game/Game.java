@@ -192,11 +192,11 @@ public final class Game {
 		}
 		Logger.getInstance().log("Game over.");
 		if (scorecounter.isNotHighscore()) {
-			gamestate.setState(Gamestate.getStateStartScreen());
+			gamestate.setState(gamestate.getStartScreenState());
 		} else {
 			scorecounter.updateHighscore();
 			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
-			gamestate.setState(Gamestate.getStateHighscoreScreen());
+			gamestate.setState(gamestate.getHighscoreState());
 		}
 	}
 

@@ -8,4 +8,19 @@ public class CoopArcadeMode extends AbstractMode {
 		super(game);
 	}
 
+	@Override
+	public String toString() {
+		return "Arcade Coop";
+	}
+
+	@Override
+	public boolean isCoop() {
+		return true;
+	}
+
+	@Override
+	public boolean isBoss() {
+		return false;
+	}
+
 }

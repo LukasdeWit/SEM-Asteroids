@@ -8,4 +8,12 @@ public abstract class AbstractMode {
 	public AbstractMode (Game game) {
 		thisGame = game;
 	}
+	
+	public String toString() {
+		return "";
+	}
+	
+	public abstract boolean isCoop();
+	
+	public abstract boolean isBoss();
 }

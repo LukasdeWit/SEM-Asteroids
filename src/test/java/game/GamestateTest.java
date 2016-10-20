@@ -27,8 +27,8 @@ public class GamestateTest {
 	public final void setUp() {
 		gamestate.setPauseTime(0);
 		gamestate.setRestartTime(0);
-		gamestate.setMode(Gamestate.getModeArcade());
-		gamestate.setState(Gamestate.getStateStartScreen());
+		gamestate.setMode(gamestate.getArcadeMode());
+		gamestate.setState(gamestate.getStartScreenState());
 		thisGame.getScoreCounter().setScore(0);
 		thisGame.getScoreCounter().setHighscore(0);
 		thisGame.setEntities(new ArrayList<>());
@@ -48,21 +48,21 @@ public class GamestateTest {
 	
 	@Test
 	public final void testUpdate2() {
-		gamestate.setState(Gamestate.getStateGame());
+		gamestate.setState(gamestate.getOngoingGameState());
 		gamestate.update(input);
 		assertTrue(Launcher.getRoot().getChildren().size() > 0);
 	}
 	
 	@Test
 	public final void testUpdate3() {
-		gamestate.setState(Gamestate.getStateHighscoreScreen());
+		gamestate.setState(gamestate.getHighscoreState());
 		gamestate.update(input);
 		assertTrue(Launcher.getRoot().getChildren().size() > 0);
 	}
 	
 	@Test
 	public final void testUpdate4() {
-		gamestate.setState(Gamestate.getStatePauseScreen());
+		gamestate.setState(gamestate.getPauseScreenState());
 		gamestate.update(input);
 		assertTrue(Launcher.getRoot().getChildren().size() > 0);
 	}

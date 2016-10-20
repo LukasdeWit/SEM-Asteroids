@@ -10,9 +10,9 @@ import game.modes.AbstractMode;
 import game.modes.BossMode;
 import game.modes.CoopArcadeMode;
 import game.modes.CoopBossMode;
-import game.modes.SinglePlayerArcadeMode;
+import game.modes.ArcadeMode;
 import game.modes.NoneMode;
-import game.modes.SinglePlayerArcadeMode;
+import game.modes.ArcadeMode;
 
 import java.util.List;
 
@@ -36,23 +36,11 @@ public final class Gamestate {
 	// modes
 	private AbstractMode currentMode;
 	private NoneMode noneMode;
-	private SinglePlayerArcadeMode singlePlayerArcadeMode;
+	private ArcadeMode arcadeMode;
 	private CoopArcadeMode coopArcadeMode;
 	private BossMode bossMode;
 	private CoopBossMode coopBossMode;
-	
-	private static final int STATE_START_SCREEN = 0;
-	private static final int STATE_GAME = 1;
-	private static final int STATE_HIGHSCORE_SCREEN = 2;
-	private static final int STATE_PAUSE_SCREEN = 3;
-	
-	private static final int MODE_NONE = 0;
-	private static final int MODE_ARCADE = 1;
-	private static final int MODE_COOP = 2;
-	private static final int MODE_BOSS = 3;
-	private static final int MODE_BOSS_COOP = 4;
 		
-	
 	/**
 	 * constructor.
 	 * @param thisGame this game
@@ -65,12 +53,10 @@ public final class Gamestate {
 		currentState = startScreenState;
 		coopArcadeMode = new CoopArcadeMode(thisGame);
 		noneMode = new NoneMode(thisGame);
-		singlePlayerArcadeMode = new SinglePlayerArcadeMode(thisGame);
+		arcadeMode = new ArcadeMode(thisGame);
 		currentMode = noneMode;
 		
 		this.thisGame = thisGame;
-		this.mode = MODE_NONE;
-		state = STATE_START_SCREEN;
 	}
 	
 	public void start() {
@@ -90,28 +76,7 @@ public final class Gamestate {
 	 * @return String representing the current state.
 	 */
 	public String toString() {
-		String res;
-		switch (state) {
-		case MODE_NONE:
-			res = "None";
-			break;
-		case MODE_ARCADE:
-			res = "Arcade";
-			break;
-		case MODE_COOP:
-			res = "Arcade coop";
-			break;
-		case MODE_BOSS:
-			res = "Boss";
-			break;
-		case MODE_BOSS_COOP:
-			res = "Boss coop";
-			break;
-		default:
-			res = "";
-			break;
-		}
-		return res;
+		return currentMode.toString();
 	}
 
 	/**
@@ -143,80 +108,17 @@ public final class Gamestate {
 	}
 
 	/**
-	 * @return the stateStartScreen
-	 */
-	public static int getStateStartScreen() {
-		return STATE_START_SCREEN;
-	}
-
-	/**
-	 * @return the stateHighscoreScreen
-	 */
-	public static int getStateHighscoreScreen() {
-		return STATE_HIGHSCORE_SCREEN;
-	}
-
-	/**
-	 * @return the modeArcade
-	 */
-	public static int getModeArcade() {
-		return MODE_ARCADE;
-	}
-
-	/**
-	 * @return the modeCoop
-	 */
-	public static int getModeCoop() {
-		return MODE_COOP;
-	}
-	
-	/**
-	 * @return the modeBoss
-	 */
-	public static int getModeBoss() {
-		return MODE_BOSS;
-	}
-	
-	/**
-	 * @return the modeBossCoop
-	 */
-	public static int getModeBossCoop() {
-		return MODE_BOSS_COOP;
-	}
-
-	/**
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
-		return getMode() == getModeCoop() || getMode() == getModeBossCoop();
+		return currentMode.isCoop();
 	}
 	
 	/**
 	 * @return true if boss
 	 */
 	public boolean isBoss() {
-		return getMode() == getModeBoss() || getMode() == getModeBossCoop();
-	}
-
-	/**
-	 * @return the stateGame
-	 */
-	public static int getStateGame() {
-		return STATE_GAME;
-	}
-
-	/**
-	 * @return the statePauseScreen
-	 */
-	public static int getStatePauseScreen() {
-		return STATE_PAUSE_SCREEN;
-	}
-
-	/**
-	 * @return the modeNone
-	 */
-	public static int getModeNone() {
-		return MODE_NONE;
+		return currentMode.isBoss();
 	}
 	
 	/**
@@ -233,47 +135,82 @@ public final class Gamestate {
 		currentState.setPauseTime(pauseTime);
 	}
 	
+	/**
+	 * Set the current state
+	 * @param state the gamestate should be
+	 */
 	public void setState(AbstractState state) {
 		this.currentState = state;
 	}
 	
+	/**
+	 * @return state for highscore screen
+	 */
 	public HighscoreScreenState getHighscoreState() {
 		return highscoreScreenState;
 	}
 	
+	/**
+	 * @return state for start screen
+	 */
 	public StartScreenState getStartScreenState() {
 		return startScreenState;
 	}
 	
+	/**
+	 * @return state for ongoing game
+	 */
 	public OngoingGameState getOngoingGameState() {
 		return ongoingGameState;
 	}
 	
+	/**
+	 * @return state for pause screen
+	 */
 	public PauseScreenState getPauseScreenState() {
 		return pauseScreenState;
 	}
 	
+	/**
+	 * Setter for mode
+	 * @param mode the game should be in
+	 */
 	public void setMode(AbstractMode mode) {
 		this.currentMode = mode;
 	}
 	
+	/**
+	 * @return mode for no gamemode
+	 */
 	public NoneMode getNoneMode() {
 		return noneMode;
 	}
 	
+	/**
+	 * @return mode for coop arcade game
+	 */
 	public CoopArcadeMode getCoopArcadeMode() {
 		return coopArcadeMode;
 	}
 	
+	/**
+	 * @return mode for single player boss fight
+	 */
 	public BossMode getBossMode() {
 		return bossMode;
 	}
 	
+	/**
+	 * @return mode for multiplayer boss fight
+	 */
 	public CoopBossMode getCoopBossMode() {
 		return coopBossMode;
 	}
 	
-	public SinglePlayerArcadeMode getSinglePlayerArcadeMode() {
-		return singlePlayerArcadeMode;
+	/**
+	 * @return mode for single player arcade game
+	 */
+	public ArcadeMode getArcadeMode() {
+		return arcadeMode;
 	}
 }
