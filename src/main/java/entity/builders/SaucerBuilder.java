@@ -45,10 +45,19 @@ public class SaucerBuilder implements EntityBuilder {
 	public final void setThisGame(final Game thisGame) {
 		saucer.setThisGame(thisGame);
 	}
+	
+	/**
+	 * @param toRight the toRight value of the Saucer
+	 */
+	public final void setToRight(final int toRight) {
+		saucer.setToRight(toRight);
+	}
 
 	@Override
 	public final AbstractEntity getResult() {
 		Saucer temp = saucer.shallowCopy();
+		temp.setDirChangeTime(System.currentTimeMillis());
+		temp.setShotTime(temp.getDirChangeTime());
 		return temp;
 	}
 
