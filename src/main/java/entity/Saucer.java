@@ -344,6 +344,7 @@ public class Saucer extends AbstractEntity {
 		saucer.setThisGame(this.getThisGame());
 		saucer.setToRight(this.getToRight());
 		saucer.bBuilder.setThisGame(saucer.getThisGame());
+		saucer.setRadius(this.getRadius());
 		return saucer;
 	}
 }

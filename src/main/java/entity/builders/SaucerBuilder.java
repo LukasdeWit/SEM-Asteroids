@@ -52,6 +52,13 @@ public class SaucerBuilder implements EntityBuilder {
 	public final void setToRight(final int toRight) {
 		saucer.setToRight(toRight);
 	}
+	
+	/**
+	 * @param radius the radius of the saucer
+	 */
+	public final void setRadius(final float radius) {
+		saucer.setRadius(radius);
+	}
 
 	@Override
 	public final AbstractEntity getResult() {
