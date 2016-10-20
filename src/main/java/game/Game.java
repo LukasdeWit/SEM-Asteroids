@@ -31,6 +31,7 @@ public final class Game {
 	private List<AbstractEntity> entities;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
+	private final ScoreCounter scorecounter;
 	private final float screenX;
 	private final float screenY;
 	private final Spawner spawner;
@@ -44,13 +45,7 @@ public final class Game {
 	private long survivalHighscore;
 
 	private static final float CANVAS_SIZE = 500;
-	
-	/**
-	 * Size of a big asteroid in survival.
-	 */
 	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
-	private final ScoreCounter scorecounter;
-
 	private static final boolean LOG_SCORE = false;
 
 	/**

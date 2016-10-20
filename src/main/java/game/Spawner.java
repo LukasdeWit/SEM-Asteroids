@@ -18,9 +18,6 @@ public final class Spawner {
 	private long startRest;
 	private int wave;
 	private final Random random;
-	/**
-	 * The Game this spawner belongs to.
-	 */
 	private final Game thisGame;
 
 	private static final long SAUCER_TIME = 20000;
@@ -115,7 +112,6 @@ public final class Spawner {
 		}
 	}
 	
-
 	/**
 	 * Checks if the wave should be updated and does so if needed.
 	 */
@@ -208,7 +204,7 @@ public final class Spawner {
 	}
 	
 	/**
-	 * 
+	 * Spawns a boss.
 	 */
 	private void spawnBoss() {
 		final Boss boss =
