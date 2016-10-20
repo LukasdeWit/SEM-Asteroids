@@ -206,9 +206,13 @@ public class Boss extends AbstractEntity {
 
 	@Override
 	public final void collide(final AbstractEntity e2) {
-		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			((Player) e2).onHit();
-			Logger.getInstance().log("Player hit a Boss.");
+		if (e2 instanceof Player) {
+			if (((Player) e2).invincible()) {
+				((Player) e2).setInvincibleStart(System.currentTimeMillis());
+			} else {
+				((Player) e2).onHit();
+				Logger.getInstance().log("Player hit a Boss.");
+			}
 		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
 			getThisGame().destroy(e2);
 			currentLives--;

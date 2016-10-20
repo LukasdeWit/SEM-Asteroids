@@ -197,12 +197,20 @@ public final class Game {
 			destroy(player);
 			return;
 		}
+		Logger.getInstance().log("Game over.");
+		overSwitch();
+	}
+
+	/**
+	 * Switches the gamemode when game is over.
+	 */
+	public void overSwitch() {
 		destroy(player);
 		if (gamestate.isCoop()) {
 			destroy(playerTwo);
 		}
-		Logger.getInstance().log("Game over.");
 		if (scorecounter.isNotHighscore()) {
+			gamestate.setMode(Gamestate.getModeNone());
 			gamestate.setState(Gamestate.getStateStartScreen());
 		} else {
 			scorecounter.updateHighscore();

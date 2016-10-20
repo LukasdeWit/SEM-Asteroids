@@ -1,8 +1,8 @@
 package game;
 
-import display.DisplayText;
-
 import java.util.List;
+
+import display.DisplayText;
 
 /**
  * This class handles the switching of gamestates.
@@ -12,8 +12,7 @@ import java.util.List;
 public final class Gamestate {
 	private int state;
 	private int mode;
-	private long pauseTime;
-	private long restartTime;
+	private long screenSwitchTime;
 	private final Game thisGame;
 	
 	private static final String[] MODE_STRING = 
@@ -23,6 +22,7 @@ public final class Gamestate {
 	private static final int STATE_GAME = 1;
 	private static final int STATE_HIGHSCORE_SCREEN = 2;
 	private static final int STATE_PAUSE_SCREEN = 3;
+	private static final int STATE_VIEW_HIGHSCORES = 4;
 	
 	private static final int MODE_NONE = 0;
 	private static final int MODE_ARCADE = 1;
@@ -32,8 +32,7 @@ public final class Gamestate {
 	private static final int MODE_SURVIVAL = 5;
 	private static final int MODE_SURVIVAL_COOP = 6;
 	
-	private static final long MINIMAL_PAUSE_TIME = 300;
-	private static final long MINIMAL_RESTART_TIME = 300;
+	private static final long MINIMAL_SWITCH_TIME = 300;
 	
 	/**
 	 * constructor.
@@ -49,13 +48,11 @@ public final class Gamestate {
 	 * start game.
 	 */
 	public void start() {
-		restartTime = System.currentTimeMillis();
-		pauseTime = restartTime;
-		
+		screenSwitchTime = System.currentTimeMillis();
 	}
 	
 	/**
-	 * update the gamemodes.
+	 * update the states.
 	 * @param input - input
 	 */
 	public void update(final List<String> input) {
@@ -72,6 +69,10 @@ public final class Gamestate {
 			highscoreScreen(input);
 			DisplayText.highscoreScreen(thisGame.getScoreCounter().getHighscore());
 			break;
+		case STATE_VIEW_HIGHSCORES:
+			viewHighscoresScreen(input);
+			DisplayText.viewHighscoresScreen(thisGame.getScoreCounter().highScoresToStrings());
+			break;
 		case STATE_PAUSE_SCREEN:
 		default:
 			DisplayText.pauseScreen();
@@ -81,11 +82,23 @@ public final class Gamestate {
 	}
 
 	/**
-	 * update the gamemode startScreen.
+	 * update the startScreen state.
 	 * @param input - input
 	 * @return 
 	 */
 	private void startScreen(final List<String> input) {
+		startMode(input);
+		if (input.contains("H")) {
+			Logger.getInstance().log("View Highscores.");
+			state = STATE_VIEW_HIGHSCORES;
+		} 
+	}
+	
+	/**
+	 * starts different modes.
+	 * @param input - the input.
+	 */
+	private void startMode(final List<String> input) {
 		if (input.contains("A")) {
 			mode = MODE_ARCADE;
 			state = STATE_GAME;
@@ -110,23 +123,34 @@ public final class Gamestate {
 			mode = MODE_SURVIVAL_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
-		} 
+		}
 	}
 
 	/**
-	 * update the game gamemode.
+	 * update the highscorescreen state. 
+	 * @param input - the input
+	 */
+	private void viewHighscoresScreen(final List<String> input) {
+		if (input.contains("R") && isSwitchTime()) {
+			Logger.getInstance().log("Return to start screen.");
+			screenSwitchTime = System.currentTimeMillis();
+			state = STATE_START_SCREEN;
+		} else if (input.contains("D") && isSwitchTime()) {
+			thisGame.getScoreCounter().clearHighscores();
+		}
+	}
+
+	/**
+	 * update the game state.
 	 * @param input - the input
 	 */
 	private void game(final List<String> input) {
-		if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			thisGame.getAudio().stopAll();
+		if (input.contains("R") && isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
-			mode = MODE_NONE;
-			state = STATE_START_SCREEN;
-		} else if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
+			screenSwitchTime = System.currentTimeMillis();
+			thisGame.overSwitch();
+		} else if (input.contains("P") && isSwitchTime()) {
+			screenSwitchTime = System.currentTimeMillis();
 			thisGame.getAudio().stopAll();
 			Logger.getInstance().log("Game paused.");
 			state = STATE_PAUSE_SCREEN;
@@ -134,11 +158,11 @@ public final class Gamestate {
 	}
 
 	/**
-	 * update the highscore gamemode.
+	 * update the highscore state.
 	 * @param input - the input
 	 */
 	private void highscoreScreen(final List<String> input) {
-		if (input.contains("R")) {
+		if (input.contains("R") && isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
 			thisGame.startGame();
 			mode = MODE_NONE;
@@ -147,21 +171,26 @@ public final class Gamestate {
 	}
 
 	/**
-	 * update the pause screen gamemode.
+	 * update the pause screen state.
 	 * @param input - the input
 	 */
 	private void pauseScreen(final List<String> input) {
-		if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
+		if (input.contains("P") && isSwitchTime()) {
+			screenSwitchTime = System.currentTimeMillis();
 			Logger.getInstance().log("Game unpaused.");
 			state = STATE_GAME;
-		} else if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
+		} else if (input.contains("R") && isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
-			thisGame.startGame();
-			state = STATE_GAME;
+			screenSwitchTime = System.currentTimeMillis();
+			thisGame.overSwitch();
 		}
+	}
+	
+	/**
+	 * @return true if time to switch screens.
+	 */
+	private boolean isSwitchTime() {
+		return System.currentTimeMillis() - screenSwitchTime > MINIMAL_SWITCH_TIME;
 	}
 	
 	/**
@@ -306,16 +335,16 @@ public final class Gamestate {
 	}
 
 	/**
-	 * @param restartTime the restartTime to set
+	 * @param screenSwitchTime the screenSwitchTime to set
 	 */
-	public void setRestartTime(final long restartTime) {
-		this.restartTime = restartTime;
+	public void setScreenSwitchTime(final long screenSwitchTime) {
+		this.screenSwitchTime = screenSwitchTime;
 	}
 
 	/**
-	 * @param pauseTime the pauseTime to set
+	 * @return the modeString
 	 */
-	public void setPauseTime(final long pauseTime) {
-		this.pauseTime = pauseTime;
+	public static String[] getModeString() {
+		return MODE_STRING.clone();
 	}
 }

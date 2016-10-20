@@ -35,6 +35,7 @@ public final class DisplayText {
 	private static final float START_SURVIVAL_COOP_TEXT_Y = 310;
 	private static final float PRESS_START_TEXT_BOSS_Y = 340;
 	private static final float PRESS_START_TEXT_BOSSCOOP_Y = 370;
+	private static final float VIEW_HIGHSCORES_TEXT_Y = 410;
 
 	private static final float CONGRATULATIONS_TEXT_X = 80;
 	private static final float CONGRATULATIONS_TEXT_Y = 100;
@@ -52,6 +53,19 @@ public final class DisplayText {
 	private static final Font SCORE_FONT;
 	private static final Font LARGE_FONT;
 	private static final Font WAVE_FONT;
+
+	private static final float HIGHSCORES_TEXT_X = 140;
+	private static final float HIGHSCORES_TEXT_Y = 100;
+	private static final float HIGHSCORES_MODES_TEXT_X = 100;
+	private static final float DELETE_TEXT_Y = 410;
+	private static final float RETURN_TO_MAIN_TEXT_Y = 440;
+	private static final float MODES_TEXT_START_Y = 220;
+	private static final int HIGHSCORES_MODES_SPACE = 30;
+
+	private static final float MODE_TEXT_SIZE = 200;
+
+	private static final float SCORE_TEXT_SIZE = 100;
+
 
 	private static boolean test;
 
@@ -106,6 +120,7 @@ public final class DisplayText {
 		drawText(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSSCOOP_Y, "press x for Coop Boss Mode");
 		drawText(PRESS_START_TEXT_X, START_ARCADE_COOP_TEXT_Y, "press z to start Arcade coop");
 		drawText(PRESS_START_TEXT_X, START_SURVIVAL_COOP_TEXT_Y, "press c to start survival Coop");
+		drawText(PRESS_START_TEXT_X, VIEW_HIGHSCORES_TEXT_Y, "press h to view highscores");
 	}
 
 	/**
@@ -117,6 +132,23 @@ public final class DisplayText {
 		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "congratulations");
 		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press r to restart");
 		drawText(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, "your new highscore is " + highscore);
+	}
+
+	/**
+	 * draw the view highscores screen.
+	 * @param strings - the highscore strings
+	 */
+	public static void viewHighscoresScreen(final String[][] strings) {
+		drawText(HIGHSCORES_TEXT_X, HIGHSCORES_TEXT_Y, LARGE_FONT, "highscores");
+		for (int i = 0; i < strings[0].length; i++) {
+			drawText(HIGHSCORES_MODES_TEXT_X, MODES_TEXT_START_Y + i * HIGHSCORES_MODES_SPACE, strings[0][i]);
+			drawText(HIGHSCORES_MODES_TEXT_X + MODE_TEXT_SIZE, 
+					MODES_TEXT_START_Y + i * HIGHSCORES_MODES_SPACE, strings[1][i]);
+			drawText(HIGHSCORES_MODES_TEXT_X + MODE_TEXT_SIZE + SCORE_TEXT_SIZE, 
+					MODES_TEXT_START_Y + i * HIGHSCORES_MODES_SPACE, strings[2][i]);
+		}		
+		drawText(HIGHSCORES_MODES_TEXT_X, DELETE_TEXT_Y, 			"press d to delete all highscores");
+		drawText(HIGHSCORES_MODES_TEXT_X, RETURN_TO_MAIN_TEXT_Y, 	"press r to return to main menu");
 	}
 
 	/**
