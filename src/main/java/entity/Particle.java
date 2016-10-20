@@ -2,6 +2,7 @@ package entity;
 import java.util.List;
 
 import display.DisplayEntity;
+import entity.builders.ParticleBuilder;
 import game.Game;
 
 /**
@@ -16,21 +17,6 @@ public class Particle extends AbstractEntity {
 	private static final int EXPLOSION_PARTICLES = 10;
 	private static final float SPEED = .75f;
 
-	/**
-	 * Constructor of a particle.
-	 *
-	 * @param x        x coordinate
-	 * @param y        y coordinate
-	 * @param dX       horizontal speed
-	 * @param dY       vertical speed
-	 * @param thisGame the game this particle belongs to
-	 */
-	public Particle(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
-		setRadius(1);
-		birthTime = System.currentTimeMillis();
-	}
-	
 	/**
 	 * Empty constructor of a Particle.
 	 */
@@ -62,7 +48,13 @@ public class Particle extends AbstractEntity {
 	 * @return the random particle
 	 */
 	private static Particle randomParticle(final float x, final float y, final Game thisGame) {
-		return new Particle(x, y, (float) (Math.random() - .5) * SPEED, (float) (Math.random() - .5) * SPEED, thisGame);
+		ParticleBuilder pBuilder = new ParticleBuilder();
+		pBuilder.setX(x);
+		pBuilder.setY(y);
+		pBuilder.setDX((float) (Math.random() - .5) * SPEED);
+		pBuilder.setDY((float) (Math.random() - .5) * SPEED);
+		pBuilder.setThisGame(thisGame);
+		return (Particle) pBuilder.getResult();
 	}
 
 	/**
