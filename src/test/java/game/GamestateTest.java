@@ -71,84 +71,84 @@ public class GamestateTest {
 	public final void testStartScreen1() {
 		input.add("X");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateGame(), gamestate.getState(), 0);
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testStartScreen2() {
 		input.add("C");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeCoop(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateGame(), gamestate.getState(), 0);
+		assertEquals(gamestate.getCoopArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testGame1() {
-		gamestate.setState(Gamestate.getStateGame());
+		gamestate.setState(gamestate.getOngoingGameState());
 		input.add("R");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeNone(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateStartScreen(), gamestate.getState(), 0);
+		assertEquals(gamestate.getNoneMode(), gamestate.getMode());
+		assertEquals(gamestate.getStartScreenState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testGame2() {
-		gamestate.setState(Gamestate.getStateGame());
+		gamestate.setState(gamestate.getOngoingGameState());
 		input.add("R");
 		input.add("P");
 		gamestate.setRestartTime(System.currentTimeMillis());
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStatePauseScreen(), gamestate.getState(), 0);
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getPauseScreenState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testGame3() {
-		gamestate.setState(Gamestate.getStateGame());
+		gamestate.setState(gamestate.getOngoingGameState());
 		input.add("P");
 		gamestate.setPauseTime(System.currentTimeMillis());
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateGame(), gamestate.getState(), 0);
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testHighscoreScreen() {
-		gamestate.setState(Gamestate.getStateHighscoreScreen());
+		gamestate.setState(gamestate.getHighscoreState());
 		input.add("R");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeNone(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateStartScreen(), gamestate.getState(), 0);
+		assertEquals(gamestate.getNoneMode(), gamestate.getMode());
+		assertEquals(gamestate.getStartScreenState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testPauseScreen1() {
-		gamestate.setState(Gamestate.getStatePauseScreen());
+		gamestate.setState(gamestate.getPauseScreenState());
 		input.add("P");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateGame(), gamestate.getState(), 0);
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testPauseScreen2() {
-		gamestate.setState(Gamestate.getStatePauseScreen());
+		gamestate.setState(gamestate.getPauseScreenState());
 		input.add("P");
 		input.add("R");
 		gamestate.setPauseTime(System.currentTimeMillis());
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateGame(), gamestate.getState(), 0);
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
 	}
 	
 	@Test
 	public final void testPauseScreen3() {
-		gamestate.setState(Gamestate.getStatePauseScreen());
+		gamestate.setState(gamestate.getPauseScreenState());
 		input.add("R");
 		gamestate.setRestartTime(System.currentTimeMillis());
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStatePauseScreen(), gamestate.getState(), 0);
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getPauseScreenState(), gamestate.getState());
 	}
 }

@@ -279,7 +279,7 @@ public class GameTest {
 		thisGame.setPlayer(p1);
 		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
-		gamestate.setMode(gamestate.getArcadeMode());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		thisGame.addScore(10000);
 		assertEquals(10000, thisGame.getScoreCounter().getScore(), 0);
 		assertEquals(1, p1.getLives(), 0);

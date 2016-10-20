@@ -22,8 +22,6 @@ import java.util.List;
  *
  */
 public final class Gamestate {
-	private int state;
-	private int mode;
 	private final Game thisGame;
 	
 	// states
@@ -82,29 +80,15 @@ public final class Gamestate {
 	/**
 	 * @return the mode
 	 */
-	public int getMode() {
-		return mode;
-	}
-
-	/**
-	 * @param mode the mode to set
-	 */
-	public void setMode(final int mode) {
-		this.mode = mode;
+	public AbstractMode getMode() {
+		return currentMode;
 	}
 
 	/**
 	 * @return the state
 	 */
-	public int getState() {
-		return state;
-	}
-
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(final int state) {
-		this.state = state;
+	public AbstractState getState() {
+		return currentState;
 	}
 
 	/**
