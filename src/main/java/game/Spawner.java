@@ -86,6 +86,7 @@ public final class Spawner {
 		}
 	}
 	
+
 	/**
 	 * Checks if the wave should be updated and does so if needed.
 	 */
@@ -101,15 +102,22 @@ public final class Spawner {
 			startRest = System.currentTimeMillis();
 			wave++;
 		} else if (System.currentTimeMillis() - startRest > REST) {
-			int extra = wave * 2;
-			if (extra > MAX_EXTRA) {
-				extra = MAX_EXTRA;
-			}
-			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
-			spawnAsteroid(STARTING_ASTEROIDS + extra);
-			wave++;
-			startRest = System.currentTimeMillis();
+			nextWave();
 		}
+	}
+	
+	/**
+	 * Spawns the next wave of asteroids.
+	 */
+	private void nextWave() {
+		int extra = wave * 2;
+		if (extra > MAX_EXTRA) {
+			extra = MAX_EXTRA;
+		}
+		Logger.getInstance().log("Wave: " + (wave + 1) + ".");
+		spawnAsteroid(STARTING_ASTEROIDS + extra);
+		wave++;
+		startRest = System.currentTimeMillis();
 	}
 
 	/**
