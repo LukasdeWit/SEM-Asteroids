@@ -209,7 +209,7 @@ public class Audio {
 	/**
 	 * Silence all currently playing tracks.
 	 */
-	public final void mute() {
+	public final void stopAll() {
 		for (int i = 0; i < tracks.size(); i++) {
 			stop(i);
 		}

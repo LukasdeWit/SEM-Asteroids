@@ -201,7 +201,7 @@ public final class Game {
 			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
 			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}
-		audio.mute();
+		audio.stopAll();
 	}
 
 	/**

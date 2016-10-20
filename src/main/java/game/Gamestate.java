@@ -107,12 +107,14 @@ public final class Gamestate {
 	private void game(final List<String> input) {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
+			thisGame.getAudio().stopAll();
 			Logger.getInstance().log("Game stopped.");
 			mode = MODE_NONE;
 			state = STATE_START_SCREEN;
 		} else if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
 			pauseTime = System.currentTimeMillis();
+			thisGame.getAudio().stopAll();
 			Logger.getInstance().log("Game paused.");
 			state = STATE_PAUSE_SCREEN;
 		}
