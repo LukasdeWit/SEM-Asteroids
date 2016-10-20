@@ -35,21 +35,12 @@ public final class Game {
 	private final float screenY;
 	private final Spawner spawner;
 	private final Gamestate gamestate = new Gamestate(this);
-	/**
-	 * current score for arcade mode.
-	 */
+	
 	private long arcadeScore;
-	/**
-	 * current score for survival mode.
-	 */
 	private long survivalScore;
-	/**
-	 * current highscore for arcade mode.
-	 */
+	private long bossScore;
+	private long bossHighscore;
 	private long arcadeHighscore;
-	/**
-	 * current highscore for survival mode.
-	 */
 	private long survivalHighscore;
 
 	private static final float CANVAS_SIZE = 500;
@@ -81,11 +72,14 @@ public final class Game {
 	 */
 	private void writeHighscores() {
 		final String arcadeContent = String.valueOf(arcadeHighscore);
+		final String bossContent = String.valueOf(bossHighscore);
 		final String survivalContent = String.valueOf(survivalHighscore);
 		final File file = new File("src/main/resources/highscore.txt");
 		try (FileOutputStream fos =
 					 new FileOutputStream(file.getAbsoluteFile())) {
 			fos.write(arcadeContent.getBytes(StandardCharsets.UTF_8));
+			fos.write("\n".getBytes(StandardCharsets.UTF_8));
+			fos.write(bossContent.getBytes(StandardCharsets.UTF_8));
 			fos.write("\n".getBytes(StandardCharsets.UTF_8));
 			fos.write(survivalContent.getBytes(StandardCharsets.UTF_8));
 			fos.flush();
@@ -107,9 +101,13 @@ public final class Game {
 		if (this.survivalScore > survivalHighscore) {
 			survivalHighscore = this.survivalScore;
 		}
+		if (this.bossScore > bossHighscore) {
+			bossHighscore = this.bossScore;
+		}
 		writeHighscores();
 		arcadeScore = 0;
 		survivalScore = 0;
+		bossScore = 0;
 		
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
@@ -170,6 +168,8 @@ public final class Game {
 		
 		if (gamestate.isArcade()) {
 			spawner.updateArcade();
+		} else if (gamestate.isBoss()) {
+			spawner.updateBoss();
 		} else {
 			spawner.updateSurvival();
 		}
@@ -372,8 +372,10 @@ public final class Game {
 	public long getScore() {
 		if (gamestate.isArcade()) {
 			return arcadeScore;
+		} else if (gamestate.isBoss()) {
+			return bossScore;
 		} else {
-			return survivalHighscore;
+			return survivalScore;
 		}
 	}
 
@@ -412,6 +414,13 @@ public final class Game {
 	 */
 	public long getSurvivalHighscore() {
 		return survivalHighscore;
+	}
+	
+	/**
+	 * @return the boss highscore
+	 */
+	public long getBossHighscore() {
+		return bossHighscore;
 	}
 	
 	/**

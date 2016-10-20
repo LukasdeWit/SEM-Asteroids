@@ -52,6 +52,18 @@ public final class Spawner {
 	 * This method is called every tick of an arcade game.
 	 */
 	public void updateArcade() {
+		updateSaucer();
+		updatePowerup();
+		if (thisGame.enemies() != 0) {
+			startRest = System.currentTimeMillis();
+		}
+		updateWave();
+	}
+
+	/**
+	 * This method is called every tick of a boss game.
+	 */
+	public void updateBoss() {
 		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
 				&& System.currentTimeMillis() - startRest > REST) {
 			spawnBoss();
@@ -62,6 +74,22 @@ public final class Spawner {
 				startRest = System.currentTimeMillis();
 			}
 			updateWave();
+		}
+	}
+
+	/**
+	 * This method is called every tick of a survival game.
+	 */
+	public void updateSurvival() {
+		updateSaucer();
+		updatePowerup();
+		/*if (thisGame.enemies() != 0) {
+			startRest = System.currentTimeMillis();
+		}*/
+		final int extra = (int) (thisGame.getScoreCounter().getScore() / SURVIVAL_POINTS_PER_ASTEROID);
+		final int enemies = thisGame.convertedBigEnemies();
+		if (STARTING_ASTEROIDS + extra - enemies > 0) {
+			spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
 		}
 	}
 	
@@ -119,25 +147,6 @@ public final class Spawner {
 		spawnAsteroid(STARTING_ASTEROIDS + extra);
 		wave++;
 		startRest = System.currentTimeMillis();
-	}
-
-	/**
-	 * This method is called every tick of a survival game.
-	 */
-	public void updateSurvival() {
-		if (System.currentTimeMillis() - startSaucerTime > SAUCER_TIME) {
-			spawnSaucer();
-			startSaucerTime = System.currentTimeMillis();
-		}
-		if (thisGame.enemies() != 0) {
-			startRest = System.currentTimeMillis();
-		}
-		final int extra = (int) (thisGame.getScore() 
-				/ SURVIVAL_POINTS_PER_ASTEROID);
-		final int enemies = thisGame.convertedBigEnemies();
-		if (STARTING_ASTEROIDS + extra - enemies > 0) {
-			spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
-		}
 	}
 	
 	/**

@@ -16,6 +16,9 @@ public final class Gamestate {
 	private long restartTime;
 	private final Game thisGame;
 	
+	private static final String[] MODE_STRING = 
+		{"None", "Arcade", "Arcade coop", "Boss", "Boss coop", "Survival", "Survival coop"};
+	
 	private static final int STATE_START_SCREEN = 0;
 	private static final int STATE_GAME = 1;
 	private static final int STATE_HIGHSCORE_SCREEN = 2;
@@ -91,6 +94,14 @@ public final class Gamestate {
 			mode = MODE_ARCADE_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
+		} else if (input.contains("S")) {
+			mode = MODE_BOSS;
+			state = STATE_GAME;
+			thisGame.startGame();
+		} else if (input.contains("X")) {
+			mode = MODE_BOSS_COOP;
+			state = STATE_GAME;
+			thisGame.startGame();
 		} else if (input.contains("D")) {
 			mode = MODE_SURVIVAL;
 			state = STATE_GAME;
@@ -99,15 +110,7 @@ public final class Gamestate {
 			mode = MODE_SURVIVAL_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
-		} else if (input.contains("B")) {
-			mode = MODE_BOSS;
-			state = STATE_GAME;
-			thisGame.startGame();
-		} else if (input.contains("N")) {
-			mode = MODE_BOSS_COOP;
-			state = STATE_GAME;
-			thisGame.startGame();
-		}
+		} 
 	}
 
 	/**
@@ -164,34 +167,7 @@ public final class Gamestate {
 	 * @return String representing the current state.
 	 */
 	public String toString() {
-		String res;
-		switch (state) {
-		case MODE_NONE:
-			res = "None";
-			break;
-		case MODE_ARCADE:
-			res = "Arcade";
-			break;
-		case MODE_ARCADE_COOP:
-			res = "Arcade coop";
-			break;
-		case MODE_BOSS:
-			res = "Boss";
-			break;
-		case MODE_BOSS_COOP:
-			res = "Boss coop";
-			break;
-		case MODE_SURVIVAL:
-			res = "Survival";
-			break;
-		case MODE_SURVIVAL_COOP:
-			res = "Survival coop";
-			break;
-		default:
-			res = "";
-			break;
-		}
-		return res;
+		return MODE_STRING[mode];
 	}
 
 	/**
@@ -282,7 +258,7 @@ public final class Gamestate {
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
-		return getMode() == getModeArcadeCoop() || getMode() == getModeSurvivalCoop();
+		return getMode() == getModeArcadeCoop() || getMode() == getModeSurvivalCoop() || getMode() == getModeBossCoop();
 	}
 	
 	/**
