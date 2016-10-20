@@ -75,6 +75,14 @@ public class Asteroid extends AbstractEntity {
 		this(x, y, dX, dY, thisGame);
 		setRadius(radius);
 	}
+	
+	/**
+	 * Empty constructor for the Asteroid class.
+	 */
+	public Asteroid() {
+		super();
+		setRadius(BIG_RADIUS);
+	}
 
 	/**
 	 * Calculate new position of Asteroid.
@@ -175,5 +183,19 @@ public class Asteroid extends AbstractEntity {
 	 */
 	public static float getSmallRadius() {
 		return SMALL_RADIUS;
+	}
+	
+	/**
+	 * @return a shallow copy of the Asteroid, useful for making two copies
+	 */
+	public final Asteroid shallowCopy() {
+		Asteroid temp = new Asteroid();
+		temp.setX(this.getX());
+		temp.setY(this.getY());
+		temp.setDX(this.getDX());
+		temp.setDY(this.getDY());
+		temp.setThisGame(this.getThisGame());
+		temp.setRadius(this.getRadius());
+		return temp;
 	}
 }
