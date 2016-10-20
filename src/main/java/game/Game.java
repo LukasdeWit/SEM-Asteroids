@@ -372,4 +372,11 @@ public final class Game {
 	public ScoreCounter getScoreCounter() {
 		return scorecounter;
 	}
+
+	/**
+	 * @return the spawner
+	 */
+	public Spawner getSpawner() {
+		return spawner;
+	}
 }

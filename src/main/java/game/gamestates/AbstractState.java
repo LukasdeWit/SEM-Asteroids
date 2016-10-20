@@ -4,14 +4,14 @@ import java.util.List;
 
 import game.Game;
 
-public abstract class State {
+public abstract class AbstractState {
 	private Game thisGame;
 	protected static final long MINIMAL_PAUSE_TIME = 300;
 	protected static final long MINIMAL_RESTART_TIME = 300;
 	protected long pauseTime;
 	protected long restartTime;
 	
-	public State(Game game) {
+	public AbstractState(Game game) {
 		thisGame = game;
 	}
 	

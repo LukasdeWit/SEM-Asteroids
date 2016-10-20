@@ -7,7 +7,7 @@ import game.Game;
 import game.Gamestate;
 import game.Logger;
 
-public class HighscoreScreenState extends State {
+public class HighscoreScreenState extends AbstractState {
 
 	public HighscoreScreenState(Game game) {
 		super(game);
@@ -29,7 +29,7 @@ public class HighscoreScreenState extends State {
 		if (input.contains("R")) {
 			Logger.getInstance().log("Game stopped.");
 			getThisGame().startGame();
-			mode = MODE_NONE;
+			gameState.setMode(gameState.getNoneMode());
 			gameState.setState(gameState.getStartScreenState());
 		}
 	}

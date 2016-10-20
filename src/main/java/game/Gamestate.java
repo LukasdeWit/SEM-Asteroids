@@ -1,11 +1,18 @@
 package game;
 
 import display.DisplayText;
+import game.gamestates.AbstractState;
 import game.gamestates.HighscoreScreenState;
 import game.gamestates.OngoingGameState;
 import game.gamestates.PauseScreenState;
 import game.gamestates.StartScreenState;
-import game.gamestates.State;
+import game.modes.AbstractMode;
+import game.modes.BossMode;
+import game.modes.CoopArcadeMode;
+import game.modes.CoopBossMode;
+import game.modes.SinglePlayerArcadeMode;
+import game.modes.NoneMode;
+import game.modes.SinglePlayerArcadeMode;
 
 import java.util.List;
 
@@ -18,11 +25,21 @@ public final class Gamestate {
 	private int state;
 	private int mode;
 	private final Game thisGame;
-	private State currentState;
+	
+	// states
+	private AbstractState currentState;
 	private HighscoreScreenState highscoreScreenState;
 	private OngoingGameState ongoingGameState;
 	private PauseScreenState pauseScreenState;
 	private StartScreenState startScreenState;
+	
+	// modes
+	private AbstractMode currentMode;
+	private NoneMode noneMode;
+	private SinglePlayerArcadeMode singlePlayerArcadeMode;
+	private CoopArcadeMode coopArcadeMode;
+	private BossMode bossMode;
+	private CoopBossMode coopBossMode;
 	
 	private static final int STATE_START_SCREEN = 0;
 	private static final int STATE_GAME = 1;
@@ -46,6 +63,10 @@ public final class Gamestate {
 		ongoingGameState = new OngoingGameState(thisGame);
 		highscoreScreenState = new HighscoreScreenState(thisGame);
 		currentState = startScreenState;
+		coopArcadeMode = new CoopArcadeMode(thisGame);
+		noneMode = new NoneMode(thisGame);
+		singlePlayerArcadeMode = new SinglePlayerArcadeMode(thisGame);
+		currentMode = noneMode;
 		
 		this.thisGame = thisGame;
 		this.mode = MODE_NONE;
@@ -212,7 +233,7 @@ public final class Gamestate {
 		currentState.setPauseTime(pauseTime);
 	}
 	
-	public void setState(State state) {
+	public void setState(AbstractState state) {
 		this.currentState = state;
 	}
 	
@@ -230,5 +251,29 @@ public final class Gamestate {
 	
 	public PauseScreenState getPauseScreenState() {
 		return pauseScreenState;
+	}
+	
+	public void setMode(AbstractMode mode) {
+		this.currentMode = mode;
+	}
+	
+	public NoneMode getNoneMode() {
+		return noneMode;
+	}
+	
+	public CoopArcadeMode getCoopArcadeMode() {
+		return coopArcadeMode;
+	}
+	
+	public BossMode getBossMode() {
+		return bossMode;
+	}
+	
+	public CoopBossMode getCoopBossMode() {
+		return coopBossMode;
+	}
+	
+	public SinglePlayerArcadeMode getSinglePlayerArcadeMode() {
+		return singlePlayerArcadeMode;
 	}
 }

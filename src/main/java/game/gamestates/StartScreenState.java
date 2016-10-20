@@ -6,7 +6,7 @@ import display.DisplayText;
 import game.Game;
 import game.Gamestate;
 
-public class StartScreenState extends State {	
+public class StartScreenState extends AbstractState {	
 	public StartScreenState (Game game) {
 		super(game);
 	}
@@ -25,21 +25,21 @@ public class StartScreenState extends State {
 	private void startScreen(final List<String> input) {
 		Gamestate gameState = getThisGame().getGamestate();
 		if (input.contains("X")) {
-			mode = MODE_ARCADE;
+			gameState.setMode(gameState.getSinglePlayerArcadeMode());
 			gameState.setState(gameState.getOngoingGameState());
-			thisGame.startGame();
+			getThisGame().startGame();
 		} else if (input.contains("C")) {
-			mode = MODE_COOP;
+			gameState.setMode(gameState.getCoopArcadeMode());
 			gameState.setState(gameState.getOngoingGameState());
-			thisGame.startGame();
+			getThisGame().startGame();
 		} else if (input.contains("B")) {
-			mode = MODE_BOSS;
+			gameState.setMode(gameState.getBossMode());
 			gameState.setState(gameState.getOngoingGameState());
-			thisGame.startGame();
+			getThisGame().startGame();
 		} else if (input.contains("N")) {
-			mode = MODE_BOSS_COOP;
+			gameState.setMode(gameState.getCoopBossMode());
 			gameState.setState(gameState.getOngoingGameState());
-			thisGame.startGame();
+			getThisGame().startGame();
 		}
 	}
 }

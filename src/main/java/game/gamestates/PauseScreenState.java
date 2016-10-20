@@ -7,7 +7,7 @@ import game.Game;
 import game.Gamestate;
 import game.Logger;
 
-public class PauseScreenState extends State {
+public class PauseScreenState extends AbstractState {
 
 	public PauseScreenState(Game game) {
 		super(game);

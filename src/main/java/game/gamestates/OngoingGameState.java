@@ -6,7 +6,7 @@ import game.Game;
 import game.Gamestate;
 import game.Logger;
 
-public class OngoingGameState extends State {
+public class OngoingGameState extends AbstractState {
 	public OngoingGameState (Game game) {
 		super(game);
 	}
@@ -26,7 +26,7 @@ public class OngoingGameState extends State {
 		if (input.contains("R") && System.currentTimeMillis() 
 				- restartTime > MINIMAL_RESTART_TIME) {
 			Logger.getInstance().log("Game stopped.");
-			mode = MODE_NONE;
+			gameState.setMode(gameState.getNoneMode());
 			gameState.setState(gameState.getStartScreenState());
 		} else if (input.contains("P") && System.currentTimeMillis() 
 				- pauseTime > MINIMAL_PAUSE_TIME) {
