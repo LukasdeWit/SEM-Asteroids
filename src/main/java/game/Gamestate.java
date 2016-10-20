@@ -9,8 +9,10 @@ import game.modes.AbstractMode;
 import game.modes.BossMode;
 import game.modes.CoopArcadeMode;
 import game.modes.CoopBossMode;
+import game.modes.CoopSurvivalMode;
 import game.modes.ArcadeMode;
 import game.modes.NoneMode;
+import game.modes.SurvivalMode;
 
 import java.util.List;
 
@@ -34,6 +36,8 @@ public final class Gamestate {
 	private final CoopArcadeMode coopArcadeMode;
 	private final BossMode bossMode;
 	private final CoopBossMode coopBossMode;
+	private final SurvivalMode survivalMode;
+	private final CoopSurvivalMode coopSurvivalMode;
 		
 	/**
 	 * constructor.
@@ -50,6 +54,8 @@ public final class Gamestate {
 		arcadeMode = new ArcadeMode(thisGame);
 		bossMode = new BossMode(thisGame);
 		coopBossMode = new CoopBossMode(thisGame);
+		survivalMode = new SurvivalMode(thisGame);
+		coopSurvivalMode = new CoopSurvivalMode(thisGame);
 		currentMode = noneMode;
 	}
 	
@@ -210,5 +216,19 @@ public final class Gamestate {
 	 */
 	public ArcadeMode getArcadeMode() {
 		return arcadeMode;
+	}
+	
+	/**
+	 * @return survival mode
+	 */
+	public SurvivalMode getSurvivalMode() {
+		return survivalMode;
+	}
+	
+	/**
+	 * @return coop survival mode
+	 */
+	public CoopSurvivalMode getCoopSurvivalMode() {
+		return coopSurvivalMode;
 	}
 }
