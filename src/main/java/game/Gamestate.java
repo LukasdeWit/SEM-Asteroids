@@ -94,11 +94,13 @@ public final class Gamestate {
 	 * @return 
 	 */
 	private void startScreen(final List<String> input) {
-		startMode(input);
-		if (input.contains("H")) {
-			Logger.getInstance().log("View Highscores.");
-			state = STATE_VIEW_HIGHSCORES;
-		} 
+		if (isSwitchTime()) {
+			startMode(input);
+			if (input.contains("H")) {
+				Logger.getInstance().log("View Highscores.");
+				state = STATE_VIEW_HIGHSCORES;
+			} 
+		}
 	}
 	
 	/**
@@ -107,26 +109,32 @@ public final class Gamestate {
 	 */
 	private void startMode(final List<String> input) {
 		if (input.contains("A")) {
+			screenSwitchTime = System.currentTimeMillis();
 			mode = MODE_ARCADE;
 			state = STATE_GAME;
 			thisGame.startGame();
 		} else if (input.contains("Z")) {
+			screenSwitchTime = System.currentTimeMillis();
 			mode = MODE_ARCADE_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
 		} else if (input.contains("S")) {
+			screenSwitchTime = System.currentTimeMillis();
 			mode = MODE_BOSS;
 			state = STATE_GAME;
 			thisGame.startGame();
 		} else if (input.contains("X")) {
+			screenSwitchTime = System.currentTimeMillis();
 			mode = MODE_BOSS_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
 		} else if (input.contains("D")) {
+			screenSwitchTime = System.currentTimeMillis();
 			mode = MODE_SURVIVAL;
 			state = STATE_GAME;
 			thisGame.startGame();
 		} else if (input.contains("C")) {
+			screenSwitchTime = System.currentTimeMillis();
 			mode = MODE_SURVIVAL_COOP;
 			state = STATE_GAME;
 			thisGame.startGame();
