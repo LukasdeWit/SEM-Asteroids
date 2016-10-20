@@ -60,6 +60,23 @@ public class Saucer extends AbstractEntity {
 		bBuilder.setPierce(PIERCING);
 		bBuilder.setFriendly(false);
 	}
+	
+	/**
+	 * Empty constructor for the saucer class.
+	 */
+	public Saucer() {
+		super();
+		random = new Random();
+		setRadius(BIG_RADIUS);
+		dirChangeTime = System.currentTimeMillis();
+		shotTime = dirChangeTime;
+		int nextToRight = 0;
+		setPath(nextToRight, random.nextInt((int) PATHS));
+		
+		bBuilder = new BulletBuilder();
+		bBuilder.setPierce(PIERCING);
+		bBuilder.setFriendly(false);
+	}
 
 	/**
 	 * Set Saucer path.
@@ -90,7 +107,7 @@ public class Saucer extends AbstractEntity {
 		setDX((float) Math.cos(direction) * 2);
 		setDY((float) -Math.sin(direction) * 2);
 	}
-
+	
 	/**
 	 * Calculate new position of UFO.
 	 *
@@ -264,6 +281,13 @@ public class Saucer extends AbstractEntity {
 	public final int getToRight() {
 		return toRight;
 	}
+	
+	/**
+	 * @param toRight the new toRight
+	 */
+	public final void setToRight(final int toRight) {
+		this.toRight = toRight;
+	}
 
 	/**
 	 * @return the shotTime
@@ -305,5 +329,21 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static int getBigScore() {
 		return BIG_SCORE;
+	}
+	
+	/**
+	 * @return a shallow copy of the saucer, useful for making two copies
+	 */
+	public final Saucer shallowCopy() {
+		Saucer saucer = new Saucer();
+		saucer.setDirChangeTime(this.getDirChangeTime());
+		saucer.setX(this.getX());
+		saucer.setY(this.getY());
+		saucer.setDX(this.getDX());
+		saucer.setDY(this.getDY());
+		saucer.setThisGame(this.getThisGame());
+		saucer.setToRight(this.getToRight());
+		saucer.bBuilder.setThisGame(this.getThisGame());
+		return saucer;
 	}
 }
