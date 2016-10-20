@@ -83,7 +83,7 @@ public final class DisplayHud {
         Launcher.getRoot().getChildren().add(c);
     }
 
-    /** 
+    /**
      * draw the lives of a player.
      * @param x horizontal position
      * @param y vertical position

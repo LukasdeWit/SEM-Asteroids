@@ -93,7 +93,7 @@ public class Player extends AbstractEntity {
 	 * this happens when (for example) the player collides with an asteroid
 	 * or is hit by the bullet of an saucer.
 	 */
-	public final void onHit() {		
+	public final void onHit() {
 		if (shielding < 1) {
 			// boost sound will normally not stop if player dies mid-flight
 			getThisGame().getAudio().stop(Audio.BOOST);
