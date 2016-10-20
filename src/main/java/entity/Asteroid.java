@@ -196,6 +196,7 @@ public class Asteroid extends AbstractEntity {
 		temp.setDY(this.getDY());
 		temp.setThisGame(this.getThisGame());
 		temp.setRadius(this.getRadius());
+		temp.setShape(this.getShape());
 		return temp;
 	}
 }
