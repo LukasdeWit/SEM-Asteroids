@@ -1,9 +1,5 @@
 package game;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +33,6 @@ public final class Game {
 	private final Spawner spawner;
 	private final Gamestate gamestate = new Gamestate(this);
 	
-	private long arcadeScore;
-	private long survivalScore;
-	private long bossScore;
-	private long bossHighscore;
-	private long arcadeHighscore;
-	private long survivalHighscore;
-
 	private static final float CANVAS_SIZE = 500;
 	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
 	private static final boolean LOG_SCORE = false;
@@ -63,47 +52,11 @@ public final class Game {
 	}
 
 	/**
-	 * writes the highscore to file in resources folder.
-	 */
-	private void writeHighscores() {
-		final String arcadeContent = String.valueOf(arcadeHighscore);
-		final String bossContent = String.valueOf(bossHighscore);
-		final String survivalContent = String.valueOf(survivalHighscore);
-		final File file = new File("src/main/resources/highscore.txt");
-		try (FileOutputStream fos =
-					 new FileOutputStream(file.getAbsoluteFile())) {
-			fos.write(arcadeContent.getBytes(StandardCharsets.UTF_8));
-			fos.write("\n".getBytes(StandardCharsets.UTF_8));
-			fos.write(bossContent.getBytes(StandardCharsets.UTF_8));
-			fos.write("\n".getBytes(StandardCharsets.UTF_8));
-			fos.write(survivalContent.getBytes(StandardCharsets.UTF_8));
-			fos.flush();
-			fos.close();
-		} catch (IOException e) {
-			Logger.getInstance().log("unable to write highscore to file", e);
-		}
-	}
-
-	/**
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
 		gamestate.start();
 		entities.clear();
-		if (this.arcadeScore > arcadeHighscore) {
-			arcadeHighscore = this.arcadeScore;
-		}
-		if (this.survivalScore > survivalHighscore) {
-			survivalHighscore = this.survivalScore;
-		}
-		if (this.bossScore > bossHighscore) {
-			bossHighscore = this.bossScore;
-		}
-		writeHighscores();
-		arcadeScore = 0;
-		survivalScore = 0;
-		bossScore = 0;
-		
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
 			// Create player 1
@@ -361,20 +314,6 @@ public final class Game {
 	}
 
 	/**
-	 * Score getter.
-	 * @return score
-	 */
-	public long getScore() {
-		if (gamestate.isArcade()) {
-			return arcadeScore;
-		} else if (gamestate.isBoss()) {
-			return bossScore;
-		} else {
-			return survivalScore;
-		}
-	}
-
-	/**
 	 * Player getter.
 	 *
 	 * @return the player
@@ -397,27 +336,6 @@ public final class Game {
 		return Optional.of(playerTwo);
 	}
 
-	/**
-	 * @return the arcade highscore
-	 */
-	public long getArcadeHighscore() {
-		return arcadeHighscore;
-	}
-	
-	/**
-	 * @return the survival highscore
-	 */
-	public long getSurvivalHighscore() {
-		return survivalHighscore;
-	}
-	
-	/**
-	 * @return the boss highscore
-	 */
-	public long getBossHighscore() {
-		return bossHighscore;
-	}
-	
 	/**
 	 * @param playerTwo - a new player two.
 	 */
