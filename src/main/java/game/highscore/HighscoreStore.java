@@ -36,11 +36,13 @@ public class HighscoreStore {
     public HighscoreStore() {
     	highScores = initHighscores();
         final HighScore[] oldScores = readHighScores();
-        for (int i = 0; i < MODES; i++) {
-			if (oldScores[i].getScore() > highScores[i].getScore()) {
-				highScores[i] = oldScores[i];
+        if (oldScores.length == MODES) {
+	        for (int i = 0; i < MODES; i++) {
+				if (oldScores[i].getScore() > highScores[i].getScore()) {
+					highScores[i] = oldScores[i];
+				}
 			}
-		}
+        }
     }
 
     /**
