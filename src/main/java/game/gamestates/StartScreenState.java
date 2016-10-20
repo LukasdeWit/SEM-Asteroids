@@ -32,7 +32,7 @@ public class StartScreenState extends AbstractState {
 	 * @return 
 	 */
 	private void startScreen(final List<String> input) {
-		Gamestate gameState = getThisGame().getGamestate();
+		final Gamestate gameState = getThisGame().getGamestate();
 		if (input.contains("X")) {
 			gameState.setMode(gameState.getArcadeMode());
 			gameState.setState(gameState.getOngoingGameState());

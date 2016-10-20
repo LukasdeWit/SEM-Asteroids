@@ -32,7 +32,7 @@ public class HighscoreScreenState extends AbstractState {
 	 * @param input - the input
 	 */
 	private void highscoreScreen(final List<String> input) {
-		Gamestate gameState = getThisGame().getGamestate();
+		final Gamestate gameState = getThisGame().getGamestate();
 
 		if (input.contains("R")) {
 			Logger.getInstance().log("Game stopped.");

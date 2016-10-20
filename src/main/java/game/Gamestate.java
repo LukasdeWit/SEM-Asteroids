@@ -22,18 +22,18 @@ import java.util.List;
 public final class Gamestate {	
 	// states
 	private AbstractState currentState;
-	private HighscoreScreenState highscoreScreenState;
-	private OngoingGameState ongoingGameState;
-	private PauseScreenState pauseScreenState;
-	private StartScreenState startScreenState;
+	private final HighscoreScreenState highscoreScreenState;
+	private final OngoingGameState ongoingGameState;
+	private final PauseScreenState pauseScreenState;
+	private final StartScreenState startScreenState;
 	
 	// modes
 	private AbstractMode currentMode;
-	private NoneMode noneMode;
-	private ArcadeMode arcadeMode;
-	private CoopArcadeMode coopArcadeMode;
-	private BossMode bossMode;
-	private CoopBossMode coopBossMode;
+	private final NoneMode noneMode;
+	private final ArcadeMode arcadeMode;
+	private final CoopArcadeMode coopArcadeMode;
+	private final BossMode bossMode;
+	private final CoopBossMode coopBossMode;
 		
 	/**
 	 * constructor.
@@ -48,6 +48,8 @@ public final class Gamestate {
 		coopArcadeMode = new CoopArcadeMode(thisGame);
 		noneMode = new NoneMode(thisGame);
 		arcadeMode = new ArcadeMode(thisGame);
+		bossMode = new BossMode(thisGame);
+		coopBossMode = new CoopBossMode(thisGame);
 		currentMode = noneMode;
 	}
 	

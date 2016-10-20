@@ -31,7 +31,7 @@ public class OngoingGameState extends AbstractState {
 	 * @param input - the input
 	 */
 	private void game(final List<String> input) {
-		Gamestate gameState = getThisGame().getGamestate();
+		final Gamestate gameState = getThisGame().getGamestate();
 
 		if (input.contains("R") && System.currentTimeMillis() 
 				- getRestartTime() > MINIMAL_RESTART_TIME) {
