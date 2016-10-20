@@ -365,13 +365,6 @@ public final class Game {
 	public Gamestate getGamestate() {
 		return gamestate;
 	}
-
-	/**
-	 * @return the spawner
-	 */
-	public Spawner getSpawner() {
-		return spawner;
-	}
 	
 	/**
 	 * @return the scorecounter

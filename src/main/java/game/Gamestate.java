@@ -1,6 +1,11 @@
 package game;
 
 import display.DisplayText;
+import game.gamestates.HighscoreScreenState;
+import game.gamestates.OngoingGameState;
+import game.gamestates.PauseScreenState;
+import game.gamestates.StartScreenState;
+import game.gamestates.State;
 
 import java.util.List;
 
@@ -12,9 +17,12 @@ import java.util.List;
 public final class Gamestate {
 	private int state;
 	private int mode;
-	private long pauseTime;
-	private long restartTime;
 	private final Game thisGame;
+	private State currentState;
+	private HighscoreScreenState highscoreScreenState;
+	private OngoingGameState ongoingGameState;
+	private PauseScreenState pauseScreenState;
+	private StartScreenState startScreenState;
 	
 	private static final int STATE_START_SCREEN = 0;
 	private static final int STATE_GAME = 1;
@@ -27,26 +35,25 @@ public final class Gamestate {
 	private static final int MODE_BOSS = 3;
 	private static final int MODE_BOSS_COOP = 4;
 		
-	private static final long MINIMAL_PAUSE_TIME = 300;
-	private static final long MINIMAL_RESTART_TIME = 300;
 	
 	/**
 	 * constructor.
 	 * @param thisGame this game
 	 */
 	public Gamestate(final Game thisGame) {
+		startScreenState = new StartScreenState(thisGame);
+		pauseScreenState = new PauseScreenState(thisGame);
+		ongoingGameState = new OngoingGameState(thisGame);
+		highscoreScreenState = new HighscoreScreenState(thisGame);
+		currentState = startScreenState;
+		
 		this.thisGame = thisGame;
 		this.mode = MODE_NONE;
 		state = STATE_START_SCREEN;
 	}
 	
-	/**
-	 * start game.
-	 */
 	public void start() {
-		restartTime = System.currentTimeMillis();
-		pauseTime = restartTime;
-		
+		currentState.start();
 	}
 	
 	/**
@@ -54,101 +61,9 @@ public final class Gamestate {
 	 * @param input - input
 	 */
 	public void update(final List<String> input) {
-		switch(state) {
-		case STATE_START_SCREEN:
-			startScreen(input);
-			DisplayText.startScreen();
-			break;
-		case STATE_GAME:
-			thisGame.updateGame(input);
-			game(input);
-			break;
-		case STATE_HIGHSCORE_SCREEN:
-			highscoreScreen(input);
-			DisplayText.highscoreScreen(thisGame.getScoreCounter().getHighscore());
-			break;
-		case STATE_PAUSE_SCREEN:
-		default:
-			DisplayText.pauseScreen();
-			pauseScreen(input);
-			break;
-		}
+		currentState.update(input);
 	}
 
-	/**
-	 * update the gamemode startScreen.
-	 * @param input - input
-	 * @return 
-	 */
-	private void startScreen(final List<String> input) {
-		if (input.contains("X")) {
-			mode = MODE_ARCADE;
-			state = STATE_GAME;
-			thisGame.startGame();
-		} else if (input.contains("C")) {
-			mode = MODE_COOP;
-			state = STATE_GAME;
-			thisGame.startGame();
-		} else if (input.contains("B")) {
-			mode = MODE_BOSS;
-			state = STATE_GAME;
-			thisGame.startGame();
-		} else if (input.contains("N")) {
-			mode = MODE_BOSS_COOP;
-			state = STATE_GAME;
-			thisGame.startGame();
-		}
-	}
-
-	/**
-	 * update the game gamemode.
-	 * @param input - the input
-	 */
-	private void game(final List<String> input) {
-		if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			mode = MODE_NONE;
-			state = STATE_START_SCREEN;
-		} else if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game paused.");
-			state = STATE_PAUSE_SCREEN;
-		}
-	}
-
-	/**
-	 * update the highscore gamemode.
-	 * @param input - the input
-	 */
-	private void highscoreScreen(final List<String> input) {
-		if (input.contains("R")) {
-			Logger.getInstance().log("Game stopped.");
-			thisGame.startGame();
-			mode = MODE_NONE;
-			state = STATE_START_SCREEN;
-		}
-	}
-
-	/**
-	 * update the pause screen gamemode.
-	 * @param input - the input
-	 */
-	private void pauseScreen(final List<String> input) {
-		if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game unpaused.");
-			state = STATE_GAME;
-		} else if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			thisGame.startGame();
-			state = STATE_GAME;
-		}
-	}
-	
 	/**
 	 * Get string of current gamestate for logging.
 	 * @return String representing the current state.
@@ -282,18 +197,38 @@ public final class Gamestate {
 	public static int getModeNone() {
 		return MODE_NONE;
 	}
-
+	
 	/**
 	 * @param restartTime the restartTime to set
 	 */
 	public void setRestartTime(final long restartTime) {
-		this.restartTime = restartTime;
+		currentState.setRestartTime(restartTime);
 	}
 
 	/**
 	 * @param pauseTime the pauseTime to set
 	 */
 	public void setPauseTime(final long pauseTime) {
-		this.pauseTime = pauseTime;
+		currentState.setPauseTime(pauseTime);
+	}
+	
+	public void setState(State state) {
+		this.currentState = state;
+	}
+	
+	public HighscoreScreenState getHighscoreState() {
+		return highscoreScreenState;
+	}
+	
+	public StartScreenState getStartScreenState() {
+		return startScreenState;
+	}
+	
+	public OngoingGameState getOngoingGameState() {
+		return ongoingGameState;
+	}
+	
+	public PauseScreenState getPauseScreenState() {
+		return pauseScreenState;
 	}
 }
