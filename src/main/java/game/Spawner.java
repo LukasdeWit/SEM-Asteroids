@@ -6,6 +6,7 @@ import entity.Asteroid;
 import entity.Boss;
 import entity.Powerup;
 import entity.Saucer;
+import entity.builders.SaucerBuilder;
 
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.
@@ -19,6 +20,7 @@ public final class Spawner {
 	private int wave;
 	private final Random random;
 	private final Game thisGame;
+	private final SaucerBuilder sBuilder;
 
 	private static final long SAUCER_TIME = 20000;
 	private static final long POWERUP_TIME = 10000;
@@ -43,6 +45,9 @@ public final class Spawner {
 		startRest = 0;
 		wave = 0;
 		random = new Random();
+		
+		sBuilder = new SaucerBuilder();
+		sBuilder.setThisGame(thisGame);
 	}
 
 	/**
@@ -146,9 +151,11 @@ public final class Spawner {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	private void spawnSaucer() {
-		final Saucer newSaucer = new Saucer(random.nextInt(1)
-				* 2 * thisGame.getScreenX(), (float) Math.random()
-				* thisGame.getScreenY(), 0, 0, thisGame);
+		sBuilder.setX(random.nextInt(1) * 2 * thisGame.getScreenX());
+		sBuilder.setY((float) Math.random() * thisGame.getScreenY());
+		sBuilder.setDX(0);
+		sBuilder.setDY(0);
+		final Saucer newSaucer = (Saucer) sBuilder.getResult();
 		if (Math.random() < smallSaucerRatio()) {
 			newSaucer.setRadius(Saucer.getSmallRadius());
 		}

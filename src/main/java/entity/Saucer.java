@@ -33,33 +33,6 @@ public class Saucer extends AbstractEntity {
 	private static final long LESS_SHOT = 50;
 	private static final float MAX_ACCURACY = 10;
 	private static final int PIERCING = 1;
-
-	/**
-	 * Constructor for Saucer class.
-	 *
-	 * @param x        position of Saucer along the X-axis
-	 * @param y        position of Saucer along the Y-axis
-	 * @param dX       velocity of Saucer along the X-axis
-	 * @param dY       velocity of Saucer along the Y-axis
-	 * @param thisGame the game this particle belongs to
-	 */
-	public Saucer(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
-		random = new Random();
-		setRadius(BIG_RADIUS);
-		dirChangeTime = System.currentTimeMillis();
-		shotTime = dirChangeTime;
-		int nextToRight = 0;
-		if (x > (getThisGame().getScreenX() / 2)) {
-			nextToRight = 1;
-		}
-		setPath(nextToRight, random.nextInt((int) PATHS));
-		
-		bBuilder = new BulletBuilder();
-		bBuilder.setThisGame(thisGame);
-		bBuilder.setPierce(PIERCING);
-		bBuilder.setFriendly(false);
-	}
 	
 	/**
 	 * Empty constructor for the saucer class.

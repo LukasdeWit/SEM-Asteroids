@@ -17,6 +17,7 @@ import entity.Player;
 import entity.Saucer;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
+import entity.builders.SaucerBuilder;
 import javafx.scene.shape.Rectangle;
 
 
@@ -33,6 +34,7 @@ public class GameTest {
 	
 	private PlayerBuilder pBuilder;
 	private BulletBuilder bBuilder;
+	private SaucerBuilder sBuilder;
 
 	@Before
 	public final void setUp() {
@@ -60,6 +62,13 @@ public class GameTest {
 		bBuilder.setDX(0);
 		bBuilder.setDY(0);
 		bBuilder.setThisGame(thisGame);
+		
+		sBuilder = new SaucerBuilder();
+		sBuilder.setX(0);
+		sBuilder.setY(0);
+		sBuilder.setDX(0);
+		sBuilder.setDY(0);
+		sBuilder.setThisGame(thisGame);
 		
 		DisplayText.setTest(true);
 	}
@@ -333,7 +342,7 @@ public class GameTest {
 	@Test
 	public final void testEnemies(){
 		final Bullet b = (Bullet) bBuilder.getResult();
-		final Saucer s = new Saucer(0, 0, 0, 0, thisGame);
+		final Saucer s = (Saucer) sBuilder.getResult();
 		final Asteroid a = new Asteroid(0, 0, 0, 0, thisGame);
 		addToEntities(b);
 		addToEntities(s);
