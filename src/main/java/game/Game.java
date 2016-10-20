@@ -85,8 +85,7 @@ public final class Game {
 			pBuilder.setThisGame(this);
 			player = (Player) pBuilder.getResult();
 			entities.add(player);
-		} 
-		scorecounter.startGame();
+		}
 		spawner.reset();
 		Logger.getInstance().log(gamestate.toString() + " game started.");
 	}
@@ -210,10 +209,10 @@ public final class Game {
 			destroy(playerTwo);
 		}
 		if (scorecounter.isNotHighscore()) {
+			scorecounter.setScore(0);
 			gamestate.setMode(Gamestate.getModeNone());
 			gamestate.setState(Gamestate.getStateStartScreen());
 		} else {
-			scorecounter.updateHighscore();
 			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
 			gamestate.setState(Gamestate.getStateHighscoreScreen());
 		}

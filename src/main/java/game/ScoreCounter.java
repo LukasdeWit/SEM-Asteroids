@@ -33,10 +33,11 @@ public class ScoreCounter {
 	/**
 	 * Set score to 0 at start of game.
 	 * Write existing score as highscore if larger than current highscore.
+	 * @param name - the name
 	 */
-	protected final void startGame() {
+	protected final void startGame(final String name) {
 		if (this.score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode())) {
-			highscoreStore.addHighScore(score, thisGame.getGamestate().getMode());
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode());
 			highscoreStore.writeScores();
 		}		
 		score = 0;
@@ -98,10 +99,11 @@ public class ScoreCounter {
 	
 	/**
 	 * Update the highscore.
+	 * @param name - the name
 	 */
-	protected final void updateHighscore() {
+	protected final void updateHighscore(final String name) {
 		if (isHighscore()) {
-			highscoreStore.addHighScore(score, thisGame.getGamestate().getMode());
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode());
 			highscoreStore.writeScores();
 		}
 	}
@@ -131,10 +133,11 @@ public class ScoreCounter {
 	}
 	
 	/**
+	 * @param name - the name
 	 * @param highscore the highscore to set
 	 */
-	public final void setHighscore(final long highscore) {
-		highscoreStore.addHighScore(highscore, thisGame.getGamestate().getMode());
+	public final void setHighscore(final String name, final long highscore) {
+		highscoreStore.addHighScore(name, highscore, thisGame.getGamestate().getMode());
 	}
 	
 	/**

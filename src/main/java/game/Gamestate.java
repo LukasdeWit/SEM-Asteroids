@@ -14,6 +14,9 @@ public final class Gamestate {
 	private int mode;
 	private long screenSwitchTime;
 	private final Game thisGame;
+	private char[] name;
+	private int namePos;
+	private String pressedButton;
 	
 	private static final String[] MODE_STRING = 
 		{"None", "Arcade", "Arcade coop", "Boss", "Boss coop", "Survival", "Survival coop"};
@@ -33,6 +36,8 @@ public final class Gamestate {
 	private static final int MODE_SURVIVAL_COOP = 6;
 	
 	private static final long MINIMAL_SWITCH_TIME = 300;
+	private static final long FLICKER_TIME = 200;
+	private static final int INPUT_LENGTH = 8;
 	
 	/**
 	 * constructor.
@@ -42,6 +47,8 @@ public final class Gamestate {
 		this.thisGame = thisGame;
 		this.mode = MODE_NONE;
 		state = STATE_START_SCREEN;
+		name = new char[INPUT_LENGTH];
+		namePos = 0;
 	}
 	
 	/**
@@ -67,7 +74,7 @@ public final class Gamestate {
 			break;
 		case STATE_HIGHSCORE_SCREEN:
 			highscoreScreen(input);
-			DisplayText.highscoreScreen(thisGame.getScoreCounter().getHighscore());
+			DisplayText.highscoreScreen(thisGame.getScoreCounter().getScore(), new String(name));
 			break;
 		case STATE_VIEW_HIGHSCORES:
 			viewHighscoresScreen(input);
@@ -148,6 +155,7 @@ public final class Gamestate {
 		if (input.contains("R") && isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
 			screenSwitchTime = System.currentTimeMillis();
+			pressedButton = "R";
 			thisGame.overSwitch();
 		} else if (input.contains("P") && isSwitchTime()) {
 			screenSwitchTime = System.currentTimeMillis();
@@ -162,11 +170,89 @@ public final class Gamestate {
 	 * @param input - the input
 	 */
 	private void highscoreScreen(final List<String> input) {
-		if (input.contains("R") && isSwitchTime()) {
+		if (namePos != 0 && input.contains("ENTER") && isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
 			thisGame.startGame();
+			thisGame.getScoreCounter().startGame(nameString());
+			name = new char[INPUT_LENGTH];
+			namePos = 0;
 			mode = MODE_NONE;
 			state = STATE_START_SCREEN;
+		} else {
+			checkInput(input);
+		}
+	}
+
+	/**
+	 * checks input.
+	 * @param input - the input
+	 */
+	private void checkInput(final List<String> input) {
+		if (!input.isEmpty() && "BACK_SPACE".equals(input.get(0))
+				&& !"BACK_SPACE".equals(pressedButton) && namePos > 0) {
+			if (namePos != INPUT_LENGTH) {
+				name[namePos] = ' ';
+			}
+			namePos--;
+			pressedButton = "BACK_SPACE";
+		} else if (namePos != INPUT_LENGTH) {
+			updateName(input);
+		}
+	}
+
+	/**
+	 * make name into string by replacing underscores.
+	 * @return the string
+	 */
+	private String nameString() {
+		for (int i = 0; i < name.length; i++) {
+			if (name[i] == '_') {
+				name[i] = ' ';
+			}
+		}
+		return new String(name);
+	}
+
+	/**
+	 * updates the name input.
+	 * @param input - the input.
+	 */
+	private void updateName(final List<String> input) {
+		if (!input.isEmpty() && input.get(0).length() == 1 && !input.get(0).equals(pressedButton)) {
+			name[namePos] = input.get(0).charAt(0);
+			namePos++;
+			pressedButton = input.get(0);
+		} else if (!checkSpace(input)) {
+			flicker();
+		}
+		if (input.isEmpty()) {
+			pressedButton = "Released";
+		}
+	}
+
+	/**
+	 * checks if there is a space.
+	 * @param input - the input
+	 * @return true if there is a space
+	 */
+	private boolean checkSpace(final List<String> input) {
+		if (!input.isEmpty() && "SPACE".equals(input.get(0))	&& !"SPACE".equals(pressedButton)) {
+			name[namePos] = ' ';
+			namePos++;
+			pressedButton = "SPACE";
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * flicker the underscore to indicate input.
+	 */
+	private void flicker() {
+		if (System.currentTimeMillis() % FLICKER_TIME < FLICKER_TIME / 2) {
+			name[namePos] = '_';
+		} else {
+			name[namePos] = ' ';
 		}
 	}
 

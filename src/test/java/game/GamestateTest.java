@@ -29,7 +29,6 @@ public class GamestateTest {
 		gamestate.setMode(Gamestate.getModeArcade());
 		gamestate.setState(Gamestate.getStateStartScreen());
 		thisGame.getScoreCounter().setScore(0);
-		thisGame.getScoreCounter().setHighscore(0);
 		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		thisGame.setDestroyList(new ArrayList<>());
@@ -133,8 +132,8 @@ public class GamestateTest {
 		gamestate.setState(Gamestate.getStateHighscoreScreen());
 		input.add("R");
 		gamestate.update(input);
-		assertEquals(Gamestate.getModeNone(), gamestate.getMode(), 0);
-		assertEquals(Gamestate.getStateStartScreen(), gamestate.getState(), 0);
+		assertEquals(Gamestate.getModeArcade(), gamestate.getMode(), 0);
+		assertEquals(Gamestate.getStateHighscoreScreen(), gamestate.getState(), 0);
 	}
 	
 	@Test

@@ -39,13 +39,13 @@ public class GameTest {
 		gamestate.setMode(Gamestate.getModeArcade());
 		thisGame.getScoreCounter().clearHighscores();
 		thisGame.getScoreCounter().setScore(0);
-		thisGame.getScoreCounter().setHighscore(0);
 		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
+		thisGame.getScoreCounter().setHighscore("", 0);
 		
 		pBuilder = new PlayerBuilder();
 		pBuilder.setX(0);
@@ -63,24 +63,6 @@ public class GameTest {
 		bBuilder.setThisGame(thisGame);
 		
 		DisplayText.setTest(true);
-	}
-	
-	@Test
-	public final void testStartGame1(){
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
-		thisGame.getScoreCounter().setScore(10);
-		thisGame.startGame();
-		assertEquals(0, thisGame.getScoreCounter().getScore(), 0);
-		assertEquals(10, thisGame.getScoreCounter().getHighscore(), 0);
-	}
-	
-	@Test
-	public final void testStartGame2(){
-		thisGame.getScoreCounter().setScore(5);
-		thisGame.getScoreCounter().setHighscore(20);
-		thisGame.startGame();
-		assertEquals(0, thisGame.getScoreCounter().getScore(), 0);
-		assertEquals(20, thisGame.getScoreCounter().getHighscore(), 0);
 	}
 	
 	@Test
@@ -208,17 +190,6 @@ public class GameTest {
 		thisGame.setPlayerTwo(p2);
 		thisGame.over();
 		assertTrue(thisGame.getDestroyList().contains(p1));
-	}
-
-	@Test
-	public final void testOver5() {
-		final Player p1 = (Player) pBuilder.getResult();
-		p1.setLives(0);
-		thisGame.setPlayer(p1);
-		thisGame.getScoreCounter().setScore(10);
-		thisGame.over();
-		assertTrue(thisGame.getDestroyList().contains(p1));
-		assertEquals(10, thisGame.getScoreCounter().getHighscore(), 0);
 	}
 
 	@Test

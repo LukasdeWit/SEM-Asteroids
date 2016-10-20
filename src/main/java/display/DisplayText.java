@@ -63,8 +63,11 @@ public final class DisplayText {
 	private static final int HIGHSCORES_MODES_SPACE = 30;
 
 	private static final float MODE_TEXT_SIZE = 200;
-
 	private static final float SCORE_TEXT_SIZE = 100;
+	
+	private static final float ENTER_NAME_TEXT_Y = 310;
+	private static final float NAME_INPUT_Y = 350;
+	private static final int CONFIRM_TEXT_Y = 390;
 
 
 	private static boolean test;
@@ -126,12 +129,16 @@ public final class DisplayText {
 	/**
 	 * draw the highscore screen.
 	 *
-	 * @param highscore - the highscore
+	 * @param score - the score
+	 * @param name - the name
 	 */
-	public static void highscoreScreen(final long highscore) {
+	public static void highscoreScreen(final long score, final String name) {
 		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "congratulations");
+		drawText(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, "your new highscore is " + score);
 		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press r to restart");
-		drawText(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, "your new highscore is " + highscore);
+		drawText(PRESS_R_TEXT_X, ENTER_NAME_TEXT_Y, "please enter your name ");
+		drawText(PRESS_R_TEXT_X, NAME_INPUT_Y, name);
+		drawText(PRESS_R_TEXT_X, CONFIRM_TEXT_Y, "press enter to confirm");
 	}
 
 	/**
