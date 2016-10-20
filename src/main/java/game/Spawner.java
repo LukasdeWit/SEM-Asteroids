@@ -80,9 +80,6 @@ public final class Spawner {
 	public void updateSurvival() {
 		updateSaucer();
 		updatePowerup();
-		/*if (thisGame.enemies() != 0) {
-			startRest = System.currentTimeMillis();
-		}*/
 		final int extra = (int) (thisGame.getScoreCounter().getScore() / SURVIVAL_POINTS_PER_ASTEROID);
 		final int enemies = thisGame.convertedBigEnemies();
 		if (STARTING_ASTEROIDS + extra - enemies > 0) {
