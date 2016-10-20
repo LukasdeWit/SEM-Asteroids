@@ -62,8 +62,7 @@ public class AsteroidBuilder implements EntityBuilder {
 	
 	@Override
 	public final AbstractEntity getResult() {
-		Asteroid temp = asteroid.shallowCopy();
-		return temp;
+		return asteroid.shallowCopy();
 	}
 
 }

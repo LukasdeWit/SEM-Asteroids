@@ -62,7 +62,7 @@ public class SaucerBuilder implements EntityBuilder {
 
 	@Override
 	public final AbstractEntity getResult() {
-		Saucer temp = saucer.shallowCopy();
+		final Saucer temp = saucer.shallowCopy();
 		temp.setDirChangeTime(System.currentTimeMillis());
 		temp.setShotTime(temp.getDirChangeTime());
 		return temp;

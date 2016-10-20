@@ -11,14 +11,12 @@ import game.Logger;
 public class Asteroid extends AbstractEntity {
 	private int shape;
 
-	private static final int SHAPES = 3;
 	private static final float BIG_RADIUS = 20;
 	private static final float MEDIUM_RADIUS = 12;
 	private static final int BIG_SCORE = 20;
 	private static final float SMALL_RADIUS = 4;
 	private static final int MEDIUM_SCORE = 50;
 	private static final int SMALL_SCORE = 100;
-	private static final float MIN_SPEED = .5f;
 	private static final int SPLIT = 2;
 	/**
 	 * The converted size for big asteroids in survival mode.
@@ -74,7 +72,7 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void onDeath() {
-		AsteroidBuilder aBuilder = new AsteroidBuilder();
+		final AsteroidBuilder aBuilder = new AsteroidBuilder();
 		aBuilder.setThisGame(getThisGame());
 		aBuilder.setX(getX());
 		aBuilder.setY(getY());
@@ -162,7 +160,7 @@ public class Asteroid extends AbstractEntity {
 	 * @return a shallow copy of the Asteroid, useful for making two copies
 	 */
 	public final Asteroid shallowCopy() {
-		Asteroid temp = new Asteroid();
+		final Asteroid temp = new Asteroid();
 		temp.setX(this.getX());
 		temp.setY(this.getY());
 		temp.setDX(this.getDX());

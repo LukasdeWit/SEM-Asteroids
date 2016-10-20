@@ -5,7 +5,6 @@ import java.util.Random;
 
 import display.DisplayEntity;
 import entity.builders.BulletBuilder;
-import game.Game;
 import game.Logger;
 import game.Spawner;
 
@@ -43,7 +42,7 @@ public class Saucer extends AbstractEntity {
 		setRadius(BIG_RADIUS);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
-		int nextToRight = 0;
+		final int nextToRight = 0;
 		setPath(nextToRight, random.nextInt((int) PATHS));
 		
 		bBuilder = new BulletBuilder();
@@ -308,7 +307,7 @@ public class Saucer extends AbstractEntity {
 	 * @return a shallow copy of the saucer, useful for making two copies
 	 */
 	public final Saucer shallowCopy() {
-		Saucer saucer = new Saucer();
+		final Saucer saucer = new Saucer();
 		saucer.setDirChangeTime(this.getDirChangeTime());
 		saucer.setX(this.getX());
 		saucer.setY(this.getY());
