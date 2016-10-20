@@ -51,7 +51,7 @@ public class ScoreCounter {
 				currentHighscore = Long.parseLong(sCurrentLine);
 			}
 		} catch (IOException e) {
-			Logger.getInstance().log("unable to read highscore from file", e);
+			Logger.getInstance().log("Creating highscore file");
 		}
 		return currentHighscore;
 	}

@@ -12,6 +12,7 @@ import display.DisplayHud;
 import display.DisplayText;
 import entity.AbstractEntity;
 import entity.Asteroid;
+import entity.Boss;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
@@ -133,17 +134,12 @@ public final class Game {
 			pBuilder.setDX(0);
 			pBuilder.setDY(0);
 			pBuilder.setThisGame(this);
-			pBuilder.setPlayerTwo(false);
 			player = (Player) pBuilder.getResult();
 			entities.add(player);
 		} 
 		scorecounter.startGame();
 		spawner.reset();
-		if (gamestate.getMode() == Gamestate.getModeArcade()) {
-			Logger.getInstance().log("Arcade game started.");
-		} else {
-			Logger.getInstance().log("Coop game started.");
-		}
+		Logger.getInstance().log(gamestate.toString() + " game started.");
 	}
 
 	/**
@@ -241,9 +237,11 @@ public final class Game {
 			return;
 		}
 		if (player.isAlive()) {
+			Logger.getInstance().log("Player 2 died.");
 			destroy(playerTwo);
 			return;
 		} else if (gamestate.isCoop() && playerTwo.isAlive()) {
+			Logger.getInstance().log("Player 1 died.");
 			destroy(player);
 			return;
 		}
@@ -288,11 +286,11 @@ public final class Game {
 	private void extraLife(final int score) {
 		if (scorecounter.canGainLife(score)) {
 			player.gainLife();
+			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 			if (gamestate.isCoop()) {
 				playerTwo.gainLife();
 				Logger.getInstance().log("Player 2 gained an extra life.");
 			}
-			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 		}
 	}
 
@@ -307,7 +305,7 @@ public final class Game {
 				.filter(e -> e instanceof Bullet)
 				.map(e -> (Bullet) e)
 				.filter(Bullet::isFriendly)
-				.filter(bullet -> bullet.getPlayer().equals(player))
+				.filter(bullet -> bullet.getShooter().equals(player))
 				.count());
 	}
 
@@ -318,7 +316,7 @@ public final class Game {
 	 */
 	public int enemies() {
 		return Math.toIntExact(entities.stream()
-				.filter(e -> e instanceof Asteroid || e instanceof Saucer)
+				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof Boss)
 				.count());
 	}
 	
