@@ -7,7 +7,7 @@ import game.Game;
  * This is the superclass of all entities in the game.
  *
  * @author Kibo
- */
+ */ 
 public abstract class AbstractEntity {
 	private float x;
 	private float y;

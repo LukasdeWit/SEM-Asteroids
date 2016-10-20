@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * This class handles the switching of gamestates.
- * @author Kibo
+ * @author Kibo  
  *
  */
 public final class Gamestate {

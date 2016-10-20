@@ -290,7 +290,7 @@ public final class DisplayEntity {
 		playerModel.setStrokeWidth(2 * PLAYER_ONE_SIZE);
 		group.getChildren().add(playerModel);
 
-		if (p.isBoost()) {
+		if (p.isBoost()) { 
 			final Polygon boostModel = new Polygon(DisplayUtils.translate(function, function, PLAYER_ONE_BOOST));
 			boostModel.setStroke(Color.WHITE);
 			boostModel.setStrokeWidth(2 * PLAYER_ONE_SIZE);
