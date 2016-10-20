@@ -30,4 +30,14 @@ public class NoneMode extends AbstractMode {
 	public final boolean isBoss() {
 		return false;
 	}
+
+	@Override
+	public boolean isArcade() {
+		return false;
+	}
+
+	@Override
+	public boolean isSurvival() {
+		return false;
+	}
 }

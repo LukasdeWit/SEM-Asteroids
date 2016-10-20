@@ -30,4 +30,14 @@ public class BossMode extends AbstractMode {
 	public final boolean isBoss() {
 		return true;
 	}
+
+	@Override
+	public final boolean isArcade() {
+		return false;
+	}
+
+	@Override
+	public final boolean isSurvival() {
+		return false;
+	}
 }

@@ -25,16 +25,28 @@ public abstract class AbstractMode {
 	public abstract String toString();
 	
 	/**
-	 * Abstract method that returns whether the mode is a coop mode.
+	 * Method that returns whether the mode is a coop mode.
 	 * @return true when it's a coop mode
 	 */
 	public abstract boolean isCoop();
 	
 	/**
-	 * Abstract method that returns whether the mode is a boss mode.
+	 * Method that returns whether the mode is a boss mode.
 	 * @return true when it's a boss mode
 	 */
 	public abstract boolean isBoss();
+	
+	/**
+	 * Method that returns whether the mode is an arcade mode.
+	 * @return true when it's an arcade mode
+	 */
+	public abstract boolean isArcade();
+	
+	/**
+	 * Method that returns whether the mode is a survival mode.
+	 * @return true when it's a survival mode
+	 */
+	public abstract boolean isSurvival();
 	
 	/**
 	 * Getter for thisGame.

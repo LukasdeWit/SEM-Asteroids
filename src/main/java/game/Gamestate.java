@@ -68,6 +68,7 @@ public final class Gamestate {
 		currentState.update(input);
 	}
 
+
 	/**
 	 * Get string of current gamestate for logging.
 	 * @return String representing the current state.
@@ -102,6 +103,20 @@ public final class Gamestate {
 	 */
 	public boolean isBoss() {
 		return currentMode.isBoss();
+	}
+	
+	/**
+	 * @return true if survival mode
+	 */
+	public boolean isSurvival() {
+		return currentMode.isSurvival();
+	}
+	
+	/**
+	 * @return true if arcade mode
+	 */
+	public boolean isArcade() {
+		return currentMode.isArcade();
 	}
 	
 	/**

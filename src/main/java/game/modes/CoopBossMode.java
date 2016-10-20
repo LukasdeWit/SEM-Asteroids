@@ -32,4 +32,14 @@ public class CoopBossMode extends AbstractMode {
 		return true;
 	}
 
+	@Override
+	public final boolean isArcade() {
+		return false;
+	}
+
+	@Override
+	public final boolean isSurvival() {
+		return false;
+	}
+
 }
