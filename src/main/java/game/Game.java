@@ -31,7 +31,7 @@ public final class Game {
 	private final float screenX;
 	private final float screenY;
 	private final Spawner spawner;
-	private final Gamestate gamestate = new Gamestate(this);
+	private final Gamestate gamestate;
 	
 	private static final float CANVAS_SIZE = 500;
 	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
@@ -48,6 +48,7 @@ public final class Game {
 		spawner = new Spawner(this);
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
+		gamestate = new Gamestate(this);
 		scorecounter = new ScoreCounter(this);
 	}
 
@@ -194,7 +195,6 @@ public final class Game {
 			return;
 		}
 		destroy(player);
-		
 		if (gamestate.isCoop()) {
 			destroy(playerTwo);
 		}
