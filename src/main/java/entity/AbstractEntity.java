@@ -64,18 +64,8 @@ public abstract class AbstractEntity {
 	 * reach the edge.
 	 */
 	public final void wrapAround() {
-		if (getX() < 0) {
-			setX(getX() + getThisGame().getScreenX());
-		}
-		if (getX() > getThisGame().getScreenX()) {
-			setX(getX() - getThisGame().getScreenX());
-		}
-		if (getY() < 0) {
-			setY(getY() + getThisGame().getScreenY());
-		}
-		if (getY() > getThisGame().getScreenY()) {
-			setY(getY() - getThisGame().getScreenY());
-		}
+		setX((getX() + getThisGame().getScreenX()) % getThisGame().getScreenX());
+		setY((getY() + getThisGame().getScreenY()) % getThisGame().getScreenY());
 	}
 
 	/**

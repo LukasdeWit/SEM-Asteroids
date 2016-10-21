@@ -96,12 +96,10 @@ public class Player extends AbstractEntity {
 			getThisGame().getAudio().stop(Audio.BOOST);
 			lives--;
 			if (lives <= 0) {
-				// we are out of lives, call gameover
 				getThisGame().over();
 			} else {
-				// we lose one live
 				respawnThePlayer();
-			}
+			}			
 		} else {
 			shielding--;
 			makeInvincible(INVINCIBILITY_START_TIME);
