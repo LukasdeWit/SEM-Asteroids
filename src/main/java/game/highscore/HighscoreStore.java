@@ -89,20 +89,6 @@ public class HighscoreStore {
     }
 
     /**
-     * join the local highscores and those stored on the disk. the result will
-     * become the new list of highscores, both locally and on the disk
-     *//*
-    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
-    private void join() {
-        highScores = Stream.concat(highScores.stream(), readHighScores()
-                .stream())
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
-        writeScores();
-    }*/
-
-    /**
      * adds a <strong>nonnull</strong> highscore to the store.
      * @param name - the name
      * @param score - the score we want to add as a highscore.
