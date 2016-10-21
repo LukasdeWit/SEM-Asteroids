@@ -33,36 +33,6 @@ public class Boss extends AbstractEntity {
 	private static final double MULTI_SHOT_ANGLE = .1;
 	private static final int SCORE = 20000;
 	private static final float ACCURACY = 3;
-
-	/**
-	 * Constructor for boss.
-	 * 
-	 * @param x - location of boss along x-axis
-	 * @param y - location of boss along y-axis
-	 * @param dX - speed of boss along x-axis
-	 * @param dY - speed of boss along y-axis
-	 * @param thisGame - game the boss exists in
-	 */
-	public Boss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
-		random = new Random();
-		setRadius(RADIUS);
-		dirChangeTime = System.currentTimeMillis();
-		shotTime = dirChangeTime;
-		currentLives = STARTING_LIVES;
-		int nextToRight = 0;
-		if (x > (getThisGame().getScreenX() / 2)) {
-			nextToRight = 1;
-		}
-		setPath(nextToRight, random.nextInt((int) PATHS));
-
-		// Initialize the Bullet Builder
-		bBuilder = new BulletBuilder();
-		bBuilder.setPierce(0);
-		bBuilder.setThisGame(getThisGame());
-		bBuilder.setShooter(this);
-		bBuilder.setFriendly(false);
-	}
 	
 	/**
 	 * Empty constructor for the Boss class.

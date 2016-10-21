@@ -7,6 +7,7 @@ import entity.Boss;
 import entity.Powerup;
 import entity.Saucer;
 import entity.builders.AsteroidBuilder;
+import entity.builders.BossBuilder;
 import entity.builders.SaucerBuilder;
 
 /**
@@ -23,6 +24,7 @@ public final class Spawner {
 	private final Game thisGame;
 	private final SaucerBuilder sBuilder;
 	private final AsteroidBuilder aBuilder;
+	private final BossBuilder bBuilder;
 
 	private static final long SAUCER_TIME = 20000;
 	private static final long POWERUP_TIME = 10000;
@@ -55,6 +57,11 @@ public final class Spawner {
 		
 		sBuilder = new SaucerBuilder();
 		sBuilder.setThisGame(thisGame);
+		
+		bBuilder = new BossBuilder();
+		bBuilder.setThisGame(thisGame);
+		bBuilder.setDX(0);
+		bBuilder.setDY(0);
 	}
 
 	/**
@@ -219,10 +226,10 @@ public final class Spawner {
 	 * Spawns a boss.
 	 */
 	private void spawnBoss() {
-		final Boss boss =
-				new Boss(random.nextInt(1)
-				* 2 * thisGame.getScreenX(), (float) Math.random()
-				* thisGame.getScreenY(), 0, 0, thisGame);
+		bBuilder.setX(random.nextInt(1) * 2 * thisGame.getScreenX());
+		bBuilder.setY((float) Math.random() * thisGame.getScreenY());
+		
+		final Boss boss = (Boss) bBuilder.getResult();
 		thisGame.create(boss);
 	}
 
