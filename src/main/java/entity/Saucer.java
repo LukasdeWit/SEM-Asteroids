@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import display.DisplayEntity;
+import game.Audio;
 import entity.builders.BulletBuilder;
 import game.Logger;
 import game.Spawner;
@@ -93,6 +94,11 @@ public class Saucer extends AbstractEntity {
 		wrapAround();
 		changeDirection();
 		shoot();
+		if (isSmall()) {
+			getThisGame().getAudio().play(Audio.UFOSMALL);
+		} else {
+			getThisGame().getAudio().play(Audio.UFOBIG);
+		}
 	}
 
 	/**
@@ -223,10 +229,21 @@ public class Saucer extends AbstractEntity {
 	 */
 	@Override
 	public final void onDeath() {
-		int points = BIG_SCORE;
+		int points;
 		if (Float.compare(SMALL_RADIUS, getRadius()) >= 0) {
 			points = SMALL_SCORE;
+			getThisGame().getAudio().playMultiple(Audio.SMALLEXPLOSION);
+		} else {
+			points = BIG_SCORE;
+			getThisGame().getAudio().playMultiple(Audio.MEDIUMEXPLOSION);
 		}
+		
+		if (isSmall()) {
+			getThisGame().getAudio().stop(Audio.UFOSMALL);
+		} else {
+			getThisGame().getAudio().stop(Audio.UFOBIG);
+		}
+
 		getThisGame().addScore(points);
 		Particle.explosion(getX(), getY(), getThisGame());
 	}
@@ -238,6 +255,14 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static float getSmallRadius() {
 		return SMALL_RADIUS;
+	}
+	
+	/**
+	 * Check the size of the ufo.
+	 * @return true if small
+	 */
+	public final boolean isSmall() {
+		return getRadius() == SMALL_RADIUS;
 	}
 
 	/**

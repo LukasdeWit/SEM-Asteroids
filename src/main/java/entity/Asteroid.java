@@ -3,6 +3,7 @@ import java.util.List;
 
 import display.DisplayEntity;
 import entity.builders.AsteroidBuilder;
+import game.Audio;
 import game.Logger;
 
 /**
@@ -84,6 +85,7 @@ public class Asteroid extends AbstractEntity {
 				aBuilder.setDY((float) (getDY() + Math.random() - .5));
 				getThisGame().create(aBuilder.getResult());
 			}
+			getThisGame().getAudio().playMultiple(Audio.LARGEEXPLOSION);
 			getThisGame().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			aBuilder.setRadius(SMALL_RADIUS);
@@ -92,8 +94,10 @@ public class Asteroid extends AbstractEntity {
 				aBuilder.setDY((float) (getDY() + Math.random() - .5));
 				getThisGame().create(aBuilder.getResult());
 			}
+			getThisGame().getAudio().playMultiple(Audio.MEDIUMEXPLOSION);
 			getThisGame().addScore(MEDIUM_SCORE);
 		} else {
+			getThisGame().getAudio().playMultiple(Audio.SMALLEXPLOSION);
 			getThisGame().addScore(SMALL_SCORE);
 		}
 		Particle.explosion(getX(), getY(), getThisGame());
