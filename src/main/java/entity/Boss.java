@@ -5,7 +5,6 @@ import java.util.Random;
 
 import display.DisplayEntity;
 import entity.builders.BulletBuilder;
-import game.Game;
 import game.Logger;
 
 /**
@@ -44,7 +43,7 @@ public class Boss extends AbstractEntity {
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
 		currentLives = STARTING_LIVES;
-		int nextToRight = 0;
+		final int nextToRight = 0;
 		setPath(nextToRight, random.nextInt((int) PATHS));
 		
 		// Initialize the Bullet Builder

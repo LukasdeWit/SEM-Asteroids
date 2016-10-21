@@ -48,7 +48,7 @@ public class Particle extends AbstractEntity {
 	 * @return the random particle
 	 */
 	private static Particle randomParticle(final float x, final float y, final Game thisGame) {
-		ParticleBuilder pBuilder = new ParticleBuilder();
+		final ParticleBuilder pBuilder = new ParticleBuilder();
 		pBuilder.setX(x);
 		pBuilder.setY(y);
 		pBuilder.setDX((float) (Math.random() - .5) * SPEED);

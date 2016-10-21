@@ -189,7 +189,7 @@ public final class Spawner {
 	private void spawnPowerup() {
 		pBuilder.setX(thisGame.getScreenX() * (float) Math.random());	
 		pBuilder.setY(thisGame.getScreenY() * (float) Math.random());
-		Powerup p = (Powerup) pBuilder.getResult();
+		final Powerup p = (Powerup) pBuilder.getResult();
 		thisGame.create(p);
 	}
 

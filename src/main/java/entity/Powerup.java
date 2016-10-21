@@ -53,7 +53,7 @@ public class Powerup extends AbstractEntity {
 	public Powerup() {
 		super();
 		setRadius(RADIUS);
-		Random random = new Random();
+		final Random random = new Random();
 		type = random.nextInt(TYPES);
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
@@ -228,7 +228,7 @@ public class Powerup extends AbstractEntity {
 	 * @return a shallow copy of the Powerup, useful for making multiple copies
 	 */
 	public final Powerup shallowCopy() {
-		Powerup temp = new Powerup();
+		final Powerup temp = new Powerup();
 		temp.setX(this.getX());
 		temp.setY(this.getY());
 		temp.setDX(this.getDX());
