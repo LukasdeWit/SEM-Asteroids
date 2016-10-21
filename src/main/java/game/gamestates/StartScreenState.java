@@ -33,20 +33,28 @@ public class StartScreenState extends AbstractState {
 	 */
 	private void startScreen(final List<String> input) {
 		final Gamestate gameState = getThisGame().getGamestate();
-		if (input.contains("X")) {
+		if (input.contains("A")) {
 			gameState.setMode(gameState.getArcadeMode());
 			gameState.setState(gameState.getOngoingGameState());
 			getThisGame().startGame();
-		} else if (input.contains("C")) {
+		} else if (input.contains("Z")) {
 			gameState.setMode(gameState.getCoopArcadeMode());
 			gameState.setState(gameState.getOngoingGameState());
 			getThisGame().startGame();
-		} else if (input.contains("B")) {
+		} else if (input.contains("S")) {
 			gameState.setMode(gameState.getBossMode());
 			gameState.setState(gameState.getOngoingGameState());
 			getThisGame().startGame();
-		} else if (input.contains("N")) {
+		} else if (input.contains("X")) {
 			gameState.setMode(gameState.getCoopBossMode());
+			gameState.setState(gameState.getOngoingGameState());
+			getThisGame().startGame();
+		} else if (input.contains("D")) {
+			gameState.setMode(gameState.getSurvivalMode());
+			gameState.setState(gameState.getOngoingGameState());
+			getThisGame().startGame();
+		} else if (input.contains("C")) {
+			gameState.setMode(gameState.getCoopSurvivalMode());
 			gameState.setState(gameState.getOngoingGameState());
 			getThisGame().startGame();
 		}
