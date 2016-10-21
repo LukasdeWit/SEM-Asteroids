@@ -71,7 +71,7 @@ public class GameTest {
 		thisGame.getScoreCounter().setScore(10);
 		thisGame.startGame();
 		assertEquals(0, thisGame.getScoreCounter().getScore(), 0);
-		assertEquals(10, thisGame.getScoreCounter().getHighscore(), 0);
+		assertEquals(0, thisGame.getScoreCounter().getHighscore(), 0);
 	}
 	
 	@Test
