@@ -96,12 +96,10 @@ public class Player extends AbstractEntity {
 			getThisGame().getAudio().stop(Audio.BOOST);
 			lives--;
 			if (lives <= 0) {
-				// we are out of lives, call gameover
 				getThisGame().over();
 			} else {
-				// we lose one live
 				respawnThePlayer();
-			}
+			}			
 		} else {
 			shielding--;
 			makeInvincible(INVINCIBILITY_START_TIME);
@@ -434,11 +432,7 @@ public class Player extends AbstractEntity {
 	public final void setPlayerTwo(final boolean playerTwo) {
 		this.playerTwo = playerTwo;
 		if (getThisGame().getGamestate().isCoop()) {
-			if (playerTwo) {
-				this.playerString = "Player 2";
-			} else {
-				this.playerString = "Player 1";
-			}
+			this.playerString = (playerTwo) ? "Player 2" : "Player 1";
 		}
 	}
 
