@@ -8,6 +8,8 @@ import game.Game;
  *
  */
 public class NoneMode extends AbstractMode {
+	private static final int INT = 0;
+
 	/**
 	 * Constructor for none mode.
 	 * @param game this mode belongs to.
@@ -39,5 +41,10 @@ public class NoneMode extends AbstractMode {
 	@Override
 	public final boolean isSurvival() {
 		return false;
+	}
+	
+	@Override
+	public final int toInt() {
+		return INT;
 	}
 }

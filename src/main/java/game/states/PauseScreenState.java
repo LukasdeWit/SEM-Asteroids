@@ -32,18 +32,14 @@ public class PauseScreenState extends AbstractState {
 	 * @param input - the input
 	 */
 	private void pauseScreen(final List<String> input) {
-		final Gamestate gameState = getThisGame().getGamestate();
-
-		if (input.contains("P") && System.currentTimeMillis() 
-				- getPauseTime() > MINIMAL_PAUSE_TIME) {
-			setPauseTime(System.currentTimeMillis());
+		final Gamestate gamestate = getThisGame().getGamestate();
+		if (input.contains("P") && gamestate.isSwitchTime()) {
 			Logger.getInstance().log("Game unpaused.");
-			gameState.setState(gameState.getOngoingGameState());
-		} else if (input.contains("R") && System.currentTimeMillis() 
-				- getRestartTime() > MINIMAL_RESTART_TIME) {
+			gamestate.setState(gamestate.getOngoingGameState());
+		} else if (input.contains("R") && gamestate.isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
 			getThisGame().startGame();
-			gameState.setState(gameState.getOngoingGameState());
+			gamestate.setState(gamestate.getOngoingGameState());
 		}
 	}
 }

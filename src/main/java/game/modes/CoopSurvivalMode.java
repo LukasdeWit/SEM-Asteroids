@@ -8,6 +8,7 @@ import game.Game;
  *
  */
 public class CoopSurvivalMode extends AbstractMode {
+	private static final int INT = 4;
 
 	/**
 	 * Constructor for coop survival mode.
@@ -42,4 +43,8 @@ public class CoopSurvivalMode extends AbstractMode {
 		return true;
 	}
 
+	@Override
+	public final int toInt() {
+		return INT;
+	}
 }

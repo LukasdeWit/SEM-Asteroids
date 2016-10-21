@@ -8,6 +8,8 @@ import game.Game;
  *
  */
 public class CoopArcadeMode extends AbstractMode {
+	private static final int INT = 2;
+
 	/**
 	 * Constructor for coop arcade mode.
 	 * @param game this belongs to
@@ -18,7 +20,7 @@ public class CoopArcadeMode extends AbstractMode {
 
 	@Override
 	public final String toString() {
-		return "Arcade Coop";
+		return "Coop Arcade";
 	}
 
 	@Override
@@ -40,5 +42,9 @@ public class CoopArcadeMode extends AbstractMode {
 	public final boolean isSurvival() {
 		return false;
 	}
-
+	
+	@Override
+	public final int toInt() {
+		return INT;
+	}
 }

@@ -8,6 +8,8 @@ import game.Game;
  *
  */
 public class SurvivalMode extends AbstractMode {
+	private static final int INT = 3;
+
 	/**
 	 * Constructor for survival mode.
 	 * @param game this mode belongs to
@@ -40,5 +42,9 @@ public class SurvivalMode extends AbstractMode {
 	public final boolean isSurvival() {
 		return true;
 	}
-
+	
+	@Override
+	public final int toInt() {
+		return INT;
+	}
 }

@@ -11,10 +11,6 @@ import game.Game;
  */
 public abstract class AbstractState {
 	private Game thisGame;
-	protected static final long MINIMAL_PAUSE_TIME = 300;
-	protected static final long MINIMAL_RESTART_TIME = 300;
-	private long pauseTime;
-	private long restartTime;
 	
 	/**
 	 * Constructor for abstract game state.
@@ -47,41 +43,9 @@ public abstract class AbstractState {
 	}
 	
 	/**
-	 * start game.
+	 * set the switch time to the current time.
 	 */
-	public final void start() {
-		restartTime = System.currentTimeMillis();
-		pauseTime = restartTime;
-		
-	}
-	
-	/**
-	 * @param restartTime the restartTime to set.
-	 */
-	public final void setRestartTime(final long restartTime) {
-		this.restartTime = restartTime;
-	}
-	
-	/**
-	 * getter for restarttime.
-	 * @return the restart time
-	 */
-	public final long getRestartTime() {
-		return restartTime;
-	}
-
-	/**
-	 * @param pauseTime the pauseTime to set.
-	 */
-	public final void setPauseTime(final long pauseTime) {
-		this.pauseTime = pauseTime;
-	}
-	
-	/**
-	 * getter for pausetime.
-	 * @return the pause time
-	 */
-	public final long getPauseTime() {
-		return pauseTime;
+	public final void switchScreen() {
+		thisGame.getGamestate().setScreenSwitchTime(System.currentTimeMillis());
 	}
 }

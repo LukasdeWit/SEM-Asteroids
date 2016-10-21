@@ -31,18 +31,15 @@ public class OngoingGameState extends AbstractState {
 	 * @param input - the input
 	 */
 	private void game(final List<String> input) {
-		final Gamestate gameState = getThisGame().getGamestate();
+		final Gamestate gamestate = getThisGame().getGamestate();
 
-		if (input.contains("R") && System.currentTimeMillis() 
-				- getRestartTime() > MINIMAL_RESTART_TIME) {
+		if (input.contains("R") && gamestate.isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
-			gameState.setMode(gameState.getNoneMode());
-			gameState.setState(gameState.getStartScreenState());
-		} else if (input.contains("P") && System.currentTimeMillis() 
-				- getPauseTime() > MINIMAL_PAUSE_TIME) {
-			setPauseTime(System.currentTimeMillis());
+			getThisGame().overSwitch();
+			getThisGame().getGamestate().getHighscoreState().setPressedButton("R");
+		} else if (input.contains("P") && gamestate.isSwitchTime()) {
 			Logger.getInstance().log("Game paused.");
-			gameState.setState(gameState.getPauseScreenState());
+			gamestate.setState(gamestate.getPauseScreenState());
 		}
 	}
 

@@ -8,6 +8,8 @@ import game.Game;
  *
  */
 public class ArcadeMode extends AbstractMode {
+	private static final int INT = 1;
+
 	/**
 	 * Constructor for arcademode.
 	 * @param game this mode belongs to.
@@ -18,7 +20,7 @@ public class ArcadeMode extends AbstractMode {
 
 	@Override
 	public final String toString() {
-		return "Single Player Arcade";
+		return "Arcade";
 	}
 
 	@Override
@@ -39,5 +41,10 @@ public class ArcadeMode extends AbstractMode {
 	@Override
 	public final boolean isSurvival() {
 		return false;
+	}
+	
+	@Override
+	public final int toInt() {
+		return INT;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import display.DisplayText;
 import game.Game;
 import game.Gamestate;
+import game.Logger;
 
 /**
  * Start screen state.
@@ -12,17 +13,27 @@ import game.Gamestate;
  *
  */
 public class StartScreenState extends AbstractState {
+	private Gamestate gamestate;
 	/**
 	 * Constructor for start screen state.
 	 * @param game this state belongs to
 	 */
 	public StartScreenState(final Game game) {
 		super(game);
+		gamestate = game.getGamestate();
 	}
 
 	@Override
 	public final void update(final List<String> input) {
-		startScreen(input);
+		gamestate = getThisGame().getGamestate();
+		if (gamestate.isSwitchTime()) {
+			if (input.contains("H")) {
+				Logger.getInstance().log("Go to highscores screen");
+				gamestate.setState(gamestate.getViewHighscoresState());
+			} else {
+				startScreen(input);
+			}
+		}
 		DisplayText.startScreen();		
 	}
 	
@@ -32,30 +43,29 @@ public class StartScreenState extends AbstractState {
 	 * @return 
 	 */
 	private void startScreen(final List<String> input) {
-		final Gamestate gameState = getThisGame().getGamestate();
 		if (input.contains("A")) {
-			gameState.setMode(gameState.getArcadeMode());
-			gameState.setState(gameState.getOngoingGameState());
+			gamestate.setMode(gamestate.getArcadeMode());
+			gamestate.setState(gamestate.getOngoingGameState());
 			getThisGame().startGame();
 		} else if (input.contains("Z")) {
-			gameState.setMode(gameState.getCoopArcadeMode());
-			gameState.setState(gameState.getOngoingGameState());
+			gamestate.setMode(gamestate.getCoopArcadeMode());
+			gamestate.setState(gamestate.getOngoingGameState());
 			getThisGame().startGame();
 		} else if (input.contains("S")) {
-			gameState.setMode(gameState.getBossMode());
-			gameState.setState(gameState.getOngoingGameState());
+			gamestate.setMode(gamestate.getSurvivalMode());
+			gamestate.setState(gamestate.getOngoingGameState());
 			getThisGame().startGame();
 		} else if (input.contains("X")) {
-			gameState.setMode(gameState.getCoopBossMode());
-			gameState.setState(gameState.getOngoingGameState());
+			gamestate.setMode(gamestate.getCoopSurvivalMode());
+			gamestate.setState(gamestate.getOngoingGameState());
 			getThisGame().startGame();
 		} else if (input.contains("D")) {
-			gameState.setMode(gameState.getSurvivalMode());
-			gameState.setState(gameState.getOngoingGameState());
+			gamestate.setMode(gamestate.getBossMode());
+			gamestate.setState(gamestate.getOngoingGameState());
 			getThisGame().startGame();
 		} else if (input.contains("C")) {
-			gameState.setMode(gameState.getCoopSurvivalMode());
-			gameState.setState(gameState.getOngoingGameState());
+			gamestate.setMode(gamestate.getCoopBossMode());
+			gamestate.setState(gamestate.getOngoingGameState());
 			getThisGame().startGame();
 		}
 	}

@@ -8,6 +8,7 @@ import game.Game;
  *
  */
 public class CoopBossMode extends AbstractMode {
+	private static final int INT = 6;
 
 	/**
 	 * Constructor for coop boss mode.
@@ -19,7 +20,7 @@ public class CoopBossMode extends AbstractMode {
 
 	@Override
 	public final String toString() {
-		return "Boss Coop";
+		return "Coop Boss";
 	}
 
 	@Override
@@ -41,5 +42,9 @@ public class CoopBossMode extends AbstractMode {
 	public final boolean isSurvival() {
 		return false;
 	}
-
+	
+	@Override
+	public final int toInt() {
+		return INT;
+	}
 }

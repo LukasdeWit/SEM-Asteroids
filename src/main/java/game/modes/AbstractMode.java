@@ -25,6 +25,12 @@ public abstract class AbstractMode {
 	public abstract String toString();
 	
 	/**
+	 * give the number of this mode.
+	 * @return the number
+	 */
+	public abstract int toInt();
+	
+	/**
 	 * Method that returns whether the mode is a coop mode.
 	 * @return true when it's a coop mode
 	 */

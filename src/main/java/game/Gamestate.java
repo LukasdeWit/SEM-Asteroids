@@ -1,11 +1,13 @@
 package game;
 
+import java.util.List;
+
 import game.modes.AbstractMode;
+import game.modes.ArcadeMode;
 import game.modes.BossMode;
 import game.modes.CoopArcadeMode;
 import game.modes.CoopBossMode;
 import game.modes.CoopSurvivalMode;
-import game.modes.ArcadeMode;
 import game.modes.NoneMode;
 import game.modes.SurvivalMode;
 import game.states.AbstractState;
@@ -13,21 +15,24 @@ import game.states.HighscoreScreenState;
 import game.states.OngoingGameState;
 import game.states.PauseScreenState;
 import game.states.StartScreenState;
-
-import java.util.List;
+import game.states.ViewHighscoresState;
 
 /**
  * This class handles the switching of gamestates.
  * @author Kibo
  *
  */
-public final class Gamestate {	
+public final class Gamestate {
+	private static final String[] MODE_STRINGS = 
+		{"none", "arcade", "coop arcade", "survival", "coop survival", "boss", "coop boss"};
+	private static final long MINIMAL_SWITCH_TIME = 300;
 	// states
 	private AbstractState currentState;
 	private final HighscoreScreenState highscoreScreenState;
 	private final OngoingGameState ongoingGameState;
 	private final PauseScreenState pauseScreenState;
 	private final StartScreenState startScreenState;
+	private final ViewHighscoresState viewHighscoresState;
 	
 	// modes
 	private AbstractMode currentMode;
@@ -38,17 +43,23 @@ public final class Gamestate {
 	private final CoopBossMode coopBossMode;
 	private final SurvivalMode survivalMode;
 	private final CoopSurvivalMode coopSurvivalMode;
+	private long screenSwitchTime;
 		
 	/**
 	 * constructor.
 	 * @param thisGame this game
 	 */
-	public Gamestate(final Game thisGame) {
+	public Gamestate(final Game thisGame) {	
+		screenSwitchTime = System.currentTimeMillis();
+		
 		startScreenState = new StartScreenState(thisGame);
 		pauseScreenState = new PauseScreenState(thisGame);
 		ongoingGameState = new OngoingGameState(thisGame);
 		highscoreScreenState = new HighscoreScreenState(thisGame);
+		viewHighscoresState = new ViewHighscoresState(thisGame);
+		
 		currentState = startScreenState;
+		
 		coopArcadeMode = new CoopArcadeMode(thisGame);
 		noneMode = new NoneMode(thisGame);
 		arcadeMode = new ArcadeMode(thisGame);
@@ -56,22 +67,32 @@ public final class Gamestate {
 		coopBossMode = new CoopBossMode(thisGame);
 		survivalMode = new SurvivalMode(thisGame);
 		coopSurvivalMode = new CoopSurvivalMode(thisGame);
+		
 		currentMode = noneMode;
 	}
 	
 	/**
-	 * start game.
-	 */
-	public void start() {
-		currentState.start();
-	}
-	
-	/**
-	 * update the gamemodes.
+	 * update the states.
 	 * @param input - input
 	 */
 	public void update(final List<String> input) {
 		currentState.update(input);
+	}
+	
+	/**
+	 * makes modeInt into string.
+	 * @param modeInt - the int of the mode
+	 * @return the string of the mode
+	 */
+	public String intToString(final int modeInt) {
+		return MODE_STRINGS[modeInt];
+	}
+	
+	/**
+	 * @return true if time to switch screens.
+	 */
+	public boolean isSwitchTime() {
+		return System.currentTimeMillis() - screenSwitchTime > MINIMAL_SWITCH_TIME;
 	}
 
 
@@ -126,25 +147,12 @@ public final class Gamestate {
 	}
 	
 	/**
-	 * @param restartTime the restartTime to set
-	 */
-	public void setRestartTime(final long restartTime) {
-		currentState.setRestartTime(restartTime);
-	}
-
-	/**
-	 * @param pauseTime the pauseTime to set
-	 */
-	public void setPauseTime(final long pauseTime) {
-		currentState.setPauseTime(pauseTime);
-	}
-	
-	/**
 	 * Set the current state.
 	 * @param state the gamestate should be
 	 */
 	public void setState(final AbstractState state) {
 		this.currentState = state;
+		screenSwitchTime = System.currentTimeMillis();
 	}
 	
 	/**
@@ -219,6 +227,13 @@ public final class Gamestate {
 	}
 	
 	/**
+	 * @param screenSwitchTime the screenSwitchTime to set
+	 */
+	public void setScreenSwitchTime(final long screenSwitchTime) {
+		this.screenSwitchTime = screenSwitchTime;
+	}
+	
+	/**
 	 * @return survival mode
 	 */
 	public SurvivalMode getSurvivalMode() {
@@ -226,9 +241,16 @@ public final class Gamestate {
 	}
 	
 	/**
-	 * @return coop survival mode
+	 * @return the coop survival mode
 	 */
 	public CoopSurvivalMode getCoopSurvivalMode() {
 		return coopSurvivalMode;
+	}
+
+	/**
+	 * @return the viewHighscoresState
+	 */
+	public ViewHighscoresState getViewHighscoresState() {
+		return viewHighscoresState;
 	}
 }

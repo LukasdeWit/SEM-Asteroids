@@ -8,6 +8,8 @@ import game.Game;
  *
  */
 public class BossMode extends AbstractMode {
+	private static final int INT = 5;
+
 	/**
 	 * Constructor for bossmode.
 	 * @param game this belongs to
@@ -18,7 +20,7 @@ public class BossMode extends AbstractMode {
 
 	@Override
 	public final String toString() {
-		return "None";
+		return "Boss";
 	}
 
 	@Override
@@ -39,5 +41,10 @@ public class BossMode extends AbstractMode {
 	@Override
 	public final boolean isSurvival() {
 		return false;
+	}
+	
+	@Override
+	public final int toInt() {
+		return INT;
 	}
 }

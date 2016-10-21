@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import display.DisplayEntity;
-import game.Audio;
 import entity.builders.BulletBuilder;
+import game.Audio;
 import game.Game;
 import game.Logger;
 import game.Spawner;
@@ -101,14 +101,17 @@ public class Saucer extends AbstractEntity {
 	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
-		checkEnd();
-		wrapAround();
+		if (!checkEnd()) {
+			wrapAround();
+		}
 		changeDirection();
 		shoot();
-		if (isSmall()) {
-			getThisGame().getAudio().play(Audio.UFOSMALL);
-		} else {
-			getThisGame().getAudio().play(Audio.UFOBIG);
+		if (getThisGame().getGamestate().getOngoingGameState() == getThisGame().getGamestate().getState()) {
+			if (isSmall()) {
+				getThisGame().getAudio().play(Audio.UFOSMALL);
+			} else {
+				getThisGame().getAudio().play(Audio.UFOBIG);
+			}
 		}
 	}
 
@@ -194,11 +197,14 @@ public class Saucer extends AbstractEntity {
 
 	/**
 	 * Destroy this if it's outside the screen.
+	 * @return true if it is the end
 	 */
-	private void checkEnd() {
+	private boolean checkEnd() {
 		if (getX() > getThisGame().getScreenX() || getX() < 0) {
 			getThisGame().destroy(this);
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -240,23 +246,23 @@ public class Saucer extends AbstractEntity {
 	 */
 	@Override
 	public final void onDeath() {
-		int points;
-		if (Float.compare(SMALL_RADIUS, getRadius()) >= 0) {
-			points = SMALL_SCORE;
-			getThisGame().getAudio().playMultiple(Audio.SMALLEXPLOSION);
-		} else {
-			points = BIG_SCORE;
-			getThisGame().getAudio().playMultiple(Audio.MEDIUMEXPLOSION);
+		if (getX() < getThisGame().getScreenX() && getX() > 0) {
+			int points;
+			if (Float.compare(SMALL_RADIUS, getRadius()) >= 0) {
+				points = SMALL_SCORE;
+				getThisGame().getAudio().playMultiple(Audio.SMALLEXPLOSION);
+			} else {
+				points = BIG_SCORE;
+				getThisGame().getAudio().playMultiple(Audio.MEDIUMEXPLOSION);
+			}
+			getThisGame().addScore(points);
+			Particle.explosion(getX(), getY(), getThisGame());
 		}
-		
 		if (isSmall()) {
 			getThisGame().getAudio().stop(Audio.UFOSMALL);
 		} else {
 			getThisGame().getAudio().stop(Audio.UFOBIG);
 		}
-
-		getThisGame().addScore(points);
-		Particle.explosion(getX(), getY(), getThisGame());
 	}
 
 	/**

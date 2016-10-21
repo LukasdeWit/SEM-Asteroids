@@ -21,7 +21,7 @@ public final class DisplayHud {
     private static final double POWERUP_SLOT_ONE_X = 10;
     private static final double POWERUP_SLOT_Y = 60;
     private static final double POWERUP_SLOT_TWO_X = Game.getCanvasSize() - 10 - POWERUP_SLOT_SIZE;
-    private static final double[] LIVES_XY = new double[]{
+    private static final double[] LIVES_LINES = new double[]{
             0, 6,
             2, 0,
             4, 6,
@@ -95,7 +95,7 @@ public final class DisplayHud {
         for (int i = 0; i < lives; i++) {
             final int index = i;
             final double[] points = DisplayUtils.translate(t -> t * LIVES_SIZE + x + index * width * LIVES_SIZE,
-                    t -> t * LIVES_SIZE + y, LIVES_XY);
+                    t -> t * LIVES_SIZE + y, LIVES_LINES);
             final Polygon shape = new Polygon(points);
 
             shape.setFill(Color.WHITE);

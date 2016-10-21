@@ -1,11 +1,11 @@
 package game;
 
-import java.util.Random;
-
 import entity.Asteroid;
 import entity.Boss;
 import entity.Powerup;
 import entity.Saucer;
+
+import java.util.Random;
 
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.

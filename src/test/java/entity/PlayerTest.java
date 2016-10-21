@@ -16,7 +16,6 @@ import display.DisplayEntity;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
-import game.Gamestate;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
