@@ -17,11 +17,11 @@ public class TeleBoss extends Boss {
 	/**
 	 * The constructor for DoubleBoss.
 	 * 
-	 * @param x
-	 * @param y
-	 * @param dX
-	 * @param dY
-	 * @param thisGame
+	 * @param the x
+	 * @param the y
+	 * @param the dX
+	 * @param the dY
+	 * @param the Game
 	 */
 	public TeleBoss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
@@ -32,7 +32,7 @@ public class TeleBoss extends Boss {
 	 * The update method for TeleBoss.
 	 */
 	@Override
-	public void update(final List<String> input) {
+	public final void update(final List<String> input) {
 		teleport();
 		shoot();
 	}
@@ -40,7 +40,7 @@ public class TeleBoss extends Boss {
 	/**
 	 * The method that teleports a TeleBoss.
 	 */
-	private void teleport() {
+	private final void teleport() {
 		// TODO Auto-generated method stub
 		if (System.currentTimeMillis() - teleTime > TELEPORT_TIME) {
 			teleTime = System.currentTimeMillis();

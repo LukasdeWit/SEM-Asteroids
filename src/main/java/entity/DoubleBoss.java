@@ -16,11 +16,11 @@ public class DoubleBoss extends Boss {
 	/**
 	 * Constructor for DoubleBoss.
 	 * 
-	 * @param x
-	 * @param y
-	 * @param dX
-	 * @param dY
-	 * @param thisGame
+	 * @param the x
+	 * @param the y
+	 * @param the dX
+	 * @param the dY
+	 * @param the Game
 	 */
 	public DoubleBoss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
