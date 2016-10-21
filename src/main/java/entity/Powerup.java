@@ -63,6 +63,18 @@ public class Powerup extends AbstractEntity {
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
 	}
+	
+	/**
+	 * Empty constructor for the powerup class.
+	 */
+	public Powerup() {
+		super();
+		setRadius(RADIUS);
+		Random random = new Random();
+		type = random.nextInt(TYPES);
+		startTime = System.currentTimeMillis();
+		pickupTime = 0;
+	}
 
 	/**
 	 * Behaviour when a Powerup is hit by an entity.
@@ -186,6 +198,13 @@ public class Powerup extends AbstractEntity {
 	public final void setPickupTime(final long pickupTime) {
 		this.pickupTime = pickupTime;
 	}
+	
+	/**
+	 * @return the type of powerup
+	 */
+	public final int getType() {
+		return this.type;
+	}
 
 	/**
 	 * @param type the type to set
@@ -220,5 +239,22 @@ public class Powerup extends AbstractEntity {
 	 */
 	public final void setStartTime(final long startTime) {
 		this.startTime = startTime;
+	}
+	
+	/**
+	 * @return a shallow copy of the Powerup, useful for making multiple copies
+	 */
+	public final Powerup shallowCopy() {
+		Powerup temp = new Powerup();
+		temp.setX(this.getX());
+		temp.setY(this.getY());
+		temp.setDX(this.getDX());
+		temp.setDY(this.getDY());
+		temp.setThisGame(this.getThisGame());
+		temp.setType(this.getType());
+		temp.setPlayer(this.getPlayer());
+		temp.setStartTime(this.startTime);
+		temp.setPickupTime(this.pickupTime);
+		return temp;
 	}
 }
