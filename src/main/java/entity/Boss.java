@@ -63,6 +63,27 @@ public class Boss extends AbstractEntity {
 		bBuilder.setShooter(this);
 		bBuilder.setFriendly(false);
 	}
+	
+	/**
+	 * Empty constructor for the Boss class.
+	 */
+	public Boss() {
+		super();
+		random = new Random();
+		setRadius(RADIUS);
+		dirChangeTime = System.currentTimeMillis();
+		shotTime = dirChangeTime;
+		currentLives = STARTING_LIVES;
+		int nextToRight = 0;
+		setPath(nextToRight, random.nextInt((int) PATHS));
+		
+		// Initialize the Bullet Builder
+		bBuilder = new BulletBuilder();
+		bBuilder.setPierce(0);
+		bBuilder.setThisGame(getThisGame());
+		bBuilder.setShooter(this);
+		bBuilder.setFriendly(false);
+	}
 
 	/**
 	 * Calculate new position of BossAngryAsteroid, get it to shoot, get it to
@@ -234,6 +255,13 @@ public class Boss extends AbstractEntity {
 	public final int getToRight() {
 		return toRight;
 	}
+	
+	/**
+	 * @param toRight the new toRight
+	 */
+	public final void setToRight(final int toRight) {
+		this.toRight = toRight;
+	}
 
 	/**
 	 * Gets the starting lives of the boss.
@@ -242,5 +270,35 @@ public class Boss extends AbstractEntity {
 	 */
 	public final int getStartingLives() {
 		return STARTING_LIVES;
+	}
+	
+	/**
+	 * @return the current amount of lives of the boss
+	 */
+	public final int getCurrentLives() {
+		return currentLives;
+	}
+	
+	/**
+	 * @param lives the new current amount of lives
+	 */
+	public final void setCurrentLives(final int lives) {
+		this.currentLives = lives;
+	}
+	
+	/**
+	 * @return a shallow copy of the Boss, useful for making multiple copies.
+	 */
+	public final Boss shallowCopy() {
+		final Boss temp = new Boss();
+		temp.setX(this.getX());
+		temp.setY(this.getY());
+		temp.setDX(this.getDX());
+		temp.setDY(this.getDY());
+		temp.setThisGame(this.getThisGame());
+		temp.setRadius(this.getRadius());
+		temp.setToRight(this.getToRight());
+		temp.setCurrentLives(this.getCurrentLives());
+		return temp;
 	}
 }
