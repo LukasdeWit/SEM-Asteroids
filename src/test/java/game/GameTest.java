@@ -36,8 +36,8 @@ public class GameTest {
 
 	@Before
 	public final void setUp() {
-		gamestate.setMode(Gamestate.getModeArcade());
 		thisGame.getScoreCounter().clearHighscores();
+		gamestate.setMode(gamestate.getArcadeMode());
 		thisGame.getScoreCounter().setScore(0);
 		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
@@ -66,6 +66,24 @@ public class GameTest {
 	}
 	
 	@Test
+	public final void testStartGame1(){
+		gamestate.setMode(gamestate.getCoopArcadeMode());
+		thisGame.getScoreCounter().setScore(10);
+		thisGame.startGame();
+		assertEquals(0, thisGame.getScoreCounter().getScore(), 0);
+		assertEquals(10, thisGame.getScoreCounter().getHighscore(), 0);
+	}
+	
+	@Test
+	public final void testStartGame2(){
+		thisGame.getScoreCounter().setScore(5);
+		thisGame.getScoreCounter().setHighscore("", 20);
+		thisGame.startGame();
+		assertEquals(0, thisGame.getScoreCounter().getScore(), 0);
+		assertEquals(20, thisGame.getScoreCounter().getHighscore(), 0);
+	}
+	
+	@Test
 	public final void testUpdate(){
 		thisGame.update(noInput);
 		assertTrue(Launcher.getRoot().getChildren().get(0) instanceof Rectangle);
@@ -81,7 +99,7 @@ public class GameTest {
 	
 	@Test
 	public final void testUpdateGame2(){
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		final Player p = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p);
 		thisGame.updateGame(noInput);
@@ -90,7 +108,7 @@ public class GameTest {
 	
 	@Test
 	public final void testUpdateGame3(){
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		final Player p = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p);
 		thisGame.setPlayerTwo(p);
@@ -163,7 +181,7 @@ public class GameTest {
 		thisGame.setPlayer(p1);
 		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		thisGame.over();
 		assertTrue(thisGame.getDestroyList().contains(p1));
 	}
@@ -176,7 +194,7 @@ public class GameTest {
 		final Player p2 = (Player) pBuilder.getResult();
 		p2.setLives(0);
 		thisGame.setPlayerTwo(p2);
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		thisGame.over();
 		assertEquals(2, thisGame.getDestroyList().size(), 0);
 	}
@@ -204,7 +222,7 @@ public class GameTest {
 		thisGame.setPlayer(p1);
 		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		thisGame.addScore(10000);
 		assertEquals(10000, thisGame.getScoreCounter().getScore(), 0);
 		assertEquals(4, p1.getLives(), 0);
@@ -228,7 +246,7 @@ public class GameTest {
 		final Player p2 = (Player) pBuilder.getResult();
 		p2.setLives(0);
 		thisGame.setPlayerTwo(p2);
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		thisGame.addScore(10000);
 		assertEquals(0, thisGame.getScoreCounter().getScore(), 0);
 		assertEquals(0, p1.getLives(), 0);
@@ -251,7 +269,7 @@ public class GameTest {
 		thisGame.setPlayer(p1);
 		final Player p2 = (Player) pBuilder.getResult();
 		thisGame.setPlayerTwo(p2);
-		gamestate.setMode(Gamestate.getModeArcadeCoop());
+		gamestate.setMode(gamestate.getCoopArcadeMode());
 		thisGame.addScore(10000);
 		assertEquals(10000, thisGame.getScoreCounter().getScore(), 0);
 		assertEquals(1, p1.getLives(), 0);

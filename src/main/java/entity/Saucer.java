@@ -4,10 +4,9 @@ import java.util.List;
 import java.util.Random;
 
 import display.DisplayEntity;
-import game.Audio;
 import entity.builders.BulletBuilder;
+import game.Audio;
 import game.Game;
-import game.Gamestate;
 import game.Logger;
 import game.Spawner;
 
@@ -107,7 +106,7 @@ public class Saucer extends AbstractEntity {
 		}
 		changeDirection();
 		shoot();
-		if (Gamestate.getStateGame() == getThisGame().getGamestate().getState()) {
+		if (getThisGame().getGamestate().getOngoingGameState() == getThisGame().getGamestate().getState()) {
 			if (isSmall()) {
 				getThisGame().getAudio().play(Audio.UFOSMALL);
 			} else {

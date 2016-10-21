@@ -35,9 +35,9 @@ public class ScoreCounter {
 	 * Write existing score as highscore if larger than current highscore.
 	 * @param name - the name
 	 */
-	protected final void startGame(final String name) {
-		if (this.score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode())) {
-			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode());
+	public final void startGame(final String name) {
+		if (this.score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt())) {
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode().toInt());
 			highscoreStore.writeScores();
 		}		
 		score = 0;
@@ -48,7 +48,7 @@ public class ScoreCounter {
 	 */
 	public final void displayScore() {
 		DisplayText.score(score);
-		DisplayText.highscore(highscoreStore.getHighestScore(thisGame.getGamestate().getMode()));
+		DisplayText.highscore(getHighscore());
 	}
 
 	/**
@@ -58,9 +58,8 @@ public class ScoreCounter {
 	public final String[][] highScoresToStrings() {
 		final List<HighScore> highscores = highscoreStore.getHighScores();
 		final String[][] out = new String[THREE][highscores.size()];
-		final String[] modeString = Gamestate.getModeString();
 		for (int i = 0; i < highscores.size(); i++) {
-			out[0][i] = modeString[highscores.get(i).getGamemode()];
+			out[0][i] = getThisGame().getGamestate().intToString(i + 1);
 			out[1][i] = Long.toString(highscores.get(i).getScore());
 			out[2][i] = highscores.get(i).getUserName();
 		}
@@ -71,7 +70,7 @@ public class ScoreCounter {
 	 * @return the high score
 	 */
 	public final long getHighscore() {
-		return highscoreStore.getHighestScore(thisGame.getGamestate().getMode());
+		return highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
 	}
 	
 	/**
@@ -87,7 +86,7 @@ public class ScoreCounter {
 	 * @return true if the score is better than the highscore
 	 */
 	public final boolean isHighscore() {
-		return score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode());
+		return score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
 	}
 	
 	/**
@@ -103,7 +102,7 @@ public class ScoreCounter {
 	 */
 	protected final void updateHighscore(final String name) {
 		if (isHighscore()) {
-			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode());
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode().toInt());
 			highscoreStore.writeScores();
 		}
 	}
@@ -137,7 +136,7 @@ public class ScoreCounter {
 	 * @param highscore the highscore to set
 	 */
 	public final void setHighscore(final String name, final long highscore) {
-		highscoreStore.addHighScore(name, highscore, thisGame.getGamestate().getMode());
+		highscoreStore.addHighScore(name, highscore, thisGame.getGamestate().getMode().toInt());
 	}
 	
 	/**

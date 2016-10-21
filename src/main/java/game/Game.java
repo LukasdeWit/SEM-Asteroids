@@ -58,7 +58,7 @@ public final class Game {
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
-		gamestate.start();
+		scorecounter.setScore(0);
 		entities.clear();
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
@@ -101,7 +101,9 @@ public final class Game {
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
 		gamestate.update(input);
-		DisplayText.wave(spawner.getWave());
+		if (gamestate.getMode().isArcade()) {
+			DisplayText.wave(spawner.getWave());
+		}
 	}
 
 	/**
@@ -210,11 +212,11 @@ public final class Game {
 		}
 		if (scorecounter.isNotHighscore()) {
 			scorecounter.setScore(0);
-			gamestate.setMode(Gamestate.getModeNone());
-			gamestate.setState(Gamestate.getStateStartScreen());
+			gamestate.setMode(gamestate.getNoneMode());
+			gamestate.setState(gamestate.getStartScreenState());
 		} else {
-			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
-			gamestate.setState(Gamestate.getStateHighscoreScreen());
+			Logger.getInstance().log("New highscore is " + scorecounter.getScore() + ".");
+			gamestate.setState(gamestate.getHighscoreState());
 		}
 		audio.stopAll();
 	}
@@ -402,13 +404,6 @@ public final class Game {
 	public Gamestate getGamestate() {
 		return gamestate;
 	}
-
-	/**
-	 * @return the spawner
-	 */
-	public Spawner getSpawner() {
-		return spawner;
-	}
 	
 	/**
 	 * @return the audio
@@ -422,5 +417,12 @@ public final class Game {
 	 */
 	public ScoreCounter getScoreCounter() {
 		return scorecounter;
+	}
+
+	/**
+	 * @return the spawner
+	 */
+	public Spawner getSpawner() {
+		return spawner;
 	}
 }

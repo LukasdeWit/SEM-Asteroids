@@ -118,11 +118,11 @@ public final class DisplayText {
 	public static void startScreen() {
 		drawText(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, LARGE_FONT, "asteroids");
 		drawText(PRESS_START_TEXT_X, START_ARCADE_TEXT_Y, "press a to start arcade");
-		drawText(PRESS_START_TEXT_X, START_SURVIVAL_TEXT_Y, "press d to start survival");
-		drawText(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSS_Y, "press s for Boss Mode");
-		drawText(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSSCOOP_Y, "press x for Coop Boss Mode");
+		drawText(PRESS_START_TEXT_X, START_SURVIVAL_TEXT_Y, "press s to start survival");
+		drawText(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSS_Y, "press d for Boss Mode");
+		drawText(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSSCOOP_Y, "press c for Coop Boss Mode");
 		drawText(PRESS_START_TEXT_X, START_ARCADE_COOP_TEXT_Y, "press z to start Arcade coop");
-		drawText(PRESS_START_TEXT_X, START_SURVIVAL_COOP_TEXT_Y, "press c to start survival Coop");
+		drawText(PRESS_START_TEXT_X, START_SURVIVAL_COOP_TEXT_Y, "press x to start survival Coop");
 		drawText(PRESS_START_TEXT_X, VIEW_HIGHSCORES_TEXT_Y, "press h to view highscores");
 	}
 

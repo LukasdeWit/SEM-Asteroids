@@ -19,7 +19,7 @@ public class ScoreCounterTest {
 	@Before
 	public final void setUp() {
 		sc.clearHighscores();
-		gamestate.setMode(Gamestate.getModeArcade());
+		gamestate.setMode(gamestate.getArcadeMode());
 		sc.setScore(0);
 		sc.setHighscore("", 0);
 	}

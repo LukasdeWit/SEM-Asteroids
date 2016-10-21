@@ -92,10 +92,10 @@ public class HighscoreStore {
      * adds a <strong>nonnull</strong> highscore to the store.
      * @param name - the name
      * @param score - the score we want to add as a highscore.
-     * @param gamemode - the current gamemode
+     * @param modeInt - the current gamemode
      */
-    public final void addHighScore(final String name, final long score, final int gamemode) {
-    	highScores[gamemode - 1] = new HighScore(name, score, gamemode, gamemode);
+    public final void addHighScore(final String name, final long score, final int modeInt) {
+    	highScores[modeInt - 1] = new HighScore(name, score, modeInt, modeInt);
     }
 
     /**
