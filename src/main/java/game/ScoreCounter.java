@@ -36,7 +36,7 @@ public class ScoreCounter {
 	 * @param name - the name
 	 */
 	public final void startGame(final String name) {
-		if (this.score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt())) {
+		if (this.score > getHighscore()) {
 			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode().toInt());
 			highscoreStore.writeScores();
 		}		

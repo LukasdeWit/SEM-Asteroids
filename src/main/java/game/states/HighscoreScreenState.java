@@ -43,8 +43,8 @@ public class HighscoreScreenState extends AbstractState {
 		final Gamestate gamestate = getThisGame().getGamestate();
 		if (namePos != 0 && input.contains("ENTER") && getThisGame().getGamestate().isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
-			getThisGame().startGame();
 			getThisGame().getScoreCounter().startGame(nameString());
+			getThisGame().startGame();
 			name = new char[INPUT_LENGTH];
 			namePos = 0;
 			gamestate.setMode(gamestate.getNoneMode());
