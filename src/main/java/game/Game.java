@@ -13,6 +13,7 @@ import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
 import entity.builders.PlayerBuilder;
+import game.highscore.HighscoreStore;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -49,15 +50,15 @@ public final class Game {
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		gamestate = new Gamestate(this);
+		scorecounter = new ScoreCounter(this, new HighscoreStore());
 		audio = new Audio();
-		scorecounter = new ScoreCounter(this);
 	}
 
 	/**
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
-		gamestate.start();
+		scorecounter.setScore(0);
 		entities.clear();
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
@@ -84,8 +85,7 @@ public final class Game {
 			pBuilder.setThisGame(this);
 			player = (Player) pBuilder.getResult();
 			entities.add(player);
-		} 
-		scorecounter.startGame();
+		}
 		spawner.reset();
 		Logger.getInstance().log(gamestate.toString() + " game started.");
 	}
@@ -101,7 +101,9 @@ public final class Game {
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
 		gamestate.update(input);
-		DisplayText.wave(spawner.getWave());
+		if (gamestate.getMode().isArcade()) {
+			DisplayText.wave(spawner.getWave());
+		}
 	}
 
 	/**
@@ -196,17 +198,25 @@ public final class Game {
 			destroy(player);
 			return;
 		}
+		Logger.getInstance().log("Game over.");
+		overSwitch();
+	}
+
+	/**
+	 * Switches the gamemode when game is over.
+	 */
+	public void overSwitch() {
 		destroy(player);
 		if (gamestate.isCoop()) {
 			destroy(playerTwo);
 		}
-		Logger.getInstance().log("Game over.");
 		if (scorecounter.isNotHighscore()) {
-			gamestate.setState(Gamestate.getStateStartScreen());
+			scorecounter.setScore(0);
+			gamestate.setMode(gamestate.getNoneMode());
+			gamestate.setState(gamestate.getStartScreenState());
 		} else {
-			scorecounter.updateHighscore();
-			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
-			gamestate.setState(Gamestate.getStateHighscoreScreen());
+			Logger.getInstance().log("New highscore is " + scorecounter.getScore() + ".");
+			gamestate.setState(gamestate.getHighscoreState());
 		}
 		audio.stopAll();
 	}
@@ -394,13 +404,6 @@ public final class Game {
 	public Gamestate getGamestate() {
 		return gamestate;
 	}
-
-	/**
-	 * @return the spawner
-	 */
-	public Spawner getSpawner() {
-		return spawner;
-	}
 	
 	/**
 	 * @return the audio
@@ -414,5 +417,12 @@ public final class Game {
 	 */
 	public ScoreCounter getScoreCounter() {
 		return scorecounter;
+	}
+
+	/**
+	 * @return the spawner
+	 */
+	public Spawner getSpawner() {
+		return spawner;
 	}
 }

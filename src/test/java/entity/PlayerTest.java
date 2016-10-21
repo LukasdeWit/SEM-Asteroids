@@ -17,7 +17,6 @@ import entity.builders.AsteroidBuilder;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
-import game.Gamestate;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
@@ -40,7 +39,7 @@ public class PlayerTest {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
-		thisGame.getGamestate().setMode(Gamestate.getModeArcade());
+		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
 		Launcher.getRoot().getChildren().clear();
 		
 		pBuilder = new PlayerBuilder();
@@ -120,7 +119,7 @@ public class PlayerTest {
 
 	@Test
 	public void testOnHit5() {
-		thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
+		thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
 		player.onHit();
 		assertEquals(thisGame.getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
 	}
@@ -149,7 +148,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testGainLife4() {
-		thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
+		thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
 		player.setLives(0);
 		player.gainLife();
 		assertEquals(1,player.getLives(),0);
@@ -439,7 +438,7 @@ public class PlayerTest {
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);
 		if (coop) {
-			thisGame.getGamestate().setMode(Gamestate.getModeArcadeCoop());
+			thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
 		}
 		player.setInvincibleStart(0);
 		player.update(input);
