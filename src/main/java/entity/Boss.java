@@ -86,7 +86,7 @@ public class Boss extends AbstractEntity {
 	 * Change the boss's direction randomly at certain times in a random
 	 * direction.
 	 */
-	private final void changeDirection() {
+	private void changeDirection() {
 		if (System.currentTimeMillis() - dirChangeTime > CHANGE_DIR_TIME) {
 			dirChangeTime = System.currentTimeMillis();
 			setPath(random.nextInt((int) PATHS));
