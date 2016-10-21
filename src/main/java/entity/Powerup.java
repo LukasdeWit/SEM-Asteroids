@@ -4,7 +4,6 @@ import java.util.Random;
 
 import display.DisplayEntity;
 import display.DisplayHud;
-import game.Game;
 import game.Logger;
 
 /**
@@ -47,22 +46,6 @@ public class Powerup extends AbstractEntity {
 			"a piercing bullet",
 			"a minigun"
 	};
-	
-	/**
-	 * Constructor for the Powerup class.
-	 *
-	 * @param x        location of Powerup along the X-axis.
-	 * @param y        location of Powerup along the Y-axis.
-	 * @param thisGame the game this particle belongs to
-	 */
-	public Powerup(final float x, final float y, final Game thisGame) {
-		super(x, y, 0, 0, thisGame);
-		final Random random = new Random();
-		setRadius(RADIUS);
-		type = random.nextInt(TYPES);
-		startTime = System.currentTimeMillis();
-		pickupTime = 0;
-	}
 	
 	/**
 	 * Empty constructor for the powerup class.

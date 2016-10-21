@@ -8,6 +8,7 @@ import entity.Powerup;
 import entity.Saucer;
 import entity.builders.AsteroidBuilder;
 import entity.builders.BossBuilder;
+import entity.builders.PowerupBuilder;
 import entity.builders.SaucerBuilder;
 
 /**
@@ -25,6 +26,7 @@ public final class Spawner {
 	private final SaucerBuilder sBuilder;
 	private final AsteroidBuilder aBuilder;
 	private final BossBuilder bBuilder;
+	private final PowerupBuilder pBuilder;
 
 	private static final long SAUCER_TIME = 20000;
 	private static final long POWERUP_TIME = 10000;
@@ -62,6 +64,11 @@ public final class Spawner {
 		bBuilder.setThisGame(thisGame);
 		bBuilder.setDX(0);
 		bBuilder.setDY(0);
+		
+		pBuilder = new PowerupBuilder();
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setDX(0);
+		pBuilder.setDY(0);
 	}
 
 	/**
@@ -180,10 +187,10 @@ public final class Spawner {
 	 * adds a Powerup with random X and Y and type.
 	 */
 	private void spawnPowerup() {
-		thisGame.create(new Powerup(thisGame.getScreenY()
-				* (float) Math.random(),
-				thisGame.getScreenY()
-						* (float) Math.random(), thisGame));
+		pBuilder.setX(thisGame.getScreenX() * (float) Math.random());	
+		pBuilder.setY(thisGame.getScreenY() * (float) Math.random());
+		Powerup p = (Powerup) pBuilder.getResult();
+		thisGame.create(p);
 	}
 
 	/**
