@@ -432,7 +432,11 @@ public class Player extends AbstractEntity {
 	public final void setPlayerTwo(final boolean playerTwo) {
 		this.playerTwo = playerTwo;
 		if (getThisGame().getGamestate().isCoop()) {
-			this.playerString = (playerTwo) ? "Player 2" : "Player 1";
+			if (playerTwo) {
+				this.playerString = "Player 2";
+			} else {
+				this.playerString = "Player 1";
+			}
 		}
 	}
 
