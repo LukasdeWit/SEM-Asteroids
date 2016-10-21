@@ -101,7 +101,9 @@ public final class Game {
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
 		gamestate.update(input);
-		DisplayText.wave(spawner.getWave());
+		if (gamestate.getMode().isArcade()) {
+			DisplayText.wave(spawner.getWave());
+		}
 	}
 
 	/**
@@ -202,11 +204,11 @@ public final class Game {
 		}
 		Logger.getInstance().log("Game over.");
 		if (scorecounter.isNotHighscore()) {
-			gamestate.setState(Gamestate.getStateStartScreen());
+			gamestate.setState(gamestate.getStartScreenState());
 		} else {
 			scorecounter.updateHighscore();
 			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
-			gamestate.setState(Gamestate.getStateHighscoreScreen());
+			gamestate.setState(gamestate.getHighscoreState());
 		}
 		audio.stopAll();
 	}
@@ -394,13 +396,6 @@ public final class Game {
 	public Gamestate getGamestate() {
 		return gamestate;
 	}
-
-	/**
-	 * @return the spawner
-	 */
-	public Spawner getSpawner() {
-		return spawner;
-	}
 	
 	/**
 	 * @return the audio
@@ -414,5 +409,12 @@ public final class Game {
 	 */
 	public ScoreCounter getScoreCounter() {
 		return scorecounter;
+	}
+
+	/**
+	 * @return the spawner
+	 */
+	public Spawner getSpawner() {
+		return spawner;
 	}
 }
