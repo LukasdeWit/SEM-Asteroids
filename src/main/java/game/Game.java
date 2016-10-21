@@ -101,7 +101,9 @@ public final class Game {
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
 		gamestate.update(input);
-		DisplayText.wave(spawner.getWave());
+		if (gamestate.getMode().isArcade()) {
+			DisplayText.wave(spawner.getWave());
+		}
 	}
 
 	/**

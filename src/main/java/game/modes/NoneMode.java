@@ -32,12 +32,12 @@ public class NoneMode extends AbstractMode {
 	}
 
 	@Override
-	public boolean isArcade() {
+	public final boolean isArcade() {
 		return false;
 	}
 
 	@Override
-	public boolean isSurvival() {
+	public final boolean isSurvival() {
 		return false;
 	}
 }
