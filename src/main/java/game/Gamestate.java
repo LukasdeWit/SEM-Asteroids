@@ -1,10 +1,5 @@
 package game;
 
-import game.gamestates.AbstractState;
-import game.gamestates.HighscoreScreenState;
-import game.gamestates.OngoingGameState;
-import game.gamestates.PauseScreenState;
-import game.gamestates.StartScreenState;
 import game.modes.AbstractMode;
 import game.modes.BossMode;
 import game.modes.CoopArcadeMode;
@@ -13,6 +8,11 @@ import game.modes.CoopSurvivalMode;
 import game.modes.ArcadeMode;
 import game.modes.NoneMode;
 import game.modes.SurvivalMode;
+import game.states.AbstractState;
+import game.states.HighscoreScreenState;
+import game.states.OngoingGameState;
+import game.states.PauseScreenState;
+import game.states.StartScreenState;
 
 import java.util.List;
 

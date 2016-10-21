@@ -1,4 +1,4 @@
-package game.gamestates;
+package game.states;
 
 import java.util.List;
 
