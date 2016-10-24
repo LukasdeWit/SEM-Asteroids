@@ -83,7 +83,7 @@ public class PowerupTest {
 		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(1);
 		powerup.collide(p);
-		assertTrue(thisGame.getDestroyList().contains(powerup));
+		assertFalse(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
