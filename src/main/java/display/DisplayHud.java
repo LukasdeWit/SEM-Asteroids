@@ -3,10 +3,14 @@ package display;
 import entity.Powerup;
 import game.Game;
 import game.Launcher;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.TriangleMesh;
+import javafx.scene.shape.VertexFormat;
 
 /**
  * Created by douwe on 11-10-16.
@@ -69,18 +73,21 @@ public final class DisplayHud {
      * @param p - the powerup
      */
     public static void powerup(final Powerup p) {
-        final Circle c = new Circle(POWERUP_SLOT_SIZE / 2, POWERUP_SLOT_SIZE / 2, POWERUP_SIZE / 2);
-        c.setFill(Color.WHITE);
+        //final Circle c = new Circle(POWERUP_SLOT_SIZE / 2, POWERUP_SLOT_SIZE / 2, POWERUP_SIZE / 2);
+        //c.setFill(Color.WHITE);
         if (p.getPlayer() == null) {
             return;
         }
+        final Group g = p.getPowerupShape();
+        //g.setTranslateX(2.5f);
+        //g.setTranslateY(2.5f);
         if (p.getPlayer().isPlayerTwo()) {
-            c.setTranslateX(POWERUP_SLOT_TWO_X);
+            g.setTranslateX(POWERUP_SLOT_TWO_X + 2.5f);
         } else {
-            c.setTranslateX(POWERUP_SLOT_ONE_X);
+            g.setTranslateX(POWERUP_SLOT_ONE_X + 2.5f);
         }
-        c.setTranslateY(POWERUP_SLOT_Y);
-        Launcher.getRoot().getChildren().add(c);
+        g.setTranslateY(POWERUP_SLOT_Y + 2.5f);
+        Launcher.getRoot().getChildren().add(g);
     }
 
     /**
@@ -103,4 +110,93 @@ public final class DisplayHud {
             Launcher.getRoot().getChildren().add(shape);
         }
     }
+
+	public static Group extraLifeGroup() {
+		final Group g = new Group();
+		final Line l1 = new Line(0,10,20,10);
+		l1.setStroke(Color.WHITE);
+		l1.setStrokeWidth(4);
+		g.getChildren().add(l1);
+		final Line l2 = new Line(10,0,10,20);
+		l2.setStroke(Color.WHITE);
+		l2.setStrokeWidth(4);
+		g.getChildren().add(l2);
+		return g;
+	}
+
+	public static Group shieldGroup() {
+		final Group g = new Group();
+		final Circle c = new Circle(10, 10, 10, Color.BLACK);
+		c.setStroke(Color.WHITE);
+		c.setStrokeWidth(2);
+		g.getChildren().add(c);
+		return g;
+	}
+
+	public static Group bulletSizeGroup() {
+		final Group g = new Group();
+		final Circle c = new Circle(10, 10, 8, Color.WHITE);
+		c.setStroke(Color.WHITE);
+		c.setStrokeWidth(2);
+		g.getChildren().add(c);
+		return g;
+	}
+
+	public static Group tripleShotGroup() {
+		final Group g = new Group();
+		final Circle c1 = new Circle(4, 14, 2, Color.WHITE);
+		c1.setStroke(Color.WHITE);
+		c1.setStrokeWidth(2);
+		g.getChildren().add(c1);
+		final Circle c2 = new Circle(16, 14, 2, Color.WHITE);
+		c2.setStroke(Color.WHITE);
+		c2.setStrokeWidth(2);
+		g.getChildren().add(c2);
+		final Circle c3 = new Circle(10, 4, 2, Color.WHITE);
+		c3.setStroke(Color.WHITE);
+		c3.setStrokeWidth(2);
+		g.getChildren().add(c3);
+		return g;
+	}
+
+	public static Group piercingGroup() {
+		final Group g = new Group();
+		final Line l1 = new Line(0,12,5,12);
+		l1.setStroke(Color.WHITE);
+		l1.setStrokeWidth(4);
+		g.getChildren().add(l1);
+		final Line l2 = new Line(15,12,20,12);
+		l2.setStroke(Color.WHITE);
+		l2.setStrokeWidth(4);
+		g.getChildren().add(l2);
+		final Line l3 = new Line(10,4,10,20);
+		l3.setStroke(Color.WHITE);
+		l3.setStrokeWidth(4);
+		g.getChildren().add(l3);
+		final Polygon t = new Polygon();
+		t.getPoints().addAll(new Double[]{
+			    10.0, 0.0,
+			    16.0, 6.0,
+			    4.0, 6.0 });
+		t.setFill(Color.WHITE);
+		g.getChildren().add(t);
+		return g;
+	}
+
+	public static Group minigunGroup() {
+		final Group g = new Group();
+		final Circle c1 = new Circle(10, 4, 2, Color.WHITE);
+		c1.setStroke(Color.WHITE);
+		c1.setStrokeWidth(2);
+		g.getChildren().add(c1);
+		final Circle c2 = new Circle(10, 10, 2, Color.WHITE);
+		c2.setStroke(Color.WHITE);
+		c2.setStrokeWidth(2);
+		g.getChildren().add(c2);
+		final Circle c3 = new Circle(10, 16, 2, Color.WHITE);
+		c3.setStroke(Color.WHITE);
+		c3.setStrokeWidth(2);
+		g.getChildren().add(c3);
+		return g;
+	}
 }
