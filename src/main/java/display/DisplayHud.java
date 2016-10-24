@@ -9,8 +9,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.shape.VertexFormat;
 
 /**
  * Created by douwe on 11-10-16.
@@ -32,6 +30,9 @@ public final class DisplayHud {
             3, 5,
             1, 5
     };
+	private static final double POWERUP_SLOT_CENTER = 2.5f;
+	private static final double POWERUP_STROKE_WIDTH = 4;
+	private static final Double[] POWERUP_TRIANGLE = new Double[]{10.0, 0.0, 16.0, 6.0, 4.0, 6.0 };
 
     /**
      * private constructor since this class only contains static methods.
@@ -82,11 +83,11 @@ public final class DisplayHud {
         //g.setTranslateX(2.5f);
         //g.setTranslateY(2.5f);
         if (p.getPlayer().isPlayerTwo()) {
-            g.setTranslateX(POWERUP_SLOT_TWO_X + 2.5f);
+            g.setTranslateX(POWERUP_SLOT_TWO_X + POWERUP_SLOT_CENTER);
         } else {
-            g.setTranslateX(POWERUP_SLOT_ONE_X + 2.5f);
+            g.setTranslateX(POWERUP_SLOT_ONE_X + POWERUP_SLOT_CENTER);
         }
-        g.setTranslateY(POWERUP_SLOT_Y + 2.5f);
+        g.setTranslateY(POWERUP_SLOT_Y + POWERUP_SLOT_CENTER);
         Launcher.getRoot().getChildren().add(g);
     }
 
@@ -111,19 +112,27 @@ public final class DisplayHud {
         }
     }
 
+    /**
+     * make an extra life icon.
+     * @return the group
+     */
 	public static Group extraLifeGroup() {
 		final Group g = new Group();
-		final Line l1 = new Line(0,10,20,10);
+		final Line l1 = new Line(0, 10, 20, 10);
 		l1.setStroke(Color.WHITE);
-		l1.setStrokeWidth(4);
+		l1.setStrokeWidth(POWERUP_STROKE_WIDTH);
 		g.getChildren().add(l1);
-		final Line l2 = new Line(10,0,10,20);
+		final Line l2 = new Line(10, 0, 10, 20);
 		l2.setStroke(Color.WHITE);
-		l2.setStrokeWidth(4);
+		l2.setStrokeWidth(POWERUP_STROKE_WIDTH);
 		g.getChildren().add(l2);
 		return g;
 	}
 
+    /**
+     * make a shield icon.
+     * @return the group
+     */
 	public static Group shieldGroup() {
 		final Group g = new Group();
 		final Circle c = new Circle(10, 10, 10, Color.BLACK);
@@ -133,6 +142,10 @@ public final class DisplayHud {
 		return g;
 	}
 
+    /**
+     * make a bullet size icon.
+     * @return the group
+     */
 	public static Group bulletSizeGroup() {
 		final Group g = new Group();
 		final Circle c = new Circle(10, 10, 8, Color.WHITE);
@@ -142,6 +155,10 @@ public final class DisplayHud {
 		return g;
 	}
 
+    /**
+     * make a triple shot icon.
+     * @return the group
+     */
 	public static Group tripleShotGroup() {
 		final Group g = new Group();
 		final Circle c1 = new Circle(4, 14, 2, Color.WHITE);
@@ -159,30 +176,35 @@ public final class DisplayHud {
 		return g;
 	}
 
+    /**
+     * make a piercing icon.
+     * @return the group
+     */
 	public static Group piercingGroup() {
 		final Group g = new Group();
-		final Line l1 = new Line(0,12,5,12);
+		final Line l1 = new Line(0, 12, 5, 12);
 		l1.setStroke(Color.WHITE);
-		l1.setStrokeWidth(4);
+		l1.setStrokeWidth(POWERUP_STROKE_WIDTH);
 		g.getChildren().add(l1);
-		final Line l2 = new Line(15,12,20,12);
+		final Line l2 = new Line(15, 12, 20, 12);
 		l2.setStroke(Color.WHITE);
-		l2.setStrokeWidth(4);
+		l2.setStrokeWidth(POWERUP_STROKE_WIDTH);
 		g.getChildren().add(l2);
-		final Line l3 = new Line(10,4,10,20);
+		final Line l3 = new Line(10, 4, 10, 20);
 		l3.setStroke(Color.WHITE);
-		l3.setStrokeWidth(4);
+		l3.setStrokeWidth(POWERUP_STROKE_WIDTH);
 		g.getChildren().add(l3);
 		final Polygon t = new Polygon();
-		t.getPoints().addAll(new Double[]{
-			    10.0, 0.0,
-			    16.0, 6.0,
-			    4.0, 6.0 });
+		t.getPoints().addAll(POWERUP_TRIANGLE);
 		t.setFill(Color.WHITE);
 		g.getChildren().add(t);
 		return g;
 	}
 
+    /**
+     * make a minigun icon.
+     * @return the group
+     */
 	public static Group minigunGroup() {
 		final Group g = new Group();
 		final Circle c1 = new Circle(10, 4, 2, Color.WHITE);

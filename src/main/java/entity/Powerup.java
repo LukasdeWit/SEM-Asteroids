@@ -61,7 +61,7 @@ public class Powerup extends AbstractEntity {
 		super(x, y, 0, 0, thisGame);
 		final Random random = new Random();
 		setRadius(RADIUS);
-		type = 5; // random.nextInt(TYPES);
+		type = random.nextInt(TYPES);
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
 	}
@@ -171,7 +171,6 @@ public class Powerup extends AbstractEntity {
     
 	/**
 	 * makes every type of powerup into a group for the hud.
-	 * @param p - the powerup
 	 * @return the group
 	 */
     public final Group getPowerupShape() {
