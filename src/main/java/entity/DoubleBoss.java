@@ -8,10 +8,11 @@ import game.Game;
  * @author Dario
  *
  */
-public class DoubleBoss extends Boss {
+public class DoubleBoss extends AngryAsteroidBoss {
 	private static final int DOUBLE_BOSS_LIVES = 7;
-	private static final int SHOT_SPEED = 500;
+	private static final int SHOT_SPEED = 600;
 	private static final int BULLETS = 3;
+	private static final int DOUBLE_RADIUS = 40;
 
 	/**
 	 * Constructor for DoubleBoss.
@@ -27,6 +28,7 @@ public class DoubleBoss extends Boss {
 		this.setCurrentLives(DOUBLE_BOSS_LIVES);
 		this.setShotSpeed(SHOT_SPEED);
 		this.setBullets(BULLETS);
+		this.setRadius(DOUBLE_RADIUS);
 	}
 
 }

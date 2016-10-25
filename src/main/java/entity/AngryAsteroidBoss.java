@@ -4,26 +4,21 @@ import java.util.List;
 import java.util.Random;
 
 import display.DisplayEntity;
-import entity.builders.BulletBuilder;
 import game.Game;
-import game.Logger;
 
 /**
- * Class that represents a Boss. Moves like a saucer from one
+ * Class that represents a AngryAsteroidBoss. Moves like a saucer from one
  * side of the screen to the other until it's killed.
  * 
  * @author Dario
  *
  */
-public class Boss extends AbstractEntity {
+public class AngryAsteroidBoss extends AbstractBoss {
 	private int toRight;
-	private long shotTime;
-	private int currentLives;
 	private final Random random;
 	private long dirChangeTime;
-	private final BulletBuilder bBuilder;
 	private long shotSpeed;
-	private int bullets;
+	private long shotTime;
 	private static final double PATHS = 3;
 	private static final double PATH_ANGLE = Math.PI / 4;
 	private static final long CHANGE_DIR_TIME = 2000;
@@ -33,18 +28,18 @@ public class Boss extends AbstractEntity {
 	private static final int BULLETNUMBER = 5;
 	private static final int STARTING_LIVES = 10;
 	private static final double MULTI_SHOT_ANGLE = .1;
-	private static final int SCORE = 20000;
 	private static final float ACCURACY = 3;
+	private static final int SCORE = 20000;
 
 	/**
-	 * Constructor for boss.
-	 * @param x location of boss along x-axis
-	 * @param y location of boss along y-axis
-	 * @param dX speed of boss along x-axis
-	 * @param dY speed of boss along y-axis
-	 * @param thisGame game the boss exists in
+	 * Constructor for AngryAsteroidBoss.
+	 * @param x location of AngryAsteroidBoss along x-axis
+	 * @param y location of AngryAsteroidBoss along y-axis
+	 * @param dX speed of AngryAsteroidBoss along x-axis
+	 * @param dY speed of AngryAsteroidBoss along y-axis
+	 * @param thisGame game the AngryAsteroidBoss exists in
 	 */
-	public Boss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
+	public AngryAsteroidBoss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		random = new Random();
 		setRadius(RADIUS);
@@ -56,24 +51,19 @@ public class Boss extends AbstractEntity {
 			nextToRight = 1;
 		}
 		setPath(nextToRight, random.nextInt((int) PATHS));
-		
-		// Initialize the Bullet Builder
-		bBuilder = new BulletBuilder();
-		bBuilder.setPierce(0);
-		bBuilder.setFriendly(false);
-		shotSpeed = SHOT_TIME;
-		bullets = BULLETNUMBER;
+		this.shotSpeed = SHOT_TIME;
+		setBullets(BULLETNUMBER);
 	}
 
 	/**
-	 * Calculate new position of BossAngryAsteroid, get it to shoot, get it to
+	 * Calculate new position of AngryAsteroidBossAngryAsteroid, get it to shoot, get it to
 	 * change direction and if it hits the wall get it to turn back.
 	 * 
 	 * @param input
 	 *            - the pressed keys
 	 */
 	@Override
-	public void update(final List<String> input) {
+	public final void update(final List<String> input) {
 		setX(getX() + getDX());
 		setY(getY() + getDY());
 		checkEdgeX();
@@ -83,7 +73,7 @@ public class Boss extends AbstractEntity {
 	}
 
 	/**
-	 * Change the boss's direction randomly at certain times in a random
+	 * Change the AngryAsteroidBoss's direction randomly at certain times in a random
 	 * direction.
 	 */
 	private void changeDirection() {
@@ -94,7 +84,7 @@ public class Boss extends AbstractEntity {
 	}
 
 	/**
-	 * Set BossAngryAsteroid path.
+	 * Set AngryAsteroidBossAngryAsteroid path.
 	 * 
 	 * @param toRight
 	 *            - Direction of Saucer
@@ -107,7 +97,7 @@ public class Boss extends AbstractEntity {
 	}
 
 	/**
-	 * Set BossAngryAsteroid path.
+	 * Set AngryAsteroidBossAngryAsteroid path.
 	 * 
 	 * @param path
 	 *            - Low, mid or high path
@@ -117,7 +107,7 @@ public class Boss extends AbstractEntity {
 	}
 
 	/**
-	 * Causes the BossAngryAsteroid to turn around when it reaches the edge of
+	 * Causes the AngryAsteroidBossAngryAsteroid to turn around when it reaches the edge of
 	 * the screen in the X-direction.
 	 */
 	public final void checkEdgeX() {
@@ -128,7 +118,7 @@ public class Boss extends AbstractEntity {
 	}
 	
 	/**
-	 * Causes the BossAngryAsteroid to turn around when it reaches the edge of
+	 * Causes the AngryAsteroidBossAngryAsteroid to turn around when it reaches the edge of
 	 * the screen in the Y-direction.
 	 */
 	public final void checkEdgeY() {
@@ -157,9 +147,9 @@ public class Boss extends AbstractEntity {
 			return;
 		}
 		if (getThisGame().getPlayer().invincible()) {
-			shotTime = System.currentTimeMillis();
+			this.shotTime = System.currentTimeMillis();
 		} else {
-			if (System.currentTimeMillis() - shotTime > shotSpeed) {
+			if (System.currentTimeMillis() - this.shotTime > this.shotSpeed) {
 				final float playerX = getThisGame().getPlayer().getX();
 				final float playerY = getThisGame().getPlayer().getY();
 				final float randomRange = (float) (Math.PI * (Math.random() / ACCURACY));
@@ -173,10 +163,10 @@ public class Boss extends AbstractEntity {
 
 				final float shotDir = straightDir + errorRight * randomRange;
 
-				for (int i = 0; i < bullets; i++) {
+				for (int i = 0; i < getBullets(); i++) {
 					fireBullet(shotDir - i * MULTI_SHOT_ANGLE);
 				}
-				shotTime = System.currentTimeMillis();
+				this.shotTime = System.currentTimeMillis();
 			}
 		}
 	}
@@ -187,15 +177,15 @@ public class Boss extends AbstractEntity {
 	 * @param direction
 	 *            - the direction
 	 */
-	private void fireBullet(final double direction) {
-		bBuilder.setX(getX());
-		bBuilder.setY(getY());
-		bBuilder.setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
-		bBuilder.setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
-		bBuilder.setThisGame(getThisGame());
-		bBuilder.setShooter(this);
-		bBuilder.setFriendly(false);
-		final Bullet b = (Bullet) bBuilder.getResult();
+	public final void fireBullet(final double direction) {
+		this.getbBuilder().setX(getX());
+		this.getbBuilder().setY(getY());
+		this.getbBuilder().setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
+		this.getbBuilder().setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
+		this.getbBuilder().setThisGame(getThisGame());
+		this.getbBuilder().setShooter(this);
+		this.getbBuilder().setFriendly(false);
+		final Bullet b = (Bullet) getbBuilder().getResult();
 
 		getThisGame().create(b);
 	}
@@ -203,21 +193,6 @@ public class Boss extends AbstractEntity {
 	@Override
 	public final void draw() {
 		DisplayEntity.boss(this);
-	}
-
-	@Override
-	public final void collide(final AbstractEntity e2) {
-		if (e2 instanceof Player && !((Player) e2).invincible()) {
-			((Player) e2).onHit();
-			Logger.getInstance().log("Player hit a Boss.");
-		} else if (e2 instanceof Bullet && ((Bullet) e2).isFriendly()) {
-			getThisGame().destroy(e2);
-			setCurrentLives(getCurrentLives() - 1);
-			if (getCurrentLives() < 1) {
-				getThisGame().destroy(this);
-			}
-			Logger.getInstance().log("Boss was hit.");
-		}
 	}
 
 	@Override
@@ -236,38 +211,42 @@ public class Boss extends AbstractEntity {
 	}
 	
 	/**
-	 * Gets the starting lives of the boss.
+	 * Gets the starting lives of the AngryAsteroidBoss.
 	 * @return the amount of starting lives
 	 */
 	public final int getStartingLives() {
 		return STARTING_LIVES;
 	}
-
+	
 	/**
-	 * @return the currentLives
+	 * Gets the shot time of the AngryAsteroidBoss.
+	 * @return the shot time
 	 */
-	public final int getCurrentLives() {
-		return currentLives;
-	}
-
-	/**
-	 * @param currentLives the currentLives to set
-	 */
-	public final void setCurrentLives(final int currentLives) {
-		this.currentLives = currentLives;
+	public final long getShotTime() {
+		return shotTime;
 	}
 	
 	/**
-	 * @param shotspeed the shotSpeed to set
+	 * Sets the shot time of the AngryAsteroidBoss.
+	 * @param time the shotTime to set
 	 */
-	public final void setShotSpeed(final int shotspeed) {
-		this.shotSpeed = shotspeed;
+	public final void setShotTime(final long time) {
+		this.shotTime = time;
 	}
 	
 	/**
-	 * @param bullets the number of bullets to set
+	 * Gets the shot speed of the AngryAsteroidBoss.
+	 * @return the shot speed
 	 */
-	public final void setBullets(final int bullets) {
-		this.bullets = bullets;
+	public final long getShotSpeed() {
+		return shotSpeed;
+	}
+	
+	/**
+	 * Sets the shot speed of the AngryAsteroidBoss.
+	 * @param speed the speed to set
+	 */
+	public final void setShotSpeed(final long speed) {
+		this.shotSpeed = speed;
 	}
 }
