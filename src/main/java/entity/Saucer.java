@@ -232,4 +232,11 @@ public class Saucer extends AbstractEntity {
 	public static int getBigScore() {
 		return BIG_SCORE;
 	}
+	
+	/**
+	 * @return the saucershooter
+	 */
+	public final SaucerShooter getShooter() {
+		return shooter;
+	}
 }

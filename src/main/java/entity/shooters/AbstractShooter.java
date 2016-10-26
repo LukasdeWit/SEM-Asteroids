@@ -51,23 +51,9 @@ public abstract class AbstractShooter {
 	}
 	
 	/**
-	 * @param bBuilder the new bulletbuilder
-	 */
-	public final void setBBuilder(final BulletBuilder bBuilder) {
-		this.bBuilder = bBuilder;
-	}
-	
-	/**
 	 * @return the owner
 	 */
 	public final AbstractEntity getOwner() {
 		return owner;
-	}
-	
-	/**
-	 * @param owner the new owner
-	 */
-	public final void setOwner(final AbstractEntity owner) {
-		this.owner = owner;
 	}
 }
