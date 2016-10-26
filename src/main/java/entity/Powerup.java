@@ -4,6 +4,7 @@ import java.util.Random;
 
 import display.DisplayEntity;
 import display.DisplayHud;
+import entity.shooters.PlayerShooter;
 import game.Audio;
 import game.Game;
 import game.Logger;
@@ -37,8 +38,8 @@ public class Powerup extends AbstractEntity {
 	private static final float NEW_BULLET_SIZE = 4;
 	private static final int NEW_PIERCING_LEVEL = 3;
 	private static final long NEW_FIRE_RATE = 50;
-	private static final int TRIPLE_SHOT_BULLETS = Player.getMaxBullets() * 3;
-	private static final int MINIGUN_BULLETS = Player.getMaxBullets() * 4;
+	private static final int TRIPLE_SHOT_BULLETS = PlayerShooter.getMaxBullets() * 3;
+	private static final int MINIGUN_BULLETS = PlayerShooter.getMaxBullets() * 4;
 
 	private static final String[] TYPE_STRING = {
 			"an extra life",
@@ -85,6 +86,7 @@ public class Powerup extends AbstractEntity {
 	 */
 	private void pickup(final Player p) {
 		player = p;
+		PlayerShooter ps = p.getShooter();
 		pickupTime = System.currentTimeMillis();
 		getThisGame().getAudio().play(Audio.POWERUP);
 		switch (type) {
@@ -97,19 +99,19 @@ public class Powerup extends AbstractEntity {
 				getThisGame().destroy(this);
 				break;
 			case BULLET_SIZE:
-				p.setBulletSize(NEW_BULLET_SIZE);
+				ps.setBulletSize(NEW_BULLET_SIZE);
 				break;
 			case TRIPLE_SHOT:
-				p.setTripleShot(true);
-				p.setMaxBullets(TRIPLE_SHOT_BULLETS);
+				ps.setTripleShot(true);
+				ps.setMaxBullets(TRIPLE_SHOT_BULLETS);
 				break;
 			case PIERCING:
-				p.setPiercing(NEW_PIERCING_LEVEL);
+				ps.setPiercing(NEW_PIERCING_LEVEL);
 				break;
 			case MINIGUN:
 			default:
-				p.setFireRate(NEW_FIRE_RATE);
-				p.setMaxBullets(MINIGUN_BULLETS);
+				ps.setFireRate(NEW_FIRE_RATE);
+				ps.setMaxBullets(MINIGUN_BULLETS);
 				break;
 		}
 	}
@@ -148,21 +150,22 @@ public class Powerup extends AbstractEntity {
 			getThisGame().destroy(this);
 			return;
 		}
+		PlayerShooter ps = player.getShooter();
 		switch(type) {
 			case BULLET_SIZE: 
-				player.setBulletSize(Player.getBulletSize());
+				ps.setBulletSize(PlayerShooter.getBulletSize());
 				break;
 			case TRIPLE_SHOT:
-				player.setTripleShot(false);
-				player.setMaxBullets(Player.getMaxBullets());
+				ps.setTripleShot(false);
+				ps.setMaxBullets(PlayerShooter.getMaxBullets());
 				break;
 			case PIERCING:
-				player.setPiercing(1);
+				ps.setPiercing(1);
 				break;
 			case MINIGUN:
 			default:
-				player.setFireRate(Player.getFireRate());
-				player.setMaxBullets(Player.getMaxBullets());
+				ps.setFireRate(PlayerShooter.getFireRate());
+				ps.setMaxBullets(PlayerShooter.getMaxBullets());
 				break;
 		}
 		getThisGame().destroy(this);
