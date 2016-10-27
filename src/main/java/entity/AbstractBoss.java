@@ -1,6 +1,5 @@
 package entity;
 
-import java.util.List;
 import entity.builders.BulletBuilder;
 import game.Game;
 import game.Logger;
@@ -34,21 +33,9 @@ public abstract class AbstractBoss extends AbstractEntity {
 	}
 
 	/**
-	 * Calculate new position of BossAngryAsteroid, get it to shoot, get it to
-	 * change direction and if it hits the wall get it to turn back.
-	 * 
-	 * @param input
-	 *            - the pressed keys
+	 * Makes the Boss shoot.
 	 */
-	@Override
-	public void update(final List<String> input) {
-	}
-
-	/**
-	 * Makes the Saucer shoot.
-	 */
-	protected void shoot() {
-	}
+	protected abstract void shoot();
 
 	/**
 	 * fire a bullet in a direction.

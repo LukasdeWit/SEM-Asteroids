@@ -7,13 +7,13 @@ import display.DisplayEntity;
 import game.Game;
 
 /**
- * Class that represents a AngryAsteroidBoss. Moves like a saucer from one
+ * Class that represents a BasicBoss. Moves like a saucer from one
  * side of the screen to the other until it's killed.
  * 
  * @author Dario
  *
  */
-public class AngryAsteroidBoss extends AbstractBoss {
+public class BasicBoss extends AbstractBoss {
 	private int toRight;
 	private final Random random;
 	private long dirChangeTime;
@@ -32,14 +32,14 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	private static final int SCORE = 20000;
 
 	/**
-	 * Constructor for AngryAsteroidBoss.
-	 * @param x location of AngryAsteroidBoss along x-axis
-	 * @param y location of AngryAsteroidBoss along y-axis
-	 * @param dX speed of AngryAsteroidBoss along x-axis
-	 * @param dY speed of AngryAsteroidBoss along y-axis
-	 * @param thisGame game the AngryAsteroidBoss exists in
+	 * Constructor for BasicBoss.
+	 * @param x location of BasicBoss along x-axis
+	 * @param y location of BasicBoss along y-axis
+	 * @param dX speed of BasicBoss along x-axis
+	 * @param dY speed of BasicBoss along y-axis
+	 * @param thisGame game the BasicBoss exists in
 	 */
-	public AngryAsteroidBoss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
+	public BasicBoss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		random = new Random();
 		setRadius(RADIUS);
@@ -56,7 +56,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Calculate new position of AngryAsteroidBossAngryAsteroid, get it to shoot, get it to
+	 * Calculate new position of BasicBoss, get it to shoot, get it to
 	 * change direction and if it hits the wall get it to turn back.
 	 * 
 	 * @param input
@@ -73,7 +73,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Change the AngryAsteroidBoss's direction randomly at certain times in a random
+	 * Change the BasicBoss's direction randomly at certain times in a random
 	 * direction.
 	 */
 	private void changeDirection() {
@@ -84,7 +84,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Set AngryAsteroidBossAngryAsteroid path.
+	 * Set BasicBossAngryAsteroid path.
 	 * 
 	 * @param toRight
 	 *            - Direction of Saucer
@@ -97,7 +97,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Set AngryAsteroidBossAngryAsteroid path.
+	 * Set BasicBoss path.
 	 * 
 	 * @param path
 	 *            - Low, mid or high path
@@ -107,7 +107,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Causes the AngryAsteroidBossAngryAsteroid to turn around when it reaches the edge of
+	 * Causes the BasicBoss to turn around when it reaches the edge of
 	 * the screen in the X-direction.
 	 */
 	public final void checkEdgeX() {
@@ -118,7 +118,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Causes the AngryAsteroidBossAngryAsteroid to turn around when it reaches the edge of
+	 * Causes the BasicBoss to turn around when it reaches the edge of
 	 * the screen in the Y-direction.
 	 */
 	public final void checkEdgeY() {
@@ -129,7 +129,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Set the direction of the Saucer, so change the dX and dY using direction.
+	 * Set the direction of the BasicBoss, so change the dX and dY using direction.
 	 * 
 	 * @param direction
 	 *            - the direction in radians, 0 being right
@@ -140,7 +140,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Makes the Saucer shoot.
+	 * Makes the BasicBoss shoot.
 	 */
 	protected final void shoot() {
 		if (getThisGame().getPlayer() == null) {
@@ -211,7 +211,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Gets the starting lives of the AngryAsteroidBoss.
+	 * Gets the starting lives of the BasicBoss.
 	 * @return the amount of starting lives
 	 */
 	public final int getStartingLives() {
@@ -219,7 +219,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Gets the shot time of the AngryAsteroidBoss.
+	 * Gets the shot time of the BasicBoss.
 	 * @return the shot time
 	 */
 	public final long getShotTime() {
@@ -227,7 +227,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Sets the shot time of the AngryAsteroidBoss.
+	 * Sets the shot time of the BasicBoss.
 	 * @param time the shotTime to set
 	 */
 	public final void setShotTime(final long time) {
@@ -235,7 +235,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Gets the shot speed of the AngryAsteroidBoss.
+	 * Gets the shot speed of the BasicBoss.
 	 * @return the shot speed
 	 */
 	public final long getShotSpeed() {
@@ -243,7 +243,7 @@ public class AngryAsteroidBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Sets the shot speed of the AngryAsteroidBoss.
+	 * Sets the shot speed of the BasicBoss.
 	 * @param speed the speed to set
 	 */
 	public final void setShotSpeed(final long speed) {

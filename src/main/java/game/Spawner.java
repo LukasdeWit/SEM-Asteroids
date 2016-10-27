@@ -3,7 +3,7 @@ package game;
 import java.util.Random;
 
 import entity.Asteroid;
-import entity.AngryAsteroidBoss;
+import entity.BasicBoss;
 import entity.DoubleBoss;
 import entity.Powerup;
 import entity.Saucer;
@@ -68,7 +68,7 @@ public final class Spawner {
 					spawnDoubleBoss();
 					spawnDoubleBoss();
 				} else {
-					spawnAngryAsteroidBoss();
+					spawnBasicBoss();
 				}
 			}
 		} else {
@@ -116,7 +116,7 @@ public final class Spawner {
 					spawnDoubleBoss();
 					spawnDoubleBoss();
 				} else {
-					spawnAngryAsteroidBoss();
+					spawnBasicBoss();
 				}
 			}
 			startRest = System.currentTimeMillis();
@@ -195,9 +195,9 @@ public final class Spawner {
 	/**
 	 * 
 	 */
-	private void spawnAngryAsteroidBoss() {
-		final AngryAsteroidBoss boss =
-				new AngryAsteroidBoss(random.nextInt(1)
+	private void spawnBasicBoss() {
+		final BasicBoss boss =
+				new BasicBoss(random.nextInt(1)
 				* 2 * thisGame.getScreenX(), (float) Math.random()
 				* thisGame.getScreenY(), 0, 0, thisGame);
 		thisGame.create(boss);

@@ -8,7 +8,7 @@ import game.Game;
  * @author Dario
  *
  */
-public class DoubleBoss extends AngryAsteroidBoss {
+public class DoubleBoss extends BasicBoss {
 	private static final int DOUBLE_BOSS_LIVES = 7;
 	private static final int SHOT_SPEED = 600;
 	private static final int BULLETS = 3;
