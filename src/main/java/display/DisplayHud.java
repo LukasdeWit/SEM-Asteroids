@@ -35,6 +35,25 @@ public final class DisplayHud {
 	private static final Double[] POWERUP_TRIANGLE = new Double[]{10.0, 0.0, 16.0, 6.0, 4.0, 6.0 };
 	private static final double EXTRA_LIFE_SIZE = 3;
 	private static final double EL_LIFE_OFFSET = 10;
+	private static final double[] SOUND_POLY = new double[]{
+            1, 6,
+            4, 6,
+            8, 2,
+            9, 2,
+            9, 16,
+            8, 16,
+            4, 12,
+            1, 12,
+            1, 6
+    };
+	private static final double[][] SOUND_LINES = new double[][]{
+            {11, 7},
+            {13, 5},
+            {15, 3},
+            {17, 1}
+    };
+	private static final double SOUND_SIZE = 1;
+	private static final double SOUND_LINE_WIDTH = 1;
 
     /**
      * private constructor since this class only contains static methods.
@@ -225,5 +244,31 @@ public final class DisplayHud {
 		c3.setStrokeWidth(2);
 		g.getChildren().add(c3);
 		return g;
+	}
+	
+	/**
+	 * draw the sound icon.
+	 * @param mute - boolean true if no sound.
+	 */
+	public static void sound(final boolean mute) {
+		final Group g = new Group();
+		final float x = Game.getCanvasSize() - 30.5f;
+		final float y = 10.5f;
+		final double[] points = DisplayUtils.translate(t -> t * SOUND_SIZE + x,
+                t -> t * SOUND_SIZE + y, SOUND_POLY);
+        final Polygon shape = new Polygon(points);
+        shape.setFill(Color.WHITE);
+        shape.setStrokeWidth(1);
+        g.getChildren().add(shape);
+		if (!mute) {
+			for (int i = 0; i < SOUND_LINES.length; i++) {
+				final Line l = new Line(SOUND_LINES[i][0] + x, SOUND_LINES[i][1] + y, 
+						SOUND_LINES[i][0] + x, SOUND_LINES[i][0] + y);
+				l.setStroke(Color.WHITE);
+				l.setStrokeWidth(SOUND_LINE_WIDTH);
+				g.getChildren().add(l);
+			}
+		}
+        Launcher.getRoot().getChildren().add(g);
 	}
 }

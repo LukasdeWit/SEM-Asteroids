@@ -26,6 +26,7 @@ public class SpawnerTest {
 		spawner.setStartPowerupTime(0);
 		spawner.setStartSaucerTime(0);
 		spawner.setStartRest(0);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test
