@@ -57,6 +57,7 @@ public class KeyHandler {
 		} else {
 			actualinput.removeAll(Arrays.asList(P2COMMANDS));
 		}
+		
 		for (String s : input) {
 			AbstractCommand c = map.get(s);
 			if (c != null) {

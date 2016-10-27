@@ -4,6 +4,7 @@ import display.DisplayEntity;
 import game.Audio;
 import game.Logger;
 import entity.builders.BulletBuilder;
+import entity.keyhandler.KeyHandler;
 
 import java.util.List;
 import java.util.Random;
@@ -31,6 +32,7 @@ public class Player extends AbstractEntity {
 	private int changeOfDying;
 	private String playerString;
 	private final BulletBuilder bBuilder;
+	private KeyHandler keyhandler;
 
 	private static final int STARTING_LIVES = 3;
 	private static final float RADIUS = 5;
@@ -70,6 +72,7 @@ public class Player extends AbstractEntity {
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(piercing);
 		bBuilder.setFriendly(true);
+		keyhandler = new KeyHandler(this);
     }
 
 	/**
@@ -148,111 +151,34 @@ public class Player extends AbstractEntity {
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
-			if (getThisGame().getGamestate().isCoop()) {
-				keyHandlerTwo(input);
-			} else {
-				keyHandler(input);
-			}
+			keyhandler.update(input);
+		}
+		if (isPlayerTwo()) {
+			playBoostp2();
+		} else {
+			playBoostp1();
 		}
 	}
-
+	
 	/**
-	 * handle user key input.
-	 *
-	 * @param input List containing the keyboard input
+	 * Play rocket boost noise for player 1.
 	 */
-	private void keyHandler(final List<String> input) {
-		turnKeys(input);
-		if (input.contains("UP") || input.contains("W")) {
-			accelerate();
+	private void playBoostp1() {
+		if (isBoost()) {
 			getThisGame().getAudio().play(Audio.BOOST);
 		} else {
 			getThisGame().getAudio().stop(Audio.BOOST);
 		}
-
-		if (input.contains("DOWN") || input.contains("S")) {
-			goHyperspace();
-		}
-
-		if (input.contains("SPACE")) {
-			fire();
-		}
 	}
 	
 	/**
-	 * turn using keys.
-	 * @param input - the input.
+	 * Play rocket boost noise for player 2.
 	 */
-	private void turnKeys(final List<String> input) {
-		if (input.contains("LEFT") || input.contains("A")) {
-			turnLeft();
-		}
-
-		if (input.contains("RIGHT") || input.contains("D")) {
-			turnRight();
-		}
-	}
-	
-	/**
-	 * handle user(s) key input for coop.
-	 *
-	 * @param input List containing the keyboard input
-	 */
-	private void keyHandlerTwo(final List<String> input) {
-		if (isPlayerTwo()) {
-			playerTwoKeys(input);
-		} else {
-			if (input.contains("A")) {
-				turnLeft();
-			}
-
-			if (input.contains("D")) {
-				turnRight();
-			}
-
-			if (input.contains("W")) {
-				accelerate();
-				getThisGame().getAudio().play(Audio.BOOST);
-			} else {
-				getThisGame().getAudio().stop(Audio.BOOST);
-			}
-
-			if (input.contains("S")) {
-				goHyperspace();
-			}
-
-			if (input.contains("SPACE")) {
-				fire();
-			}
-		}
-	}
-	
-	/**
-	 * Keys for player Two.
-	 * @param input - the input
-	 */
-	private void playerTwoKeys(final List<String> input) {
-		if (input.contains("LEFT")) {
-			turnLeft();
-		}
-
-		if (input.contains("RIGHT")) {
-			turnRight();
-		}
-
-		if (input.contains("UP")) {
-			accelerate();
+	private void playBoostp2() {
+		if (isBoost()) {
 			getThisGame().getAudio().play(Audio.BOOST2);
 		} else {
 			getThisGame().getAudio().stop(Audio.BOOST2);
-		}
-
-		if (input.contains("DOWN")) {
-			goHyperspace();
-		}
-
-		if (input.contains("ENTER")) {
-			fire();
 		}
 	}
 
