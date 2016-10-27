@@ -14,9 +14,9 @@ import entity.Player;
  *
  */
 public class KeyHandler {
-	private Player p;
-	private Map<String, AbstractCommand> player1map;
-	private Map<String, AbstractCommand> player2map;
+	private final Player p;
+	private final Map<String, AbstractCommand> player1map;
+	private final Map<String, AbstractCommand> player2map;
 	
 	/**
 	 * Constructor for keyhandler.
@@ -24,11 +24,11 @@ public class KeyHandler {
 	 */
 	public KeyHandler(final Player p) {
 		this.p = p;
-		ShootCommand sc = new ShootCommand(p);
-		UpCommand uc = new UpCommand(p);
-		DownCommand dc = new DownCommand(p);
-		LeftCommand lc = new LeftCommand(p);
-		RightCommand rc = new RightCommand(p);
+		final ShootCommand sc = new ShootCommand(p);
+		final UpCommand uc = new UpCommand(p);
+		final DownCommand dc = new DownCommand(p);
+		final LeftCommand lc = new LeftCommand(p);
+		final RightCommand rc = new RightCommand(p);
 		//map = new HashMap<String, AbstractCommand>();
 		
 		player1map = new HashMap<String, AbstractCommand>();
@@ -52,9 +52,9 @@ public class KeyHandler {
 	 * @return a set of abstractcommands.
 	 */
 	private Set<AbstractCommand> convert(final List<String> input) {
-		Set<AbstractCommand> commands = new HashSet<AbstractCommand>();
+		final Set<AbstractCommand> commands = new HashSet<AbstractCommand>();
 		if (p.getThisGame().getGamestate().isCoop()) {
-			for (String s : input) {
+			for (final String s : input) {
 				AbstractCommand c = null;
 				if (p.isPlayerTwo()) {
 					c = player2map.get(s);
@@ -66,29 +66,39 @@ public class KeyHandler {
 				}
 			}
 		} else {
-			for (String s : input) {
-				AbstractCommand c = player1map.get(s);
-				AbstractCommand d = player2map.get(s);
-
-				if (c != null) {
-					commands.add(c);
-				}
-				if (d != null) {
-					commands.add(d);
-				}
-			}
+			convertSinglePlayer(input, commands);
+			
 		}
 		return commands;
 	}
 	
 	/**
+	 * convert a list of inputs to a set of commands for singleplayer.
+	 * @param input - the input
+	 * @param commands - the commands
+	 */
+	private void convertSinglePlayer(final List<String> input, final Set<AbstractCommand> commands) {
+		for (final String s : input) {
+			final AbstractCommand c = player1map.get(s);
+			final AbstractCommand d = player2map.get(s);
+
+			if (c != null) {
+				commands.add(c);
+			}
+			if (d != null) {
+				commands.add(d);
+			}
+		}
+	}
+
+	/**
 	 * Update game with string input.
 	 * @param input list containing keyboard input
 	 */
 	public final void update(final List<String> input) {
-		Set<AbstractCommand> commands = convert(input);
+		final Set<AbstractCommand> commands = convert(input);
 		
-		for (AbstractCommand c : commands) {
+		for (final AbstractCommand c : commands) {
 			c.execute();
 		}
 	}

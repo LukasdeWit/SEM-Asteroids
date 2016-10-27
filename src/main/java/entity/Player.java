@@ -32,7 +32,7 @@ public class Player extends AbstractEntity {
 	private int changeOfDying;
 	private String playerString;
 	private final BulletBuilder bBuilder;
-	private KeyHandler keyhandler;
+	private final KeyHandler keyhandler;
 
 	private static final int STARTING_LIVES = 3;
 	private static final float RADIUS = 5;
