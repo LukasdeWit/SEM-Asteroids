@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -52,6 +53,7 @@ public class Launcher extends Application {
 		stage.setTitle("ASTEROIDS!");
 		// set up the scene
 		final Scene scene = new Scene(ROOT, 500, 500, Color.BLACK);
+		scene.setCursor(Cursor.NONE);
 		stage.setScene(scene);
 		final List<String> input = getInput(scene);
 		// set up the timing control

@@ -21,7 +21,7 @@ public final class Spawner {
 	private final Game thisGame;
 
 	private static final long SAUCER_TIME = 20000;
-	private static final long POWERUP_TIME = 10000;
+	private static final long POWERUP_TIME = 15000;
 	private static final long REST = 4000;
 	private static final int STARTING_ASTEROIDS = 4;
 	private static final int MAX_EXTRA = 7;
