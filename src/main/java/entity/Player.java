@@ -242,8 +242,10 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP")) {
 			accelerate();
+			//getThisGame().getAudio().getBoost2Player().play();
 			getThisGame().getAudio().play(Audio.BOOST2);
 		} else {
+			//getThisGame().getAudio().getBoost2Player().pause();
 			getThisGame().getAudio().stop(Audio.BOOST2);
 		}
 

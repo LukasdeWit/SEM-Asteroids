@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * Class to regulate all audio output.
@@ -75,8 +77,10 @@ public class Audio {
 	 * Class that regulates the background track.
 	 */
 	private final BackgroundAudio bgtrack;
+	private MediaPlayer boost1Player;
+	private MediaPlayer boost2Player;
 	
-	private static final double BOOSTVOLUME = 0.5;
+	public static final double BOOSTVOLUME = 0.5;
 	private static final double SHOOTINGVOLUME = 0.4;
 	private static final double UFOSMALLVOLUME = 0.3;
 	private static final double UFOBIGVOLUME = 0.3;
@@ -84,6 +88,8 @@ public class Audio {
 	private static final double SHOOTING2VOLUME = 0.3;
 	private static final double ASTEROIDVOLUME = 0.5;
 	private static final double POWERUPVOLUME = 0.5;
+	
+	private static final long STOP_TIME = 16;
 	
 
 	/**
@@ -93,7 +99,13 @@ public class Audio {
 		tracks = new ArrayList<AudioClip>();
 		bgtrack = new BackgroundAudio(PATH);
 		
+		
 		try {
+			final Media b1 = new Media(new File(PATH + "boost.mp3").toURI().toURL().toString());
+			boost1Player = new MediaPlayer(b1);
+			final Media b2 = new Media(new File(PATH + "boost2.mp3").toURI().toURL().toString());
+			boost2Player = new MediaPlayer(b2);
+			
 			final AudioClip shooting = new AudioClip(new File(
 					PATH + "fire.mp3").toURI().toURL().toString());
 			final AudioClip smallexplosion = new AudioClip(new File(
@@ -103,21 +115,21 @@ public class Audio {
 			final AudioClip largeexplosion = new AudioClip(new File(
 					PATH + "bangLarge.mp3").toURI().toURL().toString());
 			final AudioClip lifeup = new AudioClip(new File(
-					PATH + "lifeup.wav").toURI().toURL().toString());
+					PATH + "lifeup.mp3").toURI().toURL().toString());
 			final AudioClip ufosmall = new AudioClip(new File(
 					PATH + "ufoSmall.mp3").toURI().toURL().toString());
 			final AudioClip ufobig = new AudioClip(new File(
 					PATH + "ufoBig.mp3").toURI().toURL().toString());
 			final AudioClip boost = new AudioClip(new File(
-					PATH + "boost.wav").toURI().toURL().toString());
+					PATH + "boost.mp3").toURI().toURL().toString());
 			final AudioClip teleport = new AudioClip(new File(
-					PATH + "teleport.wav").toURI().toURL().toString());
+					PATH + "teleport.mp3").toURI().toURL().toString());
 			final AudioClip powerup = new AudioClip(new File(
-					PATH + "pickup.wav").toURI().toURL().toString());
+					PATH + "pickup.mp3").toURI().toURL().toString());
 			final AudioClip boost2 = new AudioClip(new File(
-					PATH + "boost2.wav").toURI().toURL().toString());
+					PATH + "boost2.mp3").toURI().toURL().toString());
 			final AudioClip shooting2 = new AudioClip(new File(
-					PATH + "fire2.wav").toURI().toURL().toString());
+					PATH + "fire2.mp3").toURI().toURL().toString());
 
 			
 			ufosmall.setCycleCount(AudioClip.INDEFINITE);
@@ -194,7 +206,13 @@ public class Audio {
 	 */
 	public final void stop(final int tracknumber) {
 		if (get(tracknumber).isPlaying()) {
+			final long timer = System.currentTimeMillis();
 			get(tracknumber).stop();
+			final long duration = System.currentTimeMillis() - timer;
+			if (duration > STOP_TIME) {
+				Logger.getInstance().log("ERROR | Track nr. " + tracknumber 
+						+ " took " + duration + " milliseconds to stop");
+			}
 		}
 	}
 	
@@ -213,5 +231,19 @@ public class Audio {
 		for (int i = 0; i < tracks.size(); i++) {
 			stop(i);
 		}
+	}
+
+	/**
+	 * @return the boost1Player
+	 */
+	public final MediaPlayer getBoost1Player() {
+		return boost1Player;
+	}
+
+	/**
+	 * @return the boost2Player
+	 */
+	public final MediaPlayer getBoost2Player() {
+		return boost2Player;
 	}
 }
