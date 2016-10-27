@@ -5,7 +5,6 @@ import java.util.List;
 import display.DisplayText;
 import game.Game;
 import game.Gamestate;
-import game.Logger;
 
 /**
  * Start screen state.
