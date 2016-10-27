@@ -16,9 +16,12 @@ import entity.Player;
  */
 public class KeyHandler {
 	private Player p;
-	private Map<String, AbstractCommand> map;
-	private static final String[] P1COMMANDS = {"W", "A", "S", "D", "SPACE"};
-	private static final String[] P2COMMANDS = {"LEFT", "RIGHT", "UP", "DOWN", "ENTER"};
+	//private Map<String, AbstractCommand> map;
+	private Map<String, AbstractCommand> player1map;
+	private Map<String, AbstractCommand> player2map;
+
+	//private static final String[] P1COMMANDS = {"W", "A", "S", "D", "SPACE"};
+	//private static final String[] P2COMMANDS = {"LEFT", "RIGHT", "UP", "DOWN", "ENTER"};
 	
 	/**
 	 * Constructor for keyhandler.
@@ -31,18 +34,22 @@ public class KeyHandler {
 		DownCommand dc = new DownCommand(p);
 		LeftCommand lc = new LeftCommand(p);
 		RightCommand rc = new RightCommand(p);
-		map = new HashMap<String, AbstractCommand>();
-		map.put("SPACE", sc);
-		map.put("ENTER", sc);
-		map.put("LEFT", lc);
-		map.put("A", lc);
-		map.put("RIGHT", rc);
-		map.put("D", rc);
-		map.put("DOWN", dc);
-		map.put("S", dc);
-		map.put("UP", uc);
-		map.put("W", uc);
-	}
+		//map = new HashMap<String, AbstractCommand>();
+		
+		player1map = new HashMap<String, AbstractCommand>();
+		player2map = new HashMap<String, AbstractCommand>();
+
+		player1map.put("SPACE", sc);
+		player2map.put("ENTER", sc);
+		player1map.put("LEFT", lc);
+		player2map.put("A", lc);
+		player1map.put("RIGHT", rc);
+		player2map.put("D", rc);
+		player1map.put("DOWN", dc);
+		player2map.put("S", dc);
+		player1map.put("UP", uc);
+		player2map.put("W", uc);
+		}
 	
 	/**
 	 * Convert a list of inputs to a set of commands.
@@ -51,19 +58,29 @@ public class KeyHandler {
 	 */
 	private Set<AbstractCommand> convert(final List<String> input) {
 		Set<AbstractCommand> commands = new HashSet<AbstractCommand>();
-		List<String> actualinput = input;
-		if (p.isPlayerTwo()) {
-			actualinput.removeAll(Arrays.asList(P1COMMANDS));
-		} else {
-			if (p.getThisGame().getGamestate().getMode().isCoop()) {
-				actualinput.removeAll(Arrays.asList(P2COMMANDS));
+		if (p.getThisGame().getGamestate().isCoop()) {
+			for (String s : input) {
+				AbstractCommand c = null;
+				if (p.isPlayerTwo()) {
+					c = player2map.get(s);
+				} else {
+					c = player1map.get(s);
+				}
+				if (c != null) {
+					commands.add(c);
+				}
 			}
-		}
-		
-		for (String s : input) {
-			AbstractCommand c = map.get(s);
-			if (c != null) {
-				commands.add(c);
+		} else {
+			for (String s : input) {
+				AbstractCommand c = player1map.get(s);
+				AbstractCommand d = player2map.get(s);
+
+				if (c != null) {
+					commands.add(c);
+				}
+				if (d != null) {
+					commands.add(d);
+				}
 			}
 		}
 		return commands;

@@ -253,7 +253,7 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
-		getThisGame().getAudio().play(Audio.TELEPORT);
+		getThisGame().getAudio().playMultiple(Audio.TELEPORT);
 		}
 	}
 
