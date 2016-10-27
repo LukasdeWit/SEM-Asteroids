@@ -22,6 +22,8 @@ public class Powerup extends AbstractEntity {
 
 	private Player player;
 
+	private long glitterTime;
+
 	private static final long PERISH_TIME = 10000;
 	private static final int POWERUP_DURATION = 5000;
 
@@ -49,6 +51,8 @@ public class Powerup extends AbstractEntity {
 			"a piercing bullet",
 			"a minigun"
 	};
+
+	private static final long GLITTER_TIME = 500;
 	
 	/**
 	 * Constructor for the Powerup class.
@@ -64,6 +68,7 @@ public class Powerup extends AbstractEntity {
 		type = random.nextInt(TYPES);
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
+		glitterTime = 0;
 	}
 
 	/**
@@ -131,6 +136,10 @@ public class Powerup extends AbstractEntity {
 
 	@Override
 	public final void update(final List<String> input) {
+		if (GLITTER_TIME < (System.currentTimeMillis() - glitterTime) && pickupTime == 0) {
+			Particle.explosion(getX(), getY(), getThisGame());
+			glitterTime = System.currentTimeMillis();
+		}
 		if (pickupTime == 0) {
 			if (PERISH_TIME < (System.currentTimeMillis() - startTime)) {
 				getThisGame().destroy(this);
