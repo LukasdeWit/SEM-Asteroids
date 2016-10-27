@@ -74,14 +74,10 @@ public final class DisplayHud {
      * @param p - the powerup
      */
     public static void powerup(final Powerup p) {
-        //final Circle c = new Circle(POWERUP_SLOT_SIZE / 2, POWERUP_SLOT_SIZE / 2, POWERUP_SIZE / 2);
-        //c.setFill(Color.WHITE);
         if (p.getPlayer() == null) {
             return;
         }
         final Group g = p.getPowerupShape();
-        //g.setTranslateX(2.5f);
-        //g.setTranslateY(2.5f);
         if (p.getPlayer().isPlayerTwo()) {
             g.setTranslateX(POWERUP_SLOT_TWO_X + POWERUP_SLOT_CENTER);
         } else {

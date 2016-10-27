@@ -96,11 +96,9 @@ public class Powerup extends AbstractEntity {
 		switch (type) {
 			case EXTRA_LIFE:
 				p.gainLife();
-				//getThisGame().destroy(this);
 				break;
 			case SHIELD:
 				p.gainShield();
-				//getThisGame().destroy(this);
 				break;
 			case BULLET_SIZE:
 				p.setBulletSize(NEW_BULLET_SIZE);
