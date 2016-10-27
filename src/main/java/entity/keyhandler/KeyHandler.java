@@ -15,12 +15,8 @@ import entity.Player;
  */
 public class KeyHandler {
 	private Player p;
-	//private Map<String, AbstractCommand> map;
 	private Map<String, AbstractCommand> player1map;
 	private Map<String, AbstractCommand> player2map;
-
-	//private static final String[] P1COMMANDS = {"W", "A", "S", "D", "SPACE"};
-	//private static final String[] P2COMMANDS = {"LEFT", "RIGHT", "UP", "DOWN", "ENTER"};
 	
 	/**
 	 * Constructor for keyhandler.
@@ -40,14 +36,14 @@ public class KeyHandler {
 
 		player1map.put("SPACE", sc);
 		player2map.put("ENTER", sc);
-		player1map.put("LEFT", lc);
-		player2map.put("A", lc);
-		player1map.put("RIGHT", rc);
-		player2map.put("D", rc);
-		player1map.put("DOWN", dc);
-		player2map.put("S", dc);
-		player1map.put("UP", uc);
-		player2map.put("W", uc);
+		player2map.put("LEFT", lc);
+		player1map.put("A", lc);
+		player2map.put("RIGHT", rc);
+		player1map.put("D", rc);
+		player2map.put("DOWN", dc);
+		player1map.put("S", dc);
+		player2map.put("UP", uc);
+		player1map.put("W", uc);
 		}
 	
 	/**
