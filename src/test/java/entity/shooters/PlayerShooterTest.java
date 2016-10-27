@@ -56,26 +56,27 @@ public class PlayerShooterTest {
 		bBuilder.setThisGame(thisGame);
 	}
 	@Test
-	public void testKeyHandler9() {
+	public void testKeyHandlerShoot() {
 		final String[] input = {SPACE};
 		update(player, input, false);
 		assertEquals(System.currentTimeMillis(), player.getShooter().getLastShot(), 1);
 	}
 	@Test
-	public void testKeyHandlerTwo9() {
+	public void testKeyHandlerShoot2() {
 		final String[] input = {SPACE};
 		update(player, input, true);
 		assertEquals(System.currentTimeMillis(), player.getShooter().getLastShot(), 1);
 	}
 
 	@Test
-	public void testKeyHandlerTwo10() {
+	public void testKeyHandlerPlayer2Shoot() {
 		final String[] input = {"ENTER"};
 		update(player2, input, true);
 
 		assertEquals(System.currentTimeMillis(), player2.getShooter().getLastShot(), 1);
 	}
 	
+	/*
 	@Test
 	public void testFire() {
 		final String[] input = {SPACE};
@@ -91,6 +92,7 @@ public class PlayerShooterTest {
 		update(player, input, false);
 		assertEquals(1, thisGame.getCreateList().size(), 0);
 	}
+	*/
 	
 	@Test
 	public void testFire3() {
