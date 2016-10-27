@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.Player;
 import javafx.scene.media.AudioClip;
 
 /**
@@ -212,6 +213,27 @@ public class Audio {
 	public final void stopAll() {
 		for (int i = 0; i < tracks.size(); i++) {
 			stop(i);
+		}
+	}
+	
+	/**
+	 * Handle boost for player.
+	 * @param p player for whom the rocketboost should be played.
+	 * @param play true if the rocket boost should be turned on, false if off
+	 */
+	public final void rocketBoost(final Player p, final boolean play) {
+		if (p.isPlayerTwo()) {
+			if (p.isBoost()) {
+				play(BOOST2);
+			} else {
+				stop(BOOST2);
+			}
+		} else {
+			if (p.isBoost()) {
+				play(BOOST);
+			} else {
+				stop(BOOST);
+			}
 		}
 	}
 }

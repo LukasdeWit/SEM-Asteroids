@@ -93,7 +93,7 @@ public class Player extends AbstractEntity {
 	public final void onHit() {
 		if (shielding < 1) {
 			// boost sound will normally not stop if player dies mid-flight
-			getThisGame().getAudio().stop(Audio.BOOST);
+			getThisGame().getAudio().rocketBoost(this, false);
 			lives--;
 			if (lives <= 0) {
 				getThisGame().over();
@@ -165,9 +165,9 @@ public class Player extends AbstractEntity {
 		turnKeys(input);
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
-			getThisGame().getAudio().play(Audio.BOOST);
+			getThisGame().getAudio().rocketBoost(this, true);
 		} else {
-			getThisGame().getAudio().stop(Audio.BOOST);
+			getThisGame().getAudio().rocketBoost(this, false);
 		}
 
 		if (input.contains("DOWN") || input.contains("S")) {
@@ -212,9 +212,9 @@ public class Player extends AbstractEntity {
 
 			if (input.contains("W")) {
 				accelerate();
-				getThisGame().getAudio().play(Audio.BOOST);
+				getThisGame().getAudio().rocketBoost(this, true);
 			} else {
-				getThisGame().getAudio().stop(Audio.BOOST);
+				getThisGame().getAudio().rocketBoost(this, false);
 			}
 
 			if (input.contains("S")) {
@@ -242,9 +242,9 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP")) {
 			accelerate();
-			getThisGame().getAudio().play(Audio.BOOST2);
+			getThisGame().getAudio().rocketBoost(this, true);
 		} else {
-			getThisGame().getAudio().stop(Audio.BOOST2);
+			getThisGame().getAudio().rocketBoost(this, false);
 		}
 
 		if (input.contains("DOWN")) {
