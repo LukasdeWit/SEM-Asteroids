@@ -78,7 +78,7 @@ public class HighscoreStore {
             final List<HighScore> result = Arrays.asList(array);
             Collections.sort(result);
 
-            return array;
+            return result.toArray(array);
         } catch (IOException e) {
             Logger.getInstance().log("was unable to read the highscores file", e);
             if (highScores == null) {
