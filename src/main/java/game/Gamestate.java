@@ -88,7 +88,7 @@ public final class Gamestate {
 	 * @param input - input
 	 * @return 
 	 */
-	public final void startScreen(final List<String> input) {
+	public void startScreen(final List<String> input) {
 		if (input.contains("H")) {
 			Logger.getInstance().log("Go to highscores screen");
 			setMode(noneMode);
