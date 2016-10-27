@@ -109,13 +109,13 @@ public class Audio {
 			final AudioClip ufobig = new AudioClip(new File(
 					PATH + "ufoBig.mp3").toURI().toURL().toString());
 			final AudioClip boost = new AudioClip(new File(
-					PATH + "boost.wav").toURI().toURL().toString());
+					PATH + "boost.mp3").toURI().toURL().toString());
 			final AudioClip teleport = new AudioClip(new File(
 					PATH + "teleport.wav").toURI().toURL().toString());
 			final AudioClip powerup = new AudioClip(new File(
 					PATH + "pickup.wav").toURI().toURL().toString());
 			final AudioClip boost2 = new AudioClip(new File(
-					PATH + "boost2.wav").toURI().toURL().toString());
+					PATH + "boost2.mp3").toURI().toURL().toString());
 			final AudioClip shooting2 = new AudioClip(new File(
 					PATH + "fire2.wav").toURI().toURL().toString());
 
