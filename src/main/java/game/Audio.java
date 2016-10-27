@@ -218,18 +218,17 @@ public class Audio {
 	
 	/**
 	 * Handle boost for player.
-	 * @param p player for whom the rocketboost should be played.
-	 * @param play true if the rocket boost should be turned on, false if off
+	 * @param p - player for whom the rocketboost should be played.
 	 */
-	public final void rocketBoost(final Player p, final boolean play) {
+	public final void rocketBoost(final Player p) {
 		if (p.isPlayerTwo()) {
-			if (p.isBoost()) {
+			if (p.isBoost() && p.isAlive()) {
 				play(BOOST2);
 			} else {
 				stop(BOOST2);
 			}
 		} else {
-			if (p.isBoost()) {
+			if (p.isBoost() && p.isAlive()) {
 				play(BOOST);
 			} else {
 				stop(BOOST);

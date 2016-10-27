@@ -81,6 +81,7 @@ public class Player extends AbstractEntity {
 	 */
 	@Override
 	public final void onDeath() {
+		getThisGame().getAudio().rocketBoost(this);
 		// no-op
 	}
 
@@ -93,7 +94,6 @@ public class Player extends AbstractEntity {
 	public final void onHit() {
 		if (shielding < 1) {
 			// boost sound will normally not stop if player dies mid-flight
-			getThisGame().getAudio().rocketBoost(this, false);
 			lives--;
 			if (lives <= 0) {
 				getThisGame().over();
@@ -154,6 +154,7 @@ public class Player extends AbstractEntity {
 				keyHandler(input);
 			}
 		}
+		getThisGame().getAudio().rocketBoost(this);
 	}
 
 	/**
@@ -165,9 +166,6 @@ public class Player extends AbstractEntity {
 		turnKeys(input);
 		if (input.contains("UP") || input.contains("W")) {
 			accelerate();
-			getThisGame().getAudio().rocketBoost(this, true);
-		} else {
-			getThisGame().getAudio().rocketBoost(this, false);
 		}
 
 		if (input.contains("DOWN") || input.contains("S")) {
@@ -212,9 +210,6 @@ public class Player extends AbstractEntity {
 
 			if (input.contains("W")) {
 				accelerate();
-				getThisGame().getAudio().rocketBoost(this, true);
-			} else {
-				getThisGame().getAudio().rocketBoost(this, false);
 			}
 
 			if (input.contains("S")) {
@@ -242,9 +237,6 @@ public class Player extends AbstractEntity {
 
 		if (input.contains("UP")) {
 			accelerate();
-			getThisGame().getAudio().rocketBoost(this, true);
-		} else {
-			getThisGame().getAudio().rocketBoost(this, false);
 		}
 
 		if (input.contains("DOWN")) {
