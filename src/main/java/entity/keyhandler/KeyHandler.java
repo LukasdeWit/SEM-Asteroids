@@ -55,7 +55,9 @@ public class KeyHandler {
 		if (p.isPlayerTwo()) {
 			actualinput.removeAll(Arrays.asList(P1COMMANDS));
 		} else {
-			actualinput.removeAll(Arrays.asList(P2COMMANDS));
+			if (p.getThisGame().getGamestate().getMode().isCoop()) {
+				actualinput.removeAll(Arrays.asList(P2COMMANDS));
+			}
 		}
 		
 		for (String s : input) {
