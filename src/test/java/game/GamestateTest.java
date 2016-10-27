@@ -102,7 +102,7 @@ public class GamestateTest {
 		gamestate.setState(gamestate.getOngoingGameState());
 		input.add("R");
 		gamestate.update(input);
-		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode()); 
 		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
 	}
 	
