@@ -4,6 +4,10 @@ import entity.Asteroid;
 import entity.Boss;
 import entity.Powerup;
 import entity.Saucer;
+import entity.builders.AsteroidBuilder;
+import entity.builders.BossBuilder;
+import entity.builders.PowerupBuilder;
+import entity.builders.SaucerBuilder;
 
 import java.util.Random;
 
@@ -19,6 +23,10 @@ public final class Spawner {
 	private int wave;
 	private final Random random;
 	private final Game thisGame;
+	private final SaucerBuilder sBuilder;
+	private final AsteroidBuilder aBuilder;
+	private final BossBuilder bBuilder;
+	private final PowerupBuilder pBuilder;
 
 	private static final long SAUCER_TIME = 20000;
 	private static final long POWERUP_TIME = 10000;
@@ -43,6 +51,24 @@ public final class Spawner {
 		startRest = 0;
 		wave = 0;
 		random = new Random();
+		
+		aBuilder = new AsteroidBuilder();
+		aBuilder.setThisGame(thisGame);
+		aBuilder.setRadius(Asteroid.getBigRadius());
+		aBuilder.setX(0);
+		
+		sBuilder = new SaucerBuilder();
+		sBuilder.setThisGame(thisGame);
+		
+		bBuilder = new BossBuilder();
+		bBuilder.setThisGame(thisGame);
+		bBuilder.setDX(0);
+		bBuilder.setDY(0);
+		
+		pBuilder = new PowerupBuilder();
+		pBuilder.setThisGame(thisGame);
+		pBuilder.setDX(0);
+		pBuilder.setDY(0);
 	}
 
 	/**
@@ -146,9 +172,11 @@ public final class Spawner {
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
 	private void spawnSaucer() {
-		final Saucer newSaucer = new Saucer(random.nextInt(1)
-				* 2 * thisGame.getScreenX(), (float) Math.random()
-				* thisGame.getScreenY(), 0, 0, thisGame);
+		sBuilder.setX(random.nextInt(1) * 2 * thisGame.getScreenX());
+		sBuilder.setY((float) Math.random() * thisGame.getScreenY());
+		sBuilder.setDX(0);
+		sBuilder.setDY(0);
+		final Saucer newSaucer = (Saucer) sBuilder.getResult();
 		if (Math.random() < smallSaucerRatio()) {
 			newSaucer.setRadius(Saucer.getSmallRadius());
 		}
@@ -159,10 +187,10 @@ public final class Spawner {
 	 * adds a Powerup with random X and Y and type.
 	 */
 	private void spawnPowerup() {
-		thisGame.create(new Powerup(thisGame.getScreenY()
-				* (float) Math.random(),
-				thisGame.getScreenY()
-						* (float) Math.random(), thisGame));
+		pBuilder.setX(thisGame.getScreenX() * (float) Math.random());	
+		pBuilder.setY(thisGame.getScreenY() * (float) Math.random());
+		final Powerup p = (Powerup) pBuilder.getResult();
+		thisGame.create(p);
 	}
 
 	/**
@@ -189,9 +217,10 @@ public final class Spawner {
 	 */
 	private void spawnAsteroid(final int times) {
 		for (int i = 0; i < times; i++) {
-			thisGame.create(new Asteroid(0, thisGame.getScreenY() * (float) Math.random(),
-					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
-					thisGame));
+			aBuilder.setY(thisGame.getScreenY() * (float) Math.random());
+			aBuilder.setDX((float) (Math.random() - .5) * ASTEROID_SPEED);
+			aBuilder.setDY((float) (Math.random() - .5) * ASTEROID_SPEED);
+			thisGame.create(aBuilder.getResult());
 		}
 		if (times == 1) {
 			Logger.getInstance().log("1 asteroid was spawned.");
@@ -204,10 +233,10 @@ public final class Spawner {
 	 * Spawns a boss.
 	 */
 	private void spawnBoss() {
-		final Boss boss =
-				new Boss(random.nextInt(1)
-				* 2 * thisGame.getScreenX(), (float) Math.random()
-				* thisGame.getScreenY(), 0, 0, thisGame);
+		bBuilder.setX(random.nextInt(1) * 2 * thisGame.getScreenX());
+		bBuilder.setY((float) Math.random() * thisGame.getScreenY());
+		
+		final Boss boss = (Boss) bBuilder.getResult();
 		thisGame.create(boss);
 	}
 

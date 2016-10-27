@@ -1,6 +1,8 @@
 package entity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import entity.builders.BossBuilder;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
@@ -27,7 +30,7 @@ public class BossTest {
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
 	
-	private Boss boss;
+	private BossBuilder bBuilder;
 	private Game thisGame;
 	
 	@Before
@@ -36,21 +39,18 @@ public class BossTest {
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		boss = new Boss(X_START, Y_START, DX_START, DY_START, thisGame);
-	}
-
-	@Test
-	public final void testConstructor() {
-		//Assert that the Boss was constructed.
-		assertNotSame(boss, null);
-		//Assert that the Boss's properties are correct.
-		assertEquals(boss.getX(), X_START, 0);
-		assertEquals(boss.getY(), Y_START, 0);
-		//Can't test DX or DY, since they are randomly initialized internally.
+		
+		bBuilder = new BossBuilder();
+		bBuilder.setThisGame(thisGame);
+		bBuilder.setX(X_START);
+		bBuilder.setY(Y_START);
+		bBuilder.setDX(DX_START);
+		bBuilder.setDY(DY_START);
 	}
 	
 	@Test
 	public void testUpdate() {
+		final Boss boss = (Boss) bBuilder.getResult();
 		//Test basic movement
 		final float dX = boss.getDX();
 		final float dY = boss.getDY();
@@ -62,7 +62,11 @@ public class BossTest {
 	
 	@Test
 	public void testUpdate2() {
-		final Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
+		bBuilder.setX(-1);
+		bBuilder.setY(-1);
+		bBuilder.setDX(0);
+		bBuilder.setDY(0);
+		final Boss boss2 = (Boss) bBuilder.getResult();
 		//Test resetting of movement values to keep inside screen.
 		boss2.setDX(-2);
 		boss2.setDY(-2);
@@ -74,6 +78,7 @@ public class BossTest {
 
 	@Test
 	public void testDraw() {
+		final Boss boss = (Boss) bBuilder.getResult();
 		boss.draw();
 		final Node c = Launcher.getRoot().getChildren().get(0);
 		assertTrue(c instanceof Circle);
@@ -82,15 +87,16 @@ public class BossTest {
 
 	@Test
 	public void testCollide() {
+		final Boss boss = (Boss) bBuilder.getResult();
 		//Hit the boss with a friendly bullet.
-		final BulletBuilder bBuilder = new BulletBuilder();
-		bBuilder.setX(boss.getX());
-		bBuilder.setY(boss.getY());
-		bBuilder.setDX(0f);
-		bBuilder.setDY(0f);
-		bBuilder.setThisGame(thisGame);
-		bBuilder.setFriendly(true);
-		final Bullet bullet = (Bullet) bBuilder.getResult();
+		final BulletBuilder bulletBuilder = new BulletBuilder();
+		bulletBuilder.setX(boss.getX());
+		bulletBuilder.setY(boss.getY());
+		bulletBuilder.setDX(0f);
+		bulletBuilder.setDY(0f);
+		bulletBuilder.setThisGame(thisGame);
+		bulletBuilder.setFriendly(true);
+		final Bullet bullet = (Bullet) bulletBuilder.getResult();
 
 		boss.collide(bullet);
 		//Show that the bullet is destroyed but the boss still has lives.
@@ -105,6 +111,7 @@ public class BossTest {
 
 	@Test
 	public void testCollide2() {
+		final Boss boss = (Boss) bBuilder.getResult();
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		//Hit the boss with a player.
 		pBuilder.setX(0);
@@ -128,6 +135,7 @@ public class BossTest {
 	
 	@Test
 	public void testOnDeath() {
+		final Boss boss = (Boss) bBuilder.getResult();
 		final double initialScore = boss.getThisGame().getScoreCounter().getScore();
 		boss.onDeath();
 		assertEquals(initialScore + 20000,boss.getThisGame().getScoreCounter().getScore(),0);
@@ -136,6 +144,7 @@ public class BossTest {
 	//Since each method calls the other, more than one test would be silly.
 	@Test
 	public void testSetPath() {
+		final Boss boss = (Boss) bBuilder.getResult();
 		final int toRight = boss.getToRight();
 		final int pathtoset = 1;
 		final double predictedangle = Math.PI * toRight + (pathtoset-1) * Math.PI / 4;
@@ -146,7 +155,11 @@ public class BossTest {
 
 	@Test
 	public void testCheckEdgeX() {
-		final Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
+		bBuilder.setX(-1);
+		bBuilder.setY(-1);
+		bBuilder.setDX(0);
+		bBuilder.setDY(0);
+		final Boss boss2 = (Boss) bBuilder.getResult();
 		boss2.setDX(-2);
 		boss2.checkEdgeX();
 		assertEquals(boss2.getDX(), 2.0,0);
@@ -154,7 +167,11 @@ public class BossTest {
 
 	@Test
 	public void testCheckEdgeY() {
-		final Boss boss2 = new Boss(-1, -1, 0, 0, thisGame);
+		bBuilder.setX(-1);
+		bBuilder.setY(-1);
+		bBuilder.setDX(0);
+		bBuilder.setDY(0);
+		final Boss boss2 = (Boss) bBuilder.getResult();
 		boss2.setDY(-2);
 		boss2.checkEdgeY();
 		assertEquals(boss2.getDY(), 2.0,0);

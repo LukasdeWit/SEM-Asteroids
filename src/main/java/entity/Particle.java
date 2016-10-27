@@ -2,6 +2,7 @@ package entity;
 import java.util.List;
 
 import display.DisplayEntity;
+import entity.builders.ParticleBuilder;
 import game.Game;
 
 /**
@@ -17,16 +18,10 @@ public class Particle extends AbstractEntity {
 	private static final float SPEED = .75f;
 
 	/**
-	 * Constructor of a particle.
-	 *
-	 * @param x        x coordinate
-	 * @param y        y coordinate
-	 * @param dX       horizontal speed
-	 * @param dY       vertical speed
-	 * @param thisGame the game this particle belongs to
+	 * Empty constructor of a Particle.
 	 */
-	public Particle(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+	public Particle() {
+		super();
 		setRadius(1);
 		birthTime = System.currentTimeMillis();
 	}
@@ -53,7 +48,13 @@ public class Particle extends AbstractEntity {
 	 * @return the random particle
 	 */
 	private static Particle randomParticle(final float x, final float y, final Game thisGame) {
-		return new Particle(x, y, (float) (Math.random() - .5) * SPEED, (float) (Math.random() - .5) * SPEED, thisGame);
+		final ParticleBuilder pBuilder = new ParticleBuilder();
+		pBuilder.setX(x);
+		pBuilder.setY(y);
+		pBuilder.setDX((float) (Math.random() - .5) * SPEED);
+		pBuilder.setDY((float) (Math.random() - .5) * SPEED);
+		pBuilder.setThisGame(thisGame);
+		return (Particle) pBuilder.getResult();
 	}
 
 	/**
@@ -107,5 +108,19 @@ public class Particle extends AbstractEntity {
 	 */
 	public final void setBirthTime(final long birthTime) {
 		this.birthTime = birthTime;
+	}
+	
+	/**
+	 * @return a shallow copy of the Particle, useful for making two copies
+	 */
+	public final Particle shallowCopy() {
+		final Particle temp = new Particle();
+		temp.setX(this.getX());
+		temp.setY(this.getY());
+		temp.setDX(this.getDX());
+		temp.setDY(this.getDY());
+		temp.setThisGame(this.getThisGame());
+		temp.setBirthTime(this.birthTime);
+		return temp;
 	}
 }

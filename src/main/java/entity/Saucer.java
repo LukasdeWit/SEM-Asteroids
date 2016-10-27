@@ -6,7 +6,6 @@ import java.util.Random;
 import display.DisplayEntity;
 import entity.builders.BulletBuilder;
 import game.Audio;
-import game.Game;
 import game.Logger;
 import game.Spawner;
 
@@ -34,30 +33,20 @@ public class Saucer extends AbstractEntity {
 	private static final long LESS_SHOT = 50;
 	private static final float MAX_ACCURACY = 10;
 	private static final int PIERCING = 1;
-
+	
 	/**
-	 * Constructor for Saucer class.
-	 *
-	 * @param x        position of Saucer along the X-axis
-	 * @param y        position of Saucer along the Y-axis
-	 * @param dX       velocity of Saucer along the X-axis
-	 * @param dY       velocity of Saucer along the Y-axis
-	 * @param thisGame the game this particle belongs to
+	 * Empty constructor for the saucer class.
 	 */
-	public Saucer(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+	public Saucer() {
+		super();
 		random = new Random();
 		setRadius(BIG_RADIUS);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
-		int nextToRight = 0;
-		if (x > (getThisGame().getScreenX() / 2)) {
-			nextToRight = 1;
-		}
+		final int nextToRight = 0;
 		setPath(nextToRight, random.nextInt((int) PATHS));
 		
 		bBuilder = new BulletBuilder();
-		bBuilder.setThisGame(thisGame);
 		bBuilder.setPierce(PIERCING);
 		bBuilder.setFriendly(false);
 	}
@@ -91,7 +80,7 @@ public class Saucer extends AbstractEntity {
 		setDX((float) Math.cos(direction) * 2);
 		setDY((float) -Math.sin(direction) * 2);
 	}
-
+	
 	/**
 	 * Calculate new position of UFO.
 	 *
@@ -295,6 +284,13 @@ public class Saucer extends AbstractEntity {
 	public final int getToRight() {
 		return toRight;
 	}
+	
+	/**
+	 * @param toRight the new toRight
+	 */
+	public final void setToRight(final int toRight) {
+		this.toRight = toRight;
+	}
 
 	/**
 	 * @return the shotTime
@@ -336,5 +332,22 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static int getBigScore() {
 		return BIG_SCORE;
+	}
+	
+	/**
+	 * @return a shallow copy of the saucer, useful for making two copies
+	 */
+	public final Saucer shallowCopy() {
+		final Saucer saucer = new Saucer();
+		saucer.setDirChangeTime(this.getDirChangeTime());
+		saucer.setX(this.getX());
+		saucer.setY(this.getY());
+		saucer.setDX(this.getDX());
+		saucer.setDY(this.getDY());
+		saucer.setThisGame(this.getThisGame());
+		saucer.setToRight(this.getToRight());
+		saucer.bBuilder.setThisGame(saucer.getThisGame());
+		saucer.setRadius(this.getRadius());
+		return saucer;
 	}
 }

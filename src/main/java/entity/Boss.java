@@ -5,7 +5,6 @@ import java.util.Random;
 
 import display.DisplayEntity;
 import entity.builders.BulletBuilder;
-import game.Game;
 import game.Logger;
 
 /**
@@ -33,29 +32,20 @@ public class Boss extends AbstractEntity {
 	private static final double MULTI_SHOT_ANGLE = .1;
 	private static final int SCORE = 20000;
 	private static final float ACCURACY = 3;
-
+	
 	/**
-	 * Constructor for boss.
-	 * 
-	 * @param x - location of boss along x-axis
-	 * @param y - location of boss along y-axis
-	 * @param dX - speed of boss along x-axis
-	 * @param dY - speed of boss along y-axis
-	 * @param thisGame - game the boss exists in
+	 * Empty constructor for the Boss class.
 	 */
-	public Boss(final float x, final float y, final float dX, final float dY, final Game thisGame) {
-		super(x, y, dX, dY, thisGame);
+	public Boss() {
+		super();
 		random = new Random();
 		setRadius(RADIUS);
 		dirChangeTime = System.currentTimeMillis();
 		shotTime = dirChangeTime;
 		currentLives = STARTING_LIVES;
-		int nextToRight = 0;
-		if (x > (getThisGame().getScreenX() / 2)) {
-			nextToRight = 1;
-		}
+		final int nextToRight = 0;
 		setPath(nextToRight, random.nextInt((int) PATHS));
-
+		
 		// Initialize the Bullet Builder
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(0);
@@ -238,6 +228,13 @@ public class Boss extends AbstractEntity {
 	public final int getToRight() {
 		return toRight;
 	}
+	
+	/**
+	 * @param toRight the new toRight
+	 */
+	public final void setToRight(final int toRight) {
+		this.toRight = toRight;
+	}
 
 	/**
 	 * Gets the starting lives of the boss.
@@ -246,5 +243,35 @@ public class Boss extends AbstractEntity {
 	 */
 	public final int getStartingLives() {
 		return STARTING_LIVES;
+	}
+	
+	/**
+	 * @return the current amount of lives of the boss
+	 */
+	public final int getCurrentLives() {
+		return currentLives;
+	}
+	
+	/**
+	 * @param lives the new current amount of lives
+	 */
+	public final void setCurrentLives(final int lives) {
+		this.currentLives = lives;
+	}
+	
+	/**
+	 * @return a shallow copy of the Boss, useful for making multiple copies.
+	 */
+	public final Boss shallowCopy() {
+		final Boss temp = new Boss();
+		temp.setX(this.getX());
+		temp.setY(this.getY());
+		temp.setDX(this.getDX());
+		temp.setDY(this.getDY());
+		temp.setThisGame(this.getThisGame());
+		temp.setRadius(this.getRadius());
+		temp.setToRight(this.getToRight());
+		temp.setCurrentLives(this.getCurrentLives());
+		return temp;
 	}
 }

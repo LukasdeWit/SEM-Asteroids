@@ -5,7 +5,6 @@ import java.util.Random;
 import display.DisplayEntity;
 import display.DisplayHud;
 import game.Audio;
-import game.Game;
 import game.Logger;
 
 /**
@@ -50,16 +49,12 @@ public class Powerup extends AbstractEntity {
 	};
 	
 	/**
-	 * Constructor for the Powerup class.
-	 *
-	 * @param x        location of Powerup along the X-axis.
-	 * @param y        location of Powerup along the Y-axis.
-	 * @param thisGame the game this particle belongs to
+	 * Empty constructor for the powerup class.
 	 */
-	public Powerup(final float x, final float y, final Game thisGame) {
-		super(x, y, 0, 0, thisGame);
-		final Random random = new Random();
+	public Powerup() {
+		super();
 		setRadius(RADIUS);
+		final Random random = new Random();
 		type = random.nextInt(TYPES);
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
@@ -188,6 +183,13 @@ public class Powerup extends AbstractEntity {
 	public final void setPickupTime(final long pickupTime) {
 		this.pickupTime = pickupTime;
 	}
+	
+	/**
+	 * @return the type of powerup
+	 */
+	public final int getType() {
+		return this.type;
+	}
 
 	/**
 	 * @param type the type to set
@@ -222,5 +224,22 @@ public class Powerup extends AbstractEntity {
 	 */
 	public final void setStartTime(final long startTime) {
 		this.startTime = startTime;
+	}
+	
+	/**
+	 * @return a shallow copy of the Powerup, useful for making multiple copies
+	 */
+	public final Powerup shallowCopy() {
+		final Powerup temp = new Powerup();
+		temp.setX(this.getX());
+		temp.setY(this.getY());
+		temp.setDX(this.getDX());
+		temp.setDY(this.getDY());
+		temp.setThisGame(this.getThisGame());
+		temp.setType(this.getType());
+		temp.setPlayer(this.getPlayer());
+		temp.setStartTime(this.startTime);
+		temp.setPickupTime(this.pickupTime);
+		return temp;
 	}
 }
