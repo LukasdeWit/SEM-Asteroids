@@ -46,6 +46,7 @@ public class PowerupTest {
 		pBuilder.setDY(4);
 		pBuilder.setThisGame(thisGame);
 		pBuilder.setPlayerTwo(false);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test

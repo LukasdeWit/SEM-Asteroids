@@ -36,6 +36,7 @@ public class GamestateTest {
 		thisGame.setPlayerTwo(null);
 		DisplayText.setTest(true);
 		gamestate.setScreenSwitchTime(0);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test
