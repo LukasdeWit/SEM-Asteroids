@@ -43,13 +43,6 @@ public class PlayerShooter extends AbstractShooter {
 
 	@Override
 	public final void shoot() {
-		fire();
-	}
-	
-	/**
-	 * Method to handle firing bullets.
-	 */
-	private void fire() {
 		Player owner = (Player) getOwner();
 		double rotation = owner.getRotation();
 		if (System.currentTimeMillis() - getLastShot() > fireRate && owner.getThisGame().bullets(owner) < maxBullets) {
