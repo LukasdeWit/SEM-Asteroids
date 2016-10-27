@@ -30,6 +30,7 @@ public class Launcher extends Application {
 
 	// Make a new Game
 	private final Game thisGame = new Game();
+	private static Stage thisStage;
 
 	/**
 	 * Main method.
@@ -47,6 +48,7 @@ public class Launcher extends Application {
 	 */
 	@Override
 	public final void start(final Stage stage) {
+		Launcher.setThisStage(stage);
 		// set up the title
 		stage.setTitle("ASTEROIDS!");
 		// set up the scene
@@ -113,6 +115,27 @@ public class Launcher extends Application {
 	 */
 	public static Group getRoot() {
 		return ROOT;
+	}
+
+	/**
+	 * quit the game.
+	 */
+	public static void quit() {
+		Launcher.getThisStage().close();
+	}
+
+	/**
+	 * @return the thisStage
+	 */
+	public static final Stage getThisStage() {
+		return thisStage;
+	}
+
+	/**
+	 * @param thisStage the thisStage to set
+	 */
+	public static final void setThisStage(final Stage thisStage) {
+		Launcher.thisStage = thisStage;
 	}
 
 }
