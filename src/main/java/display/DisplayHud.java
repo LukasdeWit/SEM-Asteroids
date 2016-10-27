@@ -33,6 +33,8 @@ public final class DisplayHud {
 	private static final double POWERUP_SLOT_CENTER = 2.5f;
 	private static final double POWERUP_STROKE_WIDTH = 4;
 	private static final Double[] POWERUP_TRIANGLE = new Double[]{10.0, 0.0, 16.0, 6.0, 4.0, 6.0 };
+	private static final double EXTRA_LIFE_SIZE = 3;
+	private static final double EL_LIFE_OFFSET = 10;
 
     /**
      * private constructor since this class only contains static methods.
@@ -114,14 +116,21 @@ public final class DisplayHud {
      */
 	public static Group extraLifeGroup() {
 		final Group g = new Group();
-		final Line l1 = new Line(0, 10, 20, 10);
+		final Line l1 = new Line(0, 10, 10, 10);
 		l1.setStroke(Color.WHITE);
-		l1.setStrokeWidth(POWERUP_STROKE_WIDTH);
+		l1.setStrokeWidth(2);
 		g.getChildren().add(l1);
-		final Line l2 = new Line(10, 0, 10, 20);
+		final Line l2 = new Line(5, 5, 5, 15);
 		l2.setStroke(Color.WHITE);
-		l2.setStrokeWidth(POWERUP_STROKE_WIDTH);
+		l2.setStrokeWidth(2);
 		g.getChildren().add(l2);
+		final double[] points = DisplayUtils.translate(t -> t * EXTRA_LIFE_SIZE + EL_LIFE_OFFSET,
+                t -> t * EXTRA_LIFE_SIZE, LIVES_LINES);
+        final Polygon shape = new Polygon(points);
+
+        shape.setFill(Color.WHITE);
+        shape.setStrokeWidth(1);
+        g.getChildren().add(shape);
 		return g;
 	}
 
