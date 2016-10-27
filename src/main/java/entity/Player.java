@@ -259,21 +259,21 @@ public class Player extends AbstractEntity {
 	/**
 	 * Turn the player left.
 	 */
-	private void turnLeft() {
+	public final void turnLeft() {
 		rotation += ROTATION_SPEED;
 	}
 
 	/**
 	 * Turn the player right.
 	 */
-	private void turnRight() {
+	public final void turnRight() {
 		rotation -= ROTATION_SPEED;
 	}
 
 	/**
 	 * Makes player move faster.
 	 */
-	private void accelerate() {
+	public final void accelerate() {
 		setDX((float) (getDX() + Math.cos(getRotation()) * ACCELERATION));
 		setDY((float) (getDY() - Math.sin(getRotation()) * ACCELERATION));
 		if (speed() > MAX_SPEED) {
@@ -314,7 +314,7 @@ public class Player extends AbstractEntity {
 	/**
 	 * Method to handle hyperspace mechanic.
 	 */
-	private void goHyperspace() {
+	public final void goHyperspace() {
 		final Random random = new Random();
 		if (random.nextInt(changeOfDying) == 0) {
 			onHit();
@@ -334,7 +334,7 @@ public class Player extends AbstractEntity {
 	/**
 	 * Method to handle firing bullets.
 	 */
-	private void fire() {
+	public final void fire() {
 		if (System.currentTimeMillis() - lastShot >	fireRate && getThisGame().bullets(this) < maxBullets) {
 			fireBullet(rotation);
 			if (tripleShot) {
