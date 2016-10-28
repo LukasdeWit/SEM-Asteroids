@@ -76,15 +76,22 @@ public class Player extends AbstractEntity {
 	 */
 	public final void onHit() {
 		if (shielding < 1) {
-			lives--;
-			if (lives <= 0) {
-				getThisGame().over();
-			} else {
-				respawnThePlayer();
-			}			
+			loseLife();		
 		} else {
 			shielding--;
 			makeInvincible(INVINCIBILITY_START_TIME);
+		}
+	}
+	
+	/**
+	 * Handles what happens when a player loses a life.
+	 */
+	private void loseLife() {
+		lives--;
+		if (lives <= 0) {
+			getThisGame().over();
+		} else {
+			respawnThePlayer();
 		}
 	}
 
