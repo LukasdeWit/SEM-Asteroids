@@ -191,7 +191,7 @@ public class BasicBoss extends AbstractBoss {
 	}
 
 	@Override
-	public void draw() {
+	public final void draw() {
 		DisplayEntity.boss(this);
 	}
 
