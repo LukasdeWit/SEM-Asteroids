@@ -217,17 +217,33 @@ public class Player extends AbstractEntity {
 	@Override
 	public final void collide(final AbstractEntity e2) {
 		if (e2 instanceof Asteroid) {
-			if (invincible() && !hyperspace()) {
-				invincibleStart = System.currentTimeMillis();
-			} else if (!invincible()) {
-				getThisGame().destroy(e2);
-				onHit();
-				Logger.getInstance().log(playerString + " was hit by an asteroid.");
-			}
+			hitByAsteroid((Asteroid) e2);
 		} else if (e2 instanceof Bullet && !((Bullet) e2).isFriendly()) {
+			hitByBullet((Bullet) e2);
+		}
+	}
+	
+	/**
+	 * Handles player collision with bullet.
+	 * @param e2 - bullet
+	 */
+	private void hitByBullet(final Bullet e2) {
+		getThisGame().destroy(e2);
+		onHit();
+		Logger.getInstance().log(playerString + " was hit by a bullet.");
+	}
+	
+	/**
+	 * Handles player collision with asteroid.
+	 * @param e2 - asteroid
+	 */
+	private void hitByAsteroid(final Asteroid e2) {
+		if (invincible() && !hyperspace()) {
+			invincibleStart = System.currentTimeMillis();
+		} else if (!invincible()) {
 			getThisGame().destroy(e2);
 			onHit();
-			Logger.getInstance().log(playerString + " was hit by a bullet.");
+			Logger.getInstance().log(playerString + " was hit by an asteroid.");
 		}
 	}
 
