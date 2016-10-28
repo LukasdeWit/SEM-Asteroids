@@ -16,7 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 
 /**
- * Tests for BasicBoss
+ * Tests for basicBoss
  * @author Dario
  *
  */
@@ -27,7 +27,7 @@ public class BasicBossTest {
 	private static final float DX_START = 3;
 	private static final float DY_START = 4;
 	
-	private BasicBoss BasicBoss;
+	private BasicBoss basicBoss;
 	private Game thisGame;
 	
 	@Before
@@ -36,28 +36,28 @@ public class BasicBossTest {
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
-		BasicBoss = new BasicBoss(X_START, Y_START, DX_START, DY_START, thisGame);
+		basicBoss = new BasicBoss(X_START, Y_START, DX_START, DY_START, thisGame);
 	}
 
 	@Test
 	public final void testConstructor() {
-		//Assert that the BasicBoss was constructed.
-		assertNotSame(BasicBoss, null);
-		//Assert that the BasicBoss's properties are correct.
-		assertEquals(BasicBoss.getX(), X_START, 0);
-		assertEquals(BasicBoss.getY(), Y_START, 0);
+		//Assert that the basicBoss was constructed.
+		assertNotSame(basicBoss, null);
+		//Assert that the basicBoss's properties are correct.
+		assertEquals(basicBoss.getX(), X_START, 0);
+		assertEquals(basicBoss.getY(), Y_START, 0);
 		//Can't test DX or DY, since they are randomly initialized internally.
 	}
 	
 	@Test
 	public void testUpdate() {
 		//Test basic movement
-		final float dX = BasicBoss.getDX();
-		final float dY = BasicBoss.getDY();
+		final float dX = basicBoss.getDX();
+		final float dY = basicBoss.getDY();
 		final List<String> input = new ArrayList<>(0);
-		BasicBoss.update(input);
-		assertEquals(BasicBoss.getX(), X_START + dX, 0);
-		assertEquals(BasicBoss.getY(), Y_START + dY, 0);
+		basicBoss.update(input);
+		assertEquals(basicBoss.getX(), X_START + dX, 0);
+		assertEquals(basicBoss.getY(), Y_START + dY, 0);
 	}
 	
 	@Test
@@ -74,7 +74,7 @@ public class BasicBossTest {
 
 	@Test
 	public void testDraw() {
-		BasicBoss.draw();
+		basicBoss.draw();
 		final Node c = Launcher.getRoot().getChildren().get(0);
 		assertTrue(c instanceof Circle);
 		assertEquals(X_START, c.getTranslateX(), 0);
@@ -82,31 +82,31 @@ public class BasicBossTest {
 
 	@Test
 	public void testCollide() {
-		//Hit the BasicBoss with a friendly bullet.
+		//Hit the basicBoss with a friendly bullet.
 		final BulletBuilder bBuilder = new BulletBuilder();
-		bBuilder.setX(BasicBoss.getX());
-		bBuilder.setY(BasicBoss.getY());
+		bBuilder.setX(basicBoss.getX());
+		bBuilder.setY(basicBoss.getY());
 		bBuilder.setDX(0f);
 		bBuilder.setDY(0f);
 		bBuilder.setThisGame(thisGame);
 		bBuilder.setFriendly(true);
 		final Bullet bullet = (Bullet) bBuilder.getResult();
 
-		BasicBoss.collide(bullet);
-		//Show that the bullet is destroyed but the BasicBoss still has lives.
-		assertTrue(BasicBoss.getThisGame().getDestroyList().contains(bullet));
-		assertFalse(BasicBoss.getThisGame().getDestroyList().contains(BasicBoss));
-		for(int i = 0; i < BasicBoss.getStartingLives(); i++) {
-			BasicBoss.collide(bullet);
+		basicBoss.collide(bullet);
+		//Show that the bullet is destroyed but the basicBoss still has lives.
+		assertTrue(basicBoss.getThisGame().getDestroyList().contains(bullet));
+		assertFalse(basicBoss.getThisGame().getDestroyList().contains(basicBoss));
+		for(int i = 0; i < basicBoss.getStartingLives(); i++) {
+			basicBoss.collide(bullet);
 		}
-		//Show that the BasicBoss' lives are exhausted.
-		assertTrue(BasicBoss.getThisGame().getDestroyList().contains(BasicBoss));
+		//Show that the basicBoss' lives are exhausted.
+		assertTrue(basicBoss.getThisGame().getDestroyList().contains(basicBoss));
 	}
 
 	@Test
 	public void testCollide2() {
 		final PlayerBuilder pBuilder = new PlayerBuilder();
-		//Hit the BasicBoss with a player.
+		//Hit the basicBoss with a player.
 		pBuilder.setX(0);
 		pBuilder.setY(0);
 		pBuilder.setDX(0);
@@ -116,32 +116,32 @@ public class BasicBossTest {
 		final Player player = (Player) pBuilder.getResult();
 		
 		final int initiallives = player.getLives();
-		BasicBoss.collide(player);
+		basicBoss.collide(player);
 		//Show that the player doesn't lose a life, since they are currently invinicible.
 		assertEquals(initiallives, player.getLives());
 		//Make player not invincible and show that they lose a life.
 		player.setInvincibleStart(0);
-		BasicBoss.collide(player);
+		basicBoss.collide(player);
 		assertEquals(initiallives - 1, player.getLives());
-		assertFalse(BasicBoss.getThisGame().getDestroyList().contains(BasicBoss));
+		assertFalse(basicBoss.getThisGame().getDestroyList().contains(basicBoss));
 	}
 	
 	@Test
 	public void testOnDeath() {
-		final double initialScore = BasicBoss.getThisGame().getScoreCounter().getScore();
-		BasicBoss.onDeath();
-		assertEquals(initialScore + 20000,BasicBoss.getThisGame().getScoreCounter().getScore(),0);
+		final double initialScore = basicBoss.getThisGame().getScoreCounter().getScore();
+		basicBoss.onDeath();
+		assertEquals(initialScore + 20000,basicBoss.getThisGame().getScoreCounter().getScore(),0);
 	}
 
 	//Since each method calls the other, more than one test would be silly.
 	@Test
 	public void testSetPath() {
-		final int toRight = BasicBoss.getToRight();
+		final int toRight = basicBoss.getToRight();
 		final int pathtoset = 1;
 		final double predictedangle = Math.PI * toRight + (pathtoset-1) * Math.PI / 4;
-		BasicBoss.setPath(pathtoset);
-		assertEquals(BasicBoss.getDX(),Math.cos(predictedangle) * 2,0);
-		assertEquals(BasicBoss.getDY(),-Math.sin(predictedangle) * 2,0);
+		basicBoss.setPath(pathtoset);
+		assertEquals(basicBoss.getDX(),Math.cos(predictedangle) * 2,0);
+		assertEquals(basicBoss.getDY(),-Math.sin(predictedangle) * 2,0);
 	}
 
 	@Test
