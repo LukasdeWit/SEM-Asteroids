@@ -82,7 +82,6 @@ public class Player extends AbstractEntity {
 	@Override
 	public final void onDeath() {
 		getThisGame().getAudio().rocketBoost(this);
-		// no-op
 	}
 
 	/**
@@ -93,7 +92,6 @@ public class Player extends AbstractEntity {
 	 */
 	public final void onHit() {
 		if (shielding < 1) {
-			// boost sound will normally not stop if player dies mid-flight
 			lives--;
 			if (lives <= 0) {
 				getThisGame().over();
