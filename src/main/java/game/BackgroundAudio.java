@@ -1,9 +1,9 @@
 package game;
 
+import javafx.scene.media.AudioClip;
+
 import java.io.File;
 import java.net.MalformedURLException;
-
-import javafx.scene.media.AudioClip;
 
 /**
  * Class that regulates the background track.
@@ -60,9 +60,8 @@ public class BackgroundAudio {
 
 	/**
 	 * Play the background track.
-	 * 
-	 * @param enemies
-	 *            new amount of enemies.
+	 *
+	 * @param enemies new amount of enemies.
 	 */
 	public final void update(final int enemies) {
 		if (System.currentTimeMillis() > time + interval) {
@@ -78,7 +77,7 @@ public class BackgroundAudio {
 			// music slows down again when there are no more enemies left
 			if (enemies > 1) {
 				if (BASELINE / enemies < interval) {
-				interval = BASELINE / enemies;
+					interval = BASELINE / enemies;
 				}
 			} else {
 				interval = BASELINE;

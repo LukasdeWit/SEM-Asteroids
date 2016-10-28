@@ -29,7 +29,7 @@ public class Player extends AbstractEntity {
 	private int shielding;
 	private boolean tripleShot;
 	private float bulletSize;
-	private int changeOfDying;
+	private int chanceOfDying;
 	private String playerString;
 	private final BulletBuilder bBuilder;
 	private final KeyHandler keyhandler;
@@ -67,7 +67,7 @@ public class Player extends AbstractEntity {
 		shielding = 0;
 		bulletSize = BULLET_SIZE;
 		tripleShot = false;
-		changeOfDying = CHANCE_OF_DYING;
+		chanceOfDying = CHANCE_OF_DYING;
 		// Initialize the Bullet Builder
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(piercing);
@@ -240,18 +240,18 @@ public class Player extends AbstractEntity {
 	 */
 	public final void goHyperspace() {
 		final Random random = new Random();
-		if (random.nextInt(changeOfDying) == 0) {
+		if (random.nextInt(chanceOfDying) == 0) {
 			onHit();
 			Logger.getInstance().log(playerString + " died in hyperspace.");
 		} else {
-		Logger.getInstance().log(playerString + " went into hyperspace.");
-		setX((float) (getThisGame().getScreenX() * Math.random()));
-		setY((float) (getThisGame().getScreenY() * Math.random()));
-		setDX(0);
-		setDY(0);
-		makeInvincible(HYPERSPACE_TIME);
-		hyperspaceStart = System.currentTimeMillis();
-		getThisGame().getAudio().playMultiple(Audio.TELEPORT);
+			Logger.getInstance().log(playerString + " went into hyperspace.");
+			setX((float) (getThisGame().getScreenX() * Math.random()));
+			setY((float) (getThisGame().getScreenY() * Math.random()));
+			setDX(0);
+			setDY(0);
+			makeInvincible(HYPERSPACE_TIME);
+			hyperspaceStart = System.currentTimeMillis();
+			getThisGame().getAudio().play(Audio.TELEPORT);
 		}
 	}
 
@@ -554,10 +554,10 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @param changeOfDying the changeOfDying to set
+	 * @param chanceOfDying the chanceOfDying to set
 	 */
-	public final void setChangeOfDying(final int changeOfDying) {
-		this.changeOfDying = changeOfDying;
+	public final void setChanceOfDying(final int chanceOfDying) {
+		this.chanceOfDying = chanceOfDying;
 	}
 	
 	/**
