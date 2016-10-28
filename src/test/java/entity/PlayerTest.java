@@ -206,15 +206,6 @@ public class PlayerTest {
 		update(player, input, false);
 		assertTrue(0 != player.getHyperspaceStart() || player.getLives() == 2);
 	}
-
-	@Test
-	public void testKeyHandler9() {
-		final String[] input = {SPACE};
-		update(player, input, false);
-		assertEquals(System.currentTimeMillis(), player.getLastShot(), 1);
-	}
-	
-
 	
 	@Test
 	public void testKeyHandlerTwo1() {
@@ -272,19 +263,7 @@ public class PlayerTest {
 		assertTrue(0 !=  player.getHyperspaceStart() || player.getLives() == 2);
 	}
 
-	@Test
-	public void testKeyHandlerTwo9() {
-		final String[] input = {SPACE};
-		update(player, input, true);
-		assertEquals(System.currentTimeMillis(), player.getLastShot(), 1);
-	}
 
-	@Test
-	public void testKeyHandlerTwo10() {
-		final String[] input = {"ENTER"};
-		update(player2, input, true);
-		assertEquals(System.currentTimeMillis(), player2.getLastShot(), 1);
-	}
 	
 	@Test
 	public void testAccelerate() {
@@ -301,30 +280,6 @@ public class PlayerTest {
 		player.setChanceOfDying(1);
 		update(player, input, false);
 		assertEquals(2, player.getLives(), 0);
-	}
-	
-	@Test
-	public void testFire() {
-		final String[] input = {SPACE};
-		player.setTripleShot(true);
-		update(player, input, false);
-		assertEquals(3, thisGame.getCreateList().size(), 0);
-	}
-	
-	@Test
-	public void testFire2() {
-		final String[] input = {SPACE};
-		update(player, input, false);
-		update(player, input, false);
-		assertEquals(1, thisGame.getCreateList().size(), 0);
-	}
-	
-	@Test
-	public void testFire3() {
-		final String[] input = {SPACE};
-		player.setMaxBullets(0);
-		update(player, input, false);
-		assertEquals(0, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
@@ -414,12 +369,30 @@ public class PlayerTest {
 	}
 	
 	@Test
-	public void testGettersAndSetters(){
-		player.setBulletSize(Player.getBulletSize());
-		player.setPiercing(Player.getMaxBullets());
-		player.setFireRate(Player.getFireRate());
-		player.gainShield();
-		assertEquals(1, player.getShielding(), 0);
+	public void testFire() {
+		final String[] input = {SPACE};
+		player.getShooter().setTripleShot(true);
+		player.getShooter().setLastShot(0);
+		update(player, input, false);
+		assertEquals(3, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public void testFire2() {
+		final String[] input = {SPACE};
+		player.getShooter().setLastShot(0);
+		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
+		update(player, input, false);
+		assertEquals(1, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public void testFire3() {
+		final String[] input = {SPACE};
+		player.getShooter().setMaxBullets(0);
+		player.getShooter().setLastShot(0);
+		update(player, input, false);
+		assertEquals(0, thisGame.getCreateList().size(), 0);
 	}
 	
 	private void update(final Player player, final String[] in, final boolean coop){

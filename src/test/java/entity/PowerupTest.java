@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import entity.builders.PlayerBuilder;
+import entity.shooters.PlayerShooter;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
@@ -92,7 +93,7 @@ public class PowerupTest {
 		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(2);
 		powerup.collide(p);
-		assertEquals(Powerup.getNewBulletSize(), p.getCurrentBulletSize(), 0);
+		assertEquals(Powerup.getNewBulletSize(), p.getShooter().getCurrentBulletSize(), 0);
 	}
 	
 	@Test
@@ -100,7 +101,7 @@ public class PowerupTest {
 		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(3);
 		powerup.collide(p);
-		assertTrue(p.isTripleShot());
+		assertTrue(p.getShooter().isTripleShot());
 	}
 	
 	@Test
@@ -108,7 +109,7 @@ public class PowerupTest {
 		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(4);
 		powerup.collide(p);
-		assertEquals(Powerup.getNewPiercingLevel(), p.getPiercing(), 0);
+		assertEquals(Powerup.getNewPiercingLevel(), p.getShooter().getPiercing(), 0);
 	}
 	
 	@Test
@@ -116,7 +117,7 @@ public class PowerupTest {
 		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(5);
 		powerup.collide(p);
-		assertEquals(Powerup.getNewFireRate(), p.getCurrentFireRate(), 0);
+		assertEquals(Powerup.getNewFireRate(), p.getShooter().getCurrentFireRate(), 0);
 	}
 	
 	@Test
@@ -170,44 +171,44 @@ public class PowerupTest {
 	@Test
 	public void testRunOut1() {
 		final Player p = (Player) pBuilder.getResult();
-		p.setBulletSize(0);
+		p.getShooter().setBulletSize(0);
 		powerup.setPlayer(p);
 		powerup.setType(2);
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertEquals(Player.getBulletSize(), p.getCurrentBulletSize(), 0);
+		assertEquals(PlayerShooter.getBulletSize(), p.getShooter().getCurrentBulletSize(), 0);
 	}
 	
 	@Test
 	public void testRunOut2() {
 		final Player p = (Player) pBuilder.getResult();
-		p.setTripleShot(true);
+		p.getShooter().setTripleShot(true);
 		powerup.setPlayer(p);
 		powerup.setType(3);
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertFalse(p.isTripleShot());
+		assertFalse(p.getShooter().isTripleShot());
 	}
 	
 	@Test
 	public void testRunOut3() {
 		final Player p = (Player) pBuilder.getResult();
-		p.setPiercing(5);
+		p.getShooter().setPiercing(5);
 		powerup.setPlayer(p);
 		powerup.setType(4);
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertEquals(1, p.getPiercing(), 0);
+		assertEquals(1, p.getShooter().getPiercing(), 0);
 	}
 	
 	@Test
 	public void testRunOut4() {
 		final Player p = (Player) pBuilder.getResult();
-		p.setFireRate(0);
+		p.getShooter().setFireRate(0);
 		powerup.setPlayer(p);
 		powerup.setType(5);
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertEquals(Player.getFireRate(), p.getCurrentFireRate(), 0);
+		assertEquals(PlayerShooter.getFireRate(), p.getShooter().getCurrentFireRate(), 0);
 	}
 }

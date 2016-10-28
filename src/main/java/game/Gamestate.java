@@ -26,6 +26,9 @@ public final class Gamestate {
 	private static final String[] MODE_STRINGS = 
 		{"none", "arcade", "coop arcade", "survival", "coop survival", "boss", "coop boss"};
 	private static final long MINIMAL_SWITCH_TIME = 300;
+	
+	private final Game thisGame;
+	
 	// states
 	private AbstractState currentState;
 	private final HighscoreScreenState highscoreScreenState;
@@ -50,6 +53,7 @@ public final class Gamestate {
 	 * @param thisGame this game
 	 */
 	public Gamestate(final Game thisGame) {	
+		this.thisGame = thisGame;
 		screenSwitchTime = System.currentTimeMillis();
 		
 		startScreenState = new StartScreenState(thisGame);
@@ -77,6 +81,46 @@ public final class Gamestate {
 	 */
 	public void update(final List<String> input) {
 		currentState.update(input);
+	}
+	
+	/**
+	 * update the gamemode startScreen.
+	 * @param input - input
+	 * @return 
+	 */
+	public void startScreen(final List<String> input) {
+		if (input.contains("H")) {
+			Logger.getInstance().log("Go to highscores screen");
+			setMode(noneMode);
+			setState(viewHighscoresState);
+		} else if (input.contains("A")) {
+			setMode(arcadeMode);
+			setState(ongoingGameState);
+			thisGame.startGame();
+		} else if (input.contains("Z")) {
+			setMode(coopArcadeMode);
+			setState(ongoingGameState);
+			thisGame.startGame();
+		} else if (input.contains("S")) {
+			setMode(survivalMode);
+			setState(ongoingGameState);
+			thisGame.startGame();
+		} else if (input.contains("X")) {
+			setMode(coopSurvivalMode);
+			setState(ongoingGameState);
+			thisGame.startGame();
+		} else if (input.contains("D")) {
+			setMode(bossMode);
+			setState(ongoingGameState);
+			thisGame.startGame();
+		} else if (input.contains("C")) {
+			setMode(coopBossMode);
+			setState(ongoingGameState);
+			thisGame.startGame();
+		} else if (input.contains("ESCAPE")) {
+			Logger.getInstance().log("Player quit the game.");
+			Launcher.quit();
+		}
 	}
 	
 	/**
