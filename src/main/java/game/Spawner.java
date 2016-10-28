@@ -131,18 +131,7 @@ public final class Spawner {
 	private void updateWave() {
 		if ((startRest == 0 || System.currentTimeMillis() - startRest > REST) 
 				&& wave != 0 && wave % WAVES_BETWEEN_BOSSES == 0) {
-			if (Math.random() < (telebossratio)) {
-				spawnTeleBoss();
-			} else {
-				if (Math.random() < (telebossratio + doublebossratio)) {
-					spawnDoubleBoss();
-					spawnDoubleBoss();
-				} else {
-					spawnBasicBoss();
-				}
-			}
-			startRest = System.currentTimeMillis();
-			wave++;
+			spawnBoss();
 		} else if (startRest == 0) {
 			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS);
@@ -153,6 +142,24 @@ public final class Spawner {
 		}
 	}
 	
+	/**
+	 * Checks if and which boss should be spawned.
+	 */
+	private void spawnBoss() {
+		if (Math.random() < (telebossratio)) {
+			spawnTeleBoss();
+		} else {
+			if (Math.random() < (telebossratio + doublebossratio)) {
+				spawnDoubleBoss();
+				spawnDoubleBoss();
+			} else {
+				spawnBasicBoss();
+			}
+		}
+		startRest = System.currentTimeMillis();
+		wave++;
+	}
+
 	/**
 	 * Spawns the next wave of asteroids.
 	 */

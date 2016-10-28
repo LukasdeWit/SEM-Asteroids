@@ -92,7 +92,20 @@ public final class Gamestate {
 			Logger.getInstance().log("Go to highscores screen");
 			setMode(noneMode);
 			setState(viewHighscoresState);
-		} else if (input.contains("A")) {
+		} else if (input.contains("ESCAPE")) {
+			Logger.getInstance().log("Player quit the game.");
+			Launcher.quit();
+		} else {
+			checkModeInput(input);
+		}
+	}
+	
+	/**
+	 * checks the input on which mode should be chosen.
+	 * @param input - the input.
+	 */
+	private void checkModeInput(final List<String> input) {
+		if (input.contains("A")) {
 			setMode(arcadeMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
@@ -116,12 +129,9 @@ public final class Gamestate {
 			setMode(coopBossMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
-		} else if (input.contains("ESCAPE")) {
-			Logger.getInstance().log("Player quit the game.");
-			Launcher.quit();
-		}
+		} 
 	}
-	
+
 	/**
 	 * makes modeInt into string.
 	 * @param modeInt - the int of the mode
