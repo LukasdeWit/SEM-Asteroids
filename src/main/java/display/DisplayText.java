@@ -15,74 +15,30 @@ import javafx.scene.text.TextAlignment;
 public final class DisplayText {
 	private static final float DEFAULT_SIZE = 20;
 
-	private static final float SCORE_X = 10;
-	private static final float SCORE_Y = 25;
-	private static final float SCORE_SIZE = 1.5F;
-	
-	private static final float HIGHSCORE_X = 200;
-	private static final float HIGHSCORE_Y = 15;
-	private static final float HIGHSCORE_SIZE = 0.75f;
-	
-	private static final float BIG_TEXT_SIZE = 2F;
-
-	private static final float ASTEROIDS_TEXT_X = 140;
-	private static final float ASTEROIDS_TEXT_Y = 100;
-	private static final float PRESS_START_TEXT_X = 100;
-	
-	private static final float START_ARCADE_TEXT_Y = 220;
-	private static final float START_ARCADE_COOP_TEXT_Y = 250;
-	private static final float START_SURVIVAL_TEXT_Y = 280;
-	private static final float START_SURVIVAL_COOP_TEXT_Y = 310;
-	private static final float PRESS_START_TEXT_BOSS_Y = 340;
-	private static final float PRESS_START_TEXT_BOSSCOOP_Y = 370;
-	private static final float VIEW_HIGHSCORES_TEXT_Y = 410;
-	private static final float QUIT_TEXT_Y = 440;
-
-	private static final float CONGRATULATIONS_TEXT_X = 80;
+    private static final float CONGRATULATIONS_TEXT_X = 80;
 	private static final float CONGRATULATIONS_TEXT_Y = 100;
 	private static final float PRESS_R_TEXT_X = 80;
-	private static final float PRESS_R_TEXT_Y = 310;
-	private static final float NEW_HIGHSCORE_TEXT_X = 80;
-	private static final float NEW_HIGHSCORE_TEXT_Y = 250;
 
-	private static final float WAVE_X = 10;
-	private static final float WAVE_Y = 470;
-	private static final float WAVE_SIZE = 0.75f;
-
-	private static final Font DEFAULT_FONT;
+    private static final Font DEFAULT_FONT;
 	private static final Font HIGHSCORE_FONT;
 	private static final Font SCORE_FONT;
 	private static final Font LARGE_FONT;
 	private static final Font WAVE_FONT;
 
-	private static final float HIGHSCORES_TEXT_X = 140;
-	private static final float HIGHSCORES_TEXT_Y = 100;
-	private static final float HIGHSCORES_MODES_TEXT_X = 100;
-	private static final float DELETE_TEXT_Y = 410;
-	private static final float RETURN_TO_MAIN_TEXT_Y = 440;
-	private static final float MODES_TEXT_START_Y = 220;
-	private static final int HIGHSCORES_MODES_SPACE = 30;
-
-	private static final float MODE_TEXT_SIZE = 200;
-	private static final float SCORE_TEXT_SIZE = 100;
-	
-	private static final float ENTER_NAME_TEXT_Y = 310;
-	private static final float NAME_INPUT_Y = 350;
-	private static final int CONFIRM_TEXT_Y = 390;
-
-	private static final float PRESS_P_TEXT_Y = 280;
-
-
-
-	private static boolean test;
+    private static boolean test;
 
 	static {
 		final String fontLoc = "/fonts/HyperspaceBold.otf";
-		DEFAULT_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE);
-		HIGHSCORE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * HIGHSCORE_SIZE);
-		SCORE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * SCORE_SIZE);
-		LARGE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * BIG_TEXT_SIZE);
-		WAVE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * WAVE_SIZE);
+        float highscoreSize = 0.75f;
+        float scoreSize = 1.5F;
+        float bigTextSize = 2F;
+        float waveSize = 0.75f;
+
+        DEFAULT_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE);
+        HIGHSCORE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * highscoreSize);
+        SCORE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * scoreSize);
+        LARGE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * bigTextSize);
+        WAVE_FONT = Font.loadFont(DisplayText.class.getResourceAsStream(fontLoc), DEFAULT_SIZE * waveSize);
 	}
 
 	/**
@@ -97,10 +53,12 @@ public final class DisplayText {
 	 * @param score - score
 	 */
 	public static void score(final long score) {
+		float scoreX = 10;
+		float scoreY = 25;
 		if (score == 0) {
-			drawText(SCORE_X, SCORE_Y, SCORE_FONT, "        00");
+			drawText(scoreX, scoreY, SCORE_FONT, "        00");
 		} else {
-			drawText(SCORE_X, SCORE_Y, SCORE_FONT, String.format("%1$10s", score));
+			drawText(scoreX, scoreY, SCORE_FONT, String.format("%1$10s", score));
 		}
 	}
 	
@@ -109,10 +67,12 @@ public final class DisplayText {
 	 * @param highscore - highscore
 	 */
 	public static void highscore(final long highscore) {
+		float highscoreX = (float) 200;
+		float highscoreY = (float) 15;
 		if (highscore == 0) {
-			drawText(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_FONT, "        00");
+			drawText(highscoreX, highscoreY, HIGHSCORE_FONT, "        00");
 		} else {
-			drawText(HIGHSCORE_X, HIGHSCORE_Y, HIGHSCORE_FONT, String.format("%1$10s", highscore));
+			drawText(highscoreX, highscoreY, HIGHSCORE_FONT, String.format("%1$10s", highscore));
 		}
 	}
 
@@ -120,15 +80,26 @@ public final class DisplayText {
 	 * draw the start screen.
 	 */
 	public static void startScreen() {
-		drawText(ASTEROIDS_TEXT_X, ASTEROIDS_TEXT_Y, LARGE_FONT, "asteroids");
-		drawText(PRESS_START_TEXT_X, START_ARCADE_TEXT_Y, "press a to start arcade");
-		drawText(PRESS_START_TEXT_X, START_SURVIVAL_TEXT_Y, "press s to start survival");
-		drawText(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSS_Y, "press d for Boss Mode");
-		drawText(PRESS_START_TEXT_X, PRESS_START_TEXT_BOSSCOOP_Y, "press c for Coop Boss Mode");
-		drawText(PRESS_START_TEXT_X, START_ARCADE_COOP_TEXT_Y, "press z to start Arcade coop");
-		drawText(PRESS_START_TEXT_X, START_SURVIVAL_COOP_TEXT_Y, "press x to start survival Coop");
-		drawText(PRESS_START_TEXT_X, VIEW_HIGHSCORES_TEXT_Y, "press h to view highscores");
-		drawText(PRESS_START_TEXT_X, QUIT_TEXT_Y, "press escape to quit the game");
+		float asteroidsTextX = (float) 140;
+		float pressStartTextX = (float) 100;
+		float startArcadeTextY = (float) 220;
+		float startSurvivalTextY = (float) 280;
+		float pressStartTextBossY = (float) 340;
+		float pressStartTextBosscoopY = (float) 370;
+		float startArcadeCoopTextY = (float) 250;
+		float startSurvivalCoopTextY = (float) 310;
+		float viewHighscoresTextY = (float) 410;
+		float quitTextY = (float) 440;
+		float asteroidsTextY = (float) 100;
+		drawText(asteroidsTextX, asteroidsTextY, LARGE_FONT, "asteroids");
+		drawText(pressStartTextX, startArcadeTextY, "press a to start arcade");
+		drawText(pressStartTextX, startSurvivalTextY, "press s to start survival");
+		drawText(pressStartTextX, pressStartTextBossY, "press d for Boss Mode");
+		drawText(pressStartTextX, pressStartTextBosscoopY, "press c for Coop Boss Mode");
+		drawText(pressStartTextX, startArcadeCoopTextY, "press z to start Arcade coop");
+		drawText(pressStartTextX, startSurvivalCoopTextY, "press x to start survival Coop");
+		drawText(pressStartTextX, viewHighscoresTextY, "press h to view highscores");
+		drawText(pressStartTextX, quitTextY, "press escape to quit the game");
 	}
 
 	/**
@@ -138,11 +109,17 @@ public final class DisplayText {
 	 * @param name - the name
 	 */
 	public static void highscoreScreen(final long score, final String name) {
+		float newHighscoreTextX = (float) 80;
+		float newHighscoreTextY = (float) 250;
+		float enterNameTextY = (float) 310;
+		float nameInputY = (float) 350;
+		int confirmTextY = 390;
+
 		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "congratulations");
-		drawText(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, "your new highscore is " + score);
-		drawText(PRESS_R_TEXT_X, ENTER_NAME_TEXT_Y, "please enter your name ");
-		drawText(PRESS_R_TEXT_X, NAME_INPUT_Y, name);
-		drawText(PRESS_R_TEXT_X, CONFIRM_TEXT_Y, "press enter to confirm");
+		drawText(newHighscoreTextX, newHighscoreTextY, "your new highscore is " + score);
+		drawText(PRESS_R_TEXT_X, enterNameTextY, "please enter your name ");
+		drawText(PRESS_R_TEXT_X, nameInputY, name);
+		drawText(PRESS_R_TEXT_X, confirmTextY, "press enter to confirm");
 	}
 
 	/**
@@ -150,25 +127,39 @@ public final class DisplayText {
 	 * @param strings - the highscore strings
 	 */
 	public static void viewHighscoresScreen(final String[][] strings) {
-		drawText(HIGHSCORES_TEXT_X, HIGHSCORES_TEXT_Y, LARGE_FONT, "highscores");
-		for (int i = 0; i < strings[0].length; i++) {
-			drawText(HIGHSCORES_MODES_TEXT_X, MODES_TEXT_START_Y + i * HIGHSCORES_MODES_SPACE, strings[0][i]);
-			drawText(HIGHSCORES_MODES_TEXT_X + MODE_TEXT_SIZE, 
-					MODES_TEXT_START_Y + i * HIGHSCORES_MODES_SPACE, strings[1][i]);
-			drawText(HIGHSCORES_MODES_TEXT_X + MODE_TEXT_SIZE + SCORE_TEXT_SIZE, 
-					MODES_TEXT_START_Y + i * HIGHSCORES_MODES_SPACE, strings[2][i]);
-		}		
-		drawText(HIGHSCORES_MODES_TEXT_X, DELETE_TEXT_Y, 			"press d to delete all highscores");
-		drawText(HIGHSCORES_MODES_TEXT_X, RETURN_TO_MAIN_TEXT_Y, 	"press r to return to main menu");
+        float highscoresTextX = (float) 140;
+        float highscoresTextY = (float) 100;
+        float highscoresModesTextX = (float) 100;
+        float modesTextStartY = (float) 220;
+        float modeTextSize = (float) 200;
+        int highscoresModesSpace = 30;
+        float deleteTextY = (float) 410;
+        float returnToMainTextY = (float) 440;
+        float scoreTextSize = (float) 100;
+
+        drawText(highscoresTextX, highscoresTextY, LARGE_FONT, "highscores");
+
+        for (int i = 0; i < strings[0].length; i++) {
+            drawText(highscoresModesTextX, modesTextStartY + i * highscoresModesSpace, strings[0][i]);
+            drawText(highscoresModesTextX + modeTextSize,
+					modesTextStartY + i * highscoresModesSpace, strings[1][i]);
+            drawText(highscoresModesTextX + modeTextSize + scoreTextSize,
+					modesTextStartY + i * highscoresModesSpace, strings[2][i]);
+        }
+        drawText(highscoresModesTextX, deleteTextY, 			"press d to delete all highscores");
+        drawText(highscoresModesTextX, returnToMainTextY, 	"press r to return to main menu");
 	}
 
 	/**
 	 * draw the pause screen.
 	 */
 	public static void pauseScreen() {
-		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "Pause");
-		drawText(PRESS_R_TEXT_X, PRESS_P_TEXT_Y, "press p to continue");
-		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press r to return to main menu");
+        float pressPTextY = (float) 280;
+        float pressRTextY = (float) 310;
+
+        drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "Pause");
+        drawText(PRESS_R_TEXT_X, pressPTextY, "press p to continue");
+        drawText(PRESS_R_TEXT_X, pressRTextY, "press r to return to main menu");
 	}
 
 	/**
@@ -177,7 +168,9 @@ public final class DisplayText {
 	 * @param wave - the current wave
 	 */
 	public static void wave(final int wave) {
-		drawText(WAVE_X, WAVE_Y, WAVE_FONT, "Wave " + wave);
+        float waveX = (float) 10;
+        float waveY = (float) 470;
+        drawText(waveX, waveY, WAVE_FONT, "Wave " + wave);
 	}
 
 	/**
