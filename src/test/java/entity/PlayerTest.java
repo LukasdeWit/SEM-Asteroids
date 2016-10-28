@@ -1,17 +1,5 @@
 package entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import display.DisplayEntity;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
@@ -19,6 +7,14 @@ import game.Game;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class PlayerTest {
 	private static final float X_START = 1;
@@ -281,7 +277,7 @@ public class PlayerTest {
 	@Test
 	public void testGoHyperspace() {
 		final String[] input = {"S"};
-		player.setChangeOfDying(1);
+		player.setChanceOfDying(1);
 		update(player, input, false);
 		assertEquals(2, player.getLives(), 0);
 	}
