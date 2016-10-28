@@ -76,7 +76,6 @@ public class PlayerShooterTest {
 		assertEquals(System.currentTimeMillis(), player2.getShooter().getLastShot(), 1);
 	}
 	
-	/*
 	@Test
 	public void testFire() {
 		final String[] input = {SPACE};
@@ -92,7 +91,7 @@ public class PlayerShooterTest {
 		update(player, input, false);
 		assertEquals(1, thisGame.getCreateList().size(), 0);
 	}
-	*/
+	
 	
 	@Test
 	public void testFire3() {
