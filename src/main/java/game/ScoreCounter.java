@@ -67,6 +67,14 @@ public class ScoreCounter {
 	}
 	
 	/**
+	 * Helps calculate difficulty for small saucer.
+	 * @return difficulty for small saucer.
+	 */
+	public final long smallSaucerDifficulty() {
+		return score / Spawner.getDifficultyStep();
+	}
+	
+	/**
 	 * @return the high score
 	 */
 	public final long getHighscore() {
