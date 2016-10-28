@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import game.highscore.HighscoreStore;
+
 public class ScoreCounterTest {
 	private final Game thisGame = new Game();
 	private final Gamestate gamestate = thisGame.getGamestate();
@@ -16,18 +18,17 @@ public class ScoreCounterTest {
 
 	@Before
 	public final void setUp() {
-		gamestate.setMode(Gamestate.getModeArcade());
+		sc.clearHighscores();
+		gamestate.setMode(gamestate.getArcadeMode());
 		sc.setScore(0);
-		sc.setHighscore(0);
+		sc.setHighscore("", 0);
+		thisGame.getAudio().setMute(true);
 	}
 
 	@Test
 	public void testStartGame() {
 		sc.setScore(100);
-		sc.setHighscore(0);
-		
-		sc.startGame();
-		
+		sc.startGame("");
 		assertEquals(sc.getScore(), 0);
 		assertEquals(sc.getHighscore(), 100);
 	}
@@ -35,10 +36,8 @@ public class ScoreCounterTest {
 	@Test
 	public void testStartGame2() {
 		sc.setScore(50);
-		sc.setHighscore(100);
-		
-		sc.startGame();
-		
+		sc.setHighscore("", 100);
+		sc.startGame("");
 		assertEquals(sc.getScore(), 0);
 		assertEquals(sc.getHighscore(), 100);
 	}
@@ -46,8 +45,7 @@ public class ScoreCounterTest {
 	@Test
 	public void testIsHighscore() {
 		sc.setScore(50);
-		sc.setHighscore(100);
-		
+		sc.setHighscore("", 100);
 		assertFalse(sc.isHighscore());
 		assertTrue(sc.isNotHighscore());
 	}
@@ -55,7 +53,7 @@ public class ScoreCounterTest {
 	@Test
 	public void testIsHighscore2() {
 		sc.setScore(100);
-		sc.setHighscore(50);
+		sc.setHighscore("", 50);
 		
 		assertTrue(sc.isHighscore());
 		assertFalse(sc.isNotHighscore());
@@ -64,19 +62,16 @@ public class ScoreCounterTest {
 	@Test
 	public void testUpdateHighscore() {
 		sc.setScore(100);
-		sc.setHighscore(50);
-		
-		sc.updateHighscore();
-		
+		sc.setHighscore("", 50);
+		sc.updateHighscore("");
 		assertEquals(100, sc.getHighscore());
 	}
 	
 	@Test
 	public void testUpdateHighscore2() {
 		sc.setScore(50);
-		sc.setHighscore(55);
-		
-		sc.updateHighscore();
+		sc.setHighscore("", 55);
+		sc.updateHighscore("");
 		assertNotSame(50, sc.getHighscore());
 		assertEquals(55, sc.getHighscore());
 	}
@@ -97,7 +92,7 @@ public class ScoreCounterTest {
 	
 	@Test
 	public void testConstructor() {
-		final ScoreCounter score = new ScoreCounter(thisGame);
+		final ScoreCounter score = new ScoreCounter(thisGame, new HighscoreStore());
 		assertEquals(score.getThisGame(), thisGame);
 	}
 	
@@ -105,10 +100,10 @@ public class ScoreCounterTest {
 	public void testConstructor2() {
 		// write a new highscore to file
 		sc.setScore(1234);
-		sc.updateHighscore();
+		sc.updateHighscore("");
 		
 		// check if the highscore is read by new ScoreCounter object
-		final ScoreCounter counter = new ScoreCounter(thisGame);
+		final ScoreCounter counter = new ScoreCounter(thisGame, new HighscoreStore());
 		assertEquals(1234, counter.getHighscore());
 	}
 

@@ -1,10 +1,11 @@
 package entity;
-import display.DisplayEntity;
-import game.Game;
-import game.Logger;
-
 import java.util.List;
 import java.util.Random;
+
+import display.DisplayEntity;
+import game.Audio;
+import game.Game;
+import game.Logger;
 
 /**
  * Class that represents an Asteroid.
@@ -21,6 +22,18 @@ public class Asteroid extends AbstractEntity {
 	private static final int SMALL_SCORE = 100;
 	private static final float MIN_SPEED = .5f;
 	private static final int SPLIT = 2;
+	/**
+	 * The converted size for big asteroids in survival mode.
+	 */
+	private static final int SURVIVAL_CONVERTED_SIZE_BIG = 4;
+	/**
+	 * The converted size for medium asteroids in survival mode.
+	 */
+	private static final int SURVIVAL_CONVERTED_SIZE_MEDIUM = 2;
+	/**
+	 * The converted size for small asteroids in survival mode.
+	 */
+	private static final int SURVIVAL_CONVERTED_SIZE_SMALL = 1;
 
 	/**
 	 * Constructor for the Asteroid class.
@@ -102,17 +115,34 @@ public class Asteroid extends AbstractEntity {
 				getThisGame().create(new Asteroid(getX(), getY(), (float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), MEDIUM_RADIUS, getThisGame()));
 			}
+			getThisGame().getAudio().playMultiple(Audio.LARGEEXPLOSION);
 			getThisGame().addScore(BIG_SCORE);
 		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
 			for (int i = 0; i < SPLIT; i++) {
 				getThisGame().create(new Asteroid(getX(), getY(), (float) (getDX() + Math.random() - .5),
 						(float) (getDY() + Math.random() - .5), SMALL_RADIUS, getThisGame()));
 			}
+			getThisGame().getAudio().playMultiple(Audio.MEDIUMEXPLOSION);
 			getThisGame().addScore(MEDIUM_SCORE);
 		} else {
+			getThisGame().getAudio().playMultiple(Audio.SMALLEXPLOSION);
 			getThisGame().addScore(SMALL_SCORE);
 		}
 		Particle.explosion(getX(), getY(), getThisGame());
+	}
+	
+	/**
+	 * Returns the converted size for survival mode.
+	 * @return 4 for big asteroids, 2 for medium and 1 for small.
+	 */
+	public final int getSurvivalSize() {
+		if (Float.compare(BIG_RADIUS, getRadius()) == 0) {
+			return SURVIVAL_CONVERTED_SIZE_BIG;
+		} else if (Float.compare(MEDIUM_RADIUS, getRadius()) == 0) {
+			return SURVIVAL_CONVERTED_SIZE_MEDIUM;
+		} else {
+			return SURVIVAL_CONVERTED_SIZE_SMALL;
+		}
 	}
 
 	/**

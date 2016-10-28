@@ -14,7 +14,7 @@ import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 
 
 /**
@@ -46,6 +46,7 @@ public class PowerupTest {
 		pBuilder.setDY(4);
 		pBuilder.setThisGame(thisGame);
 		pBuilder.setPlayerTwo(false);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test
@@ -83,7 +84,7 @@ public class PowerupTest {
 		final Player p = (Player) pBuilder.getResult();
 		powerup.setType(1);
 		powerup.collide(p);
-		assertTrue(thisGame.getDestroyList().contains(powerup));
+		assertFalse(thisGame.getDestroyList().contains(powerup));
 	}
 	
 	@Test
@@ -128,7 +129,7 @@ public class PowerupTest {
 	public void testDraw() {
 		powerup.draw();
 		final Node c = Launcher.getRoot().getChildren().get(0);
-		assertTrue(c instanceof Circle);
+		assertTrue(c instanceof Polygon);
 		assertEquals(X_START, c.getTranslateX(), 0);
 	}
 	

@@ -1,8 +1,21 @@
 package game;
 
-import display.DisplayText;
-
 import java.util.List;
+
+import game.modes.AbstractMode;
+import game.modes.ArcadeMode;
+import game.modes.BossMode;
+import game.modes.CoopArcadeMode;
+import game.modes.CoopBossMode;
+import game.modes.CoopSurvivalMode;
+import game.modes.NoneMode;
+import game.modes.SurvivalMode;
+import game.states.AbstractState;
+import game.states.HighscoreScreenState;
+import game.states.OngoingGameState;
+import game.states.PauseScreenState;
+import game.states.StartScreenState;
+import game.states.ViewHighscoresState;
 
 /**
  * This class handles the switching of gamestates.
@@ -10,249 +23,234 @@ import java.util.List;
  *
  */
 public final class Gamestate {
-	private int state;
-	private int mode;
-	private long pauseTime;
-	private long restartTime;
-	private final Game thisGame;
+	private static final String[] MODE_STRINGS = 
+		{"none", "arcade", "coop arcade", "survival", "coop survival", "boss", "coop boss"};
+	private static final long MINIMAL_SWITCH_TIME = 300;
+	// states
+	private AbstractState currentState;
+	private final HighscoreScreenState highscoreScreenState;
+	private final OngoingGameState ongoingGameState;
+	private final PauseScreenState pauseScreenState;
+	private final StartScreenState startScreenState;
+	private final ViewHighscoresState viewHighscoresState;
 	
-	private static final int STATE_START_SCREEN = 0;
-	private static final int STATE_GAME = 1;
-	private static final int STATE_HIGHSCORE_SCREEN = 2;
-	private static final int STATE_PAUSE_SCREEN = 3;
-	
-	private static final int MODE_NONE = 0;
-	private static final int MODE_ARCADE = 1;
-	private static final int MODE_COOP = 2;
-	private static final int MODE_BOSS = 3;
-	
-	private static final long MINIMAL_PAUSE_TIME = 300;
-	private static final long MINIMAL_RESTART_TIME = 300;
-	
+	// modes
+	private AbstractMode currentMode;
+	private final NoneMode noneMode;
+	private final ArcadeMode arcadeMode;
+	private final CoopArcadeMode coopArcadeMode;
+	private final BossMode bossMode;
+	private final CoopBossMode coopBossMode;
+	private final SurvivalMode survivalMode;
+	private final CoopSurvivalMode coopSurvivalMode;
+	private long screenSwitchTime;
+		
 	/**
 	 * constructor.
 	 * @param thisGame this game
 	 */
-	public Gamestate(final Game thisGame) {
-		this.thisGame = thisGame;
-		this.mode = MODE_NONE;
-		state = STATE_START_SCREEN;
-	}
-	
-	/**
-	 * start game.
-	 */
-	public void start() {
-		restartTime = System.currentTimeMillis();
-		pauseTime = restartTime;
+	public Gamestate(final Game thisGame) {	
+		screenSwitchTime = System.currentTimeMillis();
 		
+		startScreenState = new StartScreenState(thisGame);
+		pauseScreenState = new PauseScreenState(thisGame);
+		ongoingGameState = new OngoingGameState(thisGame);
+		highscoreScreenState = new HighscoreScreenState(thisGame);
+		viewHighscoresState = new ViewHighscoresState(thisGame);
+		
+		currentState = startScreenState;
+		
+		coopArcadeMode = new CoopArcadeMode(thisGame);
+		noneMode = new NoneMode(thisGame);
+		arcadeMode = new ArcadeMode(thisGame);
+		bossMode = new BossMode(thisGame);
+		coopBossMode = new CoopBossMode(thisGame);
+		survivalMode = new SurvivalMode(thisGame);
+		coopSurvivalMode = new CoopSurvivalMode(thisGame);
+		
+		currentMode = noneMode;
 	}
 	
 	/**
-	 * update the gamemodes.
+	 * update the states.
 	 * @param input - input
 	 */
 	public void update(final List<String> input) {
-		switch(state) {
-		case STATE_START_SCREEN:
-			startScreen(input);
-			DisplayText.startScreen();
-			break;
-		case STATE_GAME:
-			thisGame.updateGame(input);
-			game(input);
-			break;
-		case STATE_HIGHSCORE_SCREEN:
-			highscoreScreen(input);
-			DisplayText.highscoreScreen(thisGame.getScoreCounter().getHighscore());
-			break;
-		case STATE_PAUSE_SCREEN:
-		default:
-			DisplayText.pauseScreen();
-			pauseScreen(input);
-			break;
-		}
+		currentState.update(input);
+	}
+	
+	/**
+	 * makes modeInt into string.
+	 * @param modeInt - the int of the mode
+	 * @return the string of the mode
+	 */
+	public String intToString(final int modeInt) {
+		return MODE_STRINGS[modeInt];
+	}
+	
+	/**
+	 * @return true if time to switch screens.
+	 */
+	public boolean isSwitchTime() {
+		return System.currentTimeMillis() - screenSwitchTime > MINIMAL_SWITCH_TIME;
 	}
 
-	/**
-	 * update the gamemode startScreen.
-	 * @param input - input
-	 * @return 
-	 */
-	private void startScreen(final List<String> input) {
-		if (input.contains("X")) {
-			mode = MODE_ARCADE;
-			state = STATE_GAME;
-			thisGame.startGame();
-		} else if (input.contains("C")) {
-			mode = MODE_COOP;
-			state = STATE_GAME;
-			thisGame.startGame();
-		} else if (input.contains("B")) {
-			mode = MODE_BOSS;
-			state = STATE_GAME;
-			thisGame.startGame();
-		}
-	}
 
 	/**
-	 * update the game gamemode.
-	 * @param input - the input
+	 * Get string of current gamestate for logging.
+	 * @return String representing the current state.
 	 */
-	private void game(final List<String> input) {
-		if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			mode = MODE_NONE;
-			state = STATE_START_SCREEN;
-		} else if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game paused.");
-			state = STATE_PAUSE_SCREEN;
-		}
-	}
-
-	/**
-	 * update the highscore gamemode.
-	 * @param input - the input
-	 */
-	private void highscoreScreen(final List<String> input) {
-		if (input.contains("R")) {
-			Logger.getInstance().log("Game stopped.");
-			thisGame.startGame();
-			mode = MODE_NONE;
-			state = STATE_START_SCREEN;
-		}
-	}
-
-	/**
-	 * update the pause screen gamemode.
-	 * @param input - the input
-	 */
-	private void pauseScreen(final List<String> input) {
-		if (input.contains("P") && System.currentTimeMillis() 
-				- pauseTime > MINIMAL_PAUSE_TIME) {
-			pauseTime = System.currentTimeMillis();
-			Logger.getInstance().log("Game unpaused.");
-			state = STATE_GAME;
-		} else if (input.contains("R") && System.currentTimeMillis() 
-				- restartTime > MINIMAL_RESTART_TIME) {
-			Logger.getInstance().log("Game stopped.");
-			thisGame.startGame();
-			state = STATE_GAME;
-		}
+	public String toString() {
+		return currentMode.toString();
 	}
 
 	/**
 	 * @return the mode
 	 */
-	public int getMode() {
-		return mode;
-	}
-
-	/**
-	 * @param mode the mode to set
-	 */
-	public void setMode(final int mode) {
-		this.mode = mode;
+	public AbstractMode getMode() {
+		return currentMode;
 	}
 
 	/**
 	 * @return the state
 	 */
-	public int getState() {
-		return state;
-	}
-
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(final int state) {
-		this.state = state;
-	}
-
-	/**
-	 * @return the stateStartScreen
-	 */
-	public static int getStateStartScreen() {
-		return STATE_START_SCREEN;
-	}
-
-	/**
-	 * @return the stateHighscoreScreen
-	 */
-	public static int getStateHighscoreScreen() {
-		return STATE_HIGHSCORE_SCREEN;
-	}
-
-	/**
-	 * @return the modeArcade
-	 */
-	public static int getModeArcade() {
-		return MODE_ARCADE;
-	}
-
-	/**
-	 * @return the modeCoop
-	 */
-	public static int getModeCoop() {
-		return MODE_COOP;
-	}
-	
-	/**
-	 * @return the modeBoss
-	 */
-	public static int getModeBoss() {
-		return MODE_BOSS;
+	public AbstractState getState() {
+		return currentState;
 	}
 
 	/**
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
-		return getMode() == getModeCoop();
+		return currentMode.isCoop();
 	}
 	
 	/**
 	 * @return true if boss
 	 */
 	public boolean isBoss() {
-		return getMode() == getModeBoss();
+		return currentMode.isBoss();
+	}
+	
+	/**
+	 * @return true if survival mode
+	 */
+	public boolean isSurvival() {
+		return currentMode.isSurvival();
+	}
+	
+	/**
+	 * @return true if arcade mode
+	 */
+	public boolean isArcade() {
+		return currentMode.isArcade();
+	}
+	
+	/**
+	 * Set the current state.
+	 * @param state the gamestate should be
+	 */
+	public void setState(final AbstractState state) {
+		this.currentState = state;
+		screenSwitchTime = System.currentTimeMillis();
+	}
+	
+	/**
+	 * @return state for highscore screen
+	 */
+	public HighscoreScreenState getHighscoreState() {
+		return highscoreScreenState;
+	}
+	
+	/**
+	 * @return state for start screen
+	 */
+	public StartScreenState getStartScreenState() {
+		return startScreenState;
+	}
+	
+	/**
+	 * @return state for ongoing game
+	 */
+	public OngoingGameState getOngoingGameState() {
+		return ongoingGameState;
+	}
+	
+	/**
+	 * @return state for pause screen
+	 */
+	public PauseScreenState getPauseScreenState() {
+		return pauseScreenState;
+	}
+	
+	/**
+	 * Setter for mode.
+	 * @param mode the game should be in
+	 */
+	public void setMode(final AbstractMode mode) {
+		this.currentMode = mode;
+	}
+	
+	/**
+	 * @return mode for no gamemode
+	 */
+	public NoneMode getNoneMode() {
+		return noneMode;
+	}
+	
+	/**
+	 * @return mode for coop arcade game
+	 */
+	public CoopArcadeMode getCoopArcadeMode() {
+		return coopArcadeMode;
+	}
+	
+	/**
+	 * @return mode for single player boss fight
+	 */
+	public BossMode getBossMode() {
+		return bossMode;
+	}
+	
+	/**
+	 * @return mode for multiplayer boss fight
+	 */
+	public CoopBossMode getCoopBossMode() {
+		return coopBossMode;
+	}
+	
+	/**
+	 * @return mode for single player arcade game
+	 */
+	public ArcadeMode getArcadeMode() {
+		return arcadeMode;
+	}
+	
+	/**
+	 * @param screenSwitchTime the screenSwitchTime to set
+	 */
+	public void setScreenSwitchTime(final long screenSwitchTime) {
+		this.screenSwitchTime = screenSwitchTime;
+	}
+	
+	/**
+	 * @return survival mode
+	 */
+	public SurvivalMode getSurvivalMode() {
+		return survivalMode;
+	}
+	
+	/**
+	 * @return the coop survival mode
+	 */
+	public CoopSurvivalMode getCoopSurvivalMode() {
+		return coopSurvivalMode;
 	}
 
 	/**
-	 * @return the stateGame
+	 * @return the viewHighscoresState
 	 */
-	public static int getStateGame() {
-		return STATE_GAME;
-	}
-
-	/**
-	 * @return the statePauseScreen
-	 */
-	public static int getStatePauseScreen() {
-		return STATE_PAUSE_SCREEN;
-	}
-
-	/**
-	 * @return the modeNone
-	 */
-	public static int getModeNone() {
-		return MODE_NONE;
-	}
-
-	/**
-	 * @param restartTime the restartTime to set
-	 */
-	public void setRestartTime(final long restartTime) {
-		this.restartTime = restartTime;
-	}
-
-	/**
-	 * @param pauseTime the pauseTime to set
-	 */
-	public void setPauseTime(final long pauseTime) {
-		this.pauseTime = pauseTime;
+	public ViewHighscoresState getViewHighscoresState() {
+		return viewHighscoresState;
 	}
 }

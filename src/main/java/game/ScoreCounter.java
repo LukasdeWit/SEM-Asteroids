@@ -1,14 +1,10 @@
 package game;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import display.DisplayText;
+import game.highscore.HighscoreStore;
+import game.highscore.model.HighScore;
 
 /**
  * Class that maintains the score.
@@ -16,69 +12,33 @@ import display.DisplayText;
  *
  */
 public class ScoreCounter {
-	/**
-	 * The amount of points needed to gain a life.
-	 */
 	private static final int LIFE_SCORE = 10000;
 
+	private static final int THREE = 3;
+
 	private long score;
-	private long highscore;
-	// not used  right now, but useful when we want to separate
-	// highscores for each game mode
+	private final HighscoreStore highscoreStore;
 	private final Game thisGame;
 	
 	/**
 	 * Constructor for score counter.
 	 * @param game this scorecounter belongs to
+	 * @param highscoreStore the HighscoreStore used for managing the highscores
 	 */
-	public ScoreCounter(final Game game) {
-		highscore = readHighscore();
-		thisGame = game;
+	public ScoreCounter(final Game game, final HighscoreStore highscoreStore) {
+		this.thisGame = game;
+		this.highscoreStore = highscoreStore;
 	}
-	
-	/**
-	 * reads the highscore from file in resources folder.
-	 *
-	 * @return the highscore
-	 */
-	private long readHighscore() {
-		long currentHighscore = 0;
-		final String filePath = "src/main/resources/highscore.txt";
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),
-				StandardCharsets.UTF_8))) {
-			String sCurrentLine;
-			while ((sCurrentLine = br.readLine()) != null) {
-				currentHighscore = Long.parseLong(sCurrentLine);
-			}
-		} catch (IOException e) {
-			Logger.getInstance().log("unable to read highscore from file", e);
-		}
-		return currentHighscore;
-	}
-	
-	/**
-	 * writes the highscore to file in resources folder.
-	 */
-	private void writeHighscore() {
-		final String content = String.valueOf(highscore);
-		final File file = new File("src/main/resources/highscore.txt");
-		try (FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile())) {
-			fos.write(content.getBytes(StandardCharsets.UTF_8));
-			fos.flush();
-			fos.close();
-		} catch (IOException e) {
-			Logger.getInstance().log("unable to write highscore to file", e);
-		}
-	}
-	
+
 	/**
 	 * Set score to 0 at start of game.
 	 * Write existing score as highscore if larger than current highscore.
+	 * @param name - the name
 	 */
-	protected final void startGame() {
-		if (this.score > highscore) {
-			highscore = this.score;
-			writeHighscore();
+	public final void startGame(final String name) {
+		if (this.score > getHighscore()) {
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode().toInt());
+			highscoreStore.writeScores();
 		}		
 		score = 0;
 	}
@@ -88,14 +48,29 @@ public class ScoreCounter {
 	 */
 	public final void displayScore() {
 		DisplayText.score(score);
-		DisplayText.highscore(highscore);
+		DisplayText.highscore(getHighscore());
+	}
+
+	/**
+	 * Convert highscores into readable strings for display.
+	 * @return the highscore strings.
+	 */
+	public final String[][] highScoresToStrings() {
+		final List<HighScore> highscores = highscoreStore.getHighScores();
+		final String[][] out = new String[THREE][highscores.size()];
+		for (int i = 0; i < highscores.size(); i++) {
+			out[0][i] = getThisGame().getGamestate().intToString(i + 1);
+			out[1][i] = Long.toString(highscores.get(i).getScore());
+			out[2][i] = highscores.get(i).getUserName();
+		}
+		return out;
 	}
 	
 	/**
 	 * @return the high score
 	 */
 	public final long getHighscore() {
-		return highscore;
+		return highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
 	}
 	
 	/**
@@ -111,7 +86,7 @@ public class ScoreCounter {
 	 * @return true if the score is better than the highscore
 	 */
 	public final boolean isHighscore() {
-		return score > highscore;
+		return score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
 	}
 	
 	/**
@@ -123,11 +98,12 @@ public class ScoreCounter {
 	
 	/**
 	 * Update the highscore.
+	 * @param name - the name
 	 */
-	protected final void updateHighscore() {
+	protected final void updateHighscore(final String name) {
 		if (isHighscore()) {
-			highscore = score;
-			writeHighscore();
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode().toInt());
+			highscoreStore.writeScores();
 		}
 	}
 	
@@ -156,10 +132,11 @@ public class ScoreCounter {
 	}
 	
 	/**
+	 * @param name - the name
 	 * @param highscore the highscore to set
 	 */
-	public final void setHighscore(final long highscore) {
-		this.highscore = highscore;
+	public final void setHighscore(final String name, final long highscore) {
+		highscoreStore.addHighScore(name, highscore, thisGame.getGamestate().getMode().toInt());
 	}
 	
 	/**
@@ -167,5 +144,12 @@ public class ScoreCounter {
 	 */
 	public final Game getThisGame() {
 		return thisGame;
+	}
+
+	/**
+	 * clear all saved highscores, and reset the stored file.
+	 */
+	public final void clearHighscores() {
+		highscoreStore.clear();
 	}
 }

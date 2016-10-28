@@ -1,19 +1,20 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is the main launcher of the game.
@@ -29,6 +30,7 @@ public class Launcher extends Application {
 
 	// Make a new Game
 	private final Game thisGame = new Game();
+	private static Stage thisStage;
 
 	/**
 	 * Main method.
@@ -46,10 +48,12 @@ public class Launcher extends Application {
 	 */
 	@Override
 	public final void start(final Stage stage) {
+		Launcher.setThisStage(stage);
 		// set up the title
 		stage.setTitle("ASTEROIDS!");
 		// set up the scene
 		final Scene scene = new Scene(ROOT, 500, 500, Color.BLACK);
+		scene.setCursor(Cursor.NONE);
 		stage.setScene(scene);
 		final List<String> input = getInput(scene);
 		// set up the timing control
@@ -111,6 +115,27 @@ public class Launcher extends Application {
 	 */
 	public static Group getRoot() {
 		return ROOT;
+	}
+
+	/**
+	 * quit the game.
+	 */
+	public static void quit() {
+		Launcher.getThisStage().close();
+	}
+
+	/**
+	 * @return the thisStage
+	 */
+	public static final Stage getThisStage() {
+		return thisStage;
+	}
+
+	/**
+	 * @param thisStage the thisStage to set
+	 */
+	public static final void setThisStage(final Stage thisStage) {
+		Launcher.thisStage = thisStage;
 	}
 
 }

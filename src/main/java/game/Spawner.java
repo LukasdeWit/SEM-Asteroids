@@ -1,13 +1,12 @@
 package game;
 
-import java.util.Random;
-
 import entity.Asteroid;
 import entity.BasicBoss;
 import entity.DoubleBoss;
 import entity.Powerup;
 import entity.Saucer;
 import entity.TeleBoss;
+import java.util.Random;
 
 /**
  * This class takes care of spawning in new Asteroids and Saucer's.
@@ -22,23 +21,21 @@ public final class Spawner {
 	private final double telebossratio;
 	private final double doublebossratio;
 	private final Random random;
-	/**
-	 * The Game this spawner belongs to.
-	 */
 	private final Game thisGame;
 
 	private static final long SAUCER_TIME = 20000;
 	private static final double TELE_RATIO = 0.3;
 	private static final double DOUBLE_RATIO = 0.2;
-	private static final long POWERUP_TIME = 10000;
+	private static final long POWERUP_TIME = 15000;
 	private static final long REST = 4000;
 	private static final int STARTING_ASTEROIDS = 4;
 	private static final int MAX_EXTRA = 7;
 	private static final long DIFFICULTY_STEP = 10000;
 	private static final long MAX_DIFFICULTY_SCORE = 10 * DIFFICULTY_STEP;
 	private static final float ASTEROID_SPEED = 1;
+	private static final long SURVIVAL_POINTS_PER_ASTEROID = 10000;
 	private static final float WAVES_BETWEEN_BOSSES = 5;
-
+	
 	/**
 	 * Constructor of Spawner.
 	 *
@@ -56,9 +53,21 @@ public final class Spawner {
 	}
 
 	/**
-	 * This method is called every tick.
+	 * This method is called every tick of an arcade game.
 	 */
-	public void update() {
+	public void updateArcade() {
+		updateSaucer();
+		updatePowerup();
+		if (thisGame.enemies() != 0) {
+			startRest = System.currentTimeMillis();
+		}
+		updateWave();
+	}
+
+	/**
+	 * This method is called every tick of a boss game.
+	 */
+	public void updateBoss() {
 		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
 				&& System.currentTimeMillis() - startRest > REST) {
 			if (Math.random() < (telebossratio)) {
@@ -78,6 +87,19 @@ public final class Spawner {
 				startRest = System.currentTimeMillis();
 			}
 			updateWave();
+		}
+	}
+
+	/**
+	 * This method is called every tick of a survival game.
+	 */
+	public void updateSurvival() {
+		updateSaucer();
+		updatePowerup();
+		final int extra = (int) (thisGame.getScoreCounter().getScore() / SURVIVAL_POINTS_PER_ASTEROID);
+		final int enemies = thisGame.convertedBigEnemies();
+		if (STARTING_ASTEROIDS + extra - enemies > 0) {
+			spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
 		}
 	}
 	
@@ -127,17 +149,24 @@ public final class Spawner {
 			startRest = System.currentTimeMillis();
 			wave++;
 		} else if (System.currentTimeMillis() - startRest > REST) {
-			int extra = wave * 2;
-			if (extra > MAX_EXTRA) {
-				extra = MAX_EXTRA;
-			}
-			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
-			spawnAsteroid(STARTING_ASTEROIDS + extra);
-			wave++;
-			startRest = System.currentTimeMillis();
+			nextWave();
 		}
 	}
-
+	
+	/**
+	 * Spawns the next wave of asteroids.
+	 */
+	private void nextWave() {
+		int extra = wave * 2;
+		if (extra > MAX_EXTRA) {
+			extra = MAX_EXTRA;
+		}
+		Logger.getInstance().log("Wave: " + (wave + 1) + ".");
+		spawnAsteroid(STARTING_ASTEROIDS + extra);
+		wave++;
+		startRest = System.currentTimeMillis();
+	}
+	
 	/**
 	 * adds a Saucer with random Y, side of screen, path and size.
 	 */
@@ -189,11 +218,15 @@ public final class Spawner {
 					(float) (Math.random() - .5) * ASTEROID_SPEED, (float) (Math.random() - .5) * ASTEROID_SPEED,
 					thisGame));
 		}
-		Logger.getInstance().log(times + " asteroids were spawned.");
+		if (times == 1) {
+			Logger.getInstance().log("1 asteroid was spawned.");
+		} else {
+			Logger.getInstance().log(times + " asteroids were spawned.");
+		}
 	}
 	
 	/**
-	 * 
+	 * Spawns a boss.
 	 */
 	private void spawnBasicBoss() {
 		final BasicBoss boss =

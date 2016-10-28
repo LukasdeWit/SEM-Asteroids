@@ -1,11 +1,13 @@
 package entity;
 
+import display.DisplayEntity;
+import game.Audio;
+import game.Logger;
+import entity.builders.BulletBuilder;
+import entity.keyhandler.KeyHandler;
+
 import java.util.List;
 import java.util.Random;
-
-import display.DisplayEntity;
-import entity.builders.BulletBuilder;
-import game.Logger;
 
 /**
  * This class is the player of the game.
@@ -21,6 +23,16 @@ public class Player extends AbstractEntity {
 	private long hyperspaceStart;
 	private boolean boost;
 	private boolean playerTwo;
+	private int maxBullets;
+	private double fireRate;
+	private int piercing;
+	private int shielding;
+	private boolean tripleShot;
+	private float bulletSize;
+	private int changeOfDying;
+	private String playerString;
+	private final BulletBuilder bBuilder;
+	private final KeyHandler keyhandler;
 
 	private static final int STARTING_LIVES = 3;
 	private static final float RADIUS = 5;
@@ -34,20 +46,8 @@ public class Player extends AbstractEntity {
 	private static final float MAX_SPEED = 4;
 	private static final int MAX_BULLETS = 4;
 	private static final int CHANCE_OF_DYING = 25;
-	private static final float BULLET_SIZE = 2;
-
-	private int maxBullets;
-	private double fireRate;
-	private int piercing;
-	private int shielding;
-	private boolean tripleShot;
-	private float bulletSize;
-	private int changeOfDying;
-	private String playerString;
-	private final BulletBuilder bBuilder;
-	
+	private static final float BULLET_SIZE = 1;
 	private static final float SPAWN_OFFSET = 40;
-
     private static final double TRIPLE_SHOT_ANGLE = .1;
     
     /**
@@ -59,7 +59,7 @@ public class Player extends AbstractEntity {
 		setRadius(RADIUS);
 		rotation = 0;
     	playerTwo = false;
-    	playerString = "Player 1";
+    	playerString = "The player";
     	makeInvincible(INVINCIBILITY_START_TIME);
 		maxBullets = MAX_BULLETS;
 		fireRate = FIRE_RATE;
@@ -72,6 +72,7 @@ public class Player extends AbstractEntity {
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(piercing);
 		bBuilder.setFriendly(true);
+		keyhandler = new KeyHandler(this);
     }
 
 	/**
@@ -83,7 +84,7 @@ public class Player extends AbstractEntity {
 	 */
 	@Override
 	public final void onDeath() {
-		// no-op
+		getThisGame().getAudio().rocketBoost(this);
 	}
 
 	/**
@@ -96,12 +97,10 @@ public class Player extends AbstractEntity {
 		if (shielding < 1) {
 			lives--;
 			if (lives <= 0) {
-				// we are out of lives, call gameover
 				getThisGame().over();
 			} else {
-				// we lose one live
 				respawnThePlayer();
-			}
+			}			
 		} else {
 			shielding--;
 			makeInvincible(INVINCIBILITY_START_TIME);
@@ -131,8 +130,11 @@ public class Player extends AbstractEntity {
 	 */
 	public final void gainLife() {
 		lives++;
+		getThisGame().getAudio().play(Audio.LIFEUP);
 		if (lives == 1) {
+			getThisGame().create(this);
 			respawnThePlayer();
+			Logger.getInstance().log(playerString + " was resurrected.");
 		}
 	}
 
@@ -147,124 +149,55 @@ public class Player extends AbstractEntity {
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
-			if (getThisGame().getGamestate().isCoop()) {
-				keyHandlerTwo(input);
-			} else {
-				keyHandler(input);
-			}
+			keyhandler.update(input);
 		}
-	}
-
-	/**
-	 * handle user key input.
-	 *
-	 * @param input List containing the keyboard input
-	 */
-	private void keyHandler(final List<String> input) {
-		turnKeys(input);
-		if (input.contains("UP") || input.contains("W")) {
-			accelerate();
-		}
-
-		if (input.contains("DOWN") || input.contains("S")) {
-			goHyperspace();
-		}
-
-		if (input.contains("SPACE")) {
-			fire();
-		}
-	}
-	
-	/**
-	 * turn using keys.
-	 * @param input - the input.
-	 */
-	private void turnKeys(final List<String> input) {
-		if (input.contains("LEFT") || input.contains("A")) {
-			turnLeft();
-		}
-
-		if (input.contains("RIGHT") || input.contains("D")) {
-			turnRight();
-		}
-	}
-	
-
-	/**
-	 * handle user(s) key input for coop.
-	 *
-	 * @param input List containing the keyboard input
-	 */
-	private void keyHandlerTwo(final List<String> input) {
 		if (isPlayerTwo()) {
-			playerTwoKeys(input);
+			playBoostp2();
 		} else {
-			if (input.contains("A")) {
-				turnLeft();
-			}
-
-			if (input.contains("D")) {
-				turnRight();
-			}
-
-			if (input.contains("W")) {
-				accelerate();
-			}
-
-			if (input.contains("S")) {
-				goHyperspace();
-			}
-
-			if (input.contains("SPACE")) {
-				fire();
-			}
+			playBoostp1();
 		}
 	}
 	
 	/**
-	 * Keys for player Two.
-	 * @param input - the input
+	 * Play rocket boost noise for player 1.
 	 */
-	private void playerTwoKeys(final List<String> input) {
-		if (input.contains("LEFT")) {
-			turnLeft();
+	private void playBoostp1() {
+		if (isBoost()) {
+			getThisGame().getAudio().play(Audio.BOOST);
+		} else {
+			getThisGame().getAudio().stop(Audio.BOOST);
 		}
-
-		if (input.contains("RIGHT")) {
-			turnRight();
-		}
-
-		if (input.contains("UP")) {
-			accelerate();
-		}
-
-		if (input.contains("DOWN")) {
-			goHyperspace();
-		}
-
-		if (input.contains("ENTER")) {
-			fire();
+	}
+	
+	/**
+	 * Play rocket boost noise for player 2.
+	 */
+	private void playBoostp2() {
+		if (isBoost()) {
+			getThisGame().getAudio().play(Audio.BOOST2);
+		} else {
+			getThisGame().getAudio().stop(Audio.BOOST2);
 		}
 	}
 
 	/**
 	 * Turn the player left.
 	 */
-	private void turnLeft() {
+	public final void turnLeft() {
 		rotation += ROTATION_SPEED;
 	}
 
 	/**
 	 * Turn the player right.
 	 */
-	private void turnRight() {
+	public final void turnRight() {
 		rotation -= ROTATION_SPEED;
 	}
 
 	/**
 	 * Makes player move faster.
 	 */
-	private void accelerate() {
+	public final void accelerate() {
 		setDX((float) (getDX() + Math.cos(getRotation()) * ACCELERATION));
 		setDY((float) (getDY() - Math.sin(getRotation()) * ACCELERATION));
 		if (speed() > MAX_SPEED) {
@@ -305,7 +238,7 @@ public class Player extends AbstractEntity {
 	/**
 	 * Method to handle hyperspace mechanic.
 	 */
-	private void goHyperspace() {
+	public final void goHyperspace() {
 		final Random random = new Random();
 		if (random.nextInt(changeOfDying) == 0) {
 			onHit();
@@ -318,13 +251,14 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
+		getThisGame().getAudio().playMultiple(Audio.TELEPORT);
 		}
 	}
 
 	/**
 	 * Method to handle firing bullets.
 	 */
-	private void fire() {
+	public final void fire() {
 		if (System.currentTimeMillis() - lastShot >	fireRate && getThisGame().bullets(this) < maxBullets) {
 			fireBullet(rotation);
 			if (tripleShot) {
@@ -332,6 +266,11 @@ public class Player extends AbstractEntity {
 				fireBullet(rotation + TRIPLE_SHOT_ANGLE);
 			}
 			lastShot = System.currentTimeMillis();
+			if (isPlayerTwo()) {
+				getThisGame().getAudio().playMultiple(Audio.SHOOTING2);
+			} else {
+				getThisGame().getAudio().playMultiple(Audio.SHOOTING);
+			}
 		}
 	}
 
@@ -347,6 +286,7 @@ public class Player extends AbstractEntity {
 		bBuilder.setRadius(bulletSize);
 		bBuilder.setThisGame(getThisGame());
 		bBuilder.setShooter(this);
+		bBuilder.setPierce(piercing);
 		final Bullet b = (Bullet) bBuilder.getResult();
 		
 		getThisGame().create(b);
@@ -415,10 +355,12 @@ public class Player extends AbstractEntity {
 	 */
 	public final void setPlayerTwo(final boolean playerTwo) {
 		this.playerTwo = playerTwo;
-		if (playerTwo) {
-			this.playerString = "Player 2";
-		} else {
-			this.playerString = "Player 1";
+		if (getThisGame().getGamestate().isCoop()) {
+			if (playerTwo) {
+				this.playerString = "Player 2";
+			} else {
+				this.playerString = "Player 1";
+			}
 		}
 	}
 

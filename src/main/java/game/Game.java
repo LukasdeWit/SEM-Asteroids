@@ -13,6 +13,7 @@ import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
 import entity.builders.PlayerBuilder;
+import game.highscore.HighscoreStore;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -27,13 +28,14 @@ public final class Game {
 	private List<AbstractEntity> entities;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
+	private final ScoreCounter scorecounter;
 	private final float screenX;
 	private final float screenY;
 	private final Spawner spawner;
 	private final Gamestate gamestate;
-	private final ScoreCounter scorecounter;
-
+	private final Audio audio;
 	private static final float CANVAS_SIZE = 500;
+	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
 	private static final boolean LOG_SCORE = false;
 
 	/**
@@ -48,14 +50,15 @@ public final class Game {
 		destroyList = new ArrayList<>();
 		createList = new ArrayList<>();
 		gamestate = new Gamestate(this);
-		scorecounter = new ScoreCounter(this);
+		scorecounter = new ScoreCounter(this, new HighscoreStore());
+		audio = new Audio();
 	}
 
 	/**
 	 * Starts or restarts the game, with initial entities.
 	 */
 	public void startGame() {
-		gamestate.start();
+		scorecounter.setScore(0);
 		entities.clear();
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		if (gamestate.isCoop()) {
@@ -80,17 +83,11 @@ public final class Game {
 			pBuilder.setDX(0);
 			pBuilder.setDY(0);
 			pBuilder.setThisGame(this);
-			pBuilder.setPlayerTwo(false);
 			player = (Player) pBuilder.getResult();
 			entities.add(player);
-		} 
-		scorecounter.startGame();
-		spawner.reset();
-		if (gamestate.getMode() == Gamestate.getModeArcade()) {
-			Logger.getInstance().log("Arcade game started.");
-		} else {
-			Logger.getInstance().log("Coop game started.");
 		}
+		spawner.reset();
+		Logger.getInstance().log(gamestate.toString() + " game started.");
 	}
 
 	/**
@@ -104,7 +101,11 @@ public final class Game {
 		r.setFill(Color.BLACK);
 		Launcher.getRoot().getChildren().add(r);
 		gamestate.update(input);
-		DisplayText.wave(spawner.getWave());
+		audio.update(input);
+		DisplayHud.sound(audio.isMute());
+		if (gamestate.getMode().isArcade()) {
+			DisplayText.wave(spawner.getWave());
+		}
 	}
 
 	/**
@@ -118,14 +119,22 @@ public final class Game {
 			checkCollision(e);
 			e.draw();
 		});
-
-		spawner.update();
+		
+		if (gamestate.isArcade()) {
+			spawner.updateArcade();
+		} else if (gamestate.isBoss()) {
+			spawner.updateBoss();
+		} else {
+			spawner.updateSurvival();
+		}
+		
 		destroyList.forEach(AbstractEntity::onDeath);
 		entities.removeAll(destroyList);
 		entities.addAll(createList);
 		createList.clear();
 		destroyList.clear();
 		createList.clear();
+		audio.backgroundTrack(enemies());
 		scorecounter.displayScore();
 		if (gamestate.isCoop()) {
 			if (playerTwo == null) {
@@ -183,24 +192,35 @@ public final class Game {
 			return;
 		}
 		if (player.isAlive()) {
+			Logger.getInstance().log("Player 2 died.");
 			destroy(playerTwo);
 			return;
 		} else if (gamestate.isCoop() && playerTwo.isAlive()) {
+			Logger.getInstance().log("Player 1 died.");
 			destroy(player);
 			return;
 		}
+		Logger.getInstance().log("Game over.");
+		overSwitch();
+	}
+
+	/**
+	 * Switches the gamemode when game is over.
+	 */
+	public void overSwitch() {
 		destroy(player);
 		if (gamestate.isCoop()) {
 			destroy(playerTwo);
 		}
-		Logger.getInstance().log("Game over.");
 		if (scorecounter.isNotHighscore()) {
-			gamestate.setState(Gamestate.getStateStartScreen());
+			scorecounter.setScore(0);
+			gamestate.setMode(gamestate.getNoneMode());
+			gamestate.setState(gamestate.getStartScreenState());
 		} else {
-			scorecounter.updateHighscore();
-			Logger.getInstance().log("New highscore is " + scorecounter.getHighscore() + ".");
-			gamestate.setState(Gamestate.getStateHighscoreScreen());
+			Logger.getInstance().log("New highscore is " + scorecounter.getScore() + ".");
+			gamestate.setState(gamestate.getHighscoreState());
 		}
+		audio.stopAll();
 	}
 
 	/**
@@ -229,11 +249,11 @@ public final class Game {
 	private void extraLife(final int score) {
 		if (scorecounter.canGainLife(score)) {
 			player.gainLife();
+			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 			if (gamestate.isCoop()) {
 				playerTwo.gainLife();
 				Logger.getInstance().log("Player 2 gained an extra life.");
 			}
-			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 		}
 	}
 
@@ -261,6 +281,24 @@ public final class Game {
 		return Math.toIntExact(entities.stream()
 				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof AbstractBoss)
 				.count());
+	}
+	
+	/**
+	 * Amount of big enemies, where 2 medium asteroids count as 1 big
+	 * big asteroid, and 2 small asteroids count as 1 medium asteroid.
+	 * @return amount of converted big enemies
+	 */
+	public int convertedBigEnemies() {
+		int enemies = 0;
+		for (final AbstractEntity entity : entities) {
+			if (entity instanceof Asteroid) {
+				enemies += ((Asteroid) entity).getSurvivalSize();
+			}
+		}
+		if (enemies % SURVIVAL_ASTEROID_SIZE_BIG == 0) {
+			return (int) (enemies / SURVIVAL_ASTEROID_SIZE_BIG);
+		}
+		return (int) (enemies / SURVIVAL_ASTEROID_SIZE_BIG) + 1;
 	}
 
 	/**
@@ -314,7 +352,7 @@ public final class Game {
 	}
 
 	/**
-	 * @param playerTwo the playerTwo to set
+	 * @param playerTwo - a new player two.
 	 */
 	public void setPlayerTwo(final Player playerTwo) {
 		this.playerTwo = playerTwo;
@@ -368,18 +406,25 @@ public final class Game {
 	public Gamestate getGamestate() {
 		return gamestate;
 	}
+	
+	/**
+	 * @return the audio
+	 */
+	public Audio getAudio() {
+		return audio;
+	}
+		
+	/**
+	 * @return the scorecounter
+	 */
+	public ScoreCounter getScoreCounter() {
+		return scorecounter;
+	}
 
 	/**
 	 * @return the spawner
 	 */
 	public Spawner getSpawner() {
 		return spawner;
-	}
-	
-	/**
-	 * @return the scorecounter
-	 */
-	public ScoreCounter getScoreCounter() {
-		return scorecounter;
 	}
 }

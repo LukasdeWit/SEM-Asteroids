@@ -69,9 +69,9 @@ public final class DisplayEntity {
 	private static final float ASTEROID_SIZE = .25f;
 	private static final float ASTEROID_WIDTH = 4;
 
-	private static final float BULLET_SIZE = .5f;
+	private static final float BULLET_SIZE = 1f;
 	private static final float PARTICLE_SIZE = .5f;
-	private static final float POWERUP_SIZE = .5f;
+	private static final float POWERUP_SIZE = .15f;
 
 	private static final int PLAYER_RESPAWN_FLICKER_TIME = 250;
 	private static final float[] PLAYER_TWO_CIRCLE = {11, 0, 9};
@@ -142,6 +142,16 @@ public final class DisplayEntity {
 	private static final float SAUCER_WIDTH = 4;
 	
 	private static final float BOSS_SIZE = 1f;
+	private static final double[] POWERUP_SHAPE = {
+			0, -5,
+			3, 4,
+			-4.5, -1.5,
+			4.5, -1.5,
+			-3, 4,
+			0, -5
+			
+	};
+	private static final float POWERUP_WIDTH = 4;
 
 	/**
 	 * private constructor for utility class.
@@ -191,7 +201,16 @@ public final class DisplayEntity {
 	 * @param p - the powerup
 	 */
 	public static void powerup(final Powerup p) {
-		drawEntity(p, Color.GRAY, POWERUP_SIZE);
+		final Polygon polygon = new Polygon(DisplayUtils.translate(
+				d -> d * (p.getRadius() * POWERUP_SIZE), d -> d * (p.getRadius() * POWERUP_SIZE),
+				POWERUP_SHAPE));
+
+		polygon.setStroke(Color.WHITE);
+		polygon.setFill(Color.WHITE);
+		polygon.setStrokeWidth(POWERUP_WIDTH * POWERUP_SIZE);
+		polygon.setTranslateX(p.getX());
+		polygon.setTranslateY(p.getY());
+		Launcher.getRoot().getChildren().add(polygon);
 	}
 	
 	/**
