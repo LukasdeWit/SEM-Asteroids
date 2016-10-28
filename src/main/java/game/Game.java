@@ -1,9 +1,5 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import display.DisplayHud;
 import display.DisplayText;
 import entity.AbstractEntity;
@@ -16,12 +12,20 @@ import entity.builders.PlayerBuilder;
 import game.highscore.HighscoreStore;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class defines everything within the game.
  *
  * @author Kibo
  */
+@Setter
+@Getter
 public final class Game {
 	private Player player;
 	private Player playerTwo;
@@ -311,120 +315,10 @@ public final class Game {
 	}
 
 	/**
-	 * getter for screenX.
-	 *
-	 * @return - screenX
-	 */
-	public float getScreenX() {
-		return screenX;
-	}
-
-	/**
-	 * getter for screenY.
-	 *
-	 * @return - screenY
-	 */
-	public float getScreenY() {
-		return screenY;
-	}
-
-	/**
-	 * Player getter.
-	 *
-	 * @return the player
-	 */
-	public Player getPlayer() {
-		return player;
-	}
-
-	/**
-	 * @param player the player to set
-	 */
-	public void setPlayer(final Player player) {
-		this.player = player;
-	}
-
-	/**
-	 * @return the playerTwo
+	 * return optional playertwo object.
+	 * @return the optional playertwo object
 	 */
 	public Optional<Player> getPlayerTwo() {
 		return Optional.of(playerTwo);
-	}
-
-	/**
-	 * @param playerTwo - a new player two.
-	 */
-	public void setPlayerTwo(final Player playerTwo) {
-		this.playerTwo = playerTwo;
-	}
-
-	/**
-	 * @return the destroyList
-	 */
-	public List<AbstractEntity> getDestroyList() {
-		return destroyList;
-	}
-
-	/**
-	 * @param destroyList the destroyList to set
-	 */
-	public void setDestroyList(final List<AbstractEntity> destroyList) {
-		this.destroyList = destroyList;
-	}
-
-	/**
-	 * @return the createList
-	 */
-	public List<AbstractEntity> getCreateList() {
-		return createList;
-	}
-
-	/**
-	 * @param createList the createList to set
-	 */
-	public void setCreateList(final List<AbstractEntity> createList) {
-		this.createList = createList;
-	}
-
-	/**
-	 * @param entities the entities to set
-	 */
-	public void setEntities(final List<AbstractEntity> entities) {
-		this.entities = entities;
-	}
-
-	/**
-	 * @return the entities
-	 */
-	public List<AbstractEntity> getEntities() {
-		return entities;
-	}	
-	
-	/**
-	 * @return the gamestate
-	 */
-	public Gamestate getGamestate() {
-		return gamestate;
-	}
-	
-	/**
-	 * @return the audio
-	 */
-	public Audio getAudio() {
-		return audio;
-	}
-		
-	/**
-	 * @return the scorecounter
-	 */
-	public ScoreCounter getScoreCounter() {
-		return scorecounter;
-	}
-
-	/**
-	 * @return the spawner
-	 */
-	public Spawner getSpawner() {
-		return spawner;
 	}
 }

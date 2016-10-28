@@ -5,6 +5,8 @@ import game.Audio;
 import game.Logger;
 import entity.builders.BulletBuilder;
 import entity.keyhandler.KeyHandler;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Random;
@@ -14,6 +16,8 @@ import java.util.Random;
  *
  * @author Kibo
  */
+@Setter
+@Getter
 public class Player extends AbstractEntity {
 	private int lives;
 	private double rotation;
@@ -335,20 +339,6 @@ public class Player extends AbstractEntity {
 	public final boolean isAlive() {
 		return lives > 0;
 	}
-
-	/**
-	 * @return lives
-	 */
-	public final int getLives() {
-		return lives;
-	}
-
-	/**
-	 * @param lives the lives to set
-	 */
-	public final void setLives(final int lives) {
-		this.lives = lives;
-	}
 	
 	/**
 	 * @param playerTwo - true if the player is player two, false otherwise.
@@ -372,48 +362,6 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return the invincibleStart
-	 */
-	public final long getInvincibleStart() {
-		return invincibleStart;
-	}
-
-	/**
-	 * @param invincibleStart the invincibleStart to set
-	 */
-	public final void setInvincibleStart(final long invincibleStart) {
-		this.invincibleStart = invincibleStart;
-	}
-
-	/**
-	 * @return the playerTwo
-	 */
-	public final boolean isPlayerTwo() {
-		return playerTwo;
-	}
-
-	/**
-	 * @return the boost
-	 */
-	public final boolean isBoost() {
-		return boost;
-	}
-
-	/**
-	 * @param boost the boost to set
-	 */
-	public final void setBoost(final boolean boost) {
-		this.boost = boost;
-	}
-
-	/**
-	 * @return the rotation
-	 */
-	public final double getRotation() {
-		return rotation;
-	}
-
-	/**
 	 * @return the rotationSpeed
 	 */
 	public static double getRotationSpeed() {
@@ -421,68 +369,12 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return the shielding
-	 */
-	public final int getShielding() {
-		return shielding;
-	}
-
-	/**
-	 * @param shielding the shielding to set
-	 */
-	public final void setShielding(final int shielding) {
-		this.shielding = shielding;
-	}
-
-	/**
-	 * @param bulletSize the bulletSize to set
-	 */
-	public final void setBulletSize(final float bulletSize) {
-		this.bulletSize = bulletSize;
-	}
-	
-	/**
 	 * @return bulletSize
 	 */
 	public final float getCurrentBulletSize() {
 		return bulletSize;
 	}
-	
-	/**
-	 * @param tripleShot the tripleShot to set
-	 */
-	public final void setTripleShot(final boolean tripleShot) {
-		this.tripleShot = tripleShot;
-	}
 
-	/**
-	 * @return the tripleShot
-	 */
-	public final boolean isTripleShot() {
-		return tripleShot;
-	}
-
-	/**
-	 * @param piercing the piercing to set
-	 */
-	public final void setPiercing(final int piercing) {
-		this.piercing = piercing;
-	}
-
-	/**
-	 * @return the piercing
-	 */
-	public final int getPiercing() {
-		return piercing;
-	}
-
-	/**
-	 * @param fireRate the fireRate to set
-	 */
-	public final void setFireRate(final double fireRate) {
-		this.fireRate = fireRate;
-	}
-	
 	/**
 	 * @return fireRate
 	 */
@@ -512,38 +404,10 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @param maxBullets the maxBullets to set
-	 */
-	public final void setMaxBullets(final int maxBullets) {
-		this.maxBullets = maxBullets;
-	}
-
-	/**
 	 * @return the maxBullets
 	 */
 	public static int getMaxBullets() {
 		return MAX_BULLETS;
-	}
-
-	/**
-	 * @return the hyperspaceStart
-	 */
-	public final long getHyperspaceStart() {
-		return hyperspaceStart;
-	}
-
-	/**
-	 * @param hyperspaceStart the hyperspaceStart to set
-	 */
-	public final void setHyperspaceStart(final long hyperspaceStart) {
-		this.hyperspaceStart = hyperspaceStart;
-	}
-
-	/**
-	 * @return the lastShot
-	 */
-	public final long getLastShot() {
-		return lastShot;
 	}
 
 	/**
@@ -553,20 +417,6 @@ public class Player extends AbstractEntity {
 		return MAX_SPEED;
 	}
 
-	/**
-	 * @param changeOfDying the changeOfDying to set
-	 */
-	public final void setChangeOfDying(final int changeOfDying) {
-		this.changeOfDying = changeOfDying;
-	}
-	
-	/**
-	 * @return the Player String
-	 */
-	public final String getPlayerString() {
-		return playerString;
-	}
-	
 	/**
 	 * @return a shallow copy of the current player, useful for making two entities.
 	 */

@@ -27,7 +27,7 @@ public class GamestateTest {
 	public final void setUp() {
 		gamestate.setMode(gamestate.getArcadeMode());
 		gamestate.setState(gamestate.getStartScreenState());
-		thisGame.getScoreCounter().setScore(0);
+		thisGame.getScorecounter().setScore(0);
 		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		thisGame.setDestroyList(new ArrayList<>());

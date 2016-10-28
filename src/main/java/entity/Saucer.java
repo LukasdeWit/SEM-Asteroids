@@ -1,18 +1,22 @@
 package entity;
 
-import java.util.List;
-import java.util.Random;
-
 import display.DisplayEntity;
 import entity.builders.BulletBuilder;
 import game.Audio;
 import game.Game;
 import game.Logger;
 import game.Spawner;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents a Saucer.
  */
+@Setter
+@Getter
 public class Saucer extends AbstractEntity {
 	private int toRight;
 	private final Random random;
@@ -159,7 +163,7 @@ public class Saucer extends AbstractEntity {
 	private float smallShotDir() {
 		final float playerX = getThisGame().getPlayer().getX();
 		final float playerY = getThisGame().getPlayer().getY();
-		float accuracy = getThisGame().getScoreCounter().getScore() / (float) Spawner.getDifficultyStep();
+		float accuracy = getThisGame().getScorecounter().getScore() / (float) Spawner.getDifficultyStep();
 		if (accuracy > MAX_ACCURACY) {
 			accuracy = MAX_ACCURACY;
 		}
@@ -185,7 +189,7 @@ public class Saucer extends AbstractEntity {
 	 * @return shot time of small saucer
 	 */
 	private long smallShotTime() {
-		final long score = getThisGame().getScoreCounter().getScore() / Spawner.getDifficultyStep();
+		final long score = getThisGame().getScorecounter().getScore() / Spawner.getDifficultyStep();
 		if (score == 0) {
 			return SHOT_TIME;
 		} else if (score <= SHOT_TIME / (2 * LESS_SHOT)) {
@@ -287,41 +291,6 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static float getBigRadius() {
 		return BIG_RADIUS;
-	}
-
-	/**
-	 * @return the toRight
-	 */
-	public final int getToRight() {
-		return toRight;
-	}
-
-	/**
-	 * @return the shotTime
-	 */
-	public final long getShotTime() {
-		return shotTime;
-	}
-
-	/**
-	 * @param shotTime the shotTime to set
-	 */
-	public final void setShotTime(final long shotTime) {
-		this.shotTime = shotTime;
-	}
-
-	/**
-	 * @param dirChangeTime the dirChangeTime to set
-	 */
-	public final void setDirChangeTime(final long dirChangeTime) {
-		this.dirChangeTime = dirChangeTime;
-	}
-
-	/**
-	 * @return the dirChangeTime
-	 */
-	public final long getDirChangeTime() {
-		return dirChangeTime;
 	}
 
 	/**

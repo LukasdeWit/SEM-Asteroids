@@ -1,19 +1,18 @@
 package entity;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for Boss
@@ -129,9 +128,9 @@ public class BossTest {
 	
 	@Test
 	public void testOnDeath() {
-		final double initialScore = boss.getThisGame().getScoreCounter().getScore();
+		final double initialScore = boss.getThisGame().getScorecounter().getScore();
 		boss.onDeath();
-		assertEquals(initialScore + 20000,boss.getThisGame().getScoreCounter().getScore(),0);
+		assertEquals(initialScore + 20000,boss.getThisGame().getScorecounter().getScore(),0);
 	}
 
 	//Since each method calls the other, more than one test would be silly.

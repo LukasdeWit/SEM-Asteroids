@@ -50,7 +50,7 @@ public class BulletBuilder implements EntityBuilder {
 	 * @param pierce - the amount of objects the bullet pierces.
 	 */
 	public final void setPierce(final int pierce) {
-		bullet.setPierce(pierce);
+		bullet.setPiercing(pierce);
 	}
 	
 	/**

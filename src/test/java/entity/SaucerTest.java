@@ -1,21 +1,17 @@
 package entity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import display.DisplayEntity;
 import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Group;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for Saucer.
@@ -37,7 +33,7 @@ public class SaucerTest {
 	public final void setUp() {
 		thisGame = new Game();
 		thisGame.setPlayer(null);
-		thisGame.getScoreCounter().setScore(0);
+		thisGame.getScorecounter().setScore(0);
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
@@ -148,7 +144,7 @@ public class SaucerTest {
 		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
-		thisGame.getScoreCounter().setScore(120000);
+		thisGame.getScorecounter().setScore(120000);
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.setShotTime(0);
 		saucer.update(null);
@@ -163,7 +159,7 @@ public class SaucerTest {
 		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
-		thisGame.getScoreCounter().setScore(50000);
+		thisGame.getScorecounter().setScore(50000);
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.setShotTime(0);
 		saucer.update(null);
@@ -242,12 +238,12 @@ public class SaucerTest {
 	public final void testOnDeath(){
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.onDeath();
-		assertEquals(Saucer.getSmallScore(), thisGame.getScoreCounter().getScore(), 0);
+		assertEquals(Saucer.getSmallScore(), thisGame.getScorecounter().getScore(), 0);
 	}
 	
 	@Test
 	public final void testOnDeath2(){
 		saucer.onDeath();
-		assertEquals(Saucer.getBigScore(), thisGame.getScoreCounter().getScore(), 0);
+		assertEquals(Saucer.getBigScore(), thisGame.getScorecounter().getScore(), 0);
 	}
 }

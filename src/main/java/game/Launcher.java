@@ -1,8 +1,5 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -15,6 +12,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is the main launcher of the game.
@@ -30,6 +32,8 @@ public class Launcher extends Application {
 
 	// Make a new Game
 	private final Game thisGame = new Game();
+	@Getter
+	@Setter
 	private static Stage thisStage;
 
 	/**
@@ -122,20 +126,6 @@ public class Launcher extends Application {
 	 */
 	public static void quit() {
 		Launcher.getThisStage().close();
-	}
-
-	/**
-	 * @return the thisStage
-	 */
-	public static final Stage getThisStage() {
-		return thisStage;
-	}
-
-	/**
-	 * @param thisStage the thisStage to set
-	 */
-	public static final void setThisStage(final Stage thisStage) {
-		Launcher.thisStage = thisStage;
 	}
 
 }

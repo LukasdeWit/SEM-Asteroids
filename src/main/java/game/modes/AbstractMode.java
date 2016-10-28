@@ -1,6 +1,8 @@
 package game.modes;
 
 import game.Game;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Abstract class that game modes can inherit from.
@@ -8,7 +10,8 @@ import game.Game;
  *
  */
 public abstract class AbstractMode {
-	private Game thisGame;
+	@Getter
+	@Setter private Game thisGame;
 	
 	/**
 	 * Constructor for AbstractMode.
@@ -53,20 +56,4 @@ public abstract class AbstractMode {
 	 * @return true when it's a survival mode
 	 */
 	public abstract boolean isSurvival();
-	
-	/**
-	 * Getter for thisGame.
-	 * @return thisgame
-	 */
-	public final Game getThisGame() {
-		return thisGame;
-	}
-	
-	/**
-	 * Setter for thisgame.
-	 * @param game thisGame should be
-	 */
-	public final void setThisGame(final Game game) {
-		thisGame = game;
-	}
 }
