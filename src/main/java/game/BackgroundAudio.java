@@ -64,26 +64,28 @@ public class BackgroundAudio {
 	 * @param enemies new amount of enemies.
 	 */
 	public final void update(final int enemies) {
-		if (System.currentTimeMillis() > time + interval) {
-			// alternate between booping sounds
-			if (bg) {
-				boop1.play();
-				bg = false;
-			} else {
-				boop2.play();
-				bg = true;
-			}
-			// make sure to avoid divide by 0
-			// music slows down again when there are no more enemies left
-			if (enemies > 1) {
-				if (BASELINE / enemies < interval) {
-					interval = BASELINE / enemies;
-				}
-			} else {
-				interval = BASELINE;
-			}
-			// update time to current
-			time = System.currentTimeMillis();
-		}
-	}
+    	if (System.currentTimeMillis() <= time + interval) {
+    	    return;
+    	}
+
+    	// alternate between booping sounds
+    	if (bg) {
+    	    boop1.play();
+    	} else {
+    	    boop2.play();
+    	}
+
+    	// make sure to avoid divide by 0
+    	// music slows down again when there are no more enemies left
+    	if (enemies < 1) {
+    	    interval = BASELINE;
+    	} else if (BASELINE / enemies < interval) {
+    	    interval = BASELINE / enemies;
+    	}
+
+    	// update time to current
+    	time = System.currentTimeMillis();
+    	// flip background sound so it alternates each time
+    	bg = !bg;
+    }
 }
