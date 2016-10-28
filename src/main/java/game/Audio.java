@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to regulate all audio output.
+ * Class to regulate all foreground audio output. background audio is handled by {@link BackgroundAudio}
  * 
  * @author Esmee
  *
