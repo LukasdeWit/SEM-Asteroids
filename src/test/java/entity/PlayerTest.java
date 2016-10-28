@@ -372,6 +372,33 @@ public class PlayerTest {
 		assertFalse(player.isAlive());
 	}
 	
+	@Test
+	public void testFire() {
+		final String[] input = {SPACE};
+		player.getShooter().setTripleShot(true);
+		player.getShooter().setLastShot(0);
+		update(player, input, false);
+		assertEquals(3, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public void testFire2() {
+		final String[] input = {SPACE};
+		player.getShooter().setLastShot(0);
+		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
+		update(player, input, false);
+		assertEquals(1, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public void testFire3() {
+		final String[] input = {SPACE};
+		player.getShooter().setMaxBullets(0);
+		player.getShooter().setLastShot(0);
+		update(player, input, false);
+		assertEquals(0, thisGame.getCreateList().size(), 0);
+	}
+	
 	private void update(final Player player, final String[] in, final boolean coop){
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);

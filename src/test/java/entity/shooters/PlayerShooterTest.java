@@ -78,26 +78,28 @@ public class PlayerShooterTest {
 	
 	@Test
 	public void testFire() {
-		final String[] input = {SPACE};
+		player.setThisGame(thisGame);
 		player.getShooter().setTripleShot(true);
-		update(player, input, false);
+		player.getShooter().setLastShot(0);
+		player.getShooter().shoot();
+
 		assertEquals(3, thisGame.getCreateList().size(), 0);
 	}
 	
 	@Test
 	public void testFire2() {
-		final String[] input = {SPACE};
-		update(player, input, false);
-		update(player, input, false);
+		player.setThisGame(thisGame);
+		player.getShooter().setLastShot(0);
+		player.getShooter().shoot();
 		assertEquals(1, thisGame.getCreateList().size(), 0);
 	}
 	
 	
 	@Test
 	public void testFire3() {
-		final String[] input = {SPACE};
 		player.getShooter().setMaxBullets(0);
-		update(player, input, false);
+		player.getShooter().setLastShot(0);
+		player.getShooter().shoot();
 		assertEquals(0, thisGame.getCreateList().size(), 0);
 	}
 	
