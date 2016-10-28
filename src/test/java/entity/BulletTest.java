@@ -66,6 +66,7 @@ public class BulletTest {
 		
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
+		thisGame.getAudio().setMute(true);
 	}
 
 	/**

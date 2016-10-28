@@ -5,6 +5,7 @@ import java.util.List;
 import display.DisplayText;
 import game.Game;
 import game.Gamestate;
+import game.Launcher;
 import game.Logger;
 
 /**
@@ -30,6 +31,9 @@ public class StartScreenState extends AbstractState {
 			if (input.contains("H")) {
 				Logger.getInstance().log("Go to highscores screen");
 				gamestate.setState(gamestate.getViewHighscoresState());
+			} else if (input.contains("ESCAPE")) {
+				Logger.getInstance().log("Player quit the game.");
+				Launcher.quit();
 			} else {
 				startScreen(input);
 			}

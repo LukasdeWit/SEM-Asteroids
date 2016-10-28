@@ -37,6 +37,7 @@ public class BossTest {
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		boss = new Boss(X_START, Y_START, DX_START, DY_START, thisGame);
+		thisGame.getAudio().setMute(true);
 	}
 
 	@Test

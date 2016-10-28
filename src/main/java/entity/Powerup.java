@@ -7,6 +7,7 @@ import display.DisplayHud;
 import game.Audio;
 import game.Game;
 import game.Logger;
+import javafx.scene.Group;
 
 /**
  * Class that represents a Powerup.
@@ -21,6 +22,8 @@ public class Powerup extends AbstractEntity {
 
 	private Player player;
 
+	private long glitterTime;
+
 	private static final long PERISH_TIME = 10000;
 	private static final int POWERUP_DURATION = 5000;
 
@@ -34,7 +37,7 @@ public class Powerup extends AbstractEntity {
 	private static final int PIERCING = 4;
 	private static final int MINIGUN = 5;
 
-	private static final float NEW_BULLET_SIZE = 4;
+	private static final float NEW_BULLET_SIZE = 10;
 	private static final int NEW_PIERCING_LEVEL = 3;
 	private static final long NEW_FIRE_RATE = 50;
 	private static final int TRIPLE_SHOT_BULLETS = Player.getMaxBullets() * 3;
@@ -48,6 +51,8 @@ public class Powerup extends AbstractEntity {
 			"a piercing bullet",
 			"a minigun"
 	};
+
+	private static final long GLITTER_TIME = 500;
 	
 	/**
 	 * Constructor for the Powerup class.
@@ -63,6 +68,7 @@ public class Powerup extends AbstractEntity {
 		type = random.nextInt(TYPES);
 		startTime = System.currentTimeMillis();
 		pickupTime = 0;
+		glitterTime = 0;
 	}
 
 	/**
@@ -90,11 +96,9 @@ public class Powerup extends AbstractEntity {
 		switch (type) {
 			case EXTRA_LIFE:
 				p.gainLife();
-				getThisGame().destroy(this);
 				break;
 			case SHIELD:
 				p.gainShield();
-				getThisGame().destroy(this);
 				break;
 			case BULLET_SIZE:
 				p.setBulletSize(NEW_BULLET_SIZE);
@@ -130,6 +134,10 @@ public class Powerup extends AbstractEntity {
 
 	@Override
 	public final void update(final List<String> input) {
+		if (GLITTER_TIME < (System.currentTimeMillis() - glitterTime) && pickupTime == 0) {
+			Particle.explosion(getX(), getY(), getThisGame());
+			glitterTime = System.currentTimeMillis();
+		}
 		if (pickupTime == 0) {
 			if (PERISH_TIME < (System.currentTimeMillis() - startTime)) {
 				getThisGame().destroy(this);
@@ -167,6 +175,28 @@ public class Powerup extends AbstractEntity {
 		}
 		getThisGame().destroy(this);
 	}
+    
+	/**
+	 * makes every type of powerup into a group for the hud.
+	 * @return the group
+	 */
+    public final Group getPowerupShape() {
+    	switch (getType()) {
+		case EXTRA_LIFE:
+			return DisplayHud.extraLifeGroup();
+		case SHIELD:
+			return DisplayHud.shieldGroup();
+		case BULLET_SIZE:
+			return DisplayHud.bulletSizeGroup();
+		case TRIPLE_SHOT:
+			return DisplayHud.tripleShotGroup();
+		case PIERCING:
+			return DisplayHud.piercingGroup();
+		case MINIGUN:
+		default:
+			return DisplayHud.minigunGroup();
+    	}
+    }
 
 	/**
 	 * @return the player
@@ -222,5 +252,12 @@ public class Powerup extends AbstractEntity {
 	 */
 	public final void setStartTime(final long startTime) {
 		this.startTime = startTime;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public final int getType() {
+		return type;
 	}
 }

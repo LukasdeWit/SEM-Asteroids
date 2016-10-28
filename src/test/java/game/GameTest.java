@@ -63,6 +63,7 @@ public class GameTest {
 		bBuilder.setThisGame(thisGame);
 		
 		DisplayText.setTest(true);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test

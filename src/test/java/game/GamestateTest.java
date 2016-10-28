@@ -36,6 +36,7 @@ public class GamestateTest {
 		thisGame.setPlayerTwo(null);
 		DisplayText.setTest(true);
 		gamestate.setScreenSwitchTime(0);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test
@@ -101,8 +102,9 @@ public class GamestateTest {
 	public final void testGame1() {
 		gamestate.setState(gamestate.getOngoingGameState());
 		input.add("R");
+		gamestate.setScreenSwitchTime(System.currentTimeMillis());
 		gamestate.update(input);
-		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
+		assertEquals(gamestate.getArcadeMode(), gamestate.getMode()); 
 		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
 	}
 	

@@ -31,6 +31,7 @@ public class EntityTest {
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		e = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test

@@ -44,7 +44,7 @@ public class Player extends AbstractEntity {
 	private static final float MAX_SPEED = 4;
 	private static final int MAX_BULLETS = 4;
 	private static final int CHANCE_OF_DYING = 25;
-	private static final float BULLET_SIZE = 2;
+	private static final float BULLET_SIZE = 1;
 	private static final float SPAWN_OFFSET = 40;
     private static final double TRIPLE_SHOT_ANGLE = .1;
     
