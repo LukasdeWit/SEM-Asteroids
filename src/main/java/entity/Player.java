@@ -4,6 +4,7 @@ import display.DisplayEntity;
 import game.Audio;
 import game.Logger;
 import entity.builders.BulletBuilder;
+import entity.keyhandler.KeyHandler;
 
 import java.util.List;
 import java.util.Random;
@@ -31,6 +32,7 @@ public class Player extends AbstractEntity {
 	private int changeOfDying;
 	private String playerString;
 	private final BulletBuilder bBuilder;
+	private final KeyHandler keyhandler;
 
 	private static final int STARTING_LIVES = 3;
 	private static final float RADIUS = 5;
@@ -70,6 +72,7 @@ public class Player extends AbstractEntity {
 		bBuilder = new BulletBuilder();
 		bBuilder.setPierce(piercing);
 		bBuilder.setFriendly(true);
+		keyhandler = new KeyHandler(this);
     }
 
 	/**
@@ -146,124 +149,55 @@ public class Player extends AbstractEntity {
 		slowDown();
 		wrapAround();
 		if (!invincible()) {
-			if (getThisGame().getGamestate().isCoop()) {
-				keyHandlerTwo(input);
-			} else {
-				keyHandler(input);
-			}
+			keyhandler.update(input);
 		}
-		getThisGame().getAudio().rocketBoost(this);
-	}
-
-	/**
-	 * handle user key input.
-	 *
-	 * @param input List containing the keyboard input
-	 */
-	private void keyHandler(final List<String> input) {
-		turnKeys(input);
-		if (input.contains("UP") || input.contains("W")) {
-			accelerate();
-		}
-
-		if (input.contains("DOWN") || input.contains("S")) {
-			goHyperspace();
-		}
-
-		if (input.contains("SPACE")) {
-			fire();
-		}
-	}
-	
-	/**
-	 * turn using keys.
-	 * @param input - the input.
-	 */
-	private void turnKeys(final List<String> input) {
-		if (input.contains("LEFT") || input.contains("A")) {
-			turnLeft();
-		}
-
-		if (input.contains("RIGHT") || input.contains("D")) {
-			turnRight();
-		}
-	}
-	
-	/**
-	 * handle user(s) key input for coop.
-	 *
-	 * @param input List containing the keyboard input
-	 */
-	private void keyHandlerTwo(final List<String> input) {
 		if (isPlayerTwo()) {
-			playerTwoKeys(input);
+			playBoostp2();
 		} else {
-			if (input.contains("A")) {
-				turnLeft();
-			}
-
-			if (input.contains("D")) {
-				turnRight();
-			}
-
-			if (input.contains("W")) {
-				accelerate();
-			}
-
-			if (input.contains("S")) {
-				goHyperspace();
-			}
-
-			if (input.contains("SPACE")) {
-				fire();
-			}
+			playBoostp1();
 		}
 	}
 	
 	/**
-	 * Keys for player Two.
-	 * @param input - the input
+	 * Play rocket boost noise for player 1.
 	 */
-	private void playerTwoKeys(final List<String> input) {
-		if (input.contains("LEFT")) {
-			turnLeft();
+	private void playBoostp1() {
+		if (isBoost()) {
+			getThisGame().getAudio().play(Audio.BOOST);
+		} else {
+			getThisGame().getAudio().stop(Audio.BOOST);
 		}
-
-		if (input.contains("RIGHT")) {
-			turnRight();
-		}
-
-		if (input.contains("UP")) {
-			accelerate();
-		}
-
-		if (input.contains("DOWN")) {
-			goHyperspace();
-		}
-
-		if (input.contains("ENTER")) {
-			fire();
+	}
+	
+	/**
+	 * Play rocket boost noise for player 2.
+	 */
+	private void playBoostp2() {
+		if (isBoost()) {
+			getThisGame().getAudio().play(Audio.BOOST2);
+		} else {
+			getThisGame().getAudio().stop(Audio.BOOST2);
 		}
 	}
 
 	/**
 	 * Turn the player left.
 	 */
-	private void turnLeft() {
+	public final void turnLeft() {
 		rotation += ROTATION_SPEED;
 	}
 
 	/**
 	 * Turn the player right.
 	 */
-	private void turnRight() {
+	public final void turnRight() {
 		rotation -= ROTATION_SPEED;
 	}
 
 	/**
 	 * Makes player move faster.
 	 */
-	private void accelerate() {
+	public final void accelerate() {
 		setDX((float) (getDX() + Math.cos(getRotation()) * ACCELERATION));
 		setDY((float) (getDY() - Math.sin(getRotation()) * ACCELERATION));
 		if (speed() > MAX_SPEED) {
@@ -304,7 +238,7 @@ public class Player extends AbstractEntity {
 	/**
 	 * Method to handle hyperspace mechanic.
 	 */
-	private void goHyperspace() {
+	public final void goHyperspace() {
 		final Random random = new Random();
 		if (random.nextInt(changeOfDying) == 0) {
 			onHit();
@@ -317,14 +251,14 @@ public class Player extends AbstractEntity {
 		setDY(0);
 		makeInvincible(HYPERSPACE_TIME);
 		hyperspaceStart = System.currentTimeMillis();
-		getThisGame().getAudio().play(Audio.TELEPORT);
+		getThisGame().getAudio().playMultiple(Audio.TELEPORT);
 		}
 	}
 
 	/**
 	 * Method to handle firing bullets.
 	 */
-	private void fire() {
+	public final void fire() {
 		if (System.currentTimeMillis() - lastShot >	fireRate && getThisGame().bullets(this) < maxBullets) {
 			fireBullet(rotation);
 			if (tripleShot) {
