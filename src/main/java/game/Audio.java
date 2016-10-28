@@ -104,6 +104,11 @@ public class Audio {
 		}
 	}
 
+	/**
+	 * initialise all audio tracks and add them to the track collection.
+	 *
+	 * @throws MalformedURLException when one of the URLS for the audio files was malformed
+	 */
 	private void initAudio() throws MalformedURLException {
 		final AudioClip ufosmall = createTrackWithVolume(UFOSMALLVOLUME, "ufoSmall.mp3");
 		final AudioClip ufobig = createTrackWithVolume(UFOBIGVOLUME, "ufoBig.mp3");
@@ -127,10 +132,23 @@ public class Audio {
 		tracks.add(createTrackWithVolume(SHOOTING2VOLUME, "fire2.wav"));
 	}
 
+	/**
+	 * factory method to create a track from a file name.
+	 * @param filename the name of the sound file we want to add
+	 * @return the resulting AudioClip
+	 * @throws MalformedURLException when the filename caused the URL to be malformed
+	 */
 	private static AudioClip createTrack(final String filename) throws MalformedURLException {
 		return new AudioClip(new File(PATH + filename).toURI().toURL().toString());
 	}
 
+	/**
+	 * factory method to create a track from a file name and set the volume.
+	 * @param volume the volume we want this audioclip to use
+	 * @param fileName the name of the sound file we want to add
+	 * @return the resulting AudioClip
+	 * @throws MalformedURLException when the filename caused the URL to be malformed
+	 */
 	private static AudioClip createTrackWithVolume(final double volume, final String fileName)
 			throws MalformedURLException {
 		final AudioClip audioClip = new AudioClip(new File(PATH + fileName).toURI().toURL().toString());
