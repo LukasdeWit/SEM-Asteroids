@@ -357,18 +357,22 @@ public final class DisplayEntity {
 	 * @param boss -  the boss
 	 */
 	public static void boss(final BasicBoss boss) {
-		final Group group = new Group();
-		for (final double[] shape : BASIC_BOSS_SHAPE) {
-			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
-			p -> p * (boss.getRadius() * BOSS_SIZE), shape));
-			polygon.setStroke(Color.WHITE);
-			polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
-			group.getChildren().add(polygon);
-		}
+		if (boss instanceof DoubleBoss) {
+			boss((DoubleBoss) boss);
+		} else {
+			final Group group = new Group();
+			for (final double[] shape : BASIC_BOSS_SHAPE) {
+				final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
+						p -> p * (boss.getRadius() * BOSS_SIZE), shape));
+				polygon.setStroke(Color.WHITE);
+				polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
+				group.getChildren().add(polygon);
+			}
 		
-		group.setTranslateX(boss.getX());
-		group.setTranslateY(boss.getY());
-		Launcher.getRoot().getChildren().add(group);
+			group.setTranslateX(boss.getX());
+			group.setTranslateY(boss.getY());
+			Launcher.getRoot().getChildren().add(group);
+		}
 	}
 	
 	/**
