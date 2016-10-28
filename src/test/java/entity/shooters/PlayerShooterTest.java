@@ -54,6 +54,8 @@ public class PlayerShooterTest {
 		bBuilder.setDX(DX_START);
 		bBuilder.setDY(DY_START);
 		bBuilder.setThisGame(thisGame);
+		
+		thisGame.getAudio().setMute(true);
 	}
 	@Test
 	public void testKeyHandlerShoot() {
@@ -100,6 +102,32 @@ public class PlayerShooterTest {
 		player.getShooter().setMaxBullets(0);
 		player.getShooter().setLastShot(0);
 		player.getShooter().shoot();
+		assertEquals(0, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public void testFirep2_1() {
+		player2.setThisGame(thisGame);
+		player2.getShooter().setTripleShot(true);
+		player2.getShooter().setLastShot(0);
+		player2.getShooter().shoot();
+
+		assertEquals(3, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public void testFirep2_2() {
+		player2.setThisGame(thisGame);
+		player2.getShooter().setLastShot(0);
+		player2.getShooter().shoot();
+		assertEquals(1, thisGame.getCreateList().size(), 0);
+	}
+	
+	@Test
+	public void testFire3_2() {
+		player2.getShooter().setMaxBullets(0);
+		player2.getShooter().setLastShot(0);
+		player2.getShooter().shoot();
 		assertEquals(0, thisGame.getCreateList().size(), 0);
 	}
 	
