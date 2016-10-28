@@ -92,7 +92,7 @@ public class Powerup extends AbstractEntity {
 	 */
 	private void pickup(final Player p) {
 		player = p;
-		PlayerShooter ps = p.getShooter();
+		final PlayerShooter ps = p.getShooter();
 		pickupTime = System.currentTimeMillis();
 		getThisGame().getAudio().play(Audio.POWERUP);
 		switch (type) {
@@ -158,7 +158,7 @@ public class Powerup extends AbstractEntity {
 			getThisGame().destroy(this);
 			return;
 		}
-		PlayerShooter ps = player.getShooter();
+		final PlayerShooter ps = player.getShooter();
 		switch(type) {
 			case BULLET_SIZE: 
 				ps.setBulletSize(PlayerShooter.getBulletSize());

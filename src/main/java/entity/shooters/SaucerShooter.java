@@ -20,7 +20,7 @@ public class SaucerShooter extends AbstractShooter {
 	private static final float MAX_ACCURACY = 10;
 	private static final float BULLET_SPEED = 4;
 	
-	private Random random;
+	private final Random random;
 
 	/**
 	 * Constructor for saucer.
@@ -40,8 +40,7 @@ public class SaucerShooter extends AbstractShooter {
 	 */
 	@Override
 	public final void shoot() {
-		BulletBuilder bBuilder = getBBuilder();
-		Game thisGame = getOwner().getThisGame();
+		final Game thisGame = getOwner().getThisGame();
 		
 		if (thisGame.getPlayer() == null) {
 			return;
@@ -49,6 +48,7 @@ public class SaucerShooter extends AbstractShooter {
 		if (thisGame.getPlayer().invincible()) {
 			setLastShot(System.currentTimeMillis());
 		} else {
+			final BulletBuilder bBuilder = getBBuilder();
 			bBuilder.coordinatesOfShooter();
 			if (!((Saucer) getOwner()).isSmall()) {
 				if (System.currentTimeMillis() - getLastShot() > SHOT_TIME) {
@@ -67,7 +67,7 @@ public class SaucerShooter extends AbstractShooter {
 	 * @param shotDir direction you want the saucer to shoot in
 	 */
 	private void shootBullet(final float shotDir) {
-		BulletBuilder bBuilder = getBBuilder();
+		final BulletBuilder bBuilder = getBBuilder();
 		bBuilder.setDX((float) Math.cos(shotDir) * BULLET_SPEED);
 		bBuilder.setDY((float) Math.sin(shotDir) * BULLET_SPEED);
 		final Bullet newBullet = (Bullet) bBuilder.getResult();

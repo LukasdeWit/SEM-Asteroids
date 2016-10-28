@@ -11,7 +11,7 @@ import entity.builders.BulletBuilder;
 public abstract class AbstractShooter {
 	private long lastShot;
 	private BulletBuilder bBuilder;
-	private AbstractEntity owner;
+	private final AbstractEntity owner;
 	
 	/**
 	 * Constructor for Abstracthooter.

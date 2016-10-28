@@ -43,8 +43,8 @@ public class PlayerShooter extends AbstractShooter {
 
 	@Override
 	public final void shoot() {
-		Player owner = (Player) getOwner();
-		double rotation = owner.getRotation();
+		final Player owner = (Player) getOwner();
+		final double rotation = owner.getRotation();
 		if (System.currentTimeMillis() - getLastShot() > fireRate && owner.getThisGame().bullets(owner) < maxBullets) {
 			fireBullet(rotation);
 			if (tripleShot) {
@@ -65,9 +65,9 @@ public class PlayerShooter extends AbstractShooter {
 	 * @param direction - the direction
 	 */
 	private void fireBullet(final double direction) {
-		Player owner = (Player) getOwner();
+		final Player owner = (Player) getOwner();
 
-		BulletBuilder bBuilder = getBBuilder();
+		final BulletBuilder bBuilder = getBBuilder();
 		bBuilder.coordinatesOfShooter();
 		bBuilder.setDX((float) (owner.getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
 		bBuilder.setDY((float) (owner.getDY() / 2 - Math.sin(direction) * BULLET_SPEED));

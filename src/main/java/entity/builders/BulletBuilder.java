@@ -78,7 +78,7 @@ public class BulletBuilder implements EntityBuilder {
 	 * Automatically set bullet's coordinates to coordinates of shooter.
 	 */
 	public final void coordinatesOfShooter() {
-		AbstractEntity shooter = bullet.getShooter();
+		final AbstractEntity shooter = bullet.getShooter();
 		if (shooter != null) {
 			bullet.setX(shooter.getX());
 			bullet.setY(shooter.getY());

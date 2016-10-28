@@ -4,7 +4,6 @@ import display.DisplayEntity;
 import game.Audio;
 import game.Logger;
 import entity.shooters.PlayerShooter;
-import entity.builders.BulletBuilder;
 import entity.keyhandler.KeyHandler;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class Player extends AbstractEntity {
 	private int shielding;
 	private int changeOfDying;
 	private String playerString;
-	private PlayerShooter shooter;
+	private final PlayerShooter shooter;
 	private final KeyHandler keyhandler;
 
 	private static final int STARTING_LIVES = 3;
