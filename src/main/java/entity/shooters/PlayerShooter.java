@@ -12,12 +12,12 @@ import game.Audio;
  */
 public class PlayerShooter extends AbstractShooter {
 	private static final float BULLET_SPEED = 4;
-	private static final float BULLET_SIZE = 2;
-    private static final double TRIPLE_SHOT_ANGLE = .1;
+	private static final float BULLET_SIZE = 1;
+	private static final double TRIPLE_SHOT_ANGLE = .1;
 	private static final int MAX_BULLETS = 4;
 	private static final long FIRE_RATE = 200;
 
-    private int maxBullets;
+	private int maxBullets;
 	private int piercing;
 	private float bulletSize;
 	private boolean tripleShot;
