@@ -18,7 +18,7 @@ public class ShootCommand extends AbstractCommand {
 
 	@Override
 	public final void execute() {
-		getPlayer().fire();
+		getPlayer().getShooter().shoot();
 	}
 
 }

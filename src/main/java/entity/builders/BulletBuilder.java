@@ -73,6 +73,17 @@ public class BulletBuilder implements EntityBuilder {
 	public final void setShooter(final AbstractEntity shooter) {
 		bullet.setShooter(shooter);
 	}
+	
+	/**
+	 * Automatically set bullet's coordinates to coordinates of shooter.
+	 */
+	public final void coordinatesOfShooter() {
+		final AbstractEntity shooter = bullet.getShooter();
+		if (shooter != null) {
+			bullet.setX(shooter.getX());
+			bullet.setY(shooter.getY());
+		}
+	}
 
 	@Override
 	public final AbstractEntity getResult() {
