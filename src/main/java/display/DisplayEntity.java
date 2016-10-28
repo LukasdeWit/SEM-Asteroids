@@ -145,7 +145,7 @@ public final class DisplayEntity {
 	private static final float SAUCER_WIDTH = 4;
 	private static final float BOSS_WIDTH = 4;
 	
-	private static final float BOSS_SIZE = 1f;
+	private static final float BOSS_SIZE = .3f;
 	private static final double[][] BASIC_BOSS_SHAPE = {
 			{
 					-3, 1.5,
@@ -336,6 +336,26 @@ public final class DisplayEntity {
 	 * 
 	 * @param boss -  the boss
 	 */
+	public static void boss(final DoubleBoss boss) {
+		final Group group = new Group();
+		for (final double[] shape : DOUBLE_BOSS_SHAPE) {
+			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
+			p -> p * (boss.getRadius() * BOSS_SIZE), shape));
+			polygon.setStroke(Color.WHITE);
+			polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
+			group.getChildren().add(polygon);
+		}
+		
+		group.setTranslateX(boss.getX());
+		group.setTranslateY(boss.getY());
+		Launcher.getRoot().getChildren().add(group);
+	}
+	
+	/**
+	 * draw boss.
+	 * 
+	 * @param boss -  the boss
+	 */
 	public static void boss(final BasicBoss boss) {
 		final Group group = new Group();
 		for (final double[] shape : BASIC_BOSS_SHAPE) {
@@ -345,6 +365,10 @@ public final class DisplayEntity {
 			polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
 			group.getChildren().add(polygon);
 		}
+		
+		group.setTranslateX(boss.getX());
+		group.setTranslateY(boss.getY());
+		Launcher.getRoot().getChildren().add(group);
 	}
 	
 	/**
@@ -361,22 +385,10 @@ public final class DisplayEntity {
 			polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
 			group.getChildren().add(polygon);
 		}
-	}
-	
-	/**
-	 * draw boss.
-	 * 
-	 * @param boss -  the boss
-	 */
-	public static void boss(final DoubleBoss boss) {
-		final Group group = new Group();
-		for (final double[] shape : DOUBLE_BOSS_SHAPE) {
-			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
-			p -> p * (boss.getRadius() * BOSS_SIZE), shape));
-			polygon.setStroke(Color.WHITE);
-			polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
-			group.getChildren().add(polygon);
-		}
+		
+		group.setTranslateX(boss.getX());
+		group.setTranslateY(boss.getY());
+		Launcher.getRoot().getChildren().add(group);
 	}
 
 	/**
