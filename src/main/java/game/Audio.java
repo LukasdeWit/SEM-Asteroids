@@ -1,12 +1,12 @@
 package game;
 
+import entity.Player;
+import javafx.scene.media.AudioClip;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import entity.Player;
-import javafx.scene.media.AudioClip;
 
 /**
  * Class to regulate all audio output.
@@ -94,7 +94,7 @@ public class Audio {
 	 */
 	public Audio() {
 		mute = false;
-		tracks = new ArrayList<AudioClip>();
+		tracks = new ArrayList<>();
 		bgtrack = new BackgroundAudio(PATH);
 		
 		try {
@@ -160,23 +160,23 @@ public class Audio {
 	/**
 	 * Get a track by title.
 	 * 
-	 * @param tracknumber
+	 * @param trackNumber
 	 *            number of track to be played
 	 * @return AudioClip with that title
 	 */
-	public final AudioClip get(final int tracknumber) {
-		return tracks.get(tracknumber);
+	public final AudioClip get(final int trackNumber) {
+		return tracks.get(trackNumber);
 	}
 
 	/**
 	 * Get a track by title and play it.
 	 * 
-	 * @param tracknumber
+	 * @param trackNumber
 	 *            number of track to be played
 	 */
-	public final void play(final int tracknumber) {
+	public final void play(final int trackNumber) {
 		if (!mute) {
-			final AudioClip track = get(tracknumber);
+			final AudioClip track = get(trackNumber);
 			if (!track.isPlaying()) {
 				track.play();
 			}
@@ -186,23 +186,23 @@ public class Audio {
 	/**
 	 * Get a track by title and play it (if it's fine that the track is playing multiple times).
 	 * 
-	 * @param tracknumber
+	 * @param trackNumber
 	 *            number of track to be played
 	 */
-	public final void playMultiple(final int tracknumber) {
+	public final void playMultiple(final int trackNumber) {
 		if (!mute) {
-			final AudioClip track = get(tracknumber);
+			final AudioClip track = get(trackNumber);
 			track.play();
 		}
 	}
 	
 	/**
 	 * Get a track by title and stop it from playing.
-	 * @param tracknumber number of track to be stopped
+	 * @param trackNumber number of track to be stopped
 	 */
-	public final void stop(final int tracknumber) {
-		if (get(tracknumber).isPlaying()) {
-			get(tracknumber).stop();
+	public final void stop(final int trackNumber) {
+		if (get(trackNumber).isPlaying()) {
+			get(trackNumber).stop();
 		}
 	}
 	
