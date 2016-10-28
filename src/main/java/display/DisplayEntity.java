@@ -4,7 +4,7 @@ import java.util.function.DoubleFunction;
 
 import entity.AbstractEntity;
 import entity.Asteroid;
-import entity.Boss;
+import entity.AbstractBoss;
 import entity.Bullet;
 import entity.Particle;
 import entity.Player;
@@ -218,7 +218,7 @@ public final class DisplayEntity {
 	 * 
 	 * @param boss -  the boss
 	 */
-	public static void boss(final Boss boss) {
+	public static void boss(final AbstractBoss boss) {
 		drawEntity(boss, Color.WHITE, BOSS_SIZE);
 	}
 
