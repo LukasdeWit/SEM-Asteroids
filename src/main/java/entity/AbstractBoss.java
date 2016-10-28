@@ -13,7 +13,6 @@ public abstract class AbstractBoss extends AbstractEntity {
 	private int currentLives;
 	private final BulletBuilder bBuilder;
 	private int bullets;
-	private static final long DEFAULT_SHOT_SPEED = 1000;
 
 	/**
 	 * Constructor for boss.

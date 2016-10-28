@@ -84,7 +84,7 @@ public class BasicBoss extends AbstractBoss {
 	}
 
 	/**
-	 * Set BasicBossAngryAsteroid path.
+	 * Set BasicBoss path.
 	 * 
 	 * @param toRight
 	 *            - Direction of Saucer

@@ -15,7 +15,7 @@ import game.Game;
 public class TeleBoss extends AbstractBoss {
 	private long teleTime;
 	private final Random random;
-	private long shotSpeed;
+	private final long shotSpeed;
 	private long shotTime;
 	private static final long TELEPORT_TIME = 1800;
 	private static final float BULLET_SPEED = 4;
@@ -60,7 +60,6 @@ public class TeleBoss extends AbstractBoss {
 	 * The method that teleports a TeleBoss.
 	 */
 	private void teleport() {
-		// TODO Auto-generated method stub
 		if (System.currentTimeMillis() - teleTime > TELEPORT_TIME) {
 			teleTime = System.currentTimeMillis();
 			Particle.explosion(getX(), getY(), getThisGame());
@@ -70,7 +69,7 @@ public class TeleBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Makes the Saucer shoot.
+	 * Makes the TeleBoss shoot.
 	 */
 	protected final void shoot() {
 		if (getThisGame().getPlayer() == null) {
