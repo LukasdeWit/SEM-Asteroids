@@ -1,5 +1,6 @@
 package entity;
 
+import display.DisplayEntity;
 import game.Game;
 
 /**
@@ -29,6 +30,11 @@ public class DoubleBoss extends BasicBoss {
 		this.setShotSpeed(SHOT_SPEED);
 		this.setBullets(BULLETS);
 		this.setRadius(DOUBLE_RADIUS);
+	}
+	
+	@Override
+	public final void draw() {
+		DisplayEntity.boss(this);
 	}
 
 }
