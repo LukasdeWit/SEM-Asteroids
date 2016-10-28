@@ -22,6 +22,7 @@ public class ScoreCounterTest {
 		gamestate.setMode(gamestate.getArcadeMode());
 		sc.setScore(0);
 		sc.setHighscore("", 0);
+		thisGame.getAudio().setMute(true);
 	}
 
 	@Test

@@ -38,8 +38,8 @@ public class PauseScreenState extends AbstractState {
 			gamestate.setState(gamestate.getOngoingGameState());
 		} else if (input.contains("R") && gamestate.isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
-			getThisGame().startGame();
-			gamestate.setState(gamestate.getOngoingGameState());
+			getThisGame().overSwitch();
+			getThisGame().getGamestate().getHighscoreState().setPressedButton("R");
 		}
 	}
 }

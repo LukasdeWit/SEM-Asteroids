@@ -39,6 +39,7 @@ public class AsteroidTest {
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		asteroid = new Asteroid(X_START, Y_START, DX_START, DY_START, thisGame);
+		thisGame.getAudio().setMute(true);
 	}
 
 	@Test

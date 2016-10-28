@@ -36,11 +36,12 @@ public final class DisplayText {
 	private static final float PRESS_START_TEXT_BOSS_Y = 340;
 	private static final float PRESS_START_TEXT_BOSSCOOP_Y = 370;
 	private static final float VIEW_HIGHSCORES_TEXT_Y = 410;
+	private static final float QUIT_TEXT_Y = 440;
 
 	private static final float CONGRATULATIONS_TEXT_X = 80;
 	private static final float CONGRATULATIONS_TEXT_Y = 100;
 	private static final float PRESS_R_TEXT_X = 80;
-	private static final float PRESS_R_TEXT_Y = 280;
+	private static final float PRESS_R_TEXT_Y = 310;
 	private static final float NEW_HIGHSCORE_TEXT_X = 80;
 	private static final float NEW_HIGHSCORE_TEXT_Y = 250;
 
@@ -68,6 +69,9 @@ public final class DisplayText {
 	private static final float ENTER_NAME_TEXT_Y = 310;
 	private static final float NAME_INPUT_Y = 350;
 	private static final int CONFIRM_TEXT_Y = 390;
+
+	private static final float PRESS_P_TEXT_Y = 280;
+
 
 
 	private static boolean test;
@@ -124,6 +128,7 @@ public final class DisplayText {
 		drawText(PRESS_START_TEXT_X, START_ARCADE_COOP_TEXT_Y, "press z to start Arcade coop");
 		drawText(PRESS_START_TEXT_X, START_SURVIVAL_COOP_TEXT_Y, "press x to start survival Coop");
 		drawText(PRESS_START_TEXT_X, VIEW_HIGHSCORES_TEXT_Y, "press h to view highscores");
+		drawText(PRESS_START_TEXT_X, QUIT_TEXT_Y, "press escape to quit the game");
 	}
 
 	/**
@@ -135,7 +140,6 @@ public final class DisplayText {
 	public static void highscoreScreen(final long score, final String name) {
 		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "congratulations");
 		drawText(NEW_HIGHSCORE_TEXT_X, NEW_HIGHSCORE_TEXT_Y, "your new highscore is " + score);
-		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press r to restart");
 		drawText(PRESS_R_TEXT_X, ENTER_NAME_TEXT_Y, "please enter your name ");
 		drawText(PRESS_R_TEXT_X, NAME_INPUT_Y, name);
 		drawText(PRESS_R_TEXT_X, CONFIRM_TEXT_Y, "press enter to confirm");
@@ -163,7 +167,8 @@ public final class DisplayText {
 	 */
 	public static void pauseScreen() {
 		drawText(CONGRATULATIONS_TEXT_X, CONGRATULATIONS_TEXT_Y, LARGE_FONT, "Pause");
-		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press p to start");
+		drawText(PRESS_R_TEXT_X, PRESS_P_TEXT_Y, "press p to continue");
+		drawText(PRESS_R_TEXT_X, PRESS_R_TEXT_Y, "press r to return to main menu");
 	}
 
 	/**

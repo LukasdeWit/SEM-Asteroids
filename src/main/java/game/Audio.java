@@ -75,6 +75,8 @@ public class Audio {
 	 * Class that regulates the background track.
 	 */
 	private final BackgroundAudio bgtrack;
+	private boolean mute;
+	private boolean released;
 	
 	private static final double BOOSTVOLUME = 0.5;
 	private static final double SHOOTINGVOLUME = 0.4;
@@ -90,6 +92,7 @@ public class Audio {
 	 * Constructor for audio class.
 	 */
 	public Audio() {
+		mute = false;
 		tracks = new ArrayList<AudioClip>();
 		bgtrack = new BackgroundAudio(PATH);
 		
@@ -109,13 +112,13 @@ public class Audio {
 			final AudioClip ufobig = new AudioClip(new File(
 					PATH + "ufoBig.mp3").toURI().toURL().toString());
 			final AudioClip boost = new AudioClip(new File(
-					PATH + "boost.wav").toURI().toURL().toString());
+					PATH + "boost.mp3").toURI().toURL().toString());
 			final AudioClip teleport = new AudioClip(new File(
 					PATH + "teleport.wav").toURI().toURL().toString());
 			final AudioClip powerup = new AudioClip(new File(
 					PATH + "pickup.wav").toURI().toURL().toString());
 			final AudioClip boost2 = new AudioClip(new File(
-					PATH + "boost2.wav").toURI().toURL().toString());
+					PATH + "boost2.mp3").toURI().toURL().toString());
 			final AudioClip shooting2 = new AudioClip(new File(
 					PATH + "fire2.wav").toURI().toURL().toString());
 
@@ -171,9 +174,11 @@ public class Audio {
 	 *            number of track to be played
 	 */
 	public final void play(final int tracknumber) {
-		final AudioClip track = get(tracknumber);
-		if (!track.isPlaying()) {
-			track.play();
+		if (!mute) {
+			final AudioClip track = get(tracknumber);
+			if (!track.isPlaying()) {
+				track.play();
+			}
 		}
 	}
 	
@@ -184,8 +189,10 @@ public class Audio {
 	 *            number of track to be played
 	 */
 	public final void playMultiple(final int tracknumber) {
-		final AudioClip track = get(tracknumber);
-		track.play();
+		if (!mute) {
+			final AudioClip track = get(tracknumber);
+			track.play();
+		}
 	}
 	
 	/**
@@ -203,7 +210,9 @@ public class Audio {
 	 * @param enemies amount of enemies in the game.
 	 */
 	public final void backgroundTrack(final int enemies) {
-		bgtrack.update(enemies);
+		if (!mute) {
+			bgtrack.update(enemies);
+		}
 	}
 	
 	/**
@@ -212,6 +221,47 @@ public class Audio {
 	public final void stopAll() {
 		for (int i = 0; i < tracks.size(); i++) {
 			stop(i);
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public final void switchMute() {
+		if (mute) {
+			mute = false;
+			Logger.getInstance().log("Sounds unmuted");
+		} else {
+			mute = true;
+			Logger.getInstance().log("Sounds muted");
+			stopAll();
+		}
+	}
+
+	/**
+	 * @return the mute
+	 */
+	public final boolean isMute() {
+		return mute;
+	}
+
+	/**
+	 * @param mute the mute to set
+	 */
+	public final void setMute(final boolean mute) {
+		this.mute = mute;
+	}
+
+	/**
+	 * mutes if m is pressed.
+	 * @param input - the input
+	 */
+	public final void update(final List<String> input) {
+		if (input.contains("M") && released) {
+			switchMute();
+			released = false;
+		} else if (!input.contains("M")) {
+			released = true;
 		}
 	}
 }
