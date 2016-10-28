@@ -6,7 +6,7 @@ import entity.builders.BulletBuilder;
 import game.Audio;
 
 /**
- * Class that regulates shooter activity of Player.
+ * Class that regulates logic when a Player shoots bullets.
  * @author Esmee
  *
  */
