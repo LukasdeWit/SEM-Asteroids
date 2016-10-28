@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import entity.Player;
-import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
@@ -24,8 +23,7 @@ public class PlayerShooterTest {
 	private Player player;
 	private Player player2;
 	private Game thisGame;
-	private BulletBuilder bBuilder;
-	private PlayerBuilder pBuilder;
+	
 
 	@Before
 	public final void setUp() {
@@ -34,8 +32,7 @@ public class PlayerShooterTest {
 		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
 		Launcher.getRoot().getChildren().clear();
-		
-		pBuilder = new PlayerBuilder();
+		final PlayerBuilder pBuilder = new PlayerBuilder();
 		pBuilder.setX(X_START);
 		pBuilder.setY(Y_START);
 		pBuilder.setDX(DX_START);
@@ -46,15 +43,7 @@ public class PlayerShooterTest {
 		pBuilder.setDX(DX_START + 2);
 		pBuilder.setDY(DY_START + 2);
 		pBuilder.setPlayerTwo(true);
-		player2 = (Player) pBuilder.getResult();
-				
-		bBuilder = new BulletBuilder();
-		bBuilder.setX(X_START);
-		bBuilder.setY(Y_START);
-		bBuilder.setDX(DX_START);
-		bBuilder.setDY(DY_START);
-		bBuilder.setThisGame(thisGame);
-		
+		player2 = (Player) pBuilder.getResult();		
 		thisGame.getAudio().setMute(true);
 	}
 	@Test
@@ -106,7 +95,7 @@ public class PlayerShooterTest {
 	}
 	
 	@Test
-	public void testFirep2_1() {
+	public void testP2Fire1() {
 		player2.setThisGame(thisGame);
 		player2.getShooter().setTripleShot(true);
 		player2.getShooter().setLastShot(0);
@@ -116,7 +105,7 @@ public class PlayerShooterTest {
 	}
 	
 	@Test
-	public void testFirep2_2() {
+	public void testP2Fire2() {
 		player2.setThisGame(thisGame);
 		player2.getShooter().setLastShot(0);
 		player2.getShooter().shoot();
@@ -124,7 +113,7 @@ public class PlayerShooterTest {
 	}
 	
 	@Test
-	public void testFire3_2() {
+	public void testP2Fire3() {
 		player2.getShooter().setMaxBullets(0);
 		player2.getShooter().setLastShot(0);
 		player2.getShooter().shoot();
@@ -133,7 +122,7 @@ public class PlayerShooterTest {
 	
 	@Test
 	public void testGettersAndSetters(){
-		PlayerShooter ps = player.getShooter();
+		final PlayerShooter ps = player.getShooter();
 		ps.setBulletSize(PlayerShooter.getBulletSize());
 		ps.setPiercing(PlayerShooter.getMaxBullets());
 		ps.setFireRate(PlayerShooter.getFireRate());

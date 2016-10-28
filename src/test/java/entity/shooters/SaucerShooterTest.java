@@ -13,7 +13,6 @@ import entity.AbstractEntity;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
-import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
@@ -27,7 +26,6 @@ public class SaucerShooterTest {
 	private Game thisGame;
 	private Saucer saucer;
 	private PlayerBuilder pBuilder;
-	private BulletBuilder bBuilder;
 
 	@Before
 	public final void setUp() {
@@ -47,13 +45,6 @@ public class SaucerShooterTest {
 		pBuilder.setDY(DY_START);
 		pBuilder.setThisGame(thisGame);
 		pBuilder.setPlayerTwo(false);
-		
-		bBuilder = new BulletBuilder();
-		bBuilder.setX(X_START);
-		bBuilder.setY(Y_START);
-		bBuilder.setDX(DX_START);
-		bBuilder.setDY(DY_START);
-		bBuilder.setThisGame(thisGame);
 	}
 	
 	@Test

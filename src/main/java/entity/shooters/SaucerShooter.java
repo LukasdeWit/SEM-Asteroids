@@ -50,14 +50,17 @@ public class SaucerShooter extends AbstractShooter {
 		} else {
 			final BulletBuilder bBuilder = getBBuilder();
 			bBuilder.coordinatesOfShooter();
-			if (!((Saucer) getOwner()).isSmall()) {
-				if (System.currentTimeMillis() - getLastShot() > SHOT_TIME) {
+			
+			if (((Saucer) getOwner()).isSmall()) {
+				if (System.currentTimeMillis() - getLastShot() > smallShotTime()) {
+	                final float shotDir = smallShotDir();
+	                shootBullet(shotDir);
+				}
+            } else {
+                if (System.currentTimeMillis() - getLastShot() > SHOT_TIME) {
 					final float shotDir = (float) (Math.random() * 2 * Math.PI);
 					shootBullet(shotDir);
 				}
-            } else if (System.currentTimeMillis() - getLastShot() > smallShotTime()) {
-                final float shotDir = smallShotDir();
-                shootBullet(shotDir);
 			}
 		}
 	}
