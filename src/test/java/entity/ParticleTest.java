@@ -28,6 +28,7 @@ public class ParticleTest {
 		particle = new Particle(X_START, Y_START, DX_START, DY_START, thisGame);
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test

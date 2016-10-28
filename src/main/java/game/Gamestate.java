@@ -117,6 +117,9 @@ public final class Gamestate {
 			setMode(coopBossMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
+		} else if (input.contains("ESCAPE")) {
+			Logger.getInstance().log("Player quit the game.");
+			Launcher.quit();
 		}
 	}
 	

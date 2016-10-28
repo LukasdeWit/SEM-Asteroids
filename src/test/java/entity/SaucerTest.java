@@ -58,6 +58,7 @@ public class SaucerTest {
 		bBuilder.setDX(DX_START);
 		bBuilder.setDY(DY_START);
 		bBuilder.setThisGame(thisGame);
+		thisGame.getAudio().setMute(true);
 	}
 	
 	@Test
