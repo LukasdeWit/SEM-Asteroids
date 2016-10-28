@@ -132,33 +132,7 @@ public class Player extends AbstractEntity {
 		if (!invincible()) {
 			keyhandler.update(input);
 		}
-		if (isPlayerTwo()) {
-			playBoostp2();
-		} else {
-			playBoostp1();
-		}
-	}
-	
-	/**
-	 * Play rocket boost noise for player 1.
-	 */
-	private void playBoostp1() {
-		if (isBoost()) {
-			getThisGame().getAudio().play(Audio.BOOST);
-		} else {
-			getThisGame().getAudio().stop(Audio.BOOST);
-		}
-	}
-	
-	/**
-	 * Play rocket boost noise for player 2.
-	 */
-	private void playBoostp2() {
-		if (isBoost()) {
-			getThisGame().getAudio().play(Audio.BOOST2);
-		} else {
-			getThisGame().getAudio().stop(Audio.BOOST2);
-		}
+		getThisGame().getAudio().rocketBoost(this);
 	}
 
 	/**
