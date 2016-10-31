@@ -2,9 +2,9 @@ package game;
 
 import display.DisplayHud;
 import display.DisplayText;
+import entity.AbstractBoss;
 import entity.AbstractEntity;
 import entity.Asteroid;
-import entity.Boss;
 import entity.Bullet;
 import entity.Player;
 import entity.Saucer;
@@ -283,7 +283,7 @@ public final class Game {
 	 */
 	public int enemies() {
 		return Math.toIntExact(entities.stream()
-				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof Boss)
+				.filter(e -> e instanceof Asteroid || e instanceof Saucer || e instanceof AbstractBoss)
 				.count());
 	}
 	

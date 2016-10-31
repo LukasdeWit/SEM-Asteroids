@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to regulate all audio output.
+ * Class to regulate all foreground audio output. background audio is handled by {@link BackgroundAudio}
  * 
  * @author Esmee
  *
@@ -98,89 +98,89 @@ public class Audio {
 	 */
 	public Audio() {
 		mute = false;
-		tracks = new ArrayList<AudioClip>();
+		tracks = new ArrayList<>();
 		bgtrack = new BackgroundAudio(PATH);
-		
-		try {
-			final AudioClip shooting = new AudioClip(new File(
-					PATH + "fire.mp3").toURI().toURL().toString());
-			final AudioClip smallexplosion = new AudioClip(new File(
-					PATH + "bangSmall.mp3").toURI().toURL().toString());
-			final AudioClip mediumexplosion = new AudioClip(new File(
-					PATH + "bangMedium.mp3").toURI().toURL().toString());
-			final AudioClip largeexplosion = new AudioClip(new File(
-					PATH + "bangLarge.mp3").toURI().toURL().toString());
-			final AudioClip lifeup = new AudioClip(new File(
-					PATH + "lifeup.wav").toURI().toURL().toString());
-			final AudioClip ufosmall = new AudioClip(new File(
-					PATH + "ufoSmall.mp3").toURI().toURL().toString());
-			final AudioClip ufobig = new AudioClip(new File(
-					PATH + "ufoBig.mp3").toURI().toURL().toString());
-			final AudioClip boost = new AudioClip(new File(
-					PATH + "boost.mp3").toURI().toURL().toString());
-			final AudioClip teleport = new AudioClip(new File(
-					PATH + "teleport.wav").toURI().toURL().toString());
-			final AudioClip powerup = new AudioClip(new File(
-					PATH + "pickup.wav").toURI().toURL().toString());
-			final AudioClip boost2 = new AudioClip(new File(
-					PATH + "boost2.mp3").toURI().toURL().toString());
-			final AudioClip shooting2 = new AudioClip(new File(
-					PATH + "fire2.wav").toURI().toURL().toString());
 
-			
-			ufosmall.setCycleCount(AudioClip.INDEFINITE);
-			ufobig.setCycleCount(AudioClip.INDEFINITE);
-			boost.setCycleCount(AudioClip.INDEFINITE);
-			
-			// Adjust volume of the noisier audio clips
-			boost.setVolume(BOOSTVOLUME);
-			shooting.setVolume(SHOOTINGVOLUME);
-			ufosmall.setVolume(UFOSMALLVOLUME);
-			ufobig.setVolume(UFOBIGVOLUME);
-			teleport.setVolume(TELEPORTVOLUME);
-			shooting2.setVolume(SHOOTING2VOLUME);
-			smallexplosion.setVolume(ASTEROIDVOLUME);
-			mediumexplosion.setVolume(ASTEROIDVOLUME);
-			largeexplosion.setVolume(ASTEROIDVOLUME);
-			powerup.setVolume(POWERUPVOLUME);
-			
-			tracks.add(shooting);
-			tracks.add(smallexplosion);
-			tracks.add(mediumexplosion);
-			tracks.add(largeexplosion);
-			tracks.add(lifeup);
-			tracks.add(ufosmall);
-			tracks.add(ufobig);
-			tracks.add(boost);
-			tracks.add(boost2);
-			tracks.add(powerup);
-			tracks.add(teleport);
-			tracks.add(shooting2);
+		try {
+			initAudio();
 		} catch (MalformedURLException e) {
 			Logger.getInstance().log("failed to initialize audio");
 		}
 	}
 
 	/**
+	 * initialise all audio tracks and add them to the track collection.
+	 *
+	 * @throws MalformedURLException when one of the URLS for the audio files was malformed
+	 */
+	private void initAudio() throws MalformedURLException {
+		final AudioClip ufosmall = createTrackWithVolume(UFOSMALLVOLUME, "ufoSmall.mp3");
+		final AudioClip ufobig = createTrackWithVolume(UFOBIGVOLUME, "ufoBig.mp3");
+		final AudioClip boost = createTrackWithVolume(BOOSTVOLUME, "boost.mp3");
+
+		ufosmall.setCycleCount(AudioClip.INDEFINITE);
+		ufobig.setCycleCount(AudioClip.INDEFINITE);
+		boost.setCycleCount(AudioClip.INDEFINITE);
+
+		tracks.add(createTrackWithVolume(SHOOTINGVOLUME, "fire.mp3"));
+		tracks.add(createTrackWithVolume(ASTEROIDVOLUME, "bangSmall.mp3"));
+		tracks.add(createTrackWithVolume(ASTEROIDVOLUME, "bangMedium.mp3"));
+		tracks.add(createTrackWithVolume(ASTEROIDVOLUME, "bangLarge.mp3"));
+		tracks.add(createTrack("lifeup.wav"));
+		tracks.add(ufosmall);
+		tracks.add(ufobig);
+		tracks.add(boost);
+		tracks.add(createTrack("boost2.mp3"));
+		tracks.add(createTrackWithVolume(POWERUPVOLUME, "pickup.wav"));
+		tracks.add(createTrackWithVolume(TELEPORTVOLUME, "teleport.wav"));
+		tracks.add(createTrackWithVolume(SHOOTING2VOLUME, "fire2.wav"));
+	}
+
+	/**
+	 * factory method to create a track from a file name.
+	 * @param filename the name of the sound file we want to add
+	 * @return the resulting AudioClip
+	 * @throws MalformedURLException when the filename caused the URL to be malformed
+	 */
+	private static AudioClip createTrack(final String filename) throws MalformedURLException {
+		return new AudioClip(new File(PATH + filename).toURI().toURL().toString());
+	}
+
+	/**
+	 * factory method to create a track from a file name and set the volume.
+	 * @param volume the volume we want this audioclip to use
+	 * @param fileName the name of the sound file we want to add
+	 * @return the resulting AudioClip
+	 * @throws MalformedURLException when the filename caused the URL to be malformed
+	 */
+	private static AudioClip createTrackWithVolume(final double volume, final String fileName)
+			throws MalformedURLException {
+		final AudioClip audioClip = new AudioClip(new File(PATH + fileName).toURI().toURL().toString());
+
+		audioClip.setVolume(volume);
+		return audioClip;
+	}
+
+	/**
 	 * Get a track by title.
 	 * 
-	 * @param tracknumber
+	 * @param trackNumber
 	 *            number of track to be played
 	 * @return AudioClip with that title
 	 */
-	public final AudioClip get(final int tracknumber) {
-		return tracks.get(tracknumber);
+	public final AudioClip get(final int trackNumber) {
+		return tracks.get(trackNumber);
 	}
 
 	/**
 	 * Get a track by title and play it.
 	 * 
-	 * @param tracknumber
+	 * @param trackNumber
 	 *            number of track to be played
 	 */
-	public final void play(final int tracknumber) {
+	public final void play(final int trackNumber) {
 		if (!mute) {
-			final AudioClip track = get(tracknumber);
+			final AudioClip track = get(trackNumber);
 			if (!track.isPlaying()) {
 				track.play();
 			}
@@ -190,23 +190,23 @@ public class Audio {
 	/**
 	 * Get a track by title and play it (if it's fine that the track is playing multiple times).
 	 * 
-	 * @param tracknumber
+	 * @param trackNumber
 	 *            number of track to be played
 	 */
-	public final void playMultiple(final int tracknumber) {
+	public final void playMultiple(final int trackNumber) {
 		if (!mute) {
-			final AudioClip track = get(tracknumber);
+			final AudioClip track = get(trackNumber);
 			track.play();
 		}
 	}
 	
 	/**
 	 * Get a track by title and stop it from playing.
-	 * @param tracknumber number of track to be stopped
+	 * @param trackNumber number of track to be stopped
 	 */
-	public final void stop(final int tracknumber) {
-		if (get(tracknumber).isPlaying()) {
-			get(tracknumber).stop();
+	public final void stop(final int trackNumber) {
+		if (get(trackNumber).isPlaying()) {
+			get(trackNumber).stop();
 		}
 	}
 	

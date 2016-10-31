@@ -27,7 +27,7 @@ public final class HighscoreUtils {
     public static String getAppDirectory() {
         final String os = System.getProperty("os.name").toUpperCase(Locale.ENGLISH);
         if (os.contains("WIN")) {
-            return System.getenv("APPDATA") + "/local/" + APP_NAME + '/';
+            return System.getenv("APPDATA") + "/" + APP_NAME + '/';
         } else if (os.contains("MAC")) {
             return System.getProperty("user.home") + "/Library/Application "
                     + "Support" + '/' + APP_NAME + '/';

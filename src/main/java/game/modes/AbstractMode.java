@@ -25,6 +25,7 @@ public abstract class AbstractMode {
 	 * Default tostring method.
 	 * @return string that represents this gamemode
 	 */
+	@Override
 	public abstract String toString();
 	
 	/**

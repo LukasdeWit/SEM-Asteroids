@@ -1,10 +1,11 @@
 package game;
 
 import entity.Asteroid;
-import entity.Boss;
+import entity.BasicBoss;
+import entity.DoubleBoss;
 import entity.Powerup;
 import entity.Saucer;
-
+import entity.TeleBoss;
 import java.util.Random;
 
 /**
@@ -17,10 +18,14 @@ public final class Spawner {
 	private long startPowerupTime;
 	private long startRest;
 	private int wave;
+	private final double telebossratio;
+	private final double doublebossratio;
 	private final Random random;
 	private final Game thisGame;
 
 	private static final long SAUCER_TIME = 20000;
+	private static final double TELE_RATIO = 0.3;
+	private static final double DOUBLE_RATIO = 0.2;
 	private static final long POWERUP_TIME = 15000;
 	private static final long REST = 4000;
 	private static final int STARTING_ASTEROIDS = 4;
@@ -43,6 +48,8 @@ public final class Spawner {
 		startRest = 0;
 		wave = 0;
 		random = new Random();
+		telebossratio = TELE_RATIO;
+		doublebossratio = DOUBLE_RATIO;
 	}
 
 	/**
@@ -63,7 +70,16 @@ public final class Spawner {
 	public void updateBoss() {
 		if (thisGame.getGamestate().isBoss() && thisGame.enemies() < 1 
 				&& System.currentTimeMillis() - startRest > REST) {
-			spawnBoss();
+			if (Math.random() < (telebossratio)) {
+				spawnTeleBoss();
+			} else {
+				if (Math.random() < (telebossratio + doublebossratio)) {
+					spawnDoubleBoss();
+					spawnDoubleBoss();
+				} else {
+					spawnBasicBoss();
+				}
+			}
 		} else {
 			updateSaucer();
 			updatePowerup();
@@ -116,8 +132,6 @@ public final class Spawner {
 		if ((startRest == 0 || System.currentTimeMillis() - startRest > REST) 
 				&& wave != 0 && wave % WAVES_BETWEEN_BOSSES == 0) {
 			spawnBoss();
-			startRest = System.currentTimeMillis();
-			wave++;
 		} else if (startRest == 0) {
 			Logger.getInstance().log("Wave: " + (wave + 1) + ".");
 			spawnAsteroid(STARTING_ASTEROIDS);
@@ -128,6 +142,24 @@ public final class Spawner {
 		}
 	}
 	
+	/**
+	 * Checks if and which boss should be spawned.
+	 */
+	private void spawnBoss() {
+		if (Math.random() < (telebossratio)) {
+			spawnTeleBoss();
+		} else {
+			if (Math.random() < (telebossratio + doublebossratio)) {
+				spawnDoubleBoss();
+				spawnDoubleBoss();
+			} else {
+				spawnBasicBoss();
+			}
+		}
+		startRest = System.currentTimeMillis();
+		wave++;
+	}
+
 	/**
 	 * Spawns the next wave of asteroids.
 	 */
@@ -203,14 +235,36 @@ public final class Spawner {
 	/**
 	 * Spawns a boss.
 	 */
-	private void spawnBoss() {
-		final Boss boss =
-				new Boss(random.nextInt(1)
+	private void spawnBasicBoss() {
+		final BasicBoss boss =
+				new BasicBoss(random.nextInt(1)
 				* 2 * thisGame.getScreenX(), (float) Math.random()
 				* thisGame.getScreenY(), 0, 0, thisGame);
 		thisGame.create(boss);
 	}
 
+	/**
+	 * Spawn Teleporting Boss.
+	 */
+	private void spawnTeleBoss() {
+		final TeleBoss telboss =
+				new TeleBoss(random.nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
+				* thisGame.getScreenY(), 0, 0, thisGame);
+		thisGame.create(telboss);
+	}
+	
+	/**
+	 * Spawn one of a pair of bosses.
+	 */
+	private void spawnDoubleBoss() {
+		final DoubleBoss doubboss =
+				new DoubleBoss(random.nextInt(1)
+				* 2 * thisGame.getScreenX(), (float) Math.random()
+				* thisGame.getScreenY(), 0, 0, thisGame);
+		thisGame.create(doubboss);
+	}
+	
 	/**
 	 * reset.
 	 */
