@@ -107,14 +107,14 @@ public class TeleBoss extends AbstractBoss {
 	 *            - the direction
 	 */
 	public final void fireBullet(final double direction) {
-		this.getbBuilder().setX(getX());
-		this.getbBuilder().setY(getY());
-		this.getbBuilder().setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
-		this.getbBuilder().setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
-		this.getbBuilder().setThisGame(getThisGame());
-		this.getbBuilder().setShooter(this);
-		this.getbBuilder().setFriendly(false);
-		final Bullet b = (Bullet) getbBuilder().getResult();
+		this.getBBuilder().setX(getX());
+		this.getBBuilder().setY(getY());
+		this.getBBuilder().setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
+		this.getBBuilder().setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
+		this.getBBuilder().setThisGame(getThisGame());
+		this.getBBuilder().setShooter(this);
+		this.getBBuilder().setFriendly(false);
+		final Bullet b = (Bullet) getBBuilder().getResult();
 
 		getThisGame().create(b);
 	}

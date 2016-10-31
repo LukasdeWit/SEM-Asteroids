@@ -111,6 +111,7 @@ public class Saucer extends AbstractEntity {
 
 	/**
 	 * Destroy this if it's outside the screen.
+	 *
 	 * @return true if it is the end
 	 */
 	private boolean checkEnd() {
@@ -187,9 +188,10 @@ public class Saucer extends AbstractEntity {
 	public static float getSmallRadius() {
 		return SMALL_RADIUS;
 	}
-	
+
 	/**
 	 * Check the size of the ufo.
+	 *
 	 * @return true if small
 	 */
 	public final boolean isSmall() {
@@ -215,12 +217,5 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static int getBigScore() {
 		return BIG_SCORE;
-	}
-	
-	/**
-	 * @return the saucershooter
-	 */
-	public final SaucerShooter getShooter() {
-		return shooter;
 	}
 }

@@ -2,6 +2,8 @@ package entity;
 
 import display.DisplayEntity;
 import game.Game;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Random;
@@ -13,6 +15,8 @@ import java.util.Random;
  * @author Dario
  *
  */
+@Setter
+@Getter
 public class BasicBoss extends AbstractBoss {
 	private int toRight;
 	private final Random random;
@@ -180,14 +184,14 @@ public class BasicBoss extends AbstractBoss {
 	 */
 	@Override
 	public final void fireBullet(final double direction) {
-		this.getbBuilder().setX(getX());
-		this.getbBuilder().setY(getY());
-		this.getbBuilder().setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
-		this.getbBuilder().setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
-		this.getbBuilder().setThisGame(getThisGame());
-		this.getbBuilder().setShooter(this);
-		this.getbBuilder().setFriendly(false);
-		final Bullet b = (Bullet) getbBuilder().getResult();
+		this.getBBuilder().setX(getX());
+		this.getBBuilder().setY(getY());
+		this.getBBuilder().setDX((float) (getDX() / 2 + Math.cos(direction) * BULLET_SPEED));
+		this.getBBuilder().setDY((float) (getDY() / 2 - Math.sin(direction) * BULLET_SPEED));
+		this.getBBuilder().setThisGame(getThisGame());
+		this.getBBuilder().setShooter(this);
+		this.getBBuilder().setFriendly(false);
+		final Bullet b = (Bullet) getBBuilder().getResult();
 
 		getThisGame().create(b);
 	}
@@ -205,50 +209,11 @@ public class BasicBoss extends AbstractBoss {
 	}
 	
 	/**
-	 * Gets the toRight of the class.
-	 * @return the toRight
-	 */
-	public final int getToRight() {
-		return toRight;
-	}
-	
-	/**
 	 * Gets the starting lives of the BasicBoss.
 	 * @return the amount of starting lives
 	 */
 	public final int getStartingLives() {
 		return STARTING_LIVES;
 	}
-	
-	/**
-	 * Gets the shot time of the BasicBoss.
-	 * @return the shot time
-	 */
-	public final long getShotTime() {
-		return shotTime;
-	}
-	
-	/**
-	 * Sets the shot time of the BasicBoss.
-	 * @param time the shotTime to set
-	 */
-	public final void setShotTime(final long time) {
-		this.shotTime = time;
-	}
-	
-	/**
-	 * Gets the shot speed of the BasicBoss.
-	 * @return the shot speed
-	 */
-	public final long getShotSpeed() {
-		return shotSpeed;
-	}
-	
-	/**
-	 * Sets the shot speed of the BasicBoss.
-	 * @param speed the speed to set
-	 */
-	public final void setShotSpeed(final long speed) {
-		this.shotSpeed = speed;
-	}
+
 }

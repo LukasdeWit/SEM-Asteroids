@@ -3,12 +3,16 @@ package entity;
 import entity.builders.BulletBuilder;
 import game.Game;
 import game.Logger;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Abstract version of the Boss class to allow for extension.
  * @author Dario
  *
  */
+@Setter
+@Getter
 public abstract class AbstractBoss extends AbstractEntity {
 	private int currentLives;
 	private final BulletBuilder bBuilder;
@@ -27,8 +31,8 @@ public abstract class AbstractBoss extends AbstractEntity {
 		
 		// Initialize the Bullet Builder
 		bBuilder = new BulletBuilder();
-		getbBuilder().setPierce(0);
-		getbBuilder().setFriendly(false);
+		getBBuilder().setPierce(0);
+		getBBuilder().setFriendly(false);
 	}
 
 	/**
@@ -59,38 +63,4 @@ public abstract class AbstractBoss extends AbstractEntity {
 		}
 	}
 
-	/**
-	 * @return the currentLives
-	 */
-	public final int getCurrentLives() {
-		return currentLives;
-	}
-
-	/**
-	 * @param currentLives the currentLives to set
-	 */
-	public final void setCurrentLives(final int currentLives) {
-		this.currentLives = currentLives;
-	}
-	
-	/**
-	 * @param bullets the number of bullets to set
-	 */
-	public final void setBullets(final int bullets) {
-		this.bullets = bullets;
-	}
-
-	/**
-	 * @return the bBuilder
-	 */
-	public final BulletBuilder getbBuilder() {
-		return bBuilder;
-	}
-
-	/**
-	 * @return the bullets
-	 */
-	public final int getBullets() {
-		return bullets;
-	}
 }
