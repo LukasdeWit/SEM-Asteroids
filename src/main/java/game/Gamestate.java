@@ -86,7 +86,6 @@ public final class Gamestate {
 	/**
 	 * update the gamemode startScreen.
 	 * @param input - input
-	 * @return 
 	 */
 	public void startScreen(final List<String> input) {
 		if (input.contains("H")) {
