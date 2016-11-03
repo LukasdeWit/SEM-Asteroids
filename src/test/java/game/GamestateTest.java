@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
@@ -99,6 +100,30 @@ public class GamestateTest {
 	}
 	
 	@Test
+	public final void testStartScreen5() {
+		input.add("S");
+		gamestate.update(input);
+		assertEquals(gamestate.getSurvivalMode(), gamestate.getMode());
+		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testStartScreen6() {
+		input.add("X");
+		gamestate.update(input);
+		assertEquals(gamestate.getCoopSurvivalMode(), gamestate.getMode());
+		assertEquals(gamestate.getOngoingGameState(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testStartScreen7() {
+		input.add("H");
+		gamestate.update(input);
+		assertEquals(gamestate.getNoneMode(), gamestate.getMode());
+		assertEquals(gamestate.getViewHighscoresState(), gamestate.getState());
+	}
+	
+	@Test
 	public final void testGame1() {
 		gamestate.setState(gamestate.getOngoingGameState());
 		input.add("R");
@@ -167,5 +192,29 @@ public class GamestateTest {
 		gamestate.update(input);
 		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
 		assertEquals(gamestate.getPauseScreenState(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testIsBoss1() {
+		gamestate.setMode(gamestate.getBossMode());
+		assertTrue(gamestate.isBoss());
+	}
+	
+	@Test
+	public final void testIsBoss2() {
+		gamestate.setMode(gamestate.getArcadeMode());
+		assertFalse(gamestate.isBoss());
+	}
+	
+	@Test
+	public final void testIsSurvival1() {
+		gamestate.setMode(gamestate.getSurvivalMode());
+		assertTrue(gamestate.isSurvival());
+	}
+	
+	@Test
+	public final void testIsSurvival2() {
+		gamestate.setMode(gamestate.getArcadeMode());
+		assertFalse(gamestate.isSurvival());
 	}
 }
