@@ -1,18 +1,17 @@
 package entity.shooters;
 
-import static org.junit.Assert.assertEquals;
+import entity.Player;
+import entity.builders.PlayerBuilder;
+import game.Game;
+import game.Launcher;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import entity.Player;
-import entity.builders.PlayerBuilder;
-import game.Game;
-import game.Launcher;
+import static org.junit.Assert.assertEquals;
 
 public class PlayerShooterTest {
 	private static final float X_START = 1;
@@ -30,7 +29,7 @@ public class PlayerShooterTest {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
-		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
+		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getArcadeMode());
 		Launcher.getRoot().getChildren().clear();
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		pBuilder.setX(X_START);
@@ -134,7 +133,7 @@ public class PlayerShooterTest {
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);
 		if (coop) {
-			thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
+			thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getCoopArcadeMode());
 		}
 		player.setInvincibleStart(0);
 		player.update(input);

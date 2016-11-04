@@ -15,12 +15,14 @@ import java.util.Random;
 /**
  * Class that represents a Saucer.
  */
-@Setter
-@Getter
 public class Saucer extends AbstractEntity {
+
+	@Getter
 	private int toRight;
 	private final Random random;
+	@Getter @Setter
 	private long dirChangeTime;
+	@Getter
 	private final SaucerShooter shooter;
 
 	private static final float SMALL_RADIUS = 5;

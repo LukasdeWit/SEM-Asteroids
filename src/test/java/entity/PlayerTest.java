@@ -33,7 +33,7 @@ public class PlayerTest {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
-		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
+		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getArcadeMode());
 		Launcher.getRoot().getChildren().clear();
 		
 		pBuilder = new PlayerBuilder();
@@ -107,7 +107,7 @@ public class PlayerTest {
 
 	@Test
 	public void testOnHit5() {
-		thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
+		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getCoopArcadeMode());
 		player.onHit();
 		assertEquals(thisGame.getScreenX() / 2 - Player.getSpawnOffset(), player.getX(), 0);
 	}
@@ -136,7 +136,7 @@ public class PlayerTest {
 	
 	@Test
 	public void testGainLife4() {
-		thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
+		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getCoopArcadeMode());
 		player.setLives(0);
 		player.gainLife();
 		assertEquals(1,player.getLives(),0);
@@ -381,7 +381,7 @@ public class PlayerTest {
 	public void testFire2() {
 		final String[] input = {SPACE};
 		player.getShooter().setLastShot(0);
-		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
+		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getArcadeMode());
 		update(player, input, false);
 		assertEquals(1, thisGame.getCreateList().size(), 0);
 	}
@@ -399,7 +399,7 @@ public class PlayerTest {
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);
 		if (coop) {
-			thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
+			thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getCoopArcadeMode());
 		}
 		player.setInvincibleStart(0);
 		player.update(input);

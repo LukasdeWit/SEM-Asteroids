@@ -1,8 +1,5 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import display.DisplayHud;
 import display.DisplayText;
 import entity.AbstractBoss;
@@ -15,12 +12,12 @@ import entity.builders.PlayerBuilder;
 import game.highscore.HighscoreStore;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This class defines everything within the game.
@@ -35,11 +32,17 @@ public final class Game {
 	private List<AbstractEntity> entities;
 	private List<AbstractEntity> destroyList;
 	private List<AbstractEntity> createList;
+	@Setter(AccessLevel.NONE)
 	private final ScoreCounter scorecounter;
+	@Setter(AccessLevel.NONE)
 	private final float screenX;
+	@Setter(AccessLevel.NONE)
 	private final float screenY;
+	@Setter(AccessLevel.NONE)
 	private final Spawner spawner;
+	@Setter(AccessLevel.NONE)
 	private final Gamestate gamestate;
+	@Setter(AccessLevel.NONE)
 	private final Audio audio;
 	private static final float CANVAS_SIZE = 500;
 	private static final long SURVIVAL_ASTEROID_SIZE_BIG = 4;
@@ -110,7 +113,7 @@ public final class Game {
 		gamestate.update(input);
 		audio.update(input);
 		DisplayHud.sound(audio.isMute());
-		if (gamestate.getMode().isArcade()) {
+		if (gamestate.getCurrentMode().isArcade()) {
 			DisplayText.wave(spawner.getWave());
 		}
 	}
@@ -221,7 +224,7 @@ public final class Game {
 		}
 		if (scorecounter.isNotHighscore()) {
 			scorecounter.setScore(0);
-			gamestate.setMode(gamestate.getNoneMode());
+			gamestate.setCurrentMode(gamestate.getNoneMode());
 			gamestate.setState(gamestate.getStartScreenState());
 		} else {
 			Logger.getInstance().log("New highscore is " + scorecounter.getScore() + ".");
@@ -316,10 +319,4 @@ public final class Game {
 	public static float getCanvasSize() {
 		return CANVAS_SIZE;
 	}
-
-	/**
-	 * return optional playertwo object.
-	 * @return the optional playertwo object
-	 */
-
 }

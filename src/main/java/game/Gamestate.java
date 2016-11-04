@@ -17,7 +17,6 @@ import java.util.List;
  * @author Kibo
  *
  */
-@Setter
 @Getter
 public final class Gamestate {
 	private static final String[] MODE_STRINGS = 
@@ -35,6 +34,7 @@ public final class Gamestate {
 	private final ViewHighscoresState viewHighscoresState;
 	
 	// modes
+	@Setter
 	private AbstractMode currentMode;
 	private final NoneMode noneMode;
 	private final ArcadeMode arcadeMode;
@@ -43,6 +43,7 @@ public final class Gamestate {
 	private final CoopBossMode coopBossMode;
 	private final SurvivalMode survivalMode;
 	private final CoopSurvivalMode coopSurvivalMode;
+	@Setter
 	private long screenSwitchTime;
 		
 	/**
@@ -87,7 +88,7 @@ public final class Gamestate {
 	public void startScreen(final List<String> input) {
 		if (input.contains("H")) {
 			Logger.getInstance().log("Go to highscores screen");
-			setMode(noneMode);
+			setCurrentMode(noneMode);
 			setState(viewHighscoresState);
 		} else if (input.contains("ESCAPE")) {
 			Logger.getInstance().log("Player quit the game.");
@@ -103,27 +104,27 @@ public final class Gamestate {
 	 */
 	private void checkModeInput(final List<String> input) {
 		if (input.contains("A")) {
-			setMode(arcadeMode);
+			setCurrentMode(arcadeMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("Z")) {
-			setMode(coopArcadeMode);
+			setCurrentMode(coopArcadeMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("S")) {
-			setMode(survivalMode);
+			setCurrentMode(survivalMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("X")) {
-			setMode(coopSurvivalMode);
+			setCurrentMode(coopSurvivalMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("D")) {
-			setMode(bossMode);
+			setCurrentMode(bossMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("C")) {
-			setMode(coopBossMode);
+			setCurrentMode(coopBossMode);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} 
@@ -152,13 +153,6 @@ public final class Gamestate {
 	 */
 	public String toString() {
 		return currentMode.toString();
-	}
-
-	/**
-	 * @return the mode
-	 */
-	public AbstractMode getMode() {
-		return currentMode;
 	}
 
 	/**
@@ -204,13 +198,4 @@ public final class Gamestate {
 	public HighscoreScreenState getHighscoreState() {
 		return highscoreScreenState;
 	}
-
-	/**
-	 * Setter for mode.
-	 * @param mode the game should be in
-	 */
-	public void setMode(final AbstractMode mode) {
-		this.currentMode = mode;
-	}
-
 }
