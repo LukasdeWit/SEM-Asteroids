@@ -82,7 +82,7 @@ public class ScoreCounter {
 	 * @return the high score
 	 */
 	public final long getHighscore() {
-		return highscoreStore.getHighestScore(thisGame.getGamestate().getCurrentMode());
+		return highscoreStore.getHighScore(thisGame.getGamestate().getCurrentMode()).getScore();
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class ScoreCounter {
 	 * @return true if the score is better than the highscore
 	 */
 	public final boolean isHighscore() {
-		return score > highscoreStore.getHighestScore(thisGame.getGamestate().getCurrentMode());
+		return score > highscoreStore.getHighScore(thisGame.getGamestate().getCurrentMode()).getScore();
 	}
 	
 	/**

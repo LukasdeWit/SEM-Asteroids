@@ -258,6 +258,9 @@ public final class Game {
 	 */
 	private void extraLife(final int score) {
 		if (scorecounter.canGainLife(score)) {
+			if (player == null) {
+				throw new IllegalStateException("player is not initialised, game might not be started");
+			}
 			player.gainLife();
 			Logger.getInstance().log(player.getPlayerString() + " gained an extra life.");
 			if (gamestate.isCoop()) {
