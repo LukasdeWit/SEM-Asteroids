@@ -2,7 +2,6 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import display.DisplayHud;
 import display.DisplayText;
@@ -343,14 +342,7 @@ public final class Game {
 	public void setPlayer(final Player player) {
 		this.player = player;
 	}
-
-	/**
-	 * @return the playerTwo
-	 */
-	public Optional<Player> getPlayerTwo() {
-		return Optional.of(playerTwo);
-	}
-
+	
 	/**
 	 * @param playerTwo - a new player two.
 	 */

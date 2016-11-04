@@ -186,13 +186,6 @@ public final class Gamestate {
 	}
 	
 	/**
-	 * @return true if survival mode
-	 */
-	public boolean isSurvival() {
-		return currentMode.isSurvival();
-	}
-	
-	/**
 	 * @return true if arcade mode
 	 */
 	public boolean isArcade() {
