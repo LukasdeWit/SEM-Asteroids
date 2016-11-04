@@ -61,7 +61,7 @@ public class Particle extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		DisplayEntity.particle(this);
+		DisplayEntity.draw(this);
 	}
 
 	/**

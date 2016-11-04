@@ -99,7 +99,7 @@ public class Bullet extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		DisplayEntity.bullet(this);
+		DisplayEntity.draw(this);
 	}
 
 	/**

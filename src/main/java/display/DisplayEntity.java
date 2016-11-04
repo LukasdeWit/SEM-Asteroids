@@ -283,7 +283,7 @@ public final class DisplayEntity {
 	 *
 	 * @param a - the asteroid
 	 */
-	public static void asteroid(final Asteroid a) {
+	public static void draw(final Asteroid a) {
 		final Polygon polygon = new Polygon(DisplayUtils.translate(
 				d -> d * (a.getRadius() * ASTEROID_SIZE), d -> d * (a.getRadius() * ASTEROID_SIZE),
 				ASTEROID_SHAPES[a.getShape()]));
@@ -300,7 +300,7 @@ public final class DisplayEntity {
 	 *
 	 * @param b - the bullet
 	 */
-	public static void bullet(final Bullet b) {
+	public static void draw(final Bullet b) {
 		drawEntity(b, Color.WHITE, BULLET_SIZE);
 	}
 
@@ -309,7 +309,7 @@ public final class DisplayEntity {
 	 *
 	 * @param p - the particle
 	 */
-	public static void particle(final Particle p) {
+	public static void draw(final Particle p) {
 		drawEntity(p, Color.GRAY, PARTICLE_SIZE);
 	}
 
@@ -318,7 +318,7 @@ public final class DisplayEntity {
 	 *
 	 * @param p - the powerup
 	 */
-	public static void powerup(final Powerup p) {
+	public static void draw(final Powerup p) {
 		final Polygon polygon = new Polygon(DisplayUtils.translate(
 				d -> d * (p.getRadius() * POWERUP_SIZE), d -> d * (p.getRadius() * POWERUP_SIZE),
 				POWERUP_SHAPE));
@@ -336,7 +336,7 @@ public final class DisplayEntity {
 	 * 
 	 * @param boss -  the boss
 	 */
-	public static void boss(final DoubleBoss boss) {
+	public static void draw(final DoubleBoss boss) {
 		final Group group = new Group();
 		for (final double[] shape : DOUBLE_BOSS_SHAPE) {
 			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
@@ -356,9 +356,9 @@ public final class DisplayEntity {
 	 * 
 	 * @param boss -  the boss
 	 */
-	public static void boss(final BasicBoss boss) {
+	public static void draw(final BasicBoss boss) {
 		if (boss instanceof DoubleBoss) {
-			boss((DoubleBoss) boss);
+			draw((DoubleBoss) boss);
 		} else {
 			final Group group = new Group();
 			for (final double[] shape : BASIC_BOSS_SHAPE) {
@@ -380,7 +380,7 @@ public final class DisplayEntity {
 	 * 
 	 * @param boss -  the boss
 	 */
-	public static void boss(final TeleBoss boss) {
+	public static void draw(final TeleBoss boss) {
 		final Group group = new Group();
 		for (final double[] shape : TELE_BOSS_SHAPE) {
 			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
@@ -415,7 +415,7 @@ public final class DisplayEntity {
 	 *
 	 * @param p - the player
 	 */
-	public static void player(final Player p) {
+	public static void draw(final Player p) {
 		Paint color = Color.WHITE;
 		if (p.invincible() && (System.currentTimeMillis() - p.getInvincibleStart()) % (PLAYER_RESPAWN_FLICKER_TIME * 2)
 				< PLAYER_RESPAWN_FLICKER_TIME) {
@@ -502,7 +502,7 @@ public final class DisplayEntity {
 	 *
 	 * @param s - the saucer
 	 */
-	public static void saucer(final Saucer s) {
+	public static void draw(final Saucer s) {
 		final Group group = new Group();
 		for (final double[] shape : SAUCER_SHAPE) {
 			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (s.getRadius() * SAUCER_SIZE),
