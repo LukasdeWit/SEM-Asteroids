@@ -41,8 +41,8 @@ public final class Gamestate {
 	public static final int COOPARCADEMODE = 2;
 	public static final int SURVIVALMODE = 3;
 	public static final int COOPSURVIVALMODE = 4;
-	public static final int BOSSMODE = 6;
-	public static final int COOPBOSSMODE = 7;
+	public static final int BOSSMODE = 5;
+	public static final int COOPBOSSMODE = 6;
 	
 	@Setter
 	private long screenSwitchTime;
