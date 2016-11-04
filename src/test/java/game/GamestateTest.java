@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
@@ -205,5 +206,59 @@ public class GamestateTest {
 		gamestate.update(input);
 		assertEquals(Gamestate.ARCADEMODE, gamestate.getCurrentMode());
 		assertEquals(gamestate.getPauseScreenState(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testIsBoss1() {
+		gamestate.setCurrentMode(Gamestate.BOSSMODE);
+		assertTrue(gamestate.isBoss());
+	}
+	
+	@Test
+	public final void testIsBoss2() {
+		gamestate.setCurrentMode(Gamestate.COOPBOSSMODE);
+		assertTrue(gamestate.isBoss());
+	}
+	
+	@Test
+	public final void testIsBoss3() {
+		gamestate.setCurrentMode(Gamestate.ARCADEMODE);
+		assertFalse(gamestate.isBoss());
+	}
+	
+	@Test
+	public final void testIsSurvival1() {
+		gamestate.setCurrentMode(Gamestate.SURVIVALMODE);
+		assertTrue(gamestate.isSurvival());
+	}
+	
+	@Test
+	public final void testIsSurvival2() {
+		gamestate.setCurrentMode(Gamestate.COOPSURVIVALMODE);
+		assertTrue(gamestate.isSurvival());
+	}
+	
+	@Test
+	public final void testIsSurvival3() {
+		gamestate.setCurrentMode(Gamestate.ARCADEMODE);
+		assertFalse(gamestate.isSurvival());
+	}
+	
+	@Test
+	public final void testIsArcade1() {
+		gamestate.setCurrentMode(Gamestate.ARCADEMODE);
+		assertTrue(gamestate.isArcade());
+	}
+	
+	@Test
+	public final void testIsArcade2() {
+		gamestate.setCurrentMode(Gamestate.COOPARCADEMODE);
+		assertTrue(gamestate.isArcade());
+	}
+	
+	@Test
+	public final void testIsArcade3() {
+		gamestate.setCurrentMode(Gamestate.SURVIVALMODE);
+		assertFalse(gamestate.isArcade());
 	}
 }
