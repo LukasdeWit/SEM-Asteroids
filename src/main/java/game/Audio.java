@@ -271,10 +271,18 @@ public class Audio {
 		this.mute = mute;
 	}
 	
+	/**
+	 * Setter that says whether the m key is released or not (for tests).
+	 * @param released true if m is released
+	 */
 	public final void setReleased(final boolean released) {
 		this.released = released;
 	}
 	
+	/**
+	 * Getter to determine whether the m key is released or not.
+	 * @return true if it is released.
+	 */
 	public final boolean isReleased() {
 		return released;
 	}
