@@ -27,7 +27,7 @@ public class DisplayHudTest {
 	@Test
 	public void testLives1() {
 		DisplayHud.lives(0, false);
-		Node n = Launcher.getRoot().getChildren().get(0);
+		final Node n = Launcher.getRoot().getChildren().get(0);
 		assertTrue(n instanceof Rectangle);
 	}
 	
@@ -35,7 +35,7 @@ public class DisplayHudTest {
 	public void testLives2() {
 		DisplayHud.lives(3, false);
 		assertFalse(Launcher.getRoot().getChildren().isEmpty());
-		for (Node n : Launcher.getRoot().getChildren()) {
+		for (final Node n : Launcher.getRoot().getChildren()) {
 			assertTrue (n instanceof Rectangle || n instanceof Polygon);
 		}
 	}
@@ -44,21 +44,21 @@ public class DisplayHudTest {
 	public void testLives3() {
 		DisplayHud.lives(3, true);
 		assertFalse(Launcher.getRoot().getChildren().isEmpty());
-		for (Node n : Launcher.getRoot().getChildren()) {
+		for (final Node n : Launcher.getRoot().getChildren()) {
 			assertTrue (n instanceof Rectangle || n instanceof Polygon);
 		}
 	}
 	
 	@Test
 	public void testPowerup1() {
-		Powerup p = new Powerup(10, 10, new Game());
+		final Powerup p = new Powerup(10, 10, new Game());
 		DisplayHud.powerup(p);
 		assertTrue(Launcher.getRoot().getChildren().isEmpty());
 	}
 	
 	@Test
 	public void testPowerup2() {
-		Powerup p = new Powerup(10, 10, new Game());
+		final Powerup p = new Powerup(10, 10, new Game());
 		p.setPlayer(new Player());
 		DisplayHud.powerup(p);
 		assertTrue(Launcher.getRoot().getChildren().get(0) instanceof Group);
@@ -66,8 +66,8 @@ public class DisplayHudTest {
 	
 	@Test
 	public void testPowerup3() {
-		Powerup p = new Powerup(10, 10, new Game());
-		Player player = new Player();
+		final Powerup p = new Powerup(10, 10, new Game());
+		final Player player = new Player();
 		player.setThisGame(new Game());
 		player.setPlayerTwo(true);
 		p.setPlayer(player);
@@ -77,54 +77,54 @@ public class DisplayHudTest {
 	
 	@Test
 	public void testExtraLifeGroup() {
-		Group group = DisplayHud.extraLifeGroup();
+		final Group group = DisplayHud.extraLifeGroup();
 		assertFalse(group.getChildren().isEmpty());
-		for (Node n : group.getChildren()) {
+		for (final Node n : group.getChildren()) {
 			assertTrue(n instanceof Polygon || n instanceof Line);
 		}
 	}
 	
 	@Test
 	public void testShieldGroup() {
-		Group group = DisplayHud.shieldGroup();
+		final Group group = DisplayHud.shieldGroup();
 		assertFalse(group.getChildren().isEmpty());
-		for (Node n : group.getChildren()) {
+		for (final Node n : group.getChildren()) {
 			assertTrue(n instanceof Circle);
 		}
 	}
 	
 	@Test
 	public void testBulletSizeGroup() {
-		Group group = DisplayHud.bulletSizeGroup();
+		final Group group = DisplayHud.bulletSizeGroup();
 		assertFalse(group.getChildren().isEmpty());
-		for (Node n : group.getChildren()) {
+		for (final Node n : group.getChildren()) {
 			assertTrue(n instanceof Circle);
 		}
 	}
 	
 	@Test
 	public void testTripleShotGroup() {
-		Group group = DisplayHud.tripleShotGroup();
+		final Group group = DisplayHud.tripleShotGroup();
 		assertFalse(group.getChildren().isEmpty());
-		for (Node n : group.getChildren()) {
+		for (final Node n : group.getChildren()) {
 			assertTrue(n instanceof Circle);
 		}
 	}
 	
 	@Test
 	public void testPiercingGroup() {
-		Group group = DisplayHud.piercingGroup();
+		final Group group = DisplayHud.piercingGroup();
 		assertFalse(group.getChildren().isEmpty());
-		for (Node n : group.getChildren()) {
+		for (final Node n : group.getChildren()) {
 			assertTrue(n instanceof Polygon || n instanceof Line);
 		}
 	}
 	
 	@Test
 	public void testMinigunGroup() {
-		Group group = DisplayHud.minigunGroup();
+		final Group group = DisplayHud.minigunGroup();
 		assertFalse(group.getChildren().isEmpty());
-		for (Node n : group.getChildren()) {
+		for (final Node n : group.getChildren()) {
 			assertTrue(n instanceof Circle);
 		}
 	}
@@ -132,12 +132,11 @@ public class DisplayHudTest {
 	@Test
 	public void testSound1() {
 		DisplayHud.sound(false);
-		assertFalse(Launcher.getRoot().getChildren().isEmpty());
-		Node node = Launcher.getRoot().getChildren().get(0);
+		final Node node = Launcher.getRoot().getChildren().get(0);
 		assertTrue(node instanceof Group);
-		Group g = (Group) node;
+		final Group g = (Group) node;
 		assertFalse(g.getChildren().isEmpty());
-		for (Node n : g.getChildren()) {
+		for (final Node n : g.getChildren()) {
 			assertTrue(n instanceof Polygon || n instanceof Line);
 		}
 	}
@@ -145,12 +144,11 @@ public class DisplayHudTest {
 	@Test
 	public void testSound2() {
 		DisplayHud.sound(true);
-		assertFalse(Launcher.getRoot().getChildren().isEmpty());
-		Node node = Launcher.getRoot().getChildren().get(0);
+		final Node node = Launcher.getRoot().getChildren().get(0);
 		assertTrue(node instanceof Group);
-		Group g = (Group) node;
+		final Group g = (Group) node;
 		assertFalse(g.getChildren().isEmpty());
-		for (Node n : g.getChildren()) {
+		for (final Node n : g.getChildren()) {
 			assertTrue(n instanceof Polygon);
 		}
 	}
