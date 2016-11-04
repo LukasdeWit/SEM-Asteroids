@@ -17,34 +17,33 @@ public class BackgroundAudioTest {
 	public void testUpdate1() {
 		bgaudio.setTime(0);
 		bgaudio.update(0, true);
-		assertEquals(bgaudio.getInterval(), bgaudio.getBaseline());
+		assertEquals(bgaudio.getInterval(), bgaudio.getBASELINE());
 	}
 	
 	@Test
 	public void testUpdate2() {
 		bgaudio.setTime(0);
 		bgaudio.update(5, true);
-		assertEquals(bgaudio.getInterval(), bgaudio.getBaseline() / 5);
+		assertEquals(bgaudio.getInterval(), bgaudio.getBASELINE() / 5);
 	}
 	
 	@Test
 	public void testUpdate3() {
 		bgaudio.setTime(System.currentTimeMillis());
 		bgaudio.update(5, true);
-		assertEquals(bgaudio.getInterval(), bgaudio.getBaseline());
+		assertEquals(bgaudio.getInterval(), bgaudio.getBASELINE());
 	}
 	
 	@Test
 	public void testBG1() {
 		bgaudio.setTime(0);
-		assertEquals(bgaudio.getBG(), true);
+		assertEquals(bgaudio.isBg(), true);
 		bgaudio.update(5, true);
 		bgaudio.setTime(0);
-		assertEquals(bgaudio.getBG(), false);
+		assertEquals(bgaudio.isBg(), false);
 		bgaudio.update(5, true);
 		bgaudio.setTime(0);
-		assertEquals(bgaudio.getBG(), true);
-
+		assertEquals(bgaudio.isBg(), true);
 	}
 
 }

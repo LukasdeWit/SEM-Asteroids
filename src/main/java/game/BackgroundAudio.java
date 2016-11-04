@@ -1,6 +1,8 @@
 package game;
 
 import javafx.scene.media.AudioClip;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -11,6 +13,7 @@ import java.net.MalformedURLException;
  * @author Esmee
  *
  */
+@Getter
 public class BackgroundAudio {
 	/**
 	 * Regulates which boop sound is used for background track.
@@ -19,6 +22,7 @@ public class BackgroundAudio {
 	/**
 	 * Last time a boop was played.
 	 */
+	@Setter
 	private long time;
 	/**
 	 * Interval between boops.
@@ -35,6 +39,7 @@ public class BackgroundAudio {
 	/**
 	 * Length between boops with no entities on board.
 	 */
+	@Getter
 	private static final long BASELINE = 7000;
 
 	/**
@@ -89,32 +94,4 @@ public class BackgroundAudio {
     	// flip background sound so it alternates each time
     	bg = !bg;
     }
-	
-	/**
-	 * @return interval
-	 */
-	public final long getInterval() {
-		return interval;
-	}
-	
-	/**
-	 * @return baseline
-	 */
-	public final long getBaseline() {
-		return BASELINE;
-	}
-	
-	/**
-	 * @param time the last time a background noise was played
-	 */
-	public final void setTime(final long time) {
-		this.time = time;
-	}
-	
-	/**
-	 * @return bg
-	 */
-	public final boolean getBG() {
-		return bg;
-	}
 }
