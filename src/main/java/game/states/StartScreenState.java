@@ -1,10 +1,10 @@
 package game.states;
 
-import java.util.List;
-
 import display.DisplayText;
 import game.Game;
 import game.Gamestate;
+
+import java.util.List;
 
 /**
  * Start screen state.

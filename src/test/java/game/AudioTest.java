@@ -37,16 +37,16 @@ public class AudioTest {
 
 	@Before
 	public final void setUp() {
-		thisGame.getScoreCounter().clearHighscores();
-		gamestate.setMode(gamestate.getArcadeMode());
-		thisGame.getScoreCounter().setScore(0);
+		thisGame.getScorecounter().clearHighscores();
+		gamestate.setCurrentMode(gamestate.getArcadeMode());
+		thisGame.getScorecounter().setScore(0);
 		thisGame.setEntities(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
 		thisGame.setDestroyList(new ArrayList<>());
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setPlayer(null);
 		thisGame.setPlayerTwo(null);
-		thisGame.getScoreCounter().setHighscore("", 0);
+		thisGame.getScorecounter().setHighscore("", 0);
 		
 		pBuilder = new PlayerBuilder();
 		pBuilder.setX(0);

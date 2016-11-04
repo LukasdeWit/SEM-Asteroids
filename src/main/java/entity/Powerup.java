@@ -1,7 +1,4 @@
 package entity;
-import java.util.List;
-import java.util.Random;
-
 import display.DisplayEntity;
 import display.DisplayHud;
 import entity.shooters.PlayerShooter;
@@ -9,12 +6,19 @@ import game.Audio;
 import game.Game;
 import game.Logger;
 import javafx.scene.Group;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents a Powerup.
  *
  * @author Dario
  */
+@Setter
+@Getter
 public class Powerup extends AbstractEntity {
 	private int type;
 	
@@ -202,34 +206,6 @@ public class Powerup extends AbstractEntity {
     }
 
 	/**
-	 * @return the player
-	 */
-	public final Player getPlayer() {
-		return player;
-	}
-
-	/**
-	 * @param player the player to set
-	 */
-	public final void setPlayer(final Player player) {
-		this.player = player;
-	}
-
-	/**
-	 * @param pickupTime the pickupTime to set
-	 */
-	public final void setPickupTime(final long pickupTime) {
-		this.pickupTime = pickupTime;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public final void setType(final int type) {
-		this.type = type;
-	}
-
-	/**
 	 * @return the newBulletSize
 	 */
 	public static float getNewBulletSize() {
@@ -250,17 +226,4 @@ public class Powerup extends AbstractEntity {
 		return NEW_FIRE_RATE;
 	}
 
-	/**
-	 * @param startTime the startTime to set
-	 */
-	public final void setStartTime(final long startTime) {
-		this.startTime = startTime;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public final int getType() {
-		return type;
-	}
 }

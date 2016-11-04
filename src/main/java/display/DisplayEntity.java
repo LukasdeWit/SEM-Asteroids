@@ -1,17 +1,6 @@
 package display;
 
-import java.util.function.DoubleFunction;
-
-import entity.AbstractEntity;
-import entity.Asteroid;
-import entity.BasicBoss;
-import entity.Bullet;
-import entity.DoubleBoss;
-import entity.Particle;
-import entity.Player;
-import entity.Powerup;
-import entity.Saucer;
-import entity.TeleBoss;
+import entity.*;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -19,6 +8,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+
+import java.util.function.DoubleFunction;
 
 /**
  * This class displays all entities.

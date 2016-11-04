@@ -96,7 +96,7 @@ public final class Spawner {
 	public void updateSurvival() {
 		updateSaucer();
 		updatePowerup();
-		final int extra = (int) (thisGame.getScoreCounter().getScore() / SURVIVAL_POINTS_PER_ASTEROID);
+		final int extra = (int) (thisGame.getScorecounter().getScore() / SURVIVAL_POINTS_PER_ASTEROID);
 		final int enemies = thisGame.convertedBigEnemies();
 		if (STARTING_ASTEROIDS + extra - enemies > 0) {
 			spawnAsteroid(STARTING_ASTEROIDS + extra - enemies);
@@ -203,10 +203,10 @@ public final class Spawner {
 	 * @return the ratio
 	 */
 	private double smallSaucerRatio() {
-		if (thisGame.getScoreCounter().getScore() < DIFFICULTY_STEP) {
+		if (thisGame.getScorecounter().getScore() < DIFFICULTY_STEP) {
 			return .5;
-		} else if (thisGame.getScoreCounter().getScore() < MAX_DIFFICULTY_SCORE) {
-			return .5 + ((thisGame.getScoreCounter().getScore() / (double) DIFFICULTY_STEP)
+		} else if (thisGame.getScorecounter().getScore() < MAX_DIFFICULTY_SCORE) {
+			return .5 + ((thisGame.getScorecounter().getScore() / (double) DIFFICULTY_STEP)
 					* .5 / (double) (MAX_DIFFICULTY_SCORE / DIFFICULTY_STEP));
 		} else {
 			return 1;
