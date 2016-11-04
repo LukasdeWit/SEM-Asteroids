@@ -139,7 +139,7 @@ public class HighscoreStore {
         if (mode > 0 && mode < MODES + 1) {
             return highScores[mode - 1];
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("provided mode id (" + mode + ") does not exists");
         }
     }
 }
