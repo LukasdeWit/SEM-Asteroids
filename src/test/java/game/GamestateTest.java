@@ -132,6 +132,14 @@ public class GamestateTest {
 	}
 	
 	@Test
+	public final void testStartScreen7() {
+		input.add("H");
+		gamestate.update(input);
+		assertEquals(Gamestate.NONEMODE, gamestate.getCurrentMode());
+		assertEquals(gamestate.getViewHighscoresState(), gamestate.getState());
+	}
+	
+	@Test
 	public final void testIntToString(){
 		final String actual = gamestate.intToString(0);
 		assertEquals("none", actual);
@@ -206,6 +214,14 @@ public class GamestateTest {
 		gamestate.update(input);
 		assertEquals(Gamestate.ARCADEMODE, gamestate.getCurrentMode());
 		assertEquals(gamestate.getPauseScreenState(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testViewHighscoresScreen() {
+		gamestate.setState(gamestate.getViewHighscoresState());
+		gamestate.setScreenSwitchTime(System.currentTimeMillis());
+		gamestate.update(input);
+		assertEquals(gamestate.getViewHighscoresState(), gamestate.getState());
 	}
 	
 	@Test

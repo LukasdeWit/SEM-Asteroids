@@ -1,6 +1,8 @@
 package game;
 
 import javafx.scene.media.AudioClip;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -11,6 +13,7 @@ import java.net.MalformedURLException;
  * @author Esmee
  *
  */
+@Getter
 public class BackgroundAudio {
 	/**
 	 * Regulates which boop sound is used for background track.
@@ -19,6 +22,7 @@ public class BackgroundAudio {
 	/**
 	 * Last time a boop was played.
 	 */
+	@Setter
 	private long time;
 	/**
 	 * Interval between boops.
@@ -35,6 +39,7 @@ public class BackgroundAudio {
 	/**
 	 * Length between boops with no entities on board.
 	 */
+	@Getter
 	private static final long BASELINE = 7000;
 
 	/**
@@ -62,16 +67,17 @@ public class BackgroundAudio {
 	 * Play the background track.
 	 *
 	 * @param enemies new amount of enemies.
+	 * @param mute whether the background track should be muted.
 	 */
-	public final void update(final int enemies) {
+	public final void update(final int enemies, final boolean mute) {
     	if (System.currentTimeMillis() <= time + interval) {
     	    return;
     	}
 
     	// alternate between booping sounds
-    	if (bg) {
+    	if (bg && !mute) {
     	    boop1.play();
-    	} else {
+    	} else if (!mute) {
     	    boop2.play();
     	}
 

@@ -102,5 +102,4 @@ public class ScoreCounterTest {
 		final ScoreCounter counter = new ScoreCounter(thisGame, new HighscoreStore());
 		assertEquals(1234, counter.getHighscore());
 	}
-
 }
