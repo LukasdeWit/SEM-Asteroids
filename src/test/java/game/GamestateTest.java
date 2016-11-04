@@ -225,28 +225,4 @@ public class GamestateTest {
 		gamestate.update(input);
 		assertEquals(gamestate.getViewHighscoresState(), gamestate.getState());
 	}
-	
-	@Test
-	public final void testIsBoss1() {
-		gamestate.setCurrentMode(gamestate.getBossMode());
-		assertTrue(gamestate.isBoss());
-	}
-	
-	@Test
-	public final void testIsBoss2() {
-		gamestate.setCurrentMode(gamestate.getArcadeMode());
-		assertFalse(gamestate.isBoss());
-	}
-	
-	@Test
-	public final void testIsSurvival1() {
-		gamestate.setCurrentMode(gamestate.getSurvivalMode());
-		assertTrue(gamestate.isSurvival());
-	}
-	
-	@Test
-	public final void testIsSurvival2() {
-		gamestate.setCurrentMode(gamestate.getArcadeMode());
-		assertFalse(gamestate.isSurvival());
-	}
 }
