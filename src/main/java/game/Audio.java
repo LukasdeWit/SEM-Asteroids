@@ -210,10 +210,9 @@ public class Audio {
 	 * @param enemies amount of enemies in the game.
 	 */
 	public final void backgroundTrack(final int enemies) {
-		if (!mute) {
-			bgtrack.update(enemies);
-		}
+		bgtrack.update(enemies, mute);
 	}
+	
 	
 	/**
 	 * Silence all currently playing tracks.
@@ -298,5 +297,12 @@ public class Audio {
 		} else if (!input.contains("M")) {
 			released = true;
 		}
+	}
+	
+	/**
+	 * @return backgroundaudio.
+	 */
+	public final BackgroundAudio getBackgroundAudio() {
+		return bgtrack;
 	}
 }

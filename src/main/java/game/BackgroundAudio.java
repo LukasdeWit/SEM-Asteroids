@@ -62,16 +62,17 @@ public class BackgroundAudio {
 	 * Play the background track.
 	 *
 	 * @param enemies new amount of enemies.
+	 * @param mute whether the background track should be muted.
 	 */
-	public final void update(final int enemies) {
+	public final void update(final int enemies, final boolean mute) {
     	if (System.currentTimeMillis() <= time + interval) {
     	    return;
     	}
 
     	// alternate between booping sounds
-    	if (bg) {
+    	if (bg && !mute) {
     	    boop1.play();
-    	} else {
+    	} else if (!mute) {
     	    boop2.play();
     	}
 
@@ -88,4 +89,32 @@ public class BackgroundAudio {
     	// flip background sound so it alternates each time
     	bg = !bg;
     }
+	
+	/**
+	 * @return interval
+	 */
+	public final long getInterval() {
+		return interval;
+	}
+	
+	/**
+	 * @return baseline
+	 */
+	public final long getBaseline() {
+		return BASELINE;
+	}
+	
+	/**
+	 * @param time the last time a background noise was played
+	 */
+	public final void setTime(final long time) {
+		this.time = time;
+	}
+	
+	/**
+	 * @return bg
+	 */
+	public final boolean getBG() {
+		return bg;
+	}
 }
