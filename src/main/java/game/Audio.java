@@ -2,6 +2,8 @@ package game;
 
 import entity.Player;
 import javafx.scene.media.AudioClip;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -76,6 +78,8 @@ public class Audio {
 	 * Class that regulates the background track.
 	 */
 	private final BackgroundAudio bgtrack;
+	@Getter
+	@Setter
 	private boolean mute;
 	private boolean released;
 	
@@ -256,20 +260,6 @@ public class Audio {
 			Logger.getInstance().log("Sounds muted");
 			stopAll();
 		}
-	}
-
-	/**
-	 * @return the mute
-	 */
-	public final boolean isMute() {
-		return mute;
-	}
-
-	/**
-	 * @param mute the mute to set
-	 */
-	public final void setMute(final boolean mute) {
-		this.mute = mute;
 	}
 
 	/**

@@ -1,12 +1,16 @@
 package entity;
-import java.util.List;
-
 import display.DisplayEntity;
 import game.Logger;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 /**
  * Class that stores the information for a bullet.
  */
+@Setter
+@Getter
 public class Bullet extends AbstractEntity {
 	private long birthTime;
 	private boolean friendly;
@@ -46,24 +50,6 @@ public class Bullet extends AbstractEntity {
 	}
 
 	/**
-	 * Get whether the bullet is friendly.
-	 *
-	 * @return boolean that is true when bullet is friendly
-	 */
-	public final boolean isFriendly() {
-		return friendly;
-	}
-
-	/**
-	 * Set whether the bullet is friendly.
-	 *
-	 * @param friendly value that is true when the bullet is friendly
-	 */
-	public final void setFriendly(final boolean friendly) {
-		this.friendly = friendly;
-	}
-
-	/**
 	 * Describes what happens when the bullet collides with entities.
 	 */
 	@Override
@@ -86,13 +72,6 @@ public class Bullet extends AbstractEntity {
 	public final void onDeath() {
 		//no-op
 	}
-	
-	/**
-	 * @return true if the bullet is shot, false otherwise.
-	 */
-	public final boolean isShot() {
-		return this.shot;
-	}
 
 	/**
 	 * DisplayText bullet on screen.
@@ -103,48 +82,6 @@ public class Bullet extends AbstractEntity {
 	}
 
 	/**
-	 * @return the player
-	 */
-	public final AbstractEntity getShooter() {
-		return shooter;
-	}
-
-	/**
-	 * @param shooter the entity to set as the bullet's shooter
-	 */
-	public final void setShooter(final AbstractEntity shooter) {
-		this.shooter = shooter;
-	}
-
-	/**
-	 * @param birthTime the birthTime to set
-	 */
-	public final void setBirthTime(final long birthTime) {
-		this.birthTime = birthTime;
-	}
-	
-	/**
-	 * @param pierce - the amount of objects the bullet pierces.
-	 */
-	public final void setPierce(final int pierce) {
-		this.piercing = pierce;
-	}
-	
-	/**
-	 * @return the amount of objects the bullet pierces
-	 */
-	public final int getPierce() {
-		return this.piercing;
-	}
-	
-	/**
-	 * @param shot - true if the bullet is shot and moving, false otherwise
-	 */
-	public final void setShot(final boolean shot) {
-		this.shot = shot;
-	}
-	
-	/**
 	 * @return a shallow copy of the current bullet, useful for making two entities.
 	 */
 	public final Bullet shallowCopy() {
@@ -154,7 +91,7 @@ public class Bullet extends AbstractEntity {
 		bullet.setDX(this.getDX());
 		bullet.setDY(this.getDY());
 		bullet.setThisGame(this.getThisGame());
-		bullet.setPierce(this.getPierce());
+		bullet.setPiercing(this.getPiercing());
 		bullet.setShooter(getShooter());
 		bullet.setBirthTime(birthTime);
 		bullet.setShot(isShot());

@@ -1,21 +1,28 @@
 package entity;
 
-import java.util.List;
-import java.util.Random;
-
+import com.google.common.primitives.Floats;
 import display.DisplayEntity;
 import entity.shooters.SaucerShooter;
 import game.Audio;
 import game.Game;
 import game.Logger;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents a Saucer.
  */
 public class Saucer extends AbstractEntity {
+
+	@Getter
 	private int toRight;
 	private final Random random;
+	@Getter @Setter
 	private long dirChangeTime;
+	@Getter
 	private final SaucerShooter shooter;
 
 	private static final float SMALL_RADIUS = 5;
@@ -106,6 +113,7 @@ public class Saucer extends AbstractEntity {
 
 	/**
 	 * Destroy this if it's outside the screen.
+	 *
 	 * @return true if it is the end
 	 */
 	private boolean checkEnd() {
@@ -182,13 +190,14 @@ public class Saucer extends AbstractEntity {
 	public static float getSmallRadius() {
 		return SMALL_RADIUS;
 	}
-	
+
 	/**
 	 * Check the size of the ufo.
+	 *
 	 * @return true if small
 	 */
 	public final boolean isSmall() {
-		return getRadius() == SMALL_RADIUS;
+		return Floats.compare(getRadius(), SMALL_RADIUS) == 0;
 	}
 
 	/**
@@ -196,27 +205,6 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static float getBigRadius() {
 		return BIG_RADIUS;
-	}
-
-	/**
-	 * @return the toRight
-	 */
-	public final int getToRight() {
-		return toRight;
-	}
-
-	/**
-	 * @param dirChangeTime the dirChangeTime to set
-	 */
-	public final void setDirChangeTime(final long dirChangeTime) {
-		this.dirChangeTime = dirChangeTime;
-	}
-
-	/**
-	 * @return the dirChangeTime
-	 */
-	public final long getDirChangeTime() {
-		return dirChangeTime;
 	}
 
 	/**
@@ -231,12 +219,5 @@ public class Saucer extends AbstractEntity {
 	 */
 	public static int getBigScore() {
 		return BIG_SCORE;
-	}
-	
-	/**
-	 * @return the saucershooter
-	 */
-	public final SaucerShooter getShooter() {
-		return shooter;
 	}
 }

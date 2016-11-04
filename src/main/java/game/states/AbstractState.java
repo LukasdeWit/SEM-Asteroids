@@ -1,8 +1,10 @@
 package game.states;
 
-import java.util.List;
-
 import game.Game;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 /**
  * abstract class for game states.
@@ -10,6 +12,8 @@ import game.Game;
  *
  */
 public abstract class AbstractState {
+	@Getter
+	@Setter
 	private Game thisGame;
 	
 	/**
@@ -25,22 +29,6 @@ public abstract class AbstractState {
 	 * @param input to update the state with
 	 */
 	public abstract void update(List<String> input);
-	
-	/**
-	 * Set current game of state.
-	 * @param game this state should belong to
-	 */
-	public final void setThisGame(final Game game) {
-		thisGame = game;
-	}
-	
-	/**
-	 * Get current game of state.
-	 * @return the game this state belongs to
-	 */
-	public final Game getThisGame() {
-		return thisGame;
-	}
 	
 	/**
 	 * set the switch time to the current time.

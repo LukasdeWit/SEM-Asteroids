@@ -5,6 +5,8 @@ import game.Audio;
 import game.Logger;
 import entity.shooters.PlayerShooter;
 import entity.keyhandler.KeyHandler;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Random;
@@ -14,6 +16,8 @@ import java.util.Random;
  *
  * @author Kibo
  */
+@Setter
+@Getter
 public class Player extends AbstractEntity {
 	private int lives;
 	private double rotation;
@@ -276,20 +280,6 @@ public class Player extends AbstractEntity {
 	public final boolean isAlive() {
 		return lives > 0;
 	}
-
-	/**
-	 * @return lives
-	 */
-	public final int getLives() {
-		return lives;
-	}
-
-	/**
-	 * @param lives the lives to set
-	 */
-	public final void setLives(final int lives) {
-		this.lives = lives;
-	}
 	
 	/**
 	 * @param playerTwo - true if the player is player two, false otherwise.
@@ -313,48 +303,6 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return the invincibleStart
-	 */
-	public final long getInvincibleStart() {
-		return invincibleStart;
-	}
-
-	/**
-	 * @param invincibleStart the invincibleStart to set
-	 */
-	public final void setInvincibleStart(final long invincibleStart) {
-		this.invincibleStart = invincibleStart;
-	}
-
-	/**
-	 * @return the playerTwo
-	 */
-	public final boolean isPlayerTwo() {
-		return playerTwo;
-	}
-
-	/**
-	 * @return the boost
-	 */
-	public final boolean isBoost() {
-		return boost;
-	}
-
-	/**
-	 * @param boost the boost to set
-	 */
-	public final void setBoost(final boolean boost) {
-		this.boost = boost;
-	}
-
-	/**
-	 * @return the rotation
-	 */
-	public final double getRotation() {
-		return rotation;
-	}
-
-	/**
 	 * @return the rotationSpeed
 	 */
 	public static double getRotationSpeed() {
@@ -362,20 +310,7 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return the shielding
-	 */
-	public final int getShielding() {
-		return shielding;
-	}
 
-	/**
-	 * @param shielding the shielding to set
-	 */
-	public final void setShielding(final int shielding) {
-		this.shielding = shielding;
-	}
-
-	/**
 	 * gain a shield level.
 	 */
 	public final void gainShield() {
@@ -383,47 +318,13 @@ public class Player extends AbstractEntity {
 	}
 
 	/**
-	 * @return the hyperspaceStart
-	 */
-	public final long getHyperspaceStart() {
-		return hyperspaceStart;
-	}
 
-	/**
-	 * @param hyperspaceStart the hyperspaceStart to set
-	 */
-	public final void setHyperspaceStart(final long hyperspaceStart) {
-		this.hyperspaceStart = hyperspaceStart;
-	}
-
-	/**
 	 * @return the maxSpeed
 	 */
 	public static float getMaxSpeed() {
 		return MAX_SPEED;
 	}
 
-	/**
-	 * @param chanceOfDying the chanceOfDying to set
-	 */
-	public final void setChanceOfDying(final int chanceOfDying) {
-		this.chanceOfDying = chanceOfDying;
-	}
-	
-	/**
-	 * @return the Player String
-	 */
-	public final String getPlayerString() {
-		return playerString;
-	}
-	
-	/**
-	 * @return the Player Shooter
-	 */
-	public final PlayerShooter getShooter() {
-		return shooter;
-	}
-	
 	/**
 	 * @return a shallow copy of the current player, useful for making two entities.
 	 */

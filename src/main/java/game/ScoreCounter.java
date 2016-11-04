@@ -1,10 +1,12 @@
 package game;
 
-import java.util.List;
-
 import display.DisplayText;
 import game.highscore.HighscoreStore;
 import game.highscore.model.HighScore;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 /**
  * Class that maintains the score.
@@ -16,8 +18,10 @@ public class ScoreCounter {
 
 	private static final int THREE = 3;
 
+	@Setter
 	private long score;
 	private final HighscoreStore highscoreStore;
+	@Getter
 	private final Game thisGame;
 	
 	/**
@@ -37,7 +41,7 @@ public class ScoreCounter {
 	 */
 	public final void startGame(final String name) {
 		if (this.score > getHighscore()) {
-			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode().toInt());
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getCurrentMode().toInt());
 			highscoreStore.writeScores();
 		}		
 		score = 0;
@@ -78,7 +82,7 @@ public class ScoreCounter {
 	 * @return the high score
 	 */
 	public final long getHighscore() {
-		return highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
+		return highscoreStore.getHighestScore(thisGame.getGamestate().getCurrentMode().toInt());
 	}
 	
 	/**
@@ -94,7 +98,7 @@ public class ScoreCounter {
 	 * @return true if the score is better than the highscore
 	 */
 	public final boolean isHighscore() {
-		return score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
+		return score > highscoreStore.getHighestScore(thisGame.getGamestate().getCurrentMode().toInt());
 	}
 	
 	/**
@@ -110,7 +114,7 @@ public class ScoreCounter {
 	 */
 	protected final void updateHighscore(final String name) {
 		if (isHighscore()) {
-			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getMode().toInt());
+			highscoreStore.addHighScore(name, score, thisGame.getGamestate().getCurrentMode().toInt());
 			highscoreStore.writeScores();
 		}
 	}
@@ -133,25 +137,11 @@ public class ScoreCounter {
 	}
 	
 	/**
-	 * @param score the score to set
-	 */
-	public final void setScore(final long score) {
-		this.score = score;
-	}
-	
-	/**
 	 * @param name - the name
 	 * @param highscore the highscore to set
 	 */
 	public final void setHighscore(final String name, final long highscore) {
-		highscoreStore.addHighScore(name, highscore, thisGame.getGamestate().getMode().toInt());
-	}
-	
-	/**
-	 * @return game this scorecounter belongs to
-	 */
-	public final Game getThisGame() {
-		return thisGame;
+		highscoreStore.addHighScore(name, highscore, thisGame.getGamestate().getCurrentMode().toInt());
 	}
 
 	/**

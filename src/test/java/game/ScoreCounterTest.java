@@ -1,25 +1,21 @@
 package game;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-
+import game.highscore.HighscoreStore;
 import org.junit.Before;
 import org.junit.Test;
 
-import game.highscore.HighscoreStore;
+import static org.junit.Assert.*;
 
 public class ScoreCounterTest {
 	private final Game thisGame = new Game();
 	private final Gamestate gamestate = thisGame.getGamestate();
-	private final ScoreCounter sc = thisGame.getScoreCounter();
+	private final ScoreCounter sc = thisGame.getScorecounter();
 
 	@Before
 	public final void setUp() {
 		sc.clearHighscores();
-		gamestate.setMode(gamestate.getArcadeMode());
+		gamestate.setCurrentMode(gamestate.getArcadeMode());
 		sc.setScore(0);
 		sc.setHighscore("", 0);
 		thisGame.getAudio().setMute(true);
