@@ -86,10 +86,7 @@ public class Audio {
 	private static final double TELEPORTVOLUME = 0.7;
 	private static final double SHOOTING2VOLUME = 0.3;
 	private static final double ASTEROIDVOLUME = 0.5;
-	private static final double POWERUPVOLUME = 0.5;
-	
-	private static double MASTERVOLUME = 1;
-	
+	private static final double POWERUPVOLUME = 0.5;	
 
 	/**
 	 * Constructor for audio class.
