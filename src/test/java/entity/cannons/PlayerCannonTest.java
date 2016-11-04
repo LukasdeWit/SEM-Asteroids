@@ -1,7 +1,8 @@
-package entity.shooters;
+package entity.cannons;
 
 import entity.Player;
 import entity.builders.PlayerBuilder;
+import entity.cannons.PlayerCannon;
 import game.Game;
 import game.Launcher;
 import org.junit.Before;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class PlayerShooterTest {
+public class PlayerCannonTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
@@ -121,10 +122,10 @@ public class PlayerShooterTest {
 	
 	@Test
 	public void testGettersAndSetters(){
-		final PlayerShooter ps = player.getShooter();
-		ps.setBulletSize(PlayerShooter.getBulletSize());
-		ps.setPiercing(PlayerShooter.getMaxBullets());
-		ps.setFireRate(PlayerShooter.getFireRate());
+		final PlayerCannon ps = player.getShooter();
+		ps.setBulletSize(PlayerCannon.getBulletSize());
+		ps.setPiercing(PlayerCannon.getMaxBullets());
+		ps.setFireRate(PlayerCannon.getFireRate());
 		player.gainShield();
 		assertEquals(1, player.getShielding(), 0);
 	}

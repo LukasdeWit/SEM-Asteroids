@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import entity.builders.PlayerBuilder;
-import entity.shooters.PlayerShooter;
+import entity.cannons.PlayerCannon;
 import game.Game;
 import game.Launcher;
 import javafx.scene.Node;
@@ -176,7 +176,7 @@ public class PowerupTest {
 		powerup.setType(2);
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertEquals(PlayerShooter.getBulletSize(), p.getShooter().getCurrentBulletSize(), 0);
+		assertEquals(PlayerCannon.getBulletSize(), p.getShooter().getCurrentBulletSize(), 0);
 	}
 	
 	@Test
@@ -209,6 +209,6 @@ public class PowerupTest {
 		powerup.setType(5);
 		powerup.setPickupTime(1);
 		powerup.update(null);
-		assertEquals(PlayerShooter.getFireRate(), p.getShooter().getCurrentFireRate(), 0);
+		assertEquals(PlayerCannon.getFireRate(), p.getShooter().getCurrentFireRate(), 0);
 	}
 }

@@ -1,4 +1,4 @@
-package entity.shooters;
+package entity.cannons;
 
 import entity.AbstractEntity;
 import entity.builders.BulletBuilder;
@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public abstract class AbstractShooter {
+public abstract class AbstractCannon {
 	private long lastShot;
 	private BulletBuilder bBuilder;
 	private final AbstractEntity owner;
@@ -21,7 +21,7 @@ public abstract class AbstractShooter {
 	 * Constructor for Abstracthooter.
 	 * @param owner AbstractEntity this belongs to.
 	 */
-	public AbstractShooter(final AbstractEntity owner) {
+	public AbstractCannon(final AbstractEntity owner) {
 		this.owner = owner;
 		bBuilder = new BulletBuilder();
 		bBuilder.setShooter(owner);
