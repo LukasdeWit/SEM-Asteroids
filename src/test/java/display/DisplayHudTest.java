@@ -65,6 +65,17 @@ public class DisplayHudTest {
 	}
 	
 	@Test
+	public void testPowerup3() {
+		Powerup p = new Powerup(10, 10, new Game());
+		Player player = new Player();
+		player.setThisGame(new Game());
+		player.setPlayerTwo(true);
+		p.setPlayer(player);
+		DisplayHud.powerup(p);
+		assertTrue(Launcher.getRoot().getChildren().get(0) instanceof Group);
+	}
+	
+	@Test
 	public void testExtraLifeGroup() {
 		Group group = DisplayHud.extraLifeGroup();
 		assertFalse(group.getChildren().isEmpty());
