@@ -139,7 +139,7 @@ public class Saucer extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		DisplayEntity.saucer(this);
+		DisplayEntity.draw(this);
 	}
 
 	/**

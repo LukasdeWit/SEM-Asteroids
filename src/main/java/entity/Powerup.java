@@ -132,7 +132,7 @@ public class Powerup extends AbstractEntity {
 	@Override
 	public final void draw() {
 		if (pickupTime == 0) {
-			DisplayEntity.powerup(this);
+			DisplayEntity.draw(this);
 		} else {
 			DisplayHud.powerup(this);
 		}

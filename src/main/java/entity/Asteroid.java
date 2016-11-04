@@ -154,7 +154,7 @@ public class Asteroid extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		DisplayEntity.asteroid(this);
+		DisplayEntity.draw(this);
 	}
 
 	/**
