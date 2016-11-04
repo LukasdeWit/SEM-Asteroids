@@ -113,7 +113,7 @@ public final class Game {
 		gamestate.update(input);
 		audio.update(input);
 		DisplayHud.sound(audio.isMute());
-		if (gamestate.getCurrentMode().isArcade()) {
+		if (gamestate.isArcade()) {
 			DisplayText.wave(spawner.getWave());
 		}
 	}
@@ -224,7 +224,7 @@ public final class Game {
 		}
 		if (scorecounter.isNotHighscore()) {
 			scorecounter.setScore(0);
-			gamestate.setCurrentMode(gamestate.getNoneMode());
+			gamestate.setCurrentMode(Gamestate.NONEMODE);
 			gamestate.setState(gamestate.getStartScreenState());
 		} else {
 			Logger.getInstance().log("New highscore is " + scorecounter.getScore() + ".");

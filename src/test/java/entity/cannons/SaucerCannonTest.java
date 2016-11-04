@@ -1,4 +1,4 @@
-package entity.shooters;
+package entity.cannons;
 
 import entity.AbstractEntity;
 import entity.Bullet;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class SaucerShooterTest {
+public class SaucerCannonTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;

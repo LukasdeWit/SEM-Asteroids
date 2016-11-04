@@ -1,6 +1,5 @@
 package game;
 
-import game.modes.*;
 import game.states.AbstractState;
 import game.states.HighscoreScreenState;
 import game.states.OngoingGameState;
@@ -35,14 +34,16 @@ public final class Gamestate {
 	
 	// modes
 	@Setter
-	private AbstractMode currentMode;
-	private final NoneMode noneMode;
-	private final ArcadeMode arcadeMode;
-	private final CoopArcadeMode coopArcadeMode;
-	private final BossMode bossMode;
-	private final CoopBossMode coopBossMode;
-	private final SurvivalMode survivalMode;
-	private final CoopSurvivalMode coopSurvivalMode;
+	private int currentMode;
+	
+	public static final int NONEMODE = 0;
+	public static final int ARCADEMODE = 1;
+	public static final int COOPARCADEMODE = 2;
+	public static final int SURVIVALMODE = 3;
+	public static final int COOPSURVIVALMODE = 4;
+	public static final int BOSSMODE = 5;
+	public static final int COOPBOSSMODE = 6;
+	
 	@Setter
 	private long screenSwitchTime;
 		
@@ -61,16 +62,8 @@ public final class Gamestate {
 		viewHighscoresState = new ViewHighscoresState(thisGame);
 		
 		currentState = startScreenState;
-		
-		coopArcadeMode = new CoopArcadeMode(thisGame);
-		noneMode = new NoneMode(thisGame);
-		arcadeMode = new ArcadeMode(thisGame);
-		bossMode = new BossMode(thisGame);
-		coopBossMode = new CoopBossMode(thisGame);
-		survivalMode = new SurvivalMode(thisGame);
-		coopSurvivalMode = new CoopSurvivalMode(thisGame);
-		
-		currentMode = noneMode;
+				
+		currentMode = NONEMODE;
 	}
 	
 	/**
@@ -88,7 +81,7 @@ public final class Gamestate {
 	public void startScreen(final List<String> input) {
 		if (input.contains("H")) {
 			Logger.getInstance().log("Go to highscores screen");
-			setCurrentMode(noneMode);
+			setCurrentMode(NONEMODE);
 			setState(viewHighscoresState);
 		} else if (input.contains("ESCAPE")) {
 			Logger.getInstance().log("Player quit the game.");
@@ -104,27 +97,27 @@ public final class Gamestate {
 	 */
 	private void checkModeInput(final List<String> input) {
 		if (input.contains("A")) {
-			setCurrentMode(arcadeMode);
+			setCurrentMode(ARCADEMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("Z")) {
-			setCurrentMode(coopArcadeMode);
+			setCurrentMode(COOPARCADEMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("S")) {
-			setCurrentMode(survivalMode);
+			setCurrentMode(SURVIVALMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("X")) {
-			setCurrentMode(coopSurvivalMode);
+			setCurrentMode(COOPSURVIVALMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("D")) {
-			setCurrentMode(bossMode);
+			setCurrentMode(BOSSMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("C")) {
-			setCurrentMode(coopBossMode);
+			setCurrentMode(COOPBOSSMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} 
@@ -152,7 +145,7 @@ public final class Gamestate {
 	 * @return String representing the current state.
 	 */
 	public String toString() {
-		return currentMode.toString();
+		return MODE_STRINGS[currentMode];
 	}
 
 	/**
@@ -166,21 +159,28 @@ public final class Gamestate {
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
-		return currentMode.isCoop();
+		return currentMode == COOPARCADEMODE || currentMode == COOPBOSSMODE || currentMode == COOPSURVIVALMODE;
 	}
 	
 	/**
 	 * @return true if boss
 	 */
 	public boolean isBoss() {
-		return currentMode.isBoss();
+		return currentMode == BOSSMODE || currentMode == COOPBOSSMODE;
 	}
 	
 	/**
 	 * @return true if arcade mode
 	 */
 	public boolean isArcade() {
-		return currentMode.isArcade();
+		return currentMode == ARCADEMODE || currentMode == COOPARCADEMODE;
+	}
+	
+	/**
+	 * @return true if survival mode
+	 */
+	public boolean isSurvival() {
+		return currentMode == SURVIVALMODE || currentMode == COOPSURVIVALMODE;
 	}
 	
 	/**

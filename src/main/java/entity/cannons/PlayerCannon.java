@@ -1,4 +1,4 @@
-package entity.shooters;
+package entity.cannons;
 
 import entity.Bullet;
 import entity.Player;
@@ -14,7 +14,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class PlayerShooter extends AbstractShooter {
+public class PlayerCannon extends AbstractCannon {
 	private static final float BULLET_SPEED = 4;
 	private static final float BULLET_SIZE = 1;
 	private static final double TRIPLE_SHOT_ANGLE = .1;
@@ -31,7 +31,7 @@ public class PlayerShooter extends AbstractShooter {
 	 * Constructor for playershooter.
 	 * @param player this belongs to
 	 */
-	public PlayerShooter(final Player player) {
+	public PlayerCannon(final Player player) {
 		super(player);
 		// Initialize the Bullet Builder
 		setBBuilder(new BulletBuilder());
