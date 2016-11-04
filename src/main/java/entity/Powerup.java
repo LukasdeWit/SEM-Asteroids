@@ -1,7 +1,7 @@
 package entity;
 import display.DisplayEntity;
 import display.DisplayHud;
-import entity.shooters.PlayerShooter;
+import entity.cannons.PlayerCannon;
 import game.Audio;
 import game.Game;
 import game.Logger;
@@ -45,8 +45,8 @@ public class Powerup extends AbstractEntity {
 	private static final float NEW_BULLET_SIZE = 10;
 	private static final int NEW_PIERCING_LEVEL = 3;
 	private static final long NEW_FIRE_RATE = 50;
-	private static final int TRIPLE_SHOT_BULLETS = PlayerShooter.getMaxBullets() * 3;
-	private static final int MINIGUN_BULLETS = PlayerShooter.getMaxBullets() * 4;
+	private static final int TRIPLE_SHOT_BULLETS = PlayerCannon.getMaxBullets() * 3;
+	private static final int MINIGUN_BULLETS = PlayerCannon.getMaxBullets() * 4;
 
 	private static final String[] TYPE_STRING = {
 			"an extra life",
@@ -96,7 +96,7 @@ public class Powerup extends AbstractEntity {
 	 */
 	private void pickup(final Player p) {
 		player = p;
-		final PlayerShooter ps = p.getShooter();
+		final PlayerCannon ps = p.getShooter();
 		pickupTime = System.currentTimeMillis();
 		getThisGame().getAudio().play(Audio.POWERUP);
 		switch (type) {
@@ -162,22 +162,22 @@ public class Powerup extends AbstractEntity {
 			getThisGame().destroy(this);
 			return;
 		}
-		final PlayerShooter ps = player.getShooter();
+		final PlayerCannon ps = player.getShooter();
 		switch(type) {
 			case BULLET_SIZE: 
-				ps.setBulletSize(PlayerShooter.getBulletSize());
+				ps.setBulletSize(PlayerCannon.getBulletSize());
 				break;
 			case TRIPLE_SHOT:
 				ps.setTripleShot(false);
-				ps.setMaxBullets(PlayerShooter.getMaxBullets());
+				ps.setMaxBullets(PlayerCannon.getMaxBullets());
 				break;
 			case PIERCING:
 				ps.setPiercing(1);
 				break;
 			case MINIGUN:
 			default:
-				ps.setFireRate(PlayerShooter.getFireRate());
-				ps.setMaxBullets(PlayerShooter.getMaxBullets());
+				ps.setFireRate(PlayerCannon.getFireRate());
+				ps.setMaxBullets(PlayerCannon.getMaxBullets());
 				break;
 		}
 		getThisGame().destroy(this);

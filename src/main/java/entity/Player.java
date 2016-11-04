@@ -3,7 +3,7 @@ package entity;
 import display.DisplayEntity;
 import game.Audio;
 import game.Logger;
-import entity.shooters.PlayerShooter;
+import entity.cannons.PlayerCannon;
 import entity.keyhandler.KeyHandler;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +29,7 @@ public class Player extends AbstractEntity {
 	private int shielding;
 	private int chanceOfDying;
 	private String playerString;
-	private final PlayerShooter shooter;
+	private final PlayerCannon shooter;
 	private final KeyHandler keyhandler;
 
 	private static final int STARTING_LIVES = 3;
@@ -57,7 +57,7 @@ public class Player extends AbstractEntity {
 		shielding = 0;
 		chanceOfDying = CHANCE_OF_DYING;
 		keyhandler = new KeyHandler(this);
-		shooter = new PlayerShooter(this);
+		shooter = new PlayerCannon(this);
     }
 
 	/**

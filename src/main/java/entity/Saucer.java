@@ -2,7 +2,7 @@ package entity;
 
 import com.google.common.primitives.Floats;
 import display.DisplayEntity;
-import entity.shooters.SaucerShooter;
+import entity.cannons.SaucerCannon;
 import game.Audio;
 import game.Game;
 import game.Logger;
@@ -23,7 +23,7 @@ public class Saucer extends AbstractEntity {
 	@Getter @Setter
 	private long dirChangeTime;
 	@Getter
-	private final SaucerShooter shooter;
+	private final SaucerCannon shooter;
 
 	private static final float SMALL_RADIUS = 5;
 	private static final float BIG_RADIUS = 10;
@@ -55,7 +55,7 @@ public class Saucer extends AbstractEntity {
 			nextToRight = 1;
 		}
 		setPath(nextToRight, random.nextInt((int) PATHS));
-		shooter = new SaucerShooter(this);
+		shooter = new SaucerCannon(this);
 	}
 
 	/**

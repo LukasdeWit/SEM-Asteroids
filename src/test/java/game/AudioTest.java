@@ -25,7 +25,7 @@ public class AudioTest {
 	
 	@Before
 	public final void setUp() {
-		gamestate.setCurrentMode(gamestate.getArcadeMode());
+		gamestate.setCurrentMode(Gamestate.ARCADEMODE);
 		Launcher.getRoot().getChildren().clear();
 				
 		DisplayText.setTest(true);

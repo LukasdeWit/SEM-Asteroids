@@ -1,4 +1,4 @@
-package entity.shooters;
+package entity.cannons;
 
 import entity.AbstractEntity;
 import entity.Bullet;
@@ -13,7 +13,7 @@ import java.util.Random;
  * @author Esmee
  *
  */
-public class SaucerShooter extends AbstractShooter {
+public class SaucerCannon extends AbstractCannon {
 	private static final int PIERCING = 1;
 	private static final long SHOT_TIME = 1000;
 	private static final long LESS_SHOT = 50;
@@ -26,7 +26,7 @@ public class SaucerShooter extends AbstractShooter {
 	 * Constructor for saucer.
 	 * @param saucer this belongs to
 	 */
-	public SaucerShooter(final Saucer saucer) {
+	public SaucerCannon(final Saucer saucer) {
 		super(saucer);
 		getBBuilder().setThisGame(saucer.getThisGame());
 		getBBuilder().setPierce(PIERCING);
