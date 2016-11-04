@@ -266,7 +266,7 @@ public class Player extends AbstractEntity {
 	 */
 	@Override
 	public final void draw() {
-		DisplayEntity.player(this);
+		DisplayEntity.draw(this);
 	}
 
 	/**
