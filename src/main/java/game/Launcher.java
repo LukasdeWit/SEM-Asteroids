@@ -125,6 +125,9 @@ public class Launcher extends Application {
 	 * quit the game.
 	 */
 	public static void quit() {
+		if (thisStage == null) {
+			return;
+		}
 		Launcher.getThisStage().close();
 	}
 

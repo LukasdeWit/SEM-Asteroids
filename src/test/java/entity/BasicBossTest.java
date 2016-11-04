@@ -1,6 +1,9 @@
 package entity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +15,8 @@ import entity.builders.BulletBuilder;
 import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
+import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.shape.Circle;
 
 /**
  * Tests for basicBoss
@@ -76,7 +79,7 @@ public class BasicBossTest {
 	public void testDraw() {
 		basicBoss.draw();
 		final Node c = Launcher.getRoot().getChildren().get(0);
-		assertTrue(c instanceof Circle);
+		assertTrue(c instanceof Group);
 		assertEquals(X_START, c.getTranslateX(), 0);
 	}
 

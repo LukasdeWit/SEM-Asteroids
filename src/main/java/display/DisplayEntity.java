@@ -1,6 +1,17 @@
 package display;
 
-import entity.*;
+import java.util.function.DoubleFunction;
+
+import entity.AbstractEntity;
+import entity.Asteroid;
+import entity.BasicBoss;
+import entity.Bullet;
+import entity.DoubleBoss;
+import entity.Particle;
+import entity.Player;
+import entity.Powerup;
+import entity.Saucer;
+import entity.TeleBoss;
 import game.Launcher;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -120,7 +131,8 @@ public final class DisplayEntity {
 					-5, 1,
 					-2.5, -0.75,
 					-1.25, -3.5,
-					1.25, -3.5},
+					1.25, -3.5
+			},
 			{
 					2.5, -0.75,
 					-2.5, -0.75
@@ -133,8 +145,123 @@ public final class DisplayEntity {
 
 	private static final float SAUCER_SIZE = .20f;
 	private static final float SAUCER_WIDTH = 4;
+	private static final float BOSS_WIDTH = 4;
 	
-	private static final float BOSS_SIZE = 1f;
+	private static final float BOSS_SIZE = .3f;
+	private static final double[][] BASIC_BOSS_SHAPE = {
+			{
+					-3, 1.5,
+					-1.5, 3,
+					1.5, 3,
+					3, 1.5,
+					3, -1.5,
+					1.5, -3,
+					-1.5, -3,
+					-3, -1.5,
+					-3, 1.5
+			},
+			{
+					-2, 0.5,
+					-0.5, 2
+			},
+			{
+					0.5, 2,
+					2, 0.5
+			},
+			{
+					2, -0.5,
+					0.5, -2
+			},
+			{
+					-2, -0.5,
+					-0.5, -2
+			},
+			{
+					1, 0,
+					0, 1, 
+					-1, 0, 
+					0, -1
+			}
+	};
+	private static final double[][] TELE_BOSS_SHAPE = {
+			{
+					-3, 2,
+					-2.5, 2,
+					-2, 1.5,
+					-2, 0.5,
+					-0.5, 0.5,
+					-0.5, 2,
+					-1.5, 2,
+					-2, 2.5,
+					-2, 3,
+					2, 3,
+					2, 2.5,
+					1.5, 2,
+					0.5, 2,
+					0.5, 0.5,
+					2, 0.5,
+					2, 1.5,
+					2.5, 2,
+					3, 2,
+					3, -2, 
+					2.5, -2,
+					2, -1.5,
+					2, -0.5,
+					0.5, -0.5,
+					0.5, -2,
+					1.5, -2,
+					2, -2.5,
+					2, -3,
+					-2, -3,
+					-2, -2.5,
+					-1.5, -2,
+					-0.5, -2,
+					-0.5, -0.5,
+					-2, -0.5,
+					-2, -1.5,
+					-2.5, -2,
+					-3, -2,
+					-3, 2
+			}
+	};
+	private static final double[][] DOUBLE_BOSS_SHAPE = {
+			{
+					-3, 3,
+					-1, 3,
+					-1, 1,
+					-3, 1,
+					-3, 3
+			},
+			{
+					1, 3,
+					3, 3,
+					3, 1,
+					1, 1,
+					1, 3
+			},
+			{
+					1, -1,
+					3, -1,
+					3, -3,
+					1, -3,
+					1, -1
+			},
+			{
+					-3, -1,
+					-1, -1,
+					-1, -3,
+					-3, -3,
+					-3, -1
+			}, 
+			{
+					-1, -1,
+					1, 1
+			},
+			{
+					-1, 1,
+					1, -1
+			}
+	};
 	private static final double[] POWERUP_SHAPE = {
 			0, -5,
 			3, 4,
@@ -211,8 +338,63 @@ public final class DisplayEntity {
 	 * 
 	 * @param boss -  the boss
 	 */
-	public static void boss(final AbstractBoss boss) {
-		drawEntity(boss, Color.WHITE, BOSS_SIZE);
+	public static void boss(final DoubleBoss boss) {
+		final Group group = new Group();
+		for (final double[] shape : DOUBLE_BOSS_SHAPE) {
+			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
+			p -> p * (boss.getRadius() * BOSS_SIZE), shape));
+			polygon.setStroke(Color.WHITE);
+			polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
+			group.getChildren().add(polygon);
+		}
+		
+		group.setTranslateX(boss.getX());
+		group.setTranslateY(boss.getY());
+		Launcher.getRoot().getChildren().add(group);
+	}
+	
+	/**
+	 * draw boss.
+	 * 
+	 * @param boss -  the boss
+	 */
+	public static void boss(final BasicBoss boss) {
+		if (boss instanceof DoubleBoss) {
+			boss((DoubleBoss) boss);
+		} else {
+			final Group group = new Group();
+			for (final double[] shape : BASIC_BOSS_SHAPE) {
+				final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
+						p -> p * (boss.getRadius() * BOSS_SIZE), shape));
+				polygon.setStroke(Color.WHITE);
+				polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
+				group.getChildren().add(polygon);
+			}
+		
+			group.setTranslateX(boss.getX());
+			group.setTranslateY(boss.getY());
+			Launcher.getRoot().getChildren().add(group);
+		}
+	}
+	
+	/**
+	 * draw boss.
+	 * 
+	 * @param boss -  the boss
+	 */
+	public static void boss(final TeleBoss boss) {
+		final Group group = new Group();
+		for (final double[] shape : TELE_BOSS_SHAPE) {
+			final Polygon polygon = new Polygon(DisplayUtils.translate(p -> p * (boss.getRadius() * BOSS_SIZE),
+			p -> p * (boss.getRadius() * BOSS_SIZE), shape));
+			polygon.setStroke(Color.WHITE);
+			polygon.setStrokeWidth(BOSS_WIDTH * BOSS_SIZE);
+			group.getChildren().add(polygon);
+		}
+		
+		group.setTranslateX(boss.getX());
+		group.setTranslateY(boss.getY());
+		Launcher.getRoot().getChildren().add(group);
 	}
 
 	/**

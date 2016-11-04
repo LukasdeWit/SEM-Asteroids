@@ -84,7 +84,14 @@ public class GameTest {
 	}
 	
 	@Test
-	public final void testUpdate(){
+	public final void testUpdate1(){
+		thisGame.update(noInput);
+		assertTrue(Launcher.getRoot().getChildren().get(0) instanceof Rectangle);
+	}
+
+	@Test
+	public final void testUpdate2(){
+		thisGame.getGamestate().setMode(gamestate.getSurvivalMode());
 		thisGame.update(noInput);
 		assertTrue(Launcher.getRoot().getChildren().get(0) instanceof Rectangle);
 	}
@@ -109,6 +116,26 @@ public class GameTest {
 	@Test
 	public final void testUpdateGame3(){
 		gamestate.setMode(gamestate.getCoopArcadeMode());
+		final Player p = (Player) pBuilder.getResult();
+		thisGame.setPlayer(p);
+		thisGame.setPlayerTwo(p);
+		thisGame.updateGame(noInput);
+		assertTrue(Launcher.getRoot().getChildren().size() > 0);
+	}
+
+	@Test
+	public final void testUpdateGame4(){
+		gamestate.setMode(gamestate.getBossMode());
+		final Player p = (Player) pBuilder.getResult();
+		thisGame.setPlayer(p);
+		thisGame.setPlayerTwo(p);
+		thisGame.updateGame(noInput);
+		assertTrue(Launcher.getRoot().getChildren().size() > 0);
+	}
+	
+	@Test
+	public final void testUpdateGame5(){
+		gamestate.setMode(gamestate.getCoopSurvivalMode());
 		final Player p = (Player) pBuilder.getResult();
 		thisGame.setPlayer(p);
 		thisGame.setPlayerTwo(p);
@@ -211,6 +238,28 @@ public class GameTest {
 	}
 
 	@Test
+	public final void testOver5() {
+		final Player p1 = (Player) pBuilder.getResult();
+		thisGame.setPlayer(p1);
+		final Player p2 = (Player) pBuilder.getResult();
+		thisGame.setPlayerTwo(p2);
+		thisGame.over();
+		assertTrue(thisGame.getDestroyList().contains(p2));
+	}
+
+	@Test
+	public final void testOverSwitch() {
+		final Player p1 = (Player) pBuilder.getResult();
+		p1.setLives(0);
+		thisGame.setPlayer(p1);
+		final Player p2 = (Player) pBuilder.getResult();
+		thisGame.setPlayerTwo(p2);
+		thisGame.getScoreCounter().setScore(10);
+		thisGame.over();
+		assertTrue(thisGame.getDestroyList().contains(p1));
+	}
+	
+	@Test
 	public final void testAddScore1() {
 		thisGame.addScore(10);
 		assertEquals(10, thisGame.getScorecounter().getScore(), 0);
@@ -277,6 +326,20 @@ public class GameTest {
 	}
 	
 	@Test
+	public final void testExtraLife(){
+		final Player p1 = (Player) pBuilder.getResult();
+		p1.setLives(0);
+		thisGame.setPlayer(p1);
+		final Player p2 = (Player) pBuilder.getResult();
+		thisGame.setPlayerTwo(p2);
+		gamestate.setMode(gamestate.getCoopArcadeMode());
+		thisGame.addScore(5000);
+		assertEquals(5000, thisGame.getScoreCounter().getScore(), 0);
+		assertEquals(0, p1.getLives(), 0);
+		assertEquals(3, p2.getLives(), 0);
+	}
+	
+	@Test
 	public final void testBullets1(){
 		final Player p1 = (Player) pBuilder.getResult();
 		p1.setLives(0);
@@ -329,5 +392,30 @@ public class GameTest {
 		addToEntities(s);
 		addToEntities(a);
 		assertEquals(2, thisGame.enemies(), 0);
+	}
+	
+	@Test
+	public final void testConvertedBigEnemies1(){
+		final Asteroid a = new Asteroid(0, 0, 0, 0, thisGame);
+		addToEntities(a);
+		final int actual = thisGame.convertedBigEnemies();
+		assertEquals(1, actual, 0);
+	}
+	
+	@Test
+	public final void testConvertedBigEnemies2(){
+		final Bullet b = (Bullet) bBuilder.getResult();
+		addToEntities(b);
+		final int actual = thisGame.convertedBigEnemies();
+		assertEquals(0, actual, 0);
+	}
+	
+	@Test
+	public final void testConvertedBigEnemies3(){
+		final Asteroid a = new Asteroid(0, 0, 0, 0, thisGame);
+		a.setRadius(Asteroid.getMediumRadius());
+		addToEntities(a);
+		final int actual = thisGame.convertedBigEnemies();
+		assertEquals(1, actual, 0);
 	}
 }

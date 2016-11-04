@@ -1,5 +1,8 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import display.DisplayHud;
 import display.DisplayText;
 import entity.AbstractBoss;
@@ -318,7 +321,5 @@ public final class Game {
 	 * return optional playertwo object.
 	 * @return the optional playertwo object
 	 */
-	public Optional<Player> getPlayerTwo() {
-		return Optional.of(playerTwo);
-	}
+
 }

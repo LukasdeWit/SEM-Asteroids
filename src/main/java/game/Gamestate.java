@@ -83,7 +83,6 @@ public final class Gamestate {
 	/**
 	 * update the gamemode startScreen.
 	 * @param input - input
-	 * @return 
 	 */
 	public void startScreen(final List<String> input) {
 		if (input.contains("H")) {
@@ -181,13 +180,6 @@ public final class Gamestate {
 	 */
 	public boolean isBoss() {
 		return currentMode.isBoss();
-	}
-	
-	/**
-	 * @return true if survival mode
-	 */
-	public boolean isSurvival() {
-		return currentMode.isSurvival();
 	}
 	
 	/**

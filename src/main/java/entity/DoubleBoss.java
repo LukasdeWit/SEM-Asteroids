@@ -30,5 +30,4 @@ public class DoubleBoss extends BasicBoss {
 		this.setBullets(BULLETS);
 		this.setRadius(DOUBLE_RADIUS);
 	}
-
 }
