@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import display.DisplayText;
+import game.highscore.HighscoreStore;
+import game.highscore.model.HighScore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,6 +125,7 @@ public class GamestateTest {
 		assertEquals(gamestate.getViewHighscoresState(), gamestate.getState());
 	}
 	
+	
 	@Test
 	public final void testGame1() {
 		gamestate.setState(gamestate.getOngoingGameState());
@@ -192,6 +195,28 @@ public class GamestateTest {
 		gamestate.update(input);
 		assertEquals(gamestate.getArcadeMode(), gamestate.getMode());
 		assertEquals(gamestate.getPauseScreenState(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testViewHighscoresScreen() {
+		gamestate.setState(gamestate.getViewHighscoresState());
+		gamestate.setScreenSwitchTime(System.currentTimeMillis());
+		gamestate.update(input);
+		assertEquals(gamestate.getViewHighscoresState(), gamestate.getState());
+	}
+	
+	@Test
+	public final void testViewHighscoresScreen2() {
+		gamestate.setState(gamestate.getViewHighscoresState());
+		input.add("D");
+		gamestate.setScreenSwitchTime(System.currentTimeMillis());
+		gamestate.update(input);
+		HighscoreStore store = new HighscoreStore();
+		List<HighScore> list = store.getHighScores();
+		for (HighScore h : list) {
+			assertTrue(h.getScore() == 0);
+		}
+		assertEquals(gamestate.getViewHighscoresState(), gamestate.getState());
 	}
 	
 	@Test

@@ -88,6 +88,8 @@ public class Audio {
 	private static final double ASTEROIDVOLUME = 0.5;
 	private static final double POWERUPVOLUME = 0.5;
 	
+	private static double MASTERVOLUME = 1;
+	
 
 	/**
 	 * Constructor for audio class.
@@ -270,6 +272,14 @@ public class Audio {
 	 */
 	public final void setMute(final boolean mute) {
 		this.mute = mute;
+	}
+	
+	public final void setReleased(final boolean released) {
+		this.released = released;
+	}
+	
+	public final boolean isReleased() {
+		return released;
 	}
 
 	/**
