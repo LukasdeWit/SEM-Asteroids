@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BackgroundAudioTest {
-	BackgroundAudio bgaudio;
+	private BackgroundAudio bgaudio;
 	
 	@Before
 	public void setup() {

@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import display.DisplayText;
-import game.highscore.HighscoreStore;
-import game.highscore.model.HighScore;
 
 import java.util.ArrayList;
 import java.util.List;
