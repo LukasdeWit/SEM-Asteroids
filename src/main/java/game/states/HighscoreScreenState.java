@@ -47,7 +47,7 @@ public class HighscoreScreenState extends AbstractState {
 			getThisGame().startGame();
 			name = new char[INPUT_LENGTH];
 			namePos = 0;
-			gamestate.setCurrentMode(gamestate.getNoneMode());
+			gamestate.setCurrentMode(Gamestate.NONEMODE);
 			gamestate.setState(gamestate.getStartScreenState());
 		} else {
 			checkInput(input);

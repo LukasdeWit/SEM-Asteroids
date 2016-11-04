@@ -29,7 +29,7 @@ public class PlayerShooterTest {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
-		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getArcadeMode());
+		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().ARCADEMODE);
 		Launcher.getRoot().getChildren().clear();
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		pBuilder.setX(X_START);
@@ -133,7 +133,7 @@ public class PlayerShooterTest {
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);
 		if (coop) {
-			thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().getCoopArcadeMode());
+			thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().COOPARCADEMODE);
 		}
 		player.setInvincibleStart(0);
 		player.update(input);
