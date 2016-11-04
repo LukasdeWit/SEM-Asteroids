@@ -1,16 +1,20 @@
-package entity.shooters;
+package entity.cannons;
 
 import entity.Bullet;
 import entity.Player;
 import entity.builders.BulletBuilder;
 import game.Audio;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Class that regulates logic when a Player shoots bullets.
  * @author Esmee
  *
  */
-public class PlayerShooter extends AbstractShooter {
+@Setter
+@Getter
+public class PlayerCannon extends AbstractCannon {
 	private static final float BULLET_SPEED = 4;
 	private static final float BULLET_SIZE = 1;
 	private static final double TRIPLE_SHOT_ANGLE = .1;
@@ -27,7 +31,7 @@ public class PlayerShooter extends AbstractShooter {
 	 * Constructor for playershooter.
 	 * @param player this belongs to
 	 */
-	public PlayerShooter(final Player player) {
+	public PlayerCannon(final Player player) {
 		super(player);
 		// Initialize the Bullet Builder
 		setBBuilder(new BulletBuilder());
@@ -79,14 +83,6 @@ public class PlayerShooter extends AbstractShooter {
 		
 		owner.getThisGame().create(b);
 	}
-	
-
-	/**
-	 * @param maxBullets the maxBullets to set
-	 */
-	public final void setMaxBullets(final int maxBullets) {
-		this.maxBullets = maxBullets;
-	}
 
 	/**
 	 * @return the maxBullets
@@ -94,29 +90,8 @@ public class PlayerShooter extends AbstractShooter {
 	public static int getMaxBullets() {
 		return MAX_BULLETS;
 	}
-	
-	/**
-	 * @param piercing the piercing to set
-	 */
-	public final void setPiercing(final int piercing) {
-		this.piercing = piercing;
-	}
 
-	/**
-	 * @return the piercing
-	 */
-	public final int getPiercing() {
-		return piercing;
-	}
-	
 
-	/**
-	 * @param bulletSize the bulletSize to set
-	 */
-	public final void setBulletSize(final float bulletSize) {
-		this.bulletSize = bulletSize;
-	}
-	
 	/**
 	 * @return bulletSize
 	 */
@@ -130,28 +105,7 @@ public class PlayerShooter extends AbstractShooter {
 	public static float getBulletSize() {
 		return BULLET_SIZE;
 	}
-	
-	/**
-	 * @param tripleShot the tripleShot to set
-	 */
-	public final void setTripleShot(final boolean tripleShot) {
-		this.tripleShot = tripleShot;
-	}
 
-	/**
-	 * @return the tripleShot
-	 */
-	public final boolean isTripleShot() {
-		return tripleShot;
-	}
-	
-	/**
-	 * @param fireRate the fireRate to set
-	 */
-	public final void setFireRate(final double fireRate) {
-		this.fireRate = fireRate;
-	}
-	
 	/**
 	 * @return fireRate
 	 */

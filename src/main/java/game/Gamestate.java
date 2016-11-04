@@ -1,27 +1,22 @@
 package game;
 
-import java.util.List;
-
-import game.modes.AbstractMode;
-import game.modes.ArcadeMode;
-import game.modes.BossMode;
-import game.modes.CoopArcadeMode;
-import game.modes.CoopBossMode;
-import game.modes.CoopSurvivalMode;
-import game.modes.NoneMode;
-import game.modes.SurvivalMode;
 import game.states.AbstractState;
 import game.states.HighscoreScreenState;
 import game.states.OngoingGameState;
 import game.states.PauseScreenState;
 import game.states.StartScreenState;
 import game.states.ViewHighscoresState;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 /**
  * This class handles the switching of gamestates.
  * @author Kibo
  *
  */
+@Getter
 public final class Gamestate {
 	private static final String[] MODE_STRINGS = 
 		{"none", "arcade", "coop arcade", "survival", "coop survival", "boss", "coop boss"};
@@ -38,14 +33,18 @@ public final class Gamestate {
 	private final ViewHighscoresState viewHighscoresState;
 	
 	// modes
-	private AbstractMode currentMode;
-	private final NoneMode noneMode;
-	private final ArcadeMode arcadeMode;
-	private final CoopArcadeMode coopArcadeMode;
-	private final BossMode bossMode;
-	private final CoopBossMode coopBossMode;
-	private final SurvivalMode survivalMode;
-	private final CoopSurvivalMode coopSurvivalMode;
+	@Setter
+	private int currentMode;
+	
+	public static final int NONEMODE = 0;
+	public static final int ARCADEMODE = 1;
+	public static final int COOPARCADEMODE = 2;
+	public static final int SURVIVALMODE = 3;
+	public static final int COOPSURVIVALMODE = 4;
+	public static final int BOSSMODE = 5;
+	public static final int COOPBOSSMODE = 6;
+	
+	@Setter
 	private long screenSwitchTime;
 		
 	/**
@@ -63,16 +62,8 @@ public final class Gamestate {
 		viewHighscoresState = new ViewHighscoresState(thisGame);
 		
 		currentState = startScreenState;
-		
-		coopArcadeMode = new CoopArcadeMode(thisGame);
-		noneMode = new NoneMode(thisGame);
-		arcadeMode = new ArcadeMode(thisGame);
-		bossMode = new BossMode(thisGame);
-		coopBossMode = new CoopBossMode(thisGame);
-		survivalMode = new SurvivalMode(thisGame);
-		coopSurvivalMode = new CoopSurvivalMode(thisGame);
-		
-		currentMode = noneMode;
+				
+		currentMode = NONEMODE;
 	}
 	
 	/**
@@ -90,7 +81,7 @@ public final class Gamestate {
 	public void startScreen(final List<String> input) {
 		if (input.contains("H")) {
 			Logger.getInstance().log("Go to highscores screen");
-			setMode(noneMode);
+			setCurrentMode(NONEMODE);
 			setState(viewHighscoresState);
 		} else if (input.contains("ESCAPE")) {
 			Logger.getInstance().log("Player quit the game.");
@@ -106,27 +97,27 @@ public final class Gamestate {
 	 */
 	private void checkModeInput(final List<String> input) {
 		if (input.contains("A")) {
-			setMode(arcadeMode);
+			setCurrentMode(ARCADEMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("Z")) {
-			setMode(coopArcadeMode);
+			setCurrentMode(COOPARCADEMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("S")) {
-			setMode(survivalMode);
+			setCurrentMode(SURVIVALMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("X")) {
-			setMode(coopSurvivalMode);
+			setCurrentMode(COOPSURVIVALMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("D")) {
-			setMode(bossMode);
+			setCurrentMode(BOSSMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} else if (input.contains("C")) {
-			setMode(coopBossMode);
+			setCurrentMode(COOPBOSSMODE);
 			setState(ongoingGameState);
 			thisGame.startGame();
 		} 
@@ -154,14 +145,7 @@ public final class Gamestate {
 	 * @return String representing the current state.
 	 */
 	public String toString() {
-		return currentMode.toString();
-	}
-
-	/**
-	 * @return the mode
-	 */
-	public AbstractMode getMode() {
-		return currentMode;
+		return MODE_STRINGS[currentMode];
 	}
 
 	/**
@@ -175,21 +159,28 @@ public final class Gamestate {
 	 * @return true if coop
 	 */
 	public boolean isCoop() {
-		return currentMode.isCoop();
+		return currentMode == COOPARCADEMODE || currentMode == COOPBOSSMODE || currentMode == COOPSURVIVALMODE;
 	}
 	
 	/**
 	 * @return true if boss
 	 */
 	public boolean isBoss() {
-		return currentMode.isBoss();
+		return currentMode == BOSSMODE || currentMode == COOPBOSSMODE;
 	}
 	
 	/**
 	 * @return true if arcade mode
 	 */
 	public boolean isArcade() {
-		return currentMode.isArcade();
+		return currentMode == ARCADEMODE || currentMode == COOPARCADEMODE;
+	}
+	
+	/**
+	 * @return true if survival mode
+	 */
+	public boolean isSurvival() {
+		return currentMode == SURVIVALMODE || currentMode == COOPSURVIVALMODE;
 	}
 	
 	/**
@@ -206,97 +197,5 @@ public final class Gamestate {
 	 */
 	public HighscoreScreenState getHighscoreState() {
 		return highscoreScreenState;
-	}
-	
-	/**
-	 * @return state for start screen
-	 */
-	public StartScreenState getStartScreenState() {
-		return startScreenState;
-	}
-	
-	/**
-	 * @return state for ongoing game
-	 */
-	public OngoingGameState getOngoingGameState() {
-		return ongoingGameState;
-	}
-	
-	/**
-	 * @return state for pause screen
-	 */
-	public PauseScreenState getPauseScreenState() {
-		return pauseScreenState;
-	}
-	
-	/**
-	 * Setter for mode.
-	 * @param mode the game should be in
-	 */
-	public void setMode(final AbstractMode mode) {
-		this.currentMode = mode;
-	}
-	
-	/**
-	 * @return mode for no gamemode
-	 */
-	public NoneMode getNoneMode() {
-		return noneMode;
-	}
-	
-	/**
-	 * @return mode for coop arcade game
-	 */
-	public CoopArcadeMode getCoopArcadeMode() {
-		return coopArcadeMode;
-	}
-	
-	/**
-	 * @return mode for single player boss fight
-	 */
-	public BossMode getBossMode() {
-		return bossMode;
-	}
-	
-	/**
-	 * @return mode for multiplayer boss fight
-	 */
-	public CoopBossMode getCoopBossMode() {
-		return coopBossMode;
-	}
-	
-	/**
-	 * @return mode for single player arcade game
-	 */
-	public ArcadeMode getArcadeMode() {
-		return arcadeMode;
-	}
-	
-	/**
-	 * @param screenSwitchTime the screenSwitchTime to set
-	 */
-	public void setScreenSwitchTime(final long screenSwitchTime) {
-		this.screenSwitchTime = screenSwitchTime;
-	}
-	
-	/**
-	 * @return survival mode
-	 */
-	public SurvivalMode getSurvivalMode() {
-		return survivalMode;
-	}
-	
-	/**
-	 * @return the coop survival mode
-	 */
-	public CoopSurvivalMode getCoopSurvivalMode() {
-		return coopSurvivalMode;
-	}
-
-	/**
-	 * @return the viewHighscoresState
-	 */
-	public ViewHighscoresState getViewHighscoresState() {
-		return viewHighscoresState;
 	}
 }

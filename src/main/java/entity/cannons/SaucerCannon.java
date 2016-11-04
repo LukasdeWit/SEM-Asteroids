@@ -1,6 +1,4 @@
-package entity.shooters;
-
-import java.util.Random;
+package entity.cannons;
 
 import entity.AbstractEntity;
 import entity.Bullet;
@@ -8,12 +6,14 @@ import entity.Saucer;
 import entity.builders.BulletBuilder;
 import game.Game;
 
+import java.util.Random;
+
 /**
  * Class that regulates logic when saucers shoot bullets.
  * @author Esmee
  *
  */
-public class SaucerShooter extends AbstractShooter {
+public class SaucerCannon extends AbstractCannon {
 	private static final int PIERCING = 1;
 	private static final long SHOT_TIME = 1000;
 	private static final long LESS_SHOT = 50;
@@ -26,7 +26,7 @@ public class SaucerShooter extends AbstractShooter {
 	 * Constructor for saucer.
 	 * @param saucer this belongs to
 	 */
-	public SaucerShooter(final Saucer saucer) {
+	public SaucerCannon(final Saucer saucer) {
 		super(saucer);
 		getBBuilder().setThisGame(saucer.getThisGame());
 		getBBuilder().setPierce(PIERCING);
@@ -88,7 +88,7 @@ public class SaucerShooter extends AbstractShooter {
 		final AbstractEntity owner = getOwner();
 		final float playerX = owner.getThisGame().getPlayer().getX();
 		final float playerY = owner.getThisGame().getPlayer().getY();
-		float accuracy = owner.getThisGame().getScoreCounter().smallSaucerDifficulty();
+		float accuracy = owner.getThisGame().getScorecounter().smallSaucerDifficulty();
 		if (accuracy > MAX_ACCURACY) {
 			accuracy = MAX_ACCURACY;
 		}
@@ -114,7 +114,7 @@ public class SaucerShooter extends AbstractShooter {
 	 * @return shot time of small saucer
 	 */
 	private long smallShotTime() {
-		final long score = getOwner().getThisGame().getScoreCounter().smallSaucerDifficulty();
+		final long score = getOwner().getThisGame().getScorecounter().smallSaucerDifficulty();
 		if (score == 0) {
 			return SHOT_TIME;
 		} else if (score <= SHOT_TIME / (2 * LESS_SHOT)) {

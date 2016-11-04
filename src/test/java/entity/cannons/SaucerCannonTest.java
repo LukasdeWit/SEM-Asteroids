@@ -1,13 +1,4 @@
-package entity.shooters;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
+package entity.cannons;
 
 import entity.AbstractEntity;
 import entity.Bullet;
@@ -16,8 +7,14 @@ import entity.Saucer;
 import entity.builders.PlayerBuilder;
 import game.Game;
 import game.Launcher;
+import org.junit.Before;
+import org.junit.Test;
 
-public class SaucerShooterTest {
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
+
+public class SaucerCannonTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
@@ -31,7 +28,7 @@ public class SaucerShooterTest {
 	public final void setUp() {
 		thisGame = new Game();
 		thisGame.setPlayer(null);
-		thisGame.getScoreCounter().setScore(0);
+		thisGame.getScorecounter().setScore(0);
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
 		Launcher.getRoot().getChildren().clear();
@@ -53,7 +50,7 @@ public class SaucerShooterTest {
 		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
-		thisGame.getScoreCounter().setScore(120000);
+		thisGame.getScorecounter().setScore(120000);
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.getShooter().setLastShot(0);
 		saucer.update(null);
@@ -68,7 +65,7 @@ public class SaucerShooterTest {
 		final Player p = (Player) pBuilder.getResult();
 		p.setInvincibleStart(0);
 		thisGame.setPlayer(p);
-		thisGame.getScoreCounter().setScore(50000);
+		thisGame.getScorecounter().setScore(50000);
 		saucer.setRadius(Saucer.getSmallRadius());
 		saucer.getShooter().setLastShot(0);
 		saucer.update(null);

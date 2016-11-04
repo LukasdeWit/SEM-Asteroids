@@ -1,11 +1,11 @@
 package game.states;
 
-import java.util.List;
-
 import display.DisplayText;
 import game.Game;
 import game.Gamestate;
 import game.Logger;
+
+import java.util.List;
 
 /**
  * Highscore screen state.
@@ -32,7 +32,7 @@ public class HighscoreScreenState extends AbstractState {
 	@Override
 	public final void update(final List<String> input) {
 		highscoreScreen(input);
-		DisplayText.highscoreScreen(getThisGame().getScoreCounter().getScore(), nameString());		
+		DisplayText.highscoreScreen(getThisGame().getScorecounter().getScore(), nameString());
 	}
 
 	/**
@@ -43,11 +43,11 @@ public class HighscoreScreenState extends AbstractState {
 		final Gamestate gamestate = getThisGame().getGamestate();
 		if (namePos != 0 && input.contains("ENTER") && getThisGame().getGamestate().isSwitchTime()) {
 			Logger.getInstance().log("Game stopped.");
-			getThisGame().getScoreCounter().startGame(nameString());
+			getThisGame().getScorecounter().startGame(nameString());
 			getThisGame().startGame();
 			name = new char[INPUT_LENGTH];
 			namePos = 0;
-			gamestate.setMode(gamestate.getNoneMode());
+			gamestate.setCurrentMode(Gamestate.NONEMODE);
 			gamestate.setState(gamestate.getStartScreenState());
 		} else {
 			checkInput(input);

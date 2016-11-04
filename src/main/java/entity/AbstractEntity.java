@@ -1,13 +1,17 @@
 package entity;
-import java.util.List;
-
 import game.Game;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 /**
  * This is the superclass of all entities in the game.
  *
  * @author Kibo
  */
+@Setter
+@Getter
 public abstract class AbstractEntity {
 	private float x;
 	private float y;
@@ -69,24 +73,6 @@ public abstract class AbstractEntity {
 	}
 
 	/**
-	 * thisGame getter.
-	 *
-	 * @return thisGame
-	 */
-	public final Game getThisGame() {
-		return thisGame;
-	}
-
-	/**
-	 * thisGame setter.
-	 *
-	 * @param thisGame - thisGame
-	 */
-	public final void setThisGame(final Game thisGame) {
-		this.thisGame = thisGame;
-	}
-
-	/**
 	 * returns speed of entity.
 	 *
 	 * @return the speed
@@ -130,85 +116,4 @@ public abstract class AbstractEntity {
 	 */
 	public abstract void onDeath();
 
-	/**
-	 * dY getter.
-	 *
-	 * @return dY
-	 */
-	public final float getDY() {
-		return dY;
-	}
-
-	/**
-	 * dY setter.
-	 *
-	 * @param dY - dY
-	 */
-	public final void setDY(final float dY) {
-		this.dY = dY;
-	}
-
-	/**
-	 * dX getter.
-	 *
-	 * @return dX
-	 */
-	public final float getDX() {
-		return dX;
-	}
-
-	/**
-	 * dX setter.
-	 *
-	 * @param dX - dX
-	 */
-	public final void setDX(final float dX) {
-		this.dX = dX;
-	}
-
-	/**
-	 * Radius getter.
-	 *
-	 * @return radius
-	 */
-	public final float getRadius() {
-		return radius;
-	}
-
-	/**
-	 * Radius setter.
-	 *
-	 * @param radius - radius
-	 */
-	public final void setRadius(final float radius) {
-		this.radius = radius;
-	}
-
-	/**
-	 * @return the x
-	 */
-	public final float getX() {
-		return x;
-	}
-
-	/**
-	 * @param x the x to set
-	 */
-	public final void setX(final float x) {
-		this.x = x;
-	}
-
-	/**
-	 * @return the y
-	 */
-	public final float getY() {
-		return y;
-	}
-
-	/**
-	 * @param y the y to set
-	 */
-	public final void setY(final float y) {
-		this.y = y;
-	}
 }

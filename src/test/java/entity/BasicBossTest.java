@@ -131,9 +131,9 @@ public class BasicBossTest {
 	
 	@Test
 	public void testOnDeath() {
-		final double initialScore = basicBoss.getThisGame().getScoreCounter().getScore();
+		final double initialScore = basicBoss.getThisGame().getScorecounter().getScore();
 		basicBoss.onDeath();
-		assertEquals(initialScore + 20000,basicBoss.getThisGame().getScoreCounter().getScore(),0);
+		assertEquals(initialScore + 20000,basicBoss.getThisGame().getScorecounter().getScore(),0);
 	}
 
 	//Since each method calls the other, more than one test would be silly.

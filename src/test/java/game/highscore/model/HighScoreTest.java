@@ -63,11 +63,12 @@ public class HighScoreTest {
 
     @Test
     public void testToString() throws Exception {
-        assertEquals("HighScore{"
-                + "userName='" + test1.getUserName() + '\''
+        assertEquals("HighScore("
+                + "userName=" + test1.getUserName()
                 + ", score=" + test1.getScore()
                 + ", id=" + test1.getId()
-                + '}', test1.toString());
+                + ", gamemode=" + test1.getGamemode()
+                + ')', test1.toString());
     }
 
     @Test

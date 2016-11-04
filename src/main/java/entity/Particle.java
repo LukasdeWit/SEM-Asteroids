@@ -1,14 +1,16 @@
 package entity;
-import java.util.List;
-
 import display.DisplayEntity;
 import game.Game;
+import lombok.Setter;
+
+import java.util.List;
 
 /**
  * This class is a particle used in explosions.
  *
  * @author Kibo
  */
+@Setter
 public class Particle extends AbstractEntity {
 	private long birthTime;
 	
@@ -28,7 +30,7 @@ public class Particle extends AbstractEntity {
 	public Particle(final float x, final float y, final float dX, final float dY, final Game thisGame) {
 		super(x, y, dX, dY, thisGame);
 		setRadius(1);
-		birthTime = System.currentTimeMillis();
+		setBirthTime(System.currentTimeMillis());
 	}
 
 	/**
@@ -102,10 +104,4 @@ public class Particle extends AbstractEntity {
 		return EXPLOSION_PARTICLES;
 	}
 
-	/**
-	 * @param birthTime the birthTime to set
-	 */
-	public final void setBirthTime(final long birthTime) {
-		this.birthTime = birthTime;
-	}
 }

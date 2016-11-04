@@ -1,15 +1,19 @@
 package entity;
-import java.util.List;
-import java.util.Random;
-
 import display.DisplayEntity;
 import game.Audio;
 import game.Game;
 import game.Logger;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represents an Asteroid.
  */
+@Setter
+@Getter
 public class Asteroid extends AbstractEntity {
 	private int shape;
 
@@ -151,20 +155,6 @@ public class Asteroid extends AbstractEntity {
 	@Override
 	public final void draw() {
 		DisplayEntity.draw(this);
-	}
-
-	/**
-	 * @return the shape
-	 */
-	public final int getShape() {
-		return shape;
-	}
-
-	/**
-	 * @param shape the shape to set
-	 */
-	public final void setShape(final int shape) {
-		this.shape = shape;
 	}
 
 	/**

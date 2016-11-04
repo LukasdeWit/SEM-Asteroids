@@ -1,14 +1,18 @@
-package entity.shooters;
+package entity.cannons;
 
 import entity.AbstractEntity;
 import entity.builders.BulletBuilder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Regulates the logic when entities shoot bullets.
  * @author Esmee
  *
  */
-public abstract class AbstractShooter {
+@Setter
+@Getter
+public abstract class AbstractCannon {
 	private long lastShot;
 	private BulletBuilder bBuilder;
 	private final AbstractEntity owner;
@@ -17,7 +21,7 @@ public abstract class AbstractShooter {
 	 * Constructor for Abstracthooter.
 	 * @param owner AbstractEntity this belongs to.
 	 */
-	public AbstractShooter(final AbstractEntity owner) {
+	public AbstractCannon(final AbstractEntity owner) {
 		this.owner = owner;
 		bBuilder = new BulletBuilder();
 		bBuilder.setShooter(owner);
@@ -28,21 +32,7 @@ public abstract class AbstractShooter {
 	 * method that shoots a bullet.
 	 */
 	public abstract void shoot();
-	
-	/**
-	 * @return the last time a shot was made
-	 */
-	public final long getLastShot() {
-		return lastShot;
-	}
-	
-	/**
-	 * @param lastShot the last time a shot was made
-	 */
-	public final void setLastShot(final long lastShot) {
-		this.lastShot = lastShot;
-	}
-	
+
 	/**
 	 * @return the bulletbuilder
 	 */
@@ -56,11 +46,5 @@ public abstract class AbstractShooter {
 	public final void setBBuilder(final BulletBuilder bBuilder) {
 		this.bBuilder = bBuilder;
 	}
-	
-	/**
-	 * @return the owner
-	 */
-	public final AbstractEntity getOwner() {
-		return owner;
-	}
+
 }

@@ -1,20 +1,20 @@
-package entity.shooters;
+package entity.cannons;
 
-import static org.junit.Assert.assertEquals;
+import entity.Player;
+import entity.builders.PlayerBuilder;
+import entity.cannons.PlayerCannon;
+import game.Game;
+import game.Launcher;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import entity.Player;
-import entity.builders.PlayerBuilder;
-import game.Game;
-import game.Launcher;
-
-public class PlayerShooterTest {
+public class PlayerCannonTest {
 	private static final float X_START = 1;
 	private static final float Y_START = 2;
 	private static final float DX_START = 3;
@@ -30,7 +30,7 @@ public class PlayerShooterTest {
 		thisGame = new Game();
 		thisGame.setCreateList(new ArrayList<>());
 		thisGame.setDestroyList(new ArrayList<>());
-		thisGame.getGamestate().setMode(thisGame.getGamestate().getArcadeMode());
+		thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().ARCADEMODE);
 		Launcher.getRoot().getChildren().clear();
 		final PlayerBuilder pBuilder = new PlayerBuilder();
 		pBuilder.setX(X_START);
@@ -122,10 +122,10 @@ public class PlayerShooterTest {
 	
 	@Test
 	public void testGettersAndSetters(){
-		final PlayerShooter ps = player.getShooter();
-		ps.setBulletSize(PlayerShooter.getBulletSize());
-		ps.setPiercing(PlayerShooter.getMaxBullets());
-		ps.setFireRate(PlayerShooter.getFireRate());
+		final PlayerCannon ps = player.getShooter();
+		ps.setBulletSize(PlayerCannon.getBulletSize());
+		ps.setPiercing(PlayerCannon.getMaxBullets());
+		ps.setFireRate(PlayerCannon.getFireRate());
 		player.gainShield();
 		assertEquals(1, player.getShielding(), 0);
 	}
@@ -134,7 +134,7 @@ public class PlayerShooterTest {
 		final List<String> input = new ArrayList<>();
 		Collections.addAll(input, in);
 		if (coop) {
-			thisGame.getGamestate().setMode(thisGame.getGamestate().getCoopArcadeMode());
+			thisGame.getGamestate().setCurrentMode(thisGame.getGamestate().COOPARCADEMODE);
 		}
 		player.setInvincibleStart(0);
 		player.update(input);
