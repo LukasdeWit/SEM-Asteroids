@@ -25,7 +25,16 @@ public final class HighscoreUtils {
      * @return the directory path.
      */
     public static String getAppDirectory() {
-        final String os = System.getProperty("os.name").toUpperCase(Locale.ENGLISH);
+        return getAppDirectoryForOs(System.getProperty("os.name"));
+    }
+
+    /**
+     * get app directory of given operating system.
+     * @param osName name of operating system
+     * @return the path to the app directory
+     */
+    public static String getAppDirectoryForOs(final String osName) {
+        final String os = osName.toUpperCase(Locale.ENGLISH);
         if (os.contains("WIN")) {
             return System.getenv("APPDATA") + "/" + APP_NAME + '/';
         } else if (os.contains("MAC")) {

@@ -1,5 +1,12 @@
 package game.highscore;
 
+import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
+import game.Logger;
+import game.highscore.model.HighScore;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,14 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonWriter;
-
-import game.Logger;
-import game.highscore.model.HighScore;
 
 /**
  * Created by douwe on 20-9-16.
@@ -76,7 +75,7 @@ public class HighscoreStore {
             }
 
             final List<HighScore> result = Arrays.asList(array);
-            Collections.sort(result);
+            Collections.sort(result, (o1, o2) -> Integer.compare(o1.getGamemode(), o2.getGamemode()));
 
             return result.toArray(array);
         } catch (IOException e) {
@@ -136,10 +135,11 @@ public class HighscoreStore {
      * @param mode - the mode
      * @return the highest score
      */
-    public final long getHighestScore(final int mode) {
-    	if (mode > 0) {
-    		return highScores[mode - 1].getScore();
-    	}
-    	return 0;
-    }   
+    public final HighScore getHighScore(final int mode) {
+        if (mode > 0 && mode < MODES + 1) {
+            return highScores[mode - 1];
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 }

@@ -139,6 +139,6 @@ public class HighScore implements Comparable<HighScore> {
      */
     @Override
     public final int compareTo(final HighScore o) {
-        return Integer.compare(getGamemode(), o.getGamemode());
+        return Long.compare(getScore(), o.getScore());
     }
 }

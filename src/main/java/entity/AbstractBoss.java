@@ -42,7 +42,7 @@ public abstract class AbstractBoss extends AbstractEntity {
 	 * @param direction
 	 *            - the direction
 	 */
-	protected abstract void fireBullet(final double direction);
+	protected abstract void fireBullet(double direction);
 
 	@Override
 	public final void collide(final AbstractEntity e2) {

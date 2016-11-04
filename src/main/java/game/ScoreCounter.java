@@ -1,10 +1,10 @@
 package game;
 
-import java.util.List;
-
 import display.DisplayText;
 import game.highscore.HighscoreStore;
 import game.highscore.model.HighScore;
+
+import java.util.List;
 
 /**
  * Class that maintains the score.
@@ -78,7 +78,7 @@ public class ScoreCounter {
 	 * @return the high score
 	 */
 	public final long getHighscore() {
-		return highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
+		return highscoreStore.getHighScore(thisGame.getGamestate().getMode().toInt()).getScore();
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class ScoreCounter {
 	 * @return true if the score is better than the highscore
 	 */
 	public final boolean isHighscore() {
-		return score > highscoreStore.getHighestScore(thisGame.getGamestate().getMode().toInt());
+		return score > highscoreStore.getHighScore(thisGame.getGamestate().getMode().toInt()).getScore();
 	}
 	
 	/**
